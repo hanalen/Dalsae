@@ -103,19 +103,19 @@ export default {
 			this.SendTweet(vals['text'], vals['media'], vals['replyId']);
     });
     this.EventBus.$on('Retweet', (tweet) => {
-			if(this.tweet.orgTweet.retweeted){
-				this.Retweet(tweet.orgTweet.id_str);
+			if(tweet.orgTweet.retweeted){
+        this.UnRetweet(tweet.orgTweet.id_str);
       }
       else{
-        this.UnRetweet(tweet.orgTweet.id_str);
+				this.Retweet(tweet.orgTweet.id_str);
       }
 		});
 		this.EventBus.$on('Favorite', (tweet) => {
-			if(this.tweet.orgTweet.favorited){
-				this.Favorite(tweet.orgTweet.id_str);
+			if(tweet.orgTweet.favorited){
+        this.UnFavorite(tweet.orgTweet.id_str);
       }
       else{
-        this.UnFavorite(tweet.orgTweet.id_str);
+				this.Favorite(tweet.orgTweet.id_str);
       }
 		});
 		this.EventBus.$on('LoadQTTweet',(tweet)=>{
