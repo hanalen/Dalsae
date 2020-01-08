@@ -19,12 +19,12 @@ export default new Vuex.Store({
         // have them called only once (in the tab where the commit happened)
         // ie. save certain values to localStorage
         // pluginStateChanged(mutation, state)
-        console.log('store~~')
-        console.log(state)
-        console.log('pre~')
-        console.log(predicate.indexOf(mutation.type))
-        console.log(mutation);
-        console.log(mutation.type)
+        // console.log('store~~')
+        // console.log(state)
+        // console.log('pre~')
+        // console.log(predicate.indexOf(mutation.type))
+        // console.log(mutation);
+        // console.log(mutation.type)
         return predicate.indexOf(mutation.type) >= 0;
       }
     })
@@ -155,7 +155,7 @@ export default new Vuex.Store({
           for(var i=state.tweets.home.length-1;i>-1;i--){
             var nTweet = state.tweets.home[i];  
             index=i;
-            if(nTweet.created_at <= tweet.created_at){
+            if(new Date(nTweet.created_at) <= new Date(tweet.created_at)){
               index++;
               break;
             }
@@ -184,7 +184,7 @@ export default new Vuex.Store({
           for(var i=state.tweets.mention.length-1;i>-1;i--){
             var nTweet = state.tweets.mention[i];  
             index=i;
-            if(nTweet.created_at <= tweet.created_at){
+            if(new Date(nTweet.created_at) <= new Date(tweet.created_at)){
               index++;
               break;
             }
@@ -282,8 +282,10 @@ export default new Vuex.Store({
       if(state.tweets.daehwa.find(x=>x.id==tweet.id)!=undefined){//중복 넘기기
         return;
       }
-      tweet.orgUser = tweet.retweeted_status==undefined ? tweet.user :tweet.retweeted_status.user;//리트윗, 원트윗 유저 선택
-      tweet.orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
+      var orgUser = tweet.retweeted_status==undefined ? tweet.user :tweet.retweeted_status.user;//리트윗, 원트윗 유저 선택
+      var orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
+      tweet.orgUser = JSON.parse(JSON.stringify(orgUser));
+      tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
       state.tweets.daehwa.push(tweet);
     },
     ClearDaehwa(state){
