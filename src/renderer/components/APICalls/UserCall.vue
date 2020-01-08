@@ -103,7 +103,8 @@ export default {
 		ResDaehwa(tweet){
       this.isLoadingDaehwa=false;
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'daehwa'});
-			this.$store.dispatch('Daehwa', tweet);
+      this.$store.dispatch('Daehwa', tweet);
+      this.EventBus.$emit('FocusPanel', 'daehwa');
 		},
     ResFollowing(resUsers){
       if(resUsers.next_cursor!=0){//다 땡겨왔을 경우 0으로 옴
@@ -132,8 +133,8 @@ export default {
       console.log('err load daehwa');
       console.log(err);
     }
-	},
-	mounted: function() {//EventBus등록용 함수들
+  },
+  mounted: function() {//EventBus등록용 함수들
     this.EventBus.$on('StartDalsae', () => {
 			this.StartDalsae();
     });

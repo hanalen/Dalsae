@@ -117,12 +117,23 @@ export default {
         focusEl=this.$refs.panel;
       }
       else{
-        focusEl = this.$refs.list[this.selectIndex];
+        if(this.$refs.list!=undefined){
+          focusEl = this.$refs.list[this.selectIndex];
+        }
+        else{
+          setTimeout(() => {//대화패널 표시 시 포커스가 안 되는 문제가 있음.... 왜지....
+            focusEl = this.$refs.list[this.selectIndex];
+            focusEl.$el.focus(); 
+          }, 100);
+        }
       }
       if(focusEl!=undefined){
         this.$nextTick(() =>{//이벤트에서 show가 되기 전에 focus 호출 시 focus가 되지 않는 문제가 있어서 nextTick사용
           focusEl.$el.focus(); 
         });
+      }
+      else{
+        this.$el.focus();
       }
     },
     FocusOut(id){

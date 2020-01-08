@@ -126,6 +126,7 @@ export default {
     },
     Click(e){
       this.$store.dispatch('Daehwa', this.tweet);
+      this.EventBus.$emit('FocusDaehwa');
     },
     propic() {
       var user=undefined;

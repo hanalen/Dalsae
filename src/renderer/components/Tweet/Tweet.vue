@@ -33,7 +33,7 @@
         <i v-if="tweet.orgTweet.favorited" class="fas fa-heart"></i>
       </div>
       <div class="tweet-timestamp">{{TweetDate}}</div>
-      <QTTweet ref="qtTweet" v-if="qtTweet!=undefined" :tweet="qtTweet" :option="option" :isDaehwa="isDaehwa"/>
+      <QTTweet ref="qtTweet" v-if="qtTweet!=undefined" :tweet="qtTweet" :option="option"/>
     </div>
     <div
       class="tweet-images"
@@ -77,7 +77,6 @@ export default {
     option: undefined,
     selected:false,
     index:undefined,
-    isDaehwa:false,
   },
   data() {
     return {
@@ -99,8 +98,10 @@ export default {
         if(id!=this.qtIdStr) return;
 
         this.$nextTick(()=>{
-          tweet.orgUser = tweet.retweeted_status==undefined ? tweet.user :tweet.retweeted_status.user;//리트윗, 원트윗 유저 선택
-          tweet.orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
+          var orgUser = tweet.retweeted_status==undefined ? tweet.user :tweet.retweeted_status.user;//리트윗, 원트윗 유저 선택
+          var orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
+          tweet.orgUser = JSON.parse(JSON.stringify(orgUser));
+          tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
           this.qtTweet = tweet;
         });
       });
@@ -169,14 +170,6 @@ export default {
     },
     ImageClick(e){
       this.EventBus.$emit('ShowTweetImage', this.tweet);
-      // let routeData = this.$router.resolve({ path:'/image' , query:{id:this.tweet.orgTweet.id_str}});
-      // window.open(routeData.href, '이미지 뷰어', 'width:500, height:800');
-    },
-    ArrowLeft(e){
-      this.EventBus.$emit('FocusPanel')
-    },
-    ArrowRight(e){
-      this.EventBus.$emit('FocusDaehwa')
     },
     Click(e){
       if(e.button==2 || e.button==3){
@@ -202,7 +195,7 @@ export default {
         this.$refs.qtTweet.Focused();
       }
       this.isFocus=true;
-      this.EventBus.$emit('TweetFocus', {'tweetID':this.tweet.id, 'isDaehwa':this.isDaehwa});//대화쪽 트윗인지 일반쪽 트윗인지 표시 여부
+      this.EventBus.$emit('TweetFocus', this.tweet.id);//대화쪽 트윗인지 일반쪽 트윗인지 표시 여부
     },
     FocusOut(e){
       if(this.qtTweet){

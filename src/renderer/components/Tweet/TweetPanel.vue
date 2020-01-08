@@ -22,37 +22,31 @@
         v-bind:options="this.$store.state.DalsaeOptions.uiOptions"
         v-bind:tweets="this.$store.state.tweets.fav"
       />
-    </div>
-    <div class="panel-right" v-if="this.$store.state.tweets.daehwa.length>0">
-      <TweetListDaehwa
+      <TweetList
         ref="daehwaPanel"
         :panelName="'daehwa'"
+        v-show="selectPanelName=='daehwa'"
         v-bind:options="this.$store.state.DalsaeOptions.uiOptions"
         v-bind:tweets="this.$store.state.tweets.daehwa"
       />
     </div>
-    
   </div>
 </template>
 
 <script>
 // import Tweet from "./Tweet-flex.vue";
 import TweetList from "./Tweetlist.vue";
-import TweetListDaehwa from "./TweetListDaehwa.vue";
 
 export default {
 	name: "tweetpanal",
 	data:function(){
 		return{
       selectPanelName:'home',
-      isDaehwaFocused:false,
+      prevPanelName:'home',
 		}
   },
   computed:{
     selectPanel(){
-      if(this.isDaehwaFocused){
-        return this.$refs.daehwaPanel;
-      }
       switch(this.selectPanelName){
         case 'home':
           return this.$refs.homePanel;
@@ -63,17 +57,23 @@ export default {
         case 'fav':
           return this.$refs.favPanel;
           break;
+        case 'daehwa':
+          return this.$refs.daehwaPanel;
       }
     }
   },
   mounted: function() {//EventBus등록용 함수들
     this.EventBus.$on('TweetKeyDown', (e) => {
         if(e.keyCode==49){
+          this.$store.dispatch('ClearDaehwa');
           this.selectPanelName='home';
+          this.prevPanelName='home';
           this.selectPanel.Focus(e);
         }
         else if(e.keyCode==50){
+          this.$store.dispatch('ClearDaehwa');
           this.selectPanelName='mention';
+          this.prevPanelName='mention';
           this.selectPanel.Focus(e);
         }
         else if(e.keyCode==36){
@@ -86,17 +86,17 @@ export default {
           e.preventDefault();
           this.ReqTweets(this.selectPanelName);
         }
-        else if(e.keyCode==99|| e.keyCode==67){//c
+        else if(e.keyCode==99|| e.keyCode==67){//c, 대화 트윗 불러오기
           e.preventDefault();
           var tweet =this.selectPanel.GetSelectTweet();
 
           this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'daehwa'})
           this.EventBus.$emit('ReqDaehwa', tweet);
         }
-        else if(e.keyCode==118||e.keyCode==86){//v, 대화 숨기기. vuex의 대화 목록을 clear
+        else if(e.keyCode==8){//backspace, 대화 숨기기. vuex의 대화 목록을 clear
           e.preventDefault();
           this.$store.dispatch('ClearDaehwa');
-          this.EventBus.$emit('FocusPanel', this.selectPanelName);
+          this.EventBus.$emit('FocusPanel', this.prevPanelName);
         }
         else if(e.keyCode==88||e.keyCode==120){//x, qt트윗 등록 
           e.preventDefault();
@@ -160,25 +160,21 @@ export default {
     this.EventBus.$on('ArrowDown', (e)=>{//e: event
       this.selectPanel.Next(e);
     });
-    this.EventBus.$on('TweetFocus', (vals)=>{//id: tweet id
-      var tweetID = vals['tweetID'];
-      var isDaehwa=vals['isDaehwa'];
-      this.isDaehwaFocused = isDaehwa;//대화 포커싱 여부 저장
-      this.selectPanel.Focused(tweetID);
+    this.EventBus.$on('TweetFocus', (id)=>{//id: tweet id
+      this.selectPanel.Focused(id);
     });
     this.EventBus.$on('FocusOut', (id)=>{
       this.selectPanel.FocusOut(id);
     });
-    this.EventBus.$on('FocusDaehwa',()=>{
-      if(this.$refs.daehwaPanel){
-        this.$refs.daehwaPanel.Focus();
-      }
+    this.EventBus.$on('FocusDaehwa', ()=>{
+      this.prevPanelName=this.selectPanelName;
+      this.selectPanelName='daehwa';
+      this.selectPanel.Focus(undefined);
     });
     this.EventBus.$on('FocusPanel', (selectPanelName)=>{
       if(selectPanelName!='' &&selectPanelName != undefined){
         this.selectPanelName=selectPanelName;
       }
-      this.isDaehwaFocused=false;//패널 포커스 해야 해서 대화 포커스 flag 엎음. 개 구린 코드.....
       this.selectPanel.Focus();
     });
   },
@@ -202,7 +198,6 @@ export default {
   },
   components:{
     TweetList,
-    TweetListDaehwa
   },
   props: {
   },
