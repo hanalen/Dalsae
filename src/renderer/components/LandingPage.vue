@@ -117,6 +117,7 @@ export default {
 
 <style lang="scss">
 html,body{
+    min-width: 400px;
     margin: 0px;
     overflow: hidden;
 }
