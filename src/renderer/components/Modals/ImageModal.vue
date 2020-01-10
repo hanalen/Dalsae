@@ -24,6 +24,7 @@
 					</div>
 			</div>
 		</div>
+		<ContextMenu ref="context" :index="index" :images="tweet.orgTweet.extended_entities.media"/>
 	</div>
 </template>
 <script>
@@ -35,6 +36,7 @@ import ApiOAuth from "../APICalls/OAuthCall.js"
 import Tweet from "../Tweet/Tweet.vue"
 import {EventBus} from '../../main.js';
 import ImagePopupVue from './ImagePopup.vue'
+import ContextMenu from '../ContextMenu/ImageContextMenu.vue'
 
 export default {
 	name: 'imagemodal',
@@ -56,9 +58,13 @@ export default {
 			marginTop:0,
     }
 	},
+	components:{
+		Tweet,
+		ContextMenu
+	},
 	props:{
 		uiOption:undefined,
-	},	
+	},
 	computed:{
 	},
   mounted:function(){
@@ -90,13 +96,18 @@ export default {
 		},
 		MouseDown(e){
 			e.preventDefault()
-			if(this.isZoom){
-				this.isDrag=true;
+			if(e.button==2 || e.button==3){//우클릭
+				this.$refs.context.Show(e);
 			}
-			this.prevX=e.pageX;
-			this.prevY=e.pageY;
-			this.startX=e.pageX;
-			this.startY=e.pageY;
+			if(e.button==0){//왼클릭
+				if(this.isZoom){
+					this.isDrag=true;
+				}
+				this.prevX=e.pageX;
+				this.prevY=e.pageY;
+				this.startX=e.pageX;
+				this.startY=e.pageY;
+			}
 		},
 		MouseLeave(e){
 			this.isDrag=false;
