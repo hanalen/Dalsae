@@ -46,7 +46,7 @@
         class="tweet-image"
         v-for="image in tweet.orgTweet.extended_entities.media"
         :key="image.index"
-        :src="image.media_url_https"
+        :src="image.media_url_https+':thumb'"
       />
     </div>
     <div v-if="preview" class="tweet-images-preview">
@@ -54,7 +54,7 @@
         class="tweet-image"
         v-for="image in tweet.orgTweet.extended_entities.media"
         :key="image.index"
-        :src="image.media_url_https"
+        :src="image.media_url_https+':thumb'"
       />
     </div>
     
@@ -231,16 +231,17 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tweet {
   height: auto;
   color: black;
   display: flex;
-  flex-basis: 100%;
+  position: relative;
+  // flex-basis: 100%;
   padding: 6px 6px 6px 0px;
-  flex-shrink: 1;
+  // flex-shrink: 1;
   overflow: visible;
-  align-items: stretch;
+  // align-items: stretch;
   border-bottom: dashed 1px rgba(0, 0, 0, 0.12);
 }
 .tweet:hover{
@@ -263,7 +264,7 @@ export default {
 .tweet.selected{
     background-color: #b7c7eb !important;
 } 
-.daehwa{
+.daehwa{//답멘일 경우 표시하는 애
   margin-left: 4px;
   width: 14px;
 }
@@ -285,7 +286,7 @@ export default {
 .tweet-text {
   font-size: 14px;
   flex: 1;
-  display: inline-flex;
+  // display: flex;
   flex-direction: column;
   padding: 0px 8px;
   .tweet-name {
@@ -297,7 +298,7 @@ export default {
     
   }
   .tweet-content {
-    flex: 1;
+    // flex: 1;
     line-height: 1.3;
   }
   .tweet-content.noti{
@@ -312,7 +313,7 @@ export default {
 
 .tweet-images-preview {
   position: absolute;
-  display: inline-flex;
+  // display: inline-flex;
   right: 120px;
   background: white;
   padding: 4px;

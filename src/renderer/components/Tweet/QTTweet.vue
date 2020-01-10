@@ -33,7 +33,7 @@
         class="tweet-image"
         v-for="image in tweet.extended_entities.media"
         :key="image.index"
-        :src="image.media_url_https"
+        :src="image.media_url_https+':thumb'"
       />
     </div>
     </div>
@@ -148,8 +148,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .qt {
+  position: relative;
 	background-color: #ffe9e9;
 	border-radius: 12px;
   height: auto;
