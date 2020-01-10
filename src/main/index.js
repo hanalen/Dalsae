@@ -21,6 +21,7 @@ function createWindow () {
     height: 563,
     useContentSize: true,
     width: 1000,
+    minWidth:400,
     webPreferences: {webSecurity: false}
   })
   mainWindow.webContents.openDevTools()
