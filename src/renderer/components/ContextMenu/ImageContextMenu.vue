@@ -35,24 +35,41 @@ export default {
   },
   methods: {
     Save(){
-			// var http = require('http');
-			// var fs   = require('fs');
-			// // var app  = require('remote').require('app')
-
-			// console.log(this.images[this.index].media_url)	
-			// var file = fs.createWriteStream("d:/abc.png");
-			// var request = http.get(this.images[this.index].media_url, function(response) {
-			// 	console.log(response)
-			// 	response.pipe(file);
-			// 	console.log('down ok')
-			// });
-
-			this.DownloadFile(this.images[this.index]);
-
+      this.EventBus.$emit('Save')
+			// this.DownloadFile2(this.images[this.index]);
     },
     SaveAll(){
-			for(var i=0;i<this.images.length;i++)
-      	this.DownloadFile(this.images[i]);
+      this.EventBus.$emit('SaveAll')
+			// for(var i=0;i<this.images.length;i++)
+      // 	this.DownloadFile2(this.images[i]);
+		},
+		DownloadFile2(media){
+			var http = require('http');
+			var url = media.media_url;
+			var fs = require('fs');
+			var fileName = url.substring(url.lastIndexOf('/'),9999999999);
+			var file = fs.createWriteStream('Image/'+fileName);
+
+			const request = http.get(url).on('response', function(res) {
+      const len = parseInt(res.headers['content-length'], 10)
+      let downloaded = 0
+      let percent = 0
+      res
+        .on('data', function(chunk) {
+          file.write(chunk)
+          downloaded += chunk.length
+          percent = (100.0 * downloaded / len).toFixed(2)
+          console.log(`Downloading ${percent}% ${downloaded} bytes\r`)
+        })
+        .on('end', function() {
+					file.end()
+					console.log('down ok~')
+        })
+        .on('error', function (err) {
+					console.log('img down error!!!')
+					console.log(err)
+        })
+    })
 		},
 		DownloadFile(media){//트윗 media객체
 			var http = require('http');
@@ -60,12 +77,33 @@ export default {
 			var fs = require('fs');
 			var fileName = url.substring(url.lastIndexOf('/'),9999999999);
 			var filePath = fs.createWriteStream('Image/'+fileName);
-			console.log(filePath)
-			var request = http.get(url+':orig', function(response) {
-				console.log(response)
-				response.pipe(filePath);
-				console.log('down ok')
+			const request = new HttpRequest('GET', url,  {
+				reportProgress: true
 			});
+
+			http.request(request).subscribe(event => {
+				// progress
+				if (event.type === HttpEventType.DownloadProgress) {
+					console.log(event.loaded, event.total); 
+					// event.loaded = bytes transfered 
+					// event.total = "Content-Length", set by the server
+					const percentage = 100 / event.total * event.loaded;
+					console.log(percentage);
+				}
+
+				// finished
+				if (event.type === HttpEventType.Response) {
+					response.pipe(filePath);
+					console.log('down ok')
+					// console.log(event.body);
+				}
+			})
+
+			// var request = http.get(url+':orig', function(response) {
+			// 	console.log(response)
+			// 	response.pipe(filePath);
+			// 	console.log('down ok')
+			// });
 		},
 		// DownloadFile(media){//트윗 media객체
 		// 	var method='GET';

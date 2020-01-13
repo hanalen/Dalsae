@@ -21,6 +21,7 @@
 				<div v-for="(image,index) in tweet.orgTweet.extended_entities.media"
 					:key="index" class="img-preview">
 						<img :src="image.media_url_https" class="bottom-preview"/>
+						<progress ref="progress" value="0" max="100" />
 					</div>
 			</div>
 		</div>
@@ -65,7 +66,13 @@ export default {
 	props:{
 		uiOption:undefined,
 	},
-	computed:{
+	created: function(){
+		this.EventBus.$on('Save', ()=>{
+			this.Save();
+		});
+		this.EventBus.$on('SaveAll', ()=>{
+			this.SaveAll();
+		});
 	},
   mounted:function(){
 		console.log(this.tweet);
@@ -74,6 +81,43 @@ export default {
 		setTimeout(() => this.$el.focus(), 200);
 	},
 	methods:{
+ 		Save(){
+			this.DownloadImage(this.tweet.orgTweet.extended_entities.media[this.index], this.$refs.progress[this.index]);
+    },
+    SaveAll(){
+			for(var i=0;i<this.tweet.orgTweet.extended_entities.media.length;i++)
+				this.DownloadImage(this.tweet.orgTweet.extended_entities.media[i], this.$refs.progress[i]);
+		},
+		DownloadImage(media, progress){
+			//progress show, hide 해야 함
+			var http = require('http');
+			var url = media.media_url;
+			var fs = require('fs');
+			var fileName = url.substring(url.lastIndexOf('/'),9999999999);
+			var file = fs.createWriteStream('Image/'+fileName);
+
+			const request = http.get(url).on('response', function(res) {
+      const len = parseInt(res.headers['content-length'], 10)
+      let downloaded = 0
+			let percent = 0
+			var vthis=this;
+      res
+        .on('data', function(chunk) {
+          file.write(chunk)
+          downloaded += chunk.length
+					percent = (100.0 * downloaded / len).toFixed(2)
+					progress.value=percent;
+        })
+        .on('end', function() {
+					file.end()
+					console.log('down ok~')
+        })
+        .on('error', function (err) {
+					console.log('img down error!!!')
+					console.log(err)
+        })
+    	})
+		},
 		Prev(){
 			this.isZoom=false;
 			this.index--;
@@ -239,6 +283,9 @@ export default {
 				height: 100px;
 				object-fit: cover;
 				border-radius: 12px;
+		}
+		progress{
+			width: 100px;
 		}
 	}
 }
