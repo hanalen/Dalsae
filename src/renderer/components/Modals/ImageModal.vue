@@ -18,10 +18,10 @@
 				</div>
 			</div>
 			<div class="bottom">
-				<div v-for="(image,index) in tweet.orgTweet.extended_entities.media"
-					:key="index" class="img-preview">
+				<div v-for="(image,i) in tweet.orgTweet.extended_entities.media" @click="index=i"
+					:key="i" class="img-preview">
 						<img :src="image.media_url_https" class="bottom-preview"/>
-						<progress ref="progress" value="0" max="100" />
+						<ProgressBar ref="progress" :percent="listProgressPercent[i]"/>
 					</div>
 			</div>
 		</div>
@@ -37,16 +37,21 @@ import ApiOAuth from "../APICalls/OAuthCall.js"
 import Tweet from "../Tweet/Tweet.vue"
 import {EventBus} from '../../main.js';
 import ImagePopupVue from './ImagePopup.vue'
+import ProgressBar from '../Common/ProgressBar.vue'
 import ContextMenu from '../ContextMenu/ImageContextMenu.vue'
 
 export default {
 	name: 'imagemodal',
 	components:{
 		Tweet,
-		BootStrap
+		ProgressBar,
+		BootStrap,
+		Tweet,
+		ContextMenu
 	},
   data () {
     return {
+			listProgressPercent:Array(0,0,0,0),
 			isZoom:false,
 			tweet:undefined,
 			index:0,
@@ -58,10 +63,6 @@ export default {
 			marginLeft:0,
 			marginTop:0,
     }
-	},
-	components:{
-		Tweet,
-		ContextMenu
 	},
 	props:{
 		uiOption:undefined,
@@ -106,7 +107,7 @@ export default {
           file.write(chunk)
           downloaded += chunk.length
 					percent = (100.0 * downloaded / len).toFixed(2)
-					progress.value=percent;
+					progress.SetValue(percent);
         })
         .on('end', function() {
 					file.end()
