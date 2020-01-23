@@ -2,6 +2,10 @@
 dist/electron/*
 dist/web/*
 build/*
+Data/*
+Image/*
+Skin/*
+Sound/*
 !build/icons
 node_modules/
 npm-debug.log
