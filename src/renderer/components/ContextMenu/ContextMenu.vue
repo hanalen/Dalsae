@@ -5,21 +5,21 @@
     <div class="context-list" ref="list" tabindex="-1">
       <ContextMenuItem v-if="tweet.orgTweet.extended_entities!=undefined"
         :menuText="tweet.orgTweet.extended_entities.media[0].display_url"
-        :hotkey="'G'" :callback="Media"
+        :hotkey="'G'" :callback="Media" :mouseenter="Hover"
         ref="Media"/>
       <ContextMenuItem v-for="(url, index) in tweet.orgTweet.entities.urls" :key="index"
-                    :menuText="url.display_url" :hotkey="'T'" :callback="Url" ref="Url"/>
+                    :menuText="url.display_url" :hotkey="'T'" :callback="Url" ref="Url" :mouseenter="Hover"/>
       <div class="context-group"></div>
-      <ContextMenuItem :menuText="'답글'" :hotkey="'R'" :callback="Reply" ref="Reply"/>
-      <ContextMenuItem :menuText="'모두에게 답글'" :hotkey="'A'" :callback="ReplyAll"/>
+      <ContextMenuItem :menuText="'답글'" :hotkey="'R'" :callback="Reply" ref="Reply" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'모두에게 답글'" :hotkey="'A'" :callback="ReplyAll" :mouseenter="Hover"/>
       <div class="context-group"></div>
-      <ContextMenuItem :menuText="'리트윗'" :hotkey="'T'" :callback="Retweet"/>
-      <ContextMenuItem :menuText="'인용'" :hotkey="'W'" :callback="QT"/>
-      <ContextMenuItem :menuText="'관심글'" :hotkey="'F'" :callback="Favorite"/>
+      <ContextMenuItem :menuText="'리트윗'" :hotkey="'T'" :callback="Retweet" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'인용'" :hotkey="'W'" :callback="QT" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'관심글'" :hotkey="'F'" :callback="Favorite" :mouseenter="Hover"/>
       <div class="context-group"></div>
-      <ContextMenuItem :menuText="'웹에서 보기'" :hotkey="'B'" :callback="ViewWeb"/>
-      <ContextMenuItem :menuText="'트윗 복사'" :hotkey="'Ctrl+C'" :callback="Copy"/>
-      <ContextMenuItem :menuText="'트윗 삭제'" :hotkey="'Delete'" :callback="Delete"/>
+      <ContextMenuItem :menuText="'웹에서 보기'" :hotkey="'B'" :callback="ViewWeb" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'트윗 복사'" :hotkey="'Ctrl+C'" :callback="Copy" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'트윗 삭제'" :hotkey="'Delete'" :callback="Delete" :mouseenter="Hover"/>
     </div>
   </div>
 </template>
@@ -38,32 +38,43 @@ export default {
   },
   computed: {},
   mounted: function() {
-    //EventBus등록용 함수들
-    this.EventBus.$on("TTTT", e => {});
   },
   methods: {
+    Hover(item){
+      var index = this.$children.indexOf(item);
+      if(index > -1){
+        this.selectIndex=index;
+        item.$el.focus();
+      }
+    },
     Media(){
 
     },
     Favorite(){
       this.EventBus.$emit('Favorite', this.tweet);
+      this.Hide();
     },
     Retweet(){
       this.EventBus.$emit('Retweet', this.tweet);
+      this.Hide();
     },
     Reply(){
       this.EventBus.$emit('Reply', this.tweet)
+      this.Hide();
     },
     ReplyAll(){
       this.EventBus.$emit('ReplyAll', this.tweet)
+      this.Hide();
     },
     QT(){
 
+      this.Hide();
     },
     ViewWeb(){
       const { shell } = require('electron')
       shell.openExternal('https://twitter.com/'+this.tweet.orgTweet.user.screen_name+'/status/'+this.tweet.orgTweet.id_str)
       this.$store.dispatch('AddOpen', this.tweet);
+      this.Hide();
     },
     Url(){
       //url entities 내부 변수 3개
@@ -72,7 +83,7 @@ export default {
       //display_url
     },
     Copy(){
-
+      this.Hide();
     },
     Delete(){
 
@@ -89,25 +100,19 @@ export default {
       e.stopPropagation();
       e.preventDefault();
       this.selectIndex++;
-      if (this.selectIndex >= this.$refs.list.children.length) {
+      if (this.selectIndex >= this.$children.length) {
         this.selectIndex--;
       }
-      if(this.$refs.list.children[this.selectIndex].className=='context-group'){//라인 선택 중이면 한칸더 이동
-        this.selectIndex++;
-      }
-      this.$refs.list.children[this.selectIndex].focus();
+      this.$children[this.selectIndex].$el.focus();
     },
     ArrowUp(e){
       e.preventDefault();
       e.stopPropagation();
       this.selectIndex--;
-      if(this.$refs.list.children[this.selectIndex].className=='context-group'){//라인 선택 중이면 한칸더 이동
-        this.selectIndex--;
-      }
       if (this.selectIndex < 0) {
         this.selectIndex = 0;
       }
-      this.$refs.list.children[this.selectIndex].focus();
+      this.$children[this.selectIndex].$el.focus();
     },
     Show(e) {
       this.isVisible = true;

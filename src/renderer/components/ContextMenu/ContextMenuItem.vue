@@ -1,6 +1,6 @@
 <template>
   <div :class="{'context-menu-item':true, 'selected':selected}" @click="Click" tabindex="-1"
-				@focus="Focused" v-on:focusout="FocusOut">
+				@focus="Focused" v-on:focusout="FocusOut" @mouseenter="Hover">
 		<div class="inner-box">
 			<div class="context-item-left">
 		 		<span>{{menuText}}</span>
@@ -36,6 +36,11 @@ export default {
 		FocusOut(e){
 			this.selected=false;
 		},
+		Hover(e){
+			if(this.mouseenter){
+				this.mouseenter(this);
+			}
+		},
 	},
   mounted: function() {//EventBus등록용 함수들
     this.EventBus.$on('ContextEnter', (e) => {
@@ -50,6 +55,7 @@ export default {
 		menuText:undefined,
 		hotkey:undefined,
 		callback:undefined,
+		mouseenter:undefined,
   },
 };
 </script>
