@@ -291,7 +291,27 @@ export default new Vuex.Store({
       var orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
       tweet.orgUser = JSON.parse(JSON.stringify(orgUser));
       tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
-      state.tweets.daehwa.push(tweet);
+      state.tweets.daehwa.splice(state.tweets.daehwa.length,0, tweet);//대화는 오래된 트윗이 위에 위치
+    },
+    DaehwaAutoAdd(state, tweet){
+      var list=state.tweets.daehwa;
+      if(list.find(x=>x.id_str==tweet.id_str) == undefined){//중복 넘기기
+        list.splice(list.length,0,tweet);//대화는 오래된 트윗이 위에 위치
+      }
+      var nextTweet=tweet;
+      for(var i=0 ; i < 100 ; i++){//대충 무한 루프 방지
+        if(nextTweet==undefined) break;
+        var findTweet = undefined;
+        if(nextTweet.orgTweet.in_reply_to_status_id_str==undefined) break; // 대화 끊김
+        findTweet = state.tweets.home.find(x=>x.orgTweet.id_str == nextTweet.orgTweet.in_reply_to_status_id_str);
+        if(findTweet == undefined){
+          findTweet = state.tweets.mention.find(x=>x.orgTweet.id_str == nextTweet.orgTweet.in_reply_to_status_id_str);
+        }
+        if(findTweet && list.find(x=>x.id_str==tweet.id_str)!=undefined){//캐시가 있을 경우 && 중복이 아닐 경우
+          list.splice(list.length,0,findTweet);//대화는 오래된 트윗이 위에 위치
+        }
+        nextTweet = findTweet;
+      }
     },
     ClearDaehwa(state){
       console.log('clear dh')
@@ -366,6 +386,9 @@ export default new Vuex.Store({
     },
     Daehwa(context, tweet){
       context.commit('Daehwa', tweet);
+    },
+    DaehwaAutoAdd(context, tweet){//대화 불러오기 시 캐시된 데이터가 있는지 확인 
+      context.commit('DaehwaAutoAdd', tweet);
     },
     Delete(context, tweet){
       context.commit('Delete', tweet);

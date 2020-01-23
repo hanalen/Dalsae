@@ -90,12 +90,19 @@ export default {
           e.preventDefault();
           var tweet =this.selectPanel.GetSelectTweet();
 
-          this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'daehwa'})
-          this.EventBus.$emit('ReqDaehwa', tweet);
+          this.$store.dispatch('DaehwaAutoAdd', tweet);//캐시데이터가 있는지부터 체크 
+
+          if(this.$store.state.tweets.daehwa[0].orgTweet.in_reply_to_status_id_str){//캐시 정리가 끝난 후 대화가 있을 경우에 api 콜
+            this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'daehwa'})
+            this.EventBus.$emit('ReqDaehwa', tweet);
+          }
+          else{
+            this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName':'daehwa'})//로딩 뱅글이 끄기위해 호출
+            this.EventBus.$emit('FocusPanel', 'daehwa');//패널 변경
+          }
         }
         else if(e.keyCode==8){//backspace, 대화 숨기기. vuex의 대화 목록을 clear
           e.preventDefault();
-          this.$store.dispatch('ClearDaehwa');
           this.EventBus.$emit('FocusPanel', this.prevPanelName);
         }
         else if(e.keyCode==88||e.keyCode==120){//x, qt트윗 등록 
@@ -172,6 +179,9 @@ export default {
       this.selectPanel.Focus(undefined);
     });
     this.EventBus.$on('FocusPanel', (selectPanelName)=>{
+      if(this.selectPanelName=='daehwa' && selectPanelName!='daehwa'){//대화패널에서 나갈 경우 클리어
+        this.$store.dispatch('ClearDaehwa');
+      }
       if(selectPanelName!='' &&selectPanelName != undefined){
         this.selectPanelName=selectPanelName;
       }
