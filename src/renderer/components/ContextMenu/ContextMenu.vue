@@ -61,7 +61,9 @@ export default {
 
     },
     ViewWeb(){
-
+      const { shell } = require('electron')
+      shell.openExternal('https://twitter.com/'+this.tweet.orgTweet.user.screen_name+'/status/'+this.tweet.orgTweet.id_str)
+      this.$store.dispatch('AddOpen', this.tweet);
     },
     Url(){
       //url entities 내부 변수 3개

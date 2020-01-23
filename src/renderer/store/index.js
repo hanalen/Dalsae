@@ -202,6 +202,11 @@ export default new Vuex.Store({
         }
       });
     },
+    AddOpen(state, tweet){
+      if(state.tweets.open.find(x=>x.id_str==tweet.id_str)==undefined){
+        state.tweets.open.splice(0, 0, tweet);
+      }
+    },
     updateOauth(state, oauth){
       state.OAuthTemp=oauth;
     },
@@ -334,6 +339,9 @@ export default new Vuex.Store({
     },
     AddMention(context, listTweet){
       context.commit('AddMention', listTweet);
+    },
+    AddOpen(context, tweet){
+      context.commit('AddOpen', tweet);
     },
     UpdateUser(context, user){
       context.commit('UpdateUserInfo', user);

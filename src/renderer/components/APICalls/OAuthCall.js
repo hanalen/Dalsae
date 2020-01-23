@@ -31,13 +31,9 @@ export default{
 				var pair = splitOne[i].split('=');
 				arrOAuth[pair[0]]=pair[1];
 			}
-			// console.log(arrOAuth);
-			// OAuth.UpdateToken(arrOAuth['oauth_token'],arrOAuth['oauth_token_secret']);
 			var url = 'https://api.twitter.com/oauth/authorize?oauth_token='+arrOAuth.oauth_token;
-			// this.$electron.shell.openExternal(url)
-			window.open(url);
+      shell.openExternal('https://twitter.com/'+this.tweet.orgTweet.user.screen_name+'/status/'+this.tweet.orgTweet.id_str)
 			callback(arrOAuth);
-			// return arrOAuth;
 		}).catch((err)=>{
 			console.log('get token error!');
 			console.log(err);
