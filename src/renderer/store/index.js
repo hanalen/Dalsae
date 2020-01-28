@@ -212,7 +212,8 @@ export default new Vuex.Store({
     },
     UpdateUserInfo(state, userinfo){
       state.Account.accountList.forEach(function(account){
-        if(account.id_str==userinfo.id_str){//계정 목록에 있는 데이터도 갱신 
+        if(account.user_id==userinfo.id_str){//계정 목록에 있는 데이터도 갱신 
+          console.log('userdata update')
           account.userData=userinfo;
           return false;
         }

@@ -1,6 +1,6 @@
 <template>
   <div class="ui-top-normal">
-    <div class="ui-propic" v-if="userData!=undefined &&uiOption.isShowPropic && !uiOption.isSmallInput">
+    <div class="ui-propic" v-if="userData!=undefined &&uiOption.isShowPropic && !uiOption.isSmallInput" @click="ClickPropic">
         <img class="propic" :src="Propic" :class="{'profile':!uiOption.isBigPropic,'profile-big':uiOption.isBigPropic}"/>
     </div>
     <InputTweet ref="inputTweet" :option="uiOption" v-bind:following="this.following" :tweetText.sync="tweetText" :sendCallBack="this.SendTweet"/>
@@ -52,6 +52,9 @@ export default {
     
   },
   methods:{
+    ClickPropic(e){
+      this.EventBus.$emit('ShowAccountModal', true);
+    },
     UpdateUserData(){
       this.selectAccount=this.$store.state.Account.selectAccount;
       this.accountList=this.$store.state.Account.accountList;
