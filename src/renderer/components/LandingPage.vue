@@ -1,6 +1,7 @@
 <template>
   <div class="app">
     <ImageModal ref="imageModal" v-if="isShowImage" :uiOption="this.$store.state.DalsaeOptions.uiOptions"/>
+    <AccountSelectModal ref="accountModal" v-if="isShowAccount"/>
     <div class="dalsae">
       <UIOptionModal v-if="isShowUIOption"/>
       <div id="main-page">
@@ -28,6 +29,7 @@ import FileAgent from "./Agents/FileAgent.vue"
 import OAuth from "../oauth.js"
 import UIOptionModal from './Modals/UIOptionModal.vue'
 import ImageModal from './Modals/ImageModal.vue'
+import AccountSelectModal from './Modals/AccountSelectModal.vue'
 
 export default {
   name: 'landing-page',
@@ -41,11 +43,13 @@ export default {
     FileAgent,
     UIOptionModal,
     ImageModal,
+    AccountSelectModal,
   },
   data () {
     return {
       isShowUIOption:false,
       isShowImage:false,
+      isShowAccount:false,
     }
   },
   methods: {
@@ -90,6 +94,9 @@ export default {
     });
   },
   mounted:function(){
+    this.EventBus.$on('ShowAccountModal', (isShow)=>{
+      this.isShowAccount=isShow;
+    });
     this.EventBus.$on('ClosePopup', () => {
         this.ClosePopup();
     });

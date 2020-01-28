@@ -212,7 +212,8 @@ export default new Vuex.Store({
     },
     UpdateUserInfo(state, userinfo){
       state.Account.accountList.forEach(function(account){
-        if(account.id_str==userinfo.id_str){//계정 목록에 있는 데이터도 갱신 
+        if(account.user_id==userinfo.id_str){//계정 목록에 있는 데이터도 갱신 
+          console.log('userdata update')
           account.userData=userinfo;
           return false;
         }
@@ -331,6 +332,28 @@ export default new Vuex.Store({
       state.DalsaeOptions.uiOptions.isLoadOrgImg=uiOption.isLoadOrgImg;
       state.DalsaeOptions.uiOptions.isMuteMention=uiOption.isMuteMention;
     },
+    AccountChange(state, user_id){
+      var account = state.Account.accountList.find(x=>x.user_id==user_id)
+      if(account==undefined) return;
+
+      /////////데이터 clear작업///////////
+      state.Account.selectAccount=account;
+      state.tweets.home=[];
+      state.tweets.mention=[];
+      state.tweets.fav=[];
+      state.tweets.open=[];
+      state.tweets.user=[];
+      state.tweets.daehwa=[];
+    },
+    AccountClear(state){
+      state.Account.selectAccount=undefined;
+      state.tweets.home=[];
+      state.tweets.mention=[];
+      state.tweets.fav=[];
+      state.tweets.open=[];
+      state.tweets.user=[];
+      state.tweets.daehwa=[];
+    }
   },
   methods:{
   },
@@ -400,6 +423,12 @@ export default new Vuex.Store({
       browser.runtime.sendMessage({type: "storeinit", key: "count"}).then(count => {
         commit('setCount', count)
       })
+    },
+    AccountChange(context, user_id){
+      context.commit('AccountChange', user_id);
+    },
+    AccountClear(context){
+      context.commit('AccountClear');
     }
   }
 });

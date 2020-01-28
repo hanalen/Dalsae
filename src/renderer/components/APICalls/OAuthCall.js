@@ -31,8 +31,9 @@ export default{
 				var pair = splitOne[i].split('=');
 				arrOAuth[pair[0]]=pair[1];
 			}
+      const { shell } = require('electron')
 			var url = 'https://api.twitter.com/oauth/authorize?oauth_token='+arrOAuth.oauth_token;
-      shell.openExternal('https://twitter.com/'+this.tweet.orgTweet.user.screen_name+'/status/'+this.tweet.orgTweet.id_str)
+      shell.openExternal(url);
 			callback(arrOAuth);
 		}).catch((err)=>{
 			console.log('get token error!');

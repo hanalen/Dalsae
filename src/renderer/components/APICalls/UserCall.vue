@@ -90,6 +90,7 @@ export default {
 	  ResUserInfo(userinfo){
       this.$store.dispatch('UpdateUser', userinfo);
       this.EventBus.$emit('ResUserInfo', userinfo);
+      this.EventBus.$emit('SaveAccount');
     },
     ResHome(listTweet){
       this.isLoadingHome=false;
