@@ -332,6 +332,19 @@ export default new Vuex.Store({
       state.DalsaeOptions.uiOptions.isLoadOrgImg=uiOption.isLoadOrgImg;
       state.DalsaeOptions.uiOptions.isMuteMention=uiOption.isMuteMention;
     },
+    AccountChange(state, user_id){
+      var account = state.Account.accountList.find(x=>x.user_id==user_id)
+      if(account==undefined) return;
+
+      /////////데이터 clear작업///////////
+      state.account.selectAccount=account;
+      state.tweets.home=[];
+      state.tweets.mention=[];
+      state.tweets.fav=[];
+      state.tweets.open=[];
+      state.tweets.user=[];
+      state.tweets.daehwa=[];
+    }
   },
   methods:{
   },
@@ -401,6 +414,9 @@ export default new Vuex.Store({
       browser.runtime.sendMessage({type: "storeinit", key: "count"}).then(count => {
         commit('setCount', count)
       })
-    }
+    },
+    AccountChange(context, user_id){
+      context.commit('AccountChange', user_id);
+    },
   }
 });
