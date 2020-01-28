@@ -41,6 +41,7 @@ export default {
         console.log('이미 홈 로딩 중');
         return;
       }
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'home'})
       this.isLoadingHome=true;
       ApiUser.ReqHome(maxId, sinceId, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResHome);
     },
@@ -49,6 +50,7 @@ export default {
         console.log('이미 멘션 로딩 중');
         return;
       }
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'mention'})
       this.isLoadingMention=true;
       ApiUser.ReqMention(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResMention);
     },

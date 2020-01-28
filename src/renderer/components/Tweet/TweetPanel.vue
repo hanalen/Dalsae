@@ -194,15 +194,15 @@ export default {
 
       if(panel=='home'){
         this.EventBus.$emit('ReqHome');
-        this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':this.selectPanelName})
+        // this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':this.selectPanelName})
       }
       else if(panel=='mention'){
         this.EventBus.$emit('ReqMention');
-        this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':this.selectPanelName})
+        // this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':this.selectPanelName})
       }
       else if(panel=='fav'){
         this.EventBus.$emit('ReqFav');
-        this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':this.selectPanelName})
+        // this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':this.selectPanelName})
       }
     }
   },
