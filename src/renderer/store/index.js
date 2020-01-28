@@ -337,7 +337,16 @@ export default new Vuex.Store({
       if(account==undefined) return;
 
       /////////데이터 clear작업///////////
-      state.account.selectAccount=account;
+      state.Account.selectAccount=account;
+      state.tweets.home=[];
+      state.tweets.mention=[];
+      state.tweets.fav=[];
+      state.tweets.open=[];
+      state.tweets.user=[];
+      state.tweets.daehwa=[];
+    },
+    AccountClear(state){
+      state.Account.selectAccount=undefined;
       state.tweets.home=[];
       state.tweets.mention=[];
       state.tweets.fav=[];
@@ -418,5 +427,8 @@ export default new Vuex.Store({
     AccountChange(context, user_id){
       context.commit('AccountChange', user_id);
     },
+    AccountClear(context){
+      context.commit('AccountClear');
+    }
   }
 });
