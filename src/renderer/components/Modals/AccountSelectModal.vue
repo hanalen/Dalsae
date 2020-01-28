@@ -74,11 +74,15 @@ export default {
 .account-list{
 	display: flex;
 	flex-direction: column;
+	.account{
+		margin-bottom: 10px;
+	}
 	.account img{
 		// width: 100px;
 		border-radius: 10px;
 	}
 	i{
+		margin-top: -5px;
 		color: #ffe0e0;
 	}
 }
