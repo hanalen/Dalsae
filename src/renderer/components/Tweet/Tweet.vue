@@ -42,6 +42,7 @@
       @mouseleave="hidepreview"
       @click="ImageClick"
     >
+    <i v-if="tweet.orgTweet.extended_entities.media[0].type!='photo'" class="far fa-play-circle fa-3x"></i>
       <img
         class="tweet-image"
         v-for="image in tweet.orgTweet.extended_entities.media"
