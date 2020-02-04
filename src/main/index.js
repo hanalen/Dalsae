@@ -1,4 +1,10 @@
-import { app, BrowserWindow } from 'electron'
+const {app, BrowserWindow, Menu, protocol, ipcMain, ipcRenderer} = require('electron');
+const log = require('electron-log');
+const {autoUpdater} = require("electron-updater");
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
 
 /**
  * Set `__static` path to static files in production
@@ -9,6 +15,10 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 let mainWindow
+function sendStatusToWindow(text) {
+  log.info(text);
+}
+
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
@@ -31,8 +41,37 @@ function createWindow () {
     mainWindow = null
   })
 }
+ipcMain.on('restart_app', ()=>{
+  autoUpdater.quitAndInstall(true, true);
+});
 
-app.on('ready', createWindow)
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
+})
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Update available.');
+})
+autoUpdater.on('update-not-available', (info) => {
+  sendStatusToWindow('Update not available.');
+})
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err);
+})
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  sendStatusToWindow(log_message);
+})
+autoUpdater.on('update-downloaded', (info) => {
+  mainWindow.webContents.send('update_downloaded');
+});
+
+app.on('ready', ()=>{
+    createWindow();
+    autoUpdater.checkForUpdates();
+  }  
+)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

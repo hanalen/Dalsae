@@ -92,6 +92,14 @@ export default {
     this.$nextTick(()=>{
       this.EventBus.$emit('LoadFiles');
     });
+
+    const { ipcRenderer } = require('electron');
+    ipcRenderer.on('update_downloaded', ()=>{
+      var yes = confirm('달새의 새 업데이트가 다운로드 되었습니다. 확인을 누르면 재시작됩니다.');
+      if(yes==true){
+        ipcRenderer.send('restart_app');
+      }
+    });
   },
   mounted:function(){
     this.EventBus.$on('ShowAccountModal', (isShow)=>{
