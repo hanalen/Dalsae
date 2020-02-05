@@ -45,6 +45,27 @@ ipcMain.on('restart_app', ()=>{
   autoUpdater.quitAndInstall(true, true);
 });
 
+var imageWin=undefined
+
+ipcMain.on('child', (event, tweet)=>{
+  imageWin = new BrowserWindow({parent:mainWindow, show:false});
+  const modalPath = process.env.NODE_ENV === 'development'
+      ? 'http://localhost:9080/#/Image'
+      : `file://${__dirname}/index.html#Image`
+  imageWin.loadURL(modalPath);
+
+  imageWin.once('ready-to-show', () => {
+    imageWin.webContents.send('tweet', tweet)
+    imageWin.show()
+  })
+  imageWin.on('closed', () => {
+    sendStatusToWindow('child close');
+    imageWin = null
+  })  
+})
+
+
+
 autoUpdater.on('checking-for-update', () => {
   sendStatusToWindow('Checking for update...');
 })

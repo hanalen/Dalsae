@@ -170,7 +170,30 @@ export default {
         this.$refs.qtTweet.HoverOut();
     },
     ImageClick(e){
-      this.EventBus.$emit('ShowTweetImage', this.tweet);
+      var ipcRenderer = require('electron').ipcRenderer;
+      ipcRenderer.send('child', 'abcdefg');
+      return;
+      ipcRenderer.on('tweet', function (event,store) {
+        console.log('tweet recv');
+        console.log(store);
+        console.log(event)
+      });
+      const { BrowserWindow } = require('electron')
+      console.log(BrowserWindow)
+      let win = new BrowserWindow({ width: 800, height: 600 })
+      win.on('closed', () => {
+        win = null
+      })
+      const modalPath = process.env.NODE_ENV === 'development'
+          ? 'http://localhost:9080/#/Image'
+          : `file://${__dirname}/index.html#Image`
+      win.webContents.send('tweet', 'abcdef');
+
+      win.loadURL(modalPath)
+
+
+      // window.open(modalPath);
+      // this.EventBus.$emit('ShowTweetImage', this.tweet);
     },
     Click(e){
       if(e.button==2 || e.button==3){

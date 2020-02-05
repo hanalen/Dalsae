@@ -12,7 +12,8 @@ export default new Router({
     },
     {
        path: '/Image',
-       component: require('@/components/Modals/ImageModal').default, 
+       name:'Image',
+       component: require('@/components/Modals/ImagePopup').default, 
        props: (route) => ({ query: route.query.id }) 
     },
     // {
