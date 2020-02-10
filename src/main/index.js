@@ -39,6 +39,7 @@ function createWindow () {
 
   mainWindow.on('closed', () => {
     mainWindow = null
+    imageWin=null
   })
 }
 ipcMain.on('restart_app', ()=>{
@@ -47,7 +48,7 @@ ipcMain.on('restart_app', ()=>{
 
 var imageWin=undefined
 
-ipcMain.on('child', (event, tweet)=>{
+ipcMain.on('child', (event, tweet, option)=>{
   imageWin = new BrowserWindow({parent:mainWindow, show:false});
   const modalPath = process.env.NODE_ENV === 'development'
       ? 'http://localhost:9080/#/Image'
@@ -55,7 +56,7 @@ ipcMain.on('child', (event, tweet)=>{
   imageWin.loadURL(modalPath);
 
   imageWin.once('ready-to-show', () => {
-    imageWin.webContents.send('tweet', tweet)
+    imageWin.webContents.send('tweet', tweet, option)
     imageWin.show()
   })
   imageWin.on('closed', () => {

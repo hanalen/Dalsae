@@ -171,7 +171,7 @@ export default {
     },
     ImageClick(e){
       var ipcRenderer = require('electron').ipcRenderer;
-      ipcRenderer.send('child', 'abcdefg');
+      ipcRenderer.send('child', this.tweet, this.option);
       return;
       ipcRenderer.on('tweet', function (event,store) {
         console.log('tweet recv');
