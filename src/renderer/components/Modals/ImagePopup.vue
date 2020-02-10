@@ -68,7 +68,6 @@ export default {
     }
 	},
 	props:{
-		uiOption:undefined,
 	},
 	created: function(){
 		var ipcRenderer = require('electron').ipcRenderer;
