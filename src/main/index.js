@@ -46,23 +46,44 @@ ipcMain.on('restart_app', ()=>{
   autoUpdater.quitAndInstall(true, true);
 });
 
-var imageWin=undefined
+var imageWin=[];
+
+function CreateImageWindow(){
+  for(var i=0;i<4;i++){
+    sendStatusToWindow('win before')
+    var win = new BrowserWindow({show:false});
+    sendStatusToWindow('win one')
+
+    const modalPath = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:9080/#/Image'
+        : `file://${__dirname}/index.html#Image`
+    sendStatusToWindow('win two')
+    win.loadURL(modalPath);
+    sendStatusToWindow('win load')
+
+    imageWin.push(win);
+    ImageWindowHide(win);
+  }
+}
+
+function ImageWindowHide(win){
+  win.on('close', (e)=>{
+    sendStatusToWindow('child close!')
+    sendStatusToWindow(win)
+
+    e.preventDefault();
+    win.hide();
+  });
+}
+var imageIndex=0;
 
 ipcMain.on('child', (event, tweet, option)=>{
-  imageWin = new BrowserWindow({parent:mainWindow, show:false});
-  const modalPath = process.env.NODE_ENV === 'development'
-      ? 'http://localhost:9080/#/Image'
-      : `file://${__dirname}/index.html#Image`
-  imageWin.loadURL(modalPath);
+  imageWin[imageIndex].webContents.send('tweet', tweet, option)
 
-  imageWin.once('ready-to-show', () => {
-    imageWin.webContents.send('tweet', tweet, option)
-    imageWin.show()
-  })
-  imageWin.on('closed', () => {
-    sendStatusToWindow('child close');
-    imageWin = null
-  })  
+  imageWin[imageIndex].show();
+  imageIndex++;
+  if(imageIndex > 3)
+    imageIndex=0;
 })
 
 
@@ -91,6 +112,7 @@ autoUpdater.on('update-downloaded', (info) => {
 
 app.on('ready', ()=>{
     createWindow();
+    CreateImageWindow();
     autoUpdater.checkForUpdates();
   }  
 )
