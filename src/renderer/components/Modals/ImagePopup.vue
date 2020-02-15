@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import JQuery from 'jquery'
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import BootStrap from "bootstrap"
+// import JQuery from 'jquery'
+// import 'bootstrap'
+// import 'bootstrap/dist/css/bootstrap.min.css'
+// import BootStrap from "bootstrap"
 import ApiOAuth from "../APICalls/OAuthCall.js"
 import Tweet from "../Tweet/Tweet.vue"
 import {EventBus} from '../../main.js';
@@ -47,7 +47,7 @@ export default {
 	components:{
 		Tweet,
 		ProgressBar,
-		BootStrap,
+		// BootStrap,
 		Tweet,
 		ContextMenu
 	},
