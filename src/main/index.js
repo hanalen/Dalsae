@@ -4,7 +4,6 @@ const {autoUpdater} = require("electron-updater");
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
-log.info('App starting...');
 
 /**
  * Set `__static` path to static files in production
@@ -39,7 +38,15 @@ function createWindow () {
 
   mainWindow.on('closed', () => {
     mainWindow = null
-    imageWin=null
+    
+    imageWin.forEach((win)=>{
+      win.close();
+    })
+    imageWin=null;
+    app.quit()
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
   })
 }
 ipcMain.on('restart_app', ()=>{
@@ -50,16 +57,12 @@ var imageWin=[];
 
 function CreateImageWindow(){
   for(var i=0;i<4;i++){
-    sendStatusToWindow('win before')
     var win = new BrowserWindow({show:false});
-    sendStatusToWindow('win one')
 
     const modalPath = process.env.NODE_ENV === 'development'
         ? 'http://localhost:9080/#/Image'
         : `file://${__dirname}/index.html#Image`
-    sendStatusToWindow('win two')
     win.loadURL(modalPath);
-    sendStatusToWindow('win load')
 
     imageWin.push(win);
     ImageWindowHide(win);
@@ -68,11 +71,10 @@ function CreateImageWindow(){
 
 function ImageWindowHide(win){
   win.on('close', (e)=>{
-    sendStatusToWindow('child close!')
-    sendStatusToWindow(win)
-
-    e.preventDefault();
-    win.hide();
+    if(mainWindow!=null){
+      e.preventDefault();
+      win.hide();
+    }
   });
 }
 var imageIndex=0;
