@@ -30,10 +30,12 @@ function createWindow () {
     height: 563,
     useContentSize: true,
     width: 1000,
-    minWidth:400,
+    minWidth:440,
     webPreferences: {webSecurity: false}
   })
-  mainWindow.webContents.openDevTools()
+  if(process.env.NODE_ENV === 'development'){
+    mainWindow.webContents.openDevTools()
+  }
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
