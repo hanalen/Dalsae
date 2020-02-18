@@ -71,6 +71,26 @@ function CreateImageWindow(){
   }
 }
 
+var muteOptionWin=null;
+
+ipcMain.on('show_mute_option_window', (event, option)=>{
+  if(muteOptionWin) return;//2번 생성 막기
+  muteOptionWin = new BrowserWindow({show:false,width:1500, height:800, x:2000, y:0, devTools :false});
+  const path = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:9080/#/MuteOption'
+        : `file://${__dirname}/index.html#MuteOption`
+  muteOptionWin.loadURL(path);
+  muteOptionWin.on('ready-to-show', ()=>{
+    muteOptionWin.webContents.send('mute_option', option)
+    muteOptionWin.show();
+  })
+  muteOptionWin.on('closed', (e)=>{
+    muteOptionWin=null;
+  });
+})
+
+
+
 function ImageWindowHide(win){
   win.on('close', (e)=>{
     if(mainWindow!=null){

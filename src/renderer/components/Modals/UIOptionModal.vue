@@ -64,7 +64,11 @@
       <input v-model="option.isMuteMention" @change="OptionChange" type="checkbox" class="custom-control-input" id="switchmuteMention">
       <label class="custom-control-label" for="switchmuteMention">멘션함도 뮤트 처리 합니다.</label>
     </div>
-
+    <br/>
+    <h4>알림 및 뮤트 설정</h4>
+    <div class="custom-control custom-switch">
+      <b-button variant="primary" @click="ClickMuteOption">새창으로 여는 것이야</b-button>
+    </div>
 
   </div>
 </template>
@@ -103,7 +107,12 @@ export default {
     },
     OptionChange(){
       this.$store.dispatch('UIOption', this.option);
-    }
+    },
+    ClickMuteOption(e){
+      var ipcRenderer = require('electron').ipcRenderer;
+      console.log(this.$store.state.DalsaeOptions)
+      ipcRenderer.send('show_mute_option_window', this.$store.state.DalsaeOptions.muteOptions);
+    },
   },
   created: function(){
     var orgOption=this.$store.state.DalsaeOptions.uiOptions;
@@ -125,6 +134,11 @@ export default {
 h4{
   font-size:13px;
   font-weight: bolder;
+}
+.btn{
+  font-size: 14px !important;
+  height: 30px;
+  padding: 0 6px !important
 }
 .option-modal{
   color:rgba(44,44,44,.85);

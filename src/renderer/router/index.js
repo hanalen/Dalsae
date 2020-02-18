@@ -16,6 +16,12 @@ export default new Router({
        component: require('@/components/Modals/ImagePopup').default, 
        props: (route) => ({ query: route.query.id }) 
     },
+    {
+      path: '/MuteOption',
+      name:'MuteOption',
+      component: require('@/components/Modals/MuteOptionPopup').default, 
+      // props: (route) => ({ query: route.query.id }) 
+   },
     // {
     //   path:'/image',
     //   name:'image',

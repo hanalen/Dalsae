@@ -104,6 +104,7 @@ export default new Vuex.Store({
         user:[],
         keyword:[],
         tweet:[],
+        highlight:[],
       },
       skin:[],
       hotkey:[],
