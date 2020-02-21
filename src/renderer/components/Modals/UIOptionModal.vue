@@ -110,8 +110,7 @@ export default {
     },
     ClickMuteOption(e){
       var ipcRenderer = require('electron').ipcRenderer;
-      console.log(this.$store.state.DalsaeOptions)
-      ipcRenderer.send('show_mute_option_window', this.$store.state.DalsaeOptions.muteOptions);
+      ipcRenderer.send('OpenMuteOptionPopup', this.$store.state.DalsaeOptions.muteOptions);
     },
   },
   created: function(){

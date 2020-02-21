@@ -51,19 +51,13 @@ export default {
 			}
 		},
 		SaveAll(){
-			
-			fs.writeJson('./package.json', {name: 'fs-extra'})
-			.then(() => {
-				console.log('success!')
-			})
-			.catch(err => {
-				console.error(err)
-			})
+			this.SaveAccount();
+			this.SaveOption();
 		},
 		SaveAccount(){
 			const fs = require('fs-extra');
 			var account = this.$store.state.Account;
-			fs.writeJson(this.accountPath, account)
+			fs.writeJson(this.accountPath, account, 'utf-8')
 			.then(() => {
 				console.log('success!')
 			})
@@ -72,7 +66,7 @@ export default {
 		SaveOption(){
 			const fs = require('fs-extra');
 			var option = this.$store.state.DalsaeOptions;
-			fs.writeJson(this.optionFilePath, option)
+			fs.writeJson(this.optionFilePath, option, 'utf-8')
 			.then(() => {
 				console.log('option save success!')
 			})

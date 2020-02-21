@@ -73,7 +73,7 @@ function CreateImageWindow(){
 
 var muteOptionWin=null;
 
-ipcMain.on('show_mute_option_window', (event, option)=>{
+ipcMain.on('OpenMuteOptionPopup', (event, option)=>{
   if(muteOptionWin) return;//2번 생성 막기
   muteOptionWin = new BrowserWindow({show:false,width:1500, height:800, x:2000, y:0, devTools :false});
   const path = process.env.NODE_ENV === 'development'
@@ -88,6 +88,16 @@ ipcMain.on('show_mute_option_window', (event, option)=>{
     muteOptionWin=null;
   });
 })
+
+ipcMain.on('MuteOptionSave', (event,muteOption)=>{
+  sendStatusToWindow('muteOption Save')
+  sendStatusToWindow(muteOption);
+  mainWindow.webContents.send('MuteOptionSave', muteOption)
+});
+
+ipcMain.on('CloseMuteOptionPopup',()=>{
+  muteOptionWin.close();
+});
 
 
 

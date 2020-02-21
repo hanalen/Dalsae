@@ -12,6 +12,7 @@
         <UserCall/>
         <TweetCall/>
         <FileAgent/>
+        <IPCAgent/>
       </div>
     </div>
   </div>
@@ -26,6 +27,7 @@ import ApiUser from "./APICalls/UserCall.js"
 import UserCall from "./APICalls/UserCall.vue"
 import TweetCall from "./APICalls/TweetCall.vue"
 import FileAgent from "./Agents/FileAgent.vue"
+import IPCAgent from "./Agents/IPCAgent.vue"
 import OAuth from "../oauth.js"
 import UIOptionModal from './Modals/UIOptionModal.vue'
 import ImageModal from './Modals/ImageModal.vue'
@@ -41,6 +43,7 @@ export default {
     UserCall,
     TweetCall,
     FileAgent,
+    IPCAgent,
     UIOptionModal,
     ImageModal,
     AccountSelectModal,

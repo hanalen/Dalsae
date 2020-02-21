@@ -354,6 +354,9 @@ export default new Vuex.Store({
       state.tweets.open=[];
       state.tweets.user=[];
       state.tweets.daehwa=[];
+    },
+    SaveMuteOption(state, muteOption){
+      state.DalsaeOptions.muteOptions=muteOption;
     }
   },
   methods:{
@@ -430,6 +433,9 @@ export default new Vuex.Store({
     },
     AccountClear(context){
       context.commit('AccountClear');
+    },
+    SaveMuteOption(context, muteOption){
+      context.commit('SaveMuteOption', muteOption)
     }
   }
 });
