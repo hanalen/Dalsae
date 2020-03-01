@@ -5,7 +5,7 @@ import axios from 'axios'
 // import { createPersistedState, createSharedMutations } from 'vuex-electron'
 import createMutationsSharer from "vuex-shared-mutations";
 import modules from './modules'
-
+import TweetDataAgent from '../components/Agents/TweetDataAgent.js'
 import {EventBus} from '../main.js';
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -98,7 +98,7 @@ export default new Vuex.Store({
         isLoadOrgImg:false,//이미지 뷰어 원본 불러오기
 
         isMuteMention:false,//멘션함도 뮤트
-
+        isShowMute:false,//뮤트된 트윗 우선 표시 여부
       },
       muteOptions: {
         user:[],
@@ -115,18 +115,17 @@ export default new Vuex.Store({
         follower:[]
       }
     ],
+    Blocks:[
+
+    ],
     following:[],
     follower:[],
   },
   mutations: {
     Account(state, account){
-      console.log('mute account')
-      console.log(account)
       state.Account=account;
     },
     Option(state, option){
-      console.log('mute option')
-      console.log(option)
       state.DalsaeOptions=option;
     },
     FollowerList(state, listUser){
@@ -153,20 +152,45 @@ export default new Vuex.Store({
           if(state.tweets.home.length==0){
             index=0;
           }
-          for(var i=state.tweets.home.length-1;i>-1;i--){
-            var nTweet = state.tweets.home[i];  
-            index=i;
-            if(new Date(nTweet.created_at) <= new Date(tweet.created_at)){
-              index++;
-              break;
-            }
+          TweetDataAgent.TweetInit(tweet);
+          if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
+            console.log('block tweet')
+            return;
           }
-          var orgUser=undefined;
-          var orgTweet=undefined;
-          orgUser = tweet.retweeted_status==undefined ? tweet.user :tweet.retweeted_status.user;//리트윗, 원트윗 유저 선택
-          orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
-          tweet.orgUser=JSON.parse(JSON.stringify(orgUser));
-          tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
+          if(TweetDataAgent.CheckHighlight(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.userData.screen_name)){
+            console.log('highlight!')
+            var func=function(){
+              console.log('single call!')
+              var id =state.tweets.mention.find(x=>x.id==tweet.id);
+              var index = 0;
+              if(id==undefined){//중복 넘기기
+                if(state.tweets.mention.length==0){
+                  index=0;
+                }
+                TweetDataAgent.TweetInit(tweet);
+                if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
+                  console.log('block tweet')
+                  return;
+                }
+                if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+                  if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
+                    return;
+                  }
+                }
+                tweet.isHighlight=true;
+                index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
+                state.tweets.mention.splice(index, 0, tweet);
+        
+              }else{
+                console.log('tweet exists')
+              }
+            }
+            func();
+            // state.commit('AddMentionSingle', tweet);
+            // this.AddMentionSingle(state, tweet);
+			      // this.$store.dispatch('AddMentionSingle', tweet);
+          }
+          index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
           state.tweets.home.splice(index, 0, tweet);
 
         }else{
@@ -182,20 +206,18 @@ export default new Vuex.Store({
           if(state.tweets.mention.length==0){
             index=0;
           }
-          for(var i=state.tweets.mention.length-1;i>-1;i--){
-            var nTweet = state.tweets.mention[i];  
-            index=i;
-            if(new Date(nTweet.created_at) <= new Date(tweet.created_at)){
-              index++;
-              break;
+          TweetDataAgent.TweetInit(tweet);
+          if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
+            console.log('block tweet')
+            return;
+          }
+          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+            if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
+              return;
             }
           }
-          var orgUser=undefined;
-          var orgTweet=undefined;
-          orgUser = tweet.retweeted_status==undefined ? tweet.user :tweet.retweeted_status.user;//리트윗, 원트윗 유저 선택
-          orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
-          tweet.orgUser=JSON.parse(JSON.stringify(orgUser));
-          tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
+          tweet.isHighlight=true;
+          index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
           state.tweets.mention.splice(index, 0, tweet);
 
         }else{
@@ -357,6 +379,31 @@ export default new Vuex.Store({
     },
     SaveMuteOption(state, muteOption){
       state.DalsaeOptions.muteOptions=muteOption;
+    },
+    AddMentionSingle(state, tweet){
+      var id =state.tweets.mention.find(x=>x.id==tweet.id);
+      var index = 0;
+      if(id==undefined){//중복 넘기기
+        if(state.tweets.mention.length==0){
+          index=0;
+        }
+        TweetDataAgent.TweetInit(tweet);
+        if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
+          console.log('block tweet')
+          return;
+        }
+        if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+          if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
+            return;
+          }
+        }
+        tweet.isHighlight=true;
+        index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
+        state.tweets.mention.splice(index, 0, tweet);
+
+      }else{
+        console.log('tweet exists')
+      }
     }
   },
   methods:{
@@ -436,6 +483,9 @@ export default new Vuex.Store({
     },
     SaveMuteOption(context, muteOption){
       context.commit('SaveMuteOption', muteOption)
+    },
+    AddMentionSingle(context, tweet){
+      context.commit('AddMentionSingle', tweet);
     }
   }
 });
