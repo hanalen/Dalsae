@@ -37,7 +37,9 @@ function createWindow () {
     mainWindow.webContents.openDevTools()
   }
   mainWindow.loadURL(winURL)
-
+  mainWindow.on('focus', (e)=>{
+    mainWindow.webContents.send('WindowFocused', e)
+  });
   mainWindow.on('closed', () => {
     mainWindow = null
     
@@ -51,6 +53,8 @@ function createWindow () {
     }
   })
 }
+
+
 ipcMain.on('restart_app', ()=>{
   autoUpdater.quitAndInstall(true, true);
 });

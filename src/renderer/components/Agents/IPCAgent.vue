@@ -17,7 +17,10 @@ export default {
 		ipcRenderer.on('MuteOptionSave', (event, muteOption) => {
 			this.$store.dispatch('SaveMuteOption', muteOption);
 			this.EventBus.$emit('SaveOption');
-		});
+    });
+    ipcRenderer.on('WindowFocused', (event)=>{
+      this.EventBus.$emit('FocusInput');
+    });
 
   },
   data() {

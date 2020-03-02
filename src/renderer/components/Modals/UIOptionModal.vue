@@ -123,9 +123,6 @@ export default {
     this.option=JSON.parse(JSON.stringify(orgOption));
   },
   mounted:function(){
-    this.EventBus.$on('aaaaaaaaa',()=>{
-      this.StartDalsae();
-    });
   },
   destroyed:function(){
     this.EventBus.$emit('SaveOption');
