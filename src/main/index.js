@@ -21,18 +21,27 @@ function sendStatusToWindow(text) {
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
-
+const windowStateKeeper = require('electron-window-state');//윈도우 창 크기,위치 저장하는 애
 function createWindow () {
   /**
    * Initial window options
    */
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 600,
+    defaultHeight: 800
+  });
+  sendStatusToWindow(mainWindowState)
   mainWindow = new BrowserWindow({
-    height: 563,
-    useContentSize: true,
-    width: 1000,
+    'x': mainWindowState.x,
+    'y': mainWindowState.y,
+    'width': mainWindowState.width,
+    'height': mainWindowState.height,
+    file:'mainWindow.json',
     minWidth:440,
+    useContentSize: true,
     webPreferences: {webSecurity: false}
   })
+  mainWindowState.manage(mainWindow);
   if(process.env.NODE_ENV === 'development'){
     mainWindow.webContents.openDevTools()
   }
@@ -41,8 +50,8 @@ function createWindow () {
     mainWindow.webContents.send('WindowFocused', e)
   });
   mainWindow.on('closed', () => {
+    mainWindowState.saveState(mainWindow)
     mainWindow = null
-    
     imageWin.forEach((win)=>{
       win.close();
     })
@@ -60,10 +69,23 @@ ipcMain.on('restart_app', ()=>{
 });
 
 var imageWin=[];
-
+let imageWindowState=undefined;
 function CreateImageWindow(){
+  
+  imageWindowState = windowStateKeeper({
+    defaultWidth: 600,
+    defaultHeight: 800,
+    file:'imageWindow.json'
+  });
   for(var i=0;i<4;i++){
-    var win = new BrowserWindow({show:false});
+    var win = new BrowserWindow({
+      show:false,
+      'x': imageWindowState.x,
+      'y': imageWindowState.y,
+      'width': imageWindowState.width,
+      'height': imageWindowState.height,
+    });
+    imageWindowState.manage(win);
 
     const modalPath = process.env.NODE_ENV === 'development'
         ? 'http://localhost:9080/#/Image'
@@ -110,6 +132,9 @@ function ImageWindowHide(win){
     if(mainWindow!=null){
       e.preventDefault();
       win.hide();
+    }
+    else{
+      imageWindowState.saveState(win);
     }
   });
 }
