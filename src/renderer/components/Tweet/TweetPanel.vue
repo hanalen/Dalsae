@@ -140,7 +140,9 @@ export default {
         else if(e.keyCode==71||e.keyCode==103){//g, 이미지열기
           e.preventDefault();
           var tweet=this.selectPanel.GetSelectTweet();
-          this.EventBus.$emit('ShowTweetImage', tweet);
+          var ipcRenderer = require('electron').ipcRenderer;
+          ipcRenderer.send('child', tweet, this.$store.state.DalsaeOptions.uiOptions);
+          // this.EventBus.$emit('ShowTweetImage', tweet);
         }
         else if(e.keyCode==70||e.keyCode==102){//v, 컨텍스트 메뉴
           e.preventDefault();
