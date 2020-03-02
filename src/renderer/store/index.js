@@ -158,9 +158,7 @@ export default new Vuex.Store({
             return;
           }
           if(TweetDataAgent.CheckHighlight(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.userData.screen_name)){
-            console.log('highlight!')
             var func=function(){
-              console.log('single call!')
               var id =state.tweets.mention.find(x=>x.id==tweet.id);
               var index = 0;
               if(id==undefined){//중복 넘기기
@@ -169,7 +167,6 @@ export default new Vuex.Store({
                 }
                 TweetDataAgent.TweetInit(tweet);
                 if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
-                  console.log('block tweet')
                   return;
                 }
                 if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
@@ -186,9 +183,13 @@ export default new Vuex.Store({
               }
             }
             func();
-            // state.commit('AddMentionSingle', tweet);
-            // this.AddMentionSingle(state, tweet);
-			      // this.$store.dispatch('AddMentionSingle', tweet);
+          }
+          else{
+            if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+              if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
+                return;
+              }
+            }
           }
           index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
           state.tweets.home.splice(index, 0, tweet);
@@ -338,7 +339,6 @@ export default new Vuex.Store({
       }
     },
     ClearDaehwa(state){
-      console.log('clear dh')
       state.tweets.daehwa=[];
     },
     UIOption(state, uiOption){
