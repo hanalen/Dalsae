@@ -200,13 +200,9 @@ export default {
 			}
 		},
 		KeyDownEsc(e){
-			console.log('esc~~~')
-			this.EventBus.$emit('HideTweetImage')
+			close();
 		},
 		KeyDown(e){
-			console.log(e);
-			console.log('esc~~~')
-			// this.EventBus.$emit('HideTweetImage')
 		},
 		CloseClick(e){
 			this.EventBus.$emit('HideTweetImage');
