@@ -121,6 +121,7 @@ export default {
     SendTweet(){
       this.sendCallBack();
       this.ClearInput();
+      this.EventBus.$emit('FocusPanel','');
     },
     OnFileChange(e){
       var files = e.target.files || e.dataTransfer.files;
