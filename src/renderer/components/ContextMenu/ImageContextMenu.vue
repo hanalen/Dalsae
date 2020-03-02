@@ -31,11 +31,20 @@ export default {
   },
   props: {
 		index:undefined,
-		images:undefined,
+    images:undefined,
+    id:{//eventbus 혼동을 피하기 위한 id구분값
+      type:String,
+      default:'',
+    }
   },
   methods: {
     Save(){
-      this.EventBus.$emit('Save')
+      this.isVisible=false;
+      this.EventBus.$emit('Save', this.id)
+    },
+    SaveAll(){
+      this.isVisible=false;
+      this.EventBus.$emit('SaveAll', this.id)
     },
 		Focused(e){
 			

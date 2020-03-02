@@ -25,7 +25,7 @@
 					</div>
 			</div>
 		</div>
-		<ContextMenu ref="context" :index="index" :images="tweet.orgTweet.extended_entities.media"/>
+		<ContextMenu ref="context" :id="tweet.orgTweet.id_str" :index="index" :images="tweet.orgTweet.extended_entities.media"/>
 	</div>
 </template>
 
@@ -76,10 +76,12 @@ export default {
 			this.tweet=tweet;
 			this.uiOption=uiOption;
 		});
-		this.EventBus.$on('Save', ()=>{
+		this.EventBus.$on('Save', (id)=>{//id: 트윗 id
+			if(id!=this.tweet.orgTweet.id_str) return;
 			this.Save();
 		});
-		this.EventBus.$on('SaveAll', ()=>{
+		this.EventBus.$on('SaveAll', (id)=>{
+			if(id!=this.tweet.orgTweet.id_str) return;
 			this.SaveAll();
 		});
 	},
@@ -218,7 +220,7 @@ export default {
 	top: 0;
 	width: 100%;
 	height: 100%;
-	padding: 20px;
+	// padding: 20px;
 	overflow: none;
 	background-color: rgba(0, 0, 0, 0.7);
 }
