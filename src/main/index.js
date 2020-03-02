@@ -108,7 +108,7 @@ function ImageWindowHide(win){
       win.hide();
     }
     else{
-      imageWindowState.saveState(win);
+      imageWindowState.saveState(imageWin[imageIndex]);
     }
   });
 }
