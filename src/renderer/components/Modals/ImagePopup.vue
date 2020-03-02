@@ -72,7 +72,13 @@ export default {
 	created: function(){
 		var ipcRenderer = require('electron').ipcRenderer;
 		ipcRenderer.on('tweet', (event, tweet, uiOption) => {
-			console.log('tweet recv');
+			for(var i=0;i<this.listProgressPercent.length;i++){
+				this.listProgressPercent[i]=0;
+				if(this.$refs.progress!=undefined)
+					this.$refs.progress[i].SetValue(0);
+			}
+			
+			
 			this.tweet=tweet;
 			this.uiOption=uiOption;
 		});
