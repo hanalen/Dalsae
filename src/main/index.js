@@ -42,7 +42,6 @@ function createWindow () {
     'height': mainWindowState.height,
     file:'mainWindow.json',
     minWidth:440,
-    useContentSize: true,
     webPreferences: {webSecurity: false}
   })
   mainWindowState.manage(mainWindow);
@@ -74,8 +73,9 @@ function createWindow () {
 var imageWin=[];
 let imageWindowState=undefined;
 function CreateImageWindow(){
+const windowStateKeeper2 = require('electron-window-state');//윈도우 창 크기,위치 저장하는 애
   
-  imageWindowState = windowStateKeeper({
+  imageWindowState = windowStateKeeper2({
     defaultWidth: 600,
     defaultHeight: 800,
     file:'imageWindow.json'
@@ -88,7 +88,7 @@ function CreateImageWindow(){
       'width': imageWindowState.width,
       'height': imageWindowState.height,
     });
-    imageWindowState.manage(win);
+    
 
     const modalPath = process.env.NODE_ENV === 'development'
         ? 'http://localhost:9080/#/Image'
@@ -106,15 +106,17 @@ function ImageWindowHide(win){
     if(mainWindow!=null){
       e.preventDefault();
       win.hide();
+      sendStatusToWindow(imageWindowState);
     }
     else{
-      imageWindowState.saveState(imageWin[imageIndex]);
+    imageWindowState.saveState(win);
     }
   });
 }
 var imageIndex=0;
 
 ipcMain.on('child', (event, tweet, option)=>{
+  imageWindowState.manage(imageWin[imageIndex]);
   imageWin[imageIndex].webContents.send('tweet', tweet, option)
 
   imageWin[imageIndex].show();
