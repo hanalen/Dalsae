@@ -106,7 +106,7 @@ function ImageWindowHide(win){
     if(mainWindow!=null){
       e.preventDefault();
       win.hide();
-      sendStatusToWindow(imageWindowState);
+      mainWindow.focus();
     }
     else{
     imageWindowState.saveState(win);
