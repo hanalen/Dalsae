@@ -1,10 +1,19 @@
+// #region 프로그램 구동에 필요한 코드 및 로그
 const {app, BrowserWindow, Menu, protocol, ipcMain, ipcRenderer} = require('electron');
 const log = require('electron-log');
 const {autoUpdater} = require("electron-updater");
+const windowStateKeeper = require('electron-window-state');//윈도우 창 크기,위치 저장하는 애
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 
+function sendStatusToWindow(text) {
+  log.info(text);
+}
+
+const winURL = process.env.NODE_ENV === 'development'//시작 url
+  ? `http://localhost:9080`
+  : `file://${__dirname}/index.html`
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -12,16 +21,11 @@ autoUpdater.logger.transports.file.level = 'info';
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
+// #endregion
 
+// #region 메인윈도우
 let mainWindow
-function sendStatusToWindow(text) {
-  log.info(text);
-}
 
-const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
-  : `file://${__dirname}/index.html`
-const windowStateKeeper = require('electron-window-state');//윈도우 창 크기,위치 저장하는 애
 function createWindow () {
   /**
    * Initial window options
@@ -63,10 +67,9 @@ function createWindow () {
   })
 }
 
+//#endregion
 
-ipcMain.on('restart_app', ()=>{
-  autoUpdater.quitAndInstall(true, true);
-});
+//#region 이미지 윈도우
 
 var imageWin=[];
 let imageWindowState=undefined;
@@ -97,6 +100,32 @@ function CreateImageWindow(){
   }
 }
 
+
+function ImageWindowHide(win){
+  win.on('close', (e)=>{
+    if(mainWindow!=null){
+      e.preventDefault();
+      win.hide();
+    }
+    else{
+      imageWindowState.saveState(win);
+    }
+  });
+}
+var imageIndex=0;
+
+ipcMain.on('child', (event, tweet, option)=>{
+  imageWin[imageIndex].webContents.send('tweet', tweet, option)
+
+  imageWin[imageIndex].show();
+  imageIndex++;
+  if(imageIndex > 3)
+    imageIndex=0;
+})
+
+//#endregion
+
+//#region 뮤트 윈도우
 var muteOptionWin=null;
 
 ipcMain.on('OpenMuteOptionPopup', (event, option)=>{
@@ -125,31 +154,13 @@ ipcMain.on('CloseMuteOptionPopup',()=>{
   muteOptionWin.close();
 });
 
+//#endregion
 
+//#region 자동업데이트
 
-function ImageWindowHide(win){
-  win.on('close', (e)=>{
-    if(mainWindow!=null){
-      e.preventDefault();
-      win.hide();
-    }
-    else{
-      imageWindowState.saveState(win);
-    }
-  });
-}
-var imageIndex=0;
-
-ipcMain.on('child', (event, tweet, option)=>{
-  imageWin[imageIndex].webContents.send('tweet', tweet, option)
-
-  imageWin[imageIndex].show();
-  imageIndex++;
-  if(imageIndex > 3)
-    imageIndex=0;
-})
-
-
+ipcMain.on('restart_app', ()=>{
+  autoUpdater.quitAndInstall(true, true);
+});
 
 autoUpdater.on('checking-for-update', () => {
   sendStatusToWindow('Checking for update...');
@@ -173,6 +184,9 @@ autoUpdater.on('update-downloaded', (info) => {
   mainWindow.webContents.send('update_downloaded');
 });
 
+//#endregion
+
+//#region 프로그램 시작 및 종료
 app.on('ready', ()=>{
     createWindow();
     CreateImageWindow();
@@ -185,29 +199,12 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+//#endregion
 
+//#region 윈도우 이벤트
 app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
 })
-
-/**
- * Auto Updater
- *
- * Uncomment the following code below and install `electron-updater` to
- * support auto updating. Code Signing with a valid certificate is required.
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
- */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */
+//#endregion
