@@ -142,13 +142,11 @@ export default {
           var tweet=this.selectPanel.GetSelectTweet();
           var ipcRenderer = require('electron').ipcRenderer;
           ipcRenderer.send('child', tweet, this.$store.state.DalsaeOptions.uiOptions);
-          // this.EventBus.$emit('ShowTweetImage', tweet);
         }
-        else if(e.keyCode==70||e.keyCode==102){//v, 컨텍스트 메뉴
+        else if(e.keyCode==86||e.keyCode==118){//v, 컨텍스트 메뉴
           e.preventDefault();
-          var tweet=this.selectPanel.GetSelectTweet();
-          tweet.ShowContextMenu();
-        }/////////////////////////////////
+          this.selectPanel.ShowContextMenu();
+        }
         else if(e.keyCode==85||e.keyCode==117){//u, 인풋 포커스
           e.preventDefault();
           this.EventBus.$emit('FocusInput');

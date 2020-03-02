@@ -51,6 +51,9 @@ export default {
     }
   },
   methods:{
+    ShowContextMenu(){
+      this.$refs.list[this.selectIndex].ShowContextMenu();
+    },
     GetSelectTweet(){
       return this.tweets[this.selectIndex];
     },

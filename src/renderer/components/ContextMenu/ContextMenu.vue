@@ -48,7 +48,8 @@ export default {
       }
     },
     Media(){
-
+      var ipcRenderer = require('electron').ipcRenderer;
+      ipcRenderer.send('child', this.tweet, this.$store.state.DalsaeOptions.uiOptions);
     },
     Favorite(){
       this.EventBus.$emit('Favorite', this.tweet);
@@ -115,6 +116,7 @@ export default {
       this.$children[this.selectIndex].$el.focus();
     },
     Show(e) {
+      console.log('context show')
       this.isVisible = true;
       this.$nextTick(() => {
         var x=e.clientX;
@@ -139,7 +141,8 @@ export default {
       this.isVisible = false;
     },
     FocusChild(e) {
-      e.preventDefault();
+      if(e.preventDefault)
+        e.preventDefault();
       if(this.$refs.Media){
         this.$refs.Media.$el.focus();
       }

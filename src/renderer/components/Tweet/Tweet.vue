@@ -188,7 +188,11 @@ export default {
       }
     },
     ShowContextMenu(){
-      this.$refs.context.Show(e);
+      var pos= this.$el.getBoundingClientRect()
+      var event = new Object();
+      event.clientX=pos.x;
+      event.clientY=pos.y;
+      this.$refs.context.Show(event);
     },
     keyDown(e){
       this.EventBus.$emit('tweetKeyDown', e);
