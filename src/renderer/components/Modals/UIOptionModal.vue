@@ -59,13 +59,17 @@
     </div>
     
     <br/>
-    <h4>알림 설정</h4>
+    <h4>뮤트 표시 설정</h4>
     <div class="custom-control custom-switch">
       <input v-model="option.isMuteMention" @change="OptionChange" type="checkbox" class="custom-control-input" id="switchmuteMention">
       <label class="custom-control-label" for="switchmuteMention">멘션함도 뮤트 처리 합니다.</label>
     </div>
+    <div class="custom-control custom-switch">
+      <input v-model="option.isShowMute" @change="OptionChange" type="checkbox" class="custom-control-input" id="switchShowmute">
+      <label class="custom-control-label" for="switchShowmute">뮤트 트윗을 가림 처리 합니다.</label>
+    </div>
     <br/>
-    <h4>알림 및 뮤트 설정</h4>
+    <h4>알림 및 뮤트 상세 설정</h4>
     <div class="custom-control custom-switch">
       <b-button variant="primary" @click="ClickMuteOption">새창으로 여는 것이야</b-button>
     </div>
@@ -95,6 +99,7 @@ export default {
         isLoadOrgImg:false,//이미지 뷰어 원본 불러오기
 
         isMuteMention:false,//멘션함도 뮤트
+        isShowMute:false,//뮤트 된 트윗도 일단 표시 할지 여부
       }
     };
   },

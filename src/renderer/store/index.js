@@ -354,6 +354,7 @@ export default new Vuex.Store({
       state.DalsaeOptions.uiOptions.isShowBottomPreview=uiOption.isShowBottomPreview;
       state.DalsaeOptions.uiOptions.isLoadOrgImg=uiOption.isLoadOrgImg;
       state.DalsaeOptions.uiOptions.isMuteMention=uiOption.isMuteMention;
+      state.DalsaeOptions.uiOptions.isShowMute=uiOption.isShowMute;
     },
     AccountChange(state, user_id){
       var account = state.Account.accountList.find(x=>x.user_id==user_id)
@@ -404,6 +405,9 @@ export default new Vuex.Store({
       }else{
         console.log('tweet exists')
       }
+    },
+    ShowMuteTweet(state, tweet){
+      tweet.isMuted=false;
     }
   },
   methods:{
@@ -486,6 +490,9 @@ export default new Vuex.Store({
     },
     AddMentionSingle(context, tweet){
       context.commit('AddMentionSingle', tweet);
+    },
+    ShowMuteTweet(context, tweet){
+      context.commit('ShowMuteTweet', tweet);
     }
   }
 });

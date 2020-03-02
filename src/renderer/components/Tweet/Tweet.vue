@@ -4,6 +4,10 @@
     @keydown.right="ArrowRight" @keydown.left="ArrowLeft"
     @mousedown="Click">
   <!-- @keydown="keyDown"> --><!--keydown은 list에서 처리 한다-->
+  <div class="mute-area" v-if="tweet.isMuted" @click="ClickMute">
+    <span>뮤트 된 트윗입니다. 클릭 시 표시 합니다.</span>
+  </div>
+  <div class="tweet-area" v-if="tweet.isMuted==false">
     <div class="daehwa">
       <i class="far fa-plus-square" v-if="tweet.orgTweet.in_reply_to_status_id_str!=undefined"
       :style="{'margin-left':-4, 'margin-top':option.isBigPropic?24+'px' : 18+'px'}"></i>
@@ -58,8 +62,9 @@
         :src="image.media_url_https+':thumb'"
       />
     </div>
+  </div>
     
-    <ContextMenu ref="context" :tweet="tweet"/>
+    <ContextMenu v-if="tweet.isMuted==false" ref="context" :tweet="tweet"/>
     </div>
 </template>
 
@@ -146,6 +151,9 @@ export default {
     }
   },
   methods: {
+    ClickMute(e){
+      this.$store.dispatch('ShowMuteTweet', this.tweet);
+    },
     Noti(){
       var userid=this.$store.state.Account.selectAccount.user_id;
       var mentions=this.tweet.orgTweet.entities.user_mentions;
@@ -237,12 +245,7 @@ export default {
 .tweet {
   height: auto;
   color: black;
-  display: flex;
-  position: relative;
-  // flex-basis: 100%;
-  padding: 6px 6px 6px 0px;
-  // flex-shrink: 1;
-  overflow: visible;
+  
   // align-items: stretch;
   border-bottom: dashed 1px rgba(0, 0, 0, 0.12);
 }
@@ -251,6 +254,24 @@ export default {
 }
 .tweet:focus{
   outline: none;
+}
+.tweet-area{
+  display: flex;
+  position: relative;
+  // flex-basis: 100%;
+  padding: 6px 6px 6px 0px;
+  // flex-shrink: 1;
+  overflow: visible;
+}
+.mute-area{
+  height: 50px;
+  padding:2px 0px 2px 6px;
+  // display: flex;
+  // position: relative;
+  // flex-basis: 100%;
+  // padding: 6px 6px 6px 0px;
+  // flex-shrink: 1;
+  // overflow: visible;
 }
 
 .tweet-odd{

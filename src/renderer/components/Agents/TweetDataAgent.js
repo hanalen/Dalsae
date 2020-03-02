@@ -37,6 +37,7 @@ export default{
 			return false;
 	},
 	CheckMute(tweet, muteOption){
+		tweet.isMuted=false;
 		for(var i =0;i<muteOption.keyword.length;i++){//키워드 뮤트
 			if(tweet.orgTweet.full_text.toLowerCase().indexOf(muteOption.keyword[i].toLowerCase())>-1){
 				tweet.isMuted=true;
