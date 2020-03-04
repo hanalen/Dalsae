@@ -1,5 +1,5 @@
 <template>
-	<div ref="imgModal" class="image-modal" tabindex="-1" @keydown.enter="KeyDownEsc" @keydown.esc="KeyDownEsc" @keydown="KeyDown" @keydown.left="Prev" @keydown.right="Next">
+	<div ref="imgModal" class="image-modal" tabindex="-1" @keydown="KeyDown" @keydown.left="Prev" @keydown.right="Next">
 		<div class="img-bg" ref="imgBg">
 			<Tweet ref="tweet" v-show="uiOption.isShowTweet" :tweet="tweet" :option="uiOption" class="tweet-odd"/>
       <div class="image-content" v-if="Video.type=='photo'">
@@ -236,7 +236,7 @@ export default {
 			}
 		},
 		KeyDownEsc(e){
-			close();
+			// close();
 		},
 		KeyDown(e){
 			if(e.keyCode==49){

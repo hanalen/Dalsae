@@ -116,6 +116,13 @@ function ImageWindowHide(win){
   win.on('show', (e)=>{
     win.webContents.send('focus');
   });
+  const electronLocalshortcut = require('electron-localshortcut');
+  electronLocalshortcut.register(win, 'ESC', () => {
+    win.close();
+  });
+  electronLocalshortcut.register(win, 'ENTER', () => {
+    win.close();
+  });
 }
 var imageIndex=0;
 
