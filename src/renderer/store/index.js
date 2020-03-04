@@ -175,7 +175,8 @@ export default new Vuex.Store({
                   }
                 }
                 tweet.isHighlight=true;
-                index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
+                index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.mention);
+                console.log('index: '+ index);
                 state.tweets.mention.splice(index, 0, tweet);
         
               }else{

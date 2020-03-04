@@ -19,6 +19,7 @@ export default{
 				return index;
 			}
 		}
+		return index;
 	},
 	TweetInit(tweet){
 		var orgUser=undefined;
