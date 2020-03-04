@@ -105,6 +105,7 @@ function ImageWindowHide(win){
   win.on('close', (e)=>{
     if(mainWindow!=null){
       e.preventDefault();
+      win.webContents.send('hide');
       win.hide();
       mainWindow.focus();
     }

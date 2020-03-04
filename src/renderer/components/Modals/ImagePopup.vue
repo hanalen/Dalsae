@@ -1,8 +1,8 @@
 <template>
 	<div ref="imgModal" class="image-modal" tabindex="-1" @keydown.esc="KeyDownEsc" @keydown="KeyDown" @keydown.left="Prev" @keydown.right="Next">
-		<div class="img-bg">
-			<Tweet v-show="uiOption.isShowTweet" :tweet="tweet" :option="uiOption" class="tweet-odd"/>
-			<div class="image-content">
+		<div class="img-bg" ref="imgBg">
+			<Tweet ref="tweet" v-show="uiOption.isShowTweet" :tweet="tweet" :option="uiOption" class="tweet-odd"/>
+      <div class="image-content" v-if="Video.type=='photo'">
 				<div class="arrow" v-if="tweet.orgTweet.extended_entities.media.length > 1 && !isZoom">
 					<div class="left-button">
 						<i class="fas fa-chevron-left fa-2x" @click="Prev"></i>
@@ -17,23 +17,25 @@
 					@mousedown="MouseDown" @mouseleave="MouseLeave" @mouseup="MouseUp" @mousemove="MouseMove"/>
 				</div>
 			</div>
-			<div class="bottom">
+      <div class="bottom" v-if="Video.type=='photo'">
 				<div v-for="(image,i) in tweet.orgTweet.extended_entities.media" @click="index=i"
 					:key="i" class="img-preview">
 						<img :src="image.media_url_https" class="bottom-preview"/>
 						<ProgressBar ref="progress" :percent="listProgressPercent[i]"/>
 					</div>
 			</div>
+      <div class="video" v-if="Video.type!='photo'">
+        <video ref="video" controls autoplay muted>
+          <source :src="Video.video_info.variants[0].url"
+          :type="Video.video_info.variants[0].content_type">
+        </video>
+      </div>
 		</div>
 		<ContextMenu ref="context" :id="tweet.orgTweet.id_str" :index="index" :images="tweet.orgTweet.extended_entities.media"/>
 	</div>
 </template>
 
 <script>
-// import JQuery from 'jquery'
-// import 'bootstrap'
-// import 'bootstrap/dist/css/bootstrap.min.css'
-// import BootStrap from "bootstrap"
 import ApiOAuth from "../APICalls/OAuthCall.js"
 import Tweet from "../Tweet/Tweet.vue"
 import {EventBus} from '../../main.js';
@@ -50,7 +52,22 @@ export default {
 		// BootStrap,
 		Tweet,
 		ContextMenu
-	},
+  },
+  computed:{
+    Video(){
+      if(this.tweet.orgTweet.extended_entities.media.length > 0)
+        return this.tweet.orgTweet.extended_entities.media[0];
+      else
+        return undefined;
+    },
+    VideoHeight(){
+      if(this.tweet==undefined)
+        return 0;
+      this.$nextTick(()=>{
+        return this.$refs.imgBg.clientHeight - this.$refs.tweet.$el.clientHeight;
+      });
+    }
+  },
   data () {
     return {
 			uiOption:undefined,
@@ -77,11 +94,15 @@ export default {
 				if(this.$refs.progress!=undefined)
 					this.$refs.progress[i].SetValue(0);
 			}
-			
-			
 			this.tweet=tweet;
-			this.uiOption=uiOption;
-		});
+      this.uiOption=uiOption;
+    });
+    ipcRenderer.on('hide', ()=>{
+      this.tweet=undefined;
+      var videoElement = this.$refs.video;
+      videoElement.pause();
+      videoElement.removeAttribute('src');
+    });
 		this.EventBus.$on('Save', (id)=>{//id: 트윗 id
 			if(id!=this.tweet.orgTweet.id_str) return;
 			this.Save();
@@ -222,16 +243,21 @@ export default {
 	top: 0;
 	width: 100%;
 	height: 100%;
-	// padding: 20px;
 	overflow: none;
+  display: flex;
+  flex-direction: row;
 	background-color: rgba(0, 0, 0, 0.7);
 }
 .img-bg{
+  width: 100%;
+  height: 100%;
 	background-color: rgba(0, 0, 0, 0.7);
 	// overflow: auto;
 }
 .tweet{
 	border-radius: 10px;
+  max-height: 15vh;
+  overflow: hidden;
 }
 .image-content{
 	height: 100%;
@@ -261,6 +287,15 @@ export default {
 			}
 		}
 	}
+}
+video{
+  width: 100%;
+  height: 100%;
+  max-height: 85vh;
+}
+.video{
+  display: flex;
+  justify-content: center;
 }
 .img-content.zoom{
 	object-fit: cover;
