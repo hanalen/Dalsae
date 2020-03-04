@@ -1,6 +1,6 @@
 <template>
   <div class="tweet-input">
-    <div class="text-area-top">
+    <div class="text-area-top" v-on:drop="Drop" v-on:dragover="DragOver" v-on:dragenter="DragEnter" >
       <textarea
         ref="inputTweet"
         @input="$emit('update:tweetText', tweetTextBinding);"
@@ -118,6 +118,35 @@ export default {
     });
   },
   methods: {
+    DragEnter(e){
+      e.preventDefault();
+    },
+    DragOver(e){
+      e.preventDefault();
+    },
+    Drop(e){
+      e.preventDefault();
+      var data = e.dataTransfer;
+      var files=[];
+      if (data.items) {
+        for (var i = 0; i < data.items.length; i++) {
+          if (data.items[i].kind == "file") {
+            files.push(data.items[i].getAsFile());
+          }
+        }
+      }
+      else {
+        for (var i = 0; i < data.files.length; i++) {
+          files.push(data.files[i])
+        }
+      }
+      if(files.length>4){
+        files.splice(4, files.length - 4);
+      }
+      files.forEach((file)=>{
+        this.CreateImage(file);
+      })
+    },
     SendTweet(){
       this.sendCallBack();
       this.ClearInput();
@@ -138,7 +167,7 @@ export default {
       var reader = new FileReader();
 
       reader.onload = (e) => {
-          this.arrImage.push(e.target.result);
+        this.arrImage.push(e.target.result);
       };
       reader.readAsDataURL(file);
     },
