@@ -110,8 +110,11 @@ function ImageWindowHide(win){
       mainWindow.focus();
     }
     else{
-    imageWindowState.saveState(win);
+      imageWindowState.saveState(win);
     }
+  });
+  win.on('show', (e)=>{
+    win.webContents.send('focus');
   });
 }
 var imageIndex=0;

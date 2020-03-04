@@ -1,5 +1,5 @@
 <template>
-	<div ref="imgModal" class="image-modal" tabindex="-1" @keydown.esc="KeyDownEsc" @keydown="KeyDown" @keydown.left="Prev" @keydown.right="Next">
+	<div ref="imgModal" class="image-modal" tabindex="-1" @keydown.enter="KeyDownEsc" @keydown.esc="KeyDownEsc" @keydown="KeyDown" @keydown.left="Prev" @keydown.right="Next">
 		<div class="img-bg" ref="imgBg">
 			<Tweet ref="tweet" v-show="uiOption.isShowTweet" :tweet="tweet" :option="uiOption" class="tweet-odd"/>
       <div class="image-content" v-if="Video.type=='photo'">
@@ -91,17 +91,32 @@ export default {
 		ipcRenderer.on('tweet', (event, tweet, uiOption) => {
 			for(var i=0;i<this.listProgressPercent.length;i++){
 				this.listProgressPercent[i]=0;
-				if(this.$refs.progress!=undefined)
-					this.$refs.progress[i].SetValue(0);
+			}
+			if(this.$refs.progress!=undefined){
+				this.$refs.progress.forEach((pro)=>{
+					pro.SetValue(0);
+				})
 			}
 			this.tweet=tweet;
-      this.uiOption=uiOption;
-    });
+			this.uiOption=uiOption;
+		});
+		ipcRenderer.on('focus', (event)=>{
+			this.$nextTick(()=>{
+				console.log(this.$refs.imgModal)
+				this.$refs.imgModal.focus();
+			});
+		});
+		ipcRenderer.on('keydown', (event, key)=>{
+			console.log(event);
+			this.KeyDown(key);
+		});
     ipcRenderer.on('hide', ()=>{
       this.tweet=undefined;
-      var videoElement = this.$refs.video;
-      videoElement.pause();
-      videoElement.removeAttribute('src');
+			var videoElement = this.$refs.video;
+			if(videoElement){
+				videoElement.pause();
+	      videoElement.removeAttribute('src');
+			}
     });
 		this.EventBus.$on('Save', (id)=>{//id: 트윗 id
 			if(id!=this.tweet.orgTweet.id_str) return;
@@ -224,6 +239,26 @@ export default {
 			close();
 		},
 		KeyDown(e){
+			if(e.keyCode==49){
+				this.isZoom=false;
+				if(this.tweet.orgTweet.extended_entities.media.length>0)
+					this.index=0;
+			}
+			else if(e.keyCode==50){
+				this.isZoom=false;
+				if(this.tweet.orgTweet.extended_entities.media.length>1)
+					this.index=1;
+			}
+			else if(e.keyCode==51){
+				this.isZoom=false;
+				if(this.tweet.orgTweet.extended_entities.media.length>2)
+					this.index=2;
+			}
+			else if(e.keyCode==52){
+				this.isZoom=false;
+				if(this.tweet.orgTweet.extended_entities.media.length>3)
+					this.index=3;
+			}
 		},
 		CloseClick(e){
 			this.EventBus.$emit('HideTweetImage');
@@ -260,14 +295,14 @@ export default {
   overflow: hidden;
 }
 .image-content{
-	height: 100%;
+	// height: 100%;
 	border-radius: 10px;
 	overflow-y: scroll;
 	overflow-x: scroll;
 	overflow: hidden;
 	margin:auto;
 	.img-div{
-		height: calc(100vh - 300px);
+		height: calc(85vh - 120px);
 		display:flex;
 		justify-content: center;
 		align-items: center;
@@ -315,8 +350,13 @@ video{
 .carousel-item {
 	height: calc(100vh - 300px);
 }
+.fas:hover{
+	cursor: pointer;
+}
 .bottom{
 	height: 100px;
+	position: fixed;
+	bottom: 10px;
 	.img-preview{
 		display: inline-block;
 		flex-direction: column;
@@ -331,6 +371,9 @@ video{
 				height: 100px;
 				object-fit: cover;
 				border-radius: 12px;
+		}
+		.bottom-preview:hover{
+			cursor: pointer;
 		}
 		progress{
 			width: 100px;
