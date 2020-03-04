@@ -9,6 +9,7 @@
         class="text"
         v-on:input="Input"
         v-on:select="selectionChange"
+        v-on:paste="Paste"
         @keyup="selectionChange"
         @click="selectionChange"
         @focus="selectionChange"
@@ -118,6 +119,14 @@ export default {
     });
   },
   methods: {
+    Paste(e){
+      var items =e.clipboardData.items;
+      for(var i=0;i<items.length;i++){
+        if(items[0].type.indexOf('image')==-1) continue;
+        var file = items[i].getAsFile();
+        this.CreateImage(file);
+      }
+    },
     DragEnter(e){
       e.preventDefault();
     },
