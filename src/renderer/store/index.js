@@ -146,7 +146,7 @@ export default new Vuex.Store({
     },
     AddHome(state, listTweet){
       listTweet.forEach(tweet => {
-        var id =state.tweets.home.find(x=>x.id==tweet.id);
+        var id =state.tweets.home.find(x=>x.id_str==tweet.id_str);
         var index = 0;
         if(id==undefined){//중복 넘기기
           if(state.tweets.home.length==0){
@@ -159,7 +159,7 @@ export default new Vuex.Store({
           }
           if(TweetDataAgent.CheckHighlight(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.userData.screen_name)){
             var func=function(){
-              var id =state.tweets.mention.find(x=>x.id==tweet.id);
+              var id =state.tweets.mention.find(x=>x.id_str==tweet.id_str);
               var index = 0;
               if(id==undefined){//중복 넘기기
                 if(state.tweets.mention.length==0){
@@ -201,7 +201,7 @@ export default new Vuex.Store({
     },
     AddMention(state, listTweet){
       listTweet.forEach(tweet => {
-        var id =state.tweets.mention.find(x=>x.id==tweet.id);
+        var id =state.tweets.mention.find(x=>x.id_str==tweet.id_str);
         var index = 0;
         if(id==undefined){//중복 넘기기
           if(state.tweets.mention.length==0){
@@ -309,13 +309,20 @@ export default new Vuex.Store({
       };
     },
     Daehwa(state, tweet){
-      if(state.tweets.daehwa.find(x=>x.id==tweet.id)!=undefined){//중복 넘기기
+      var find=state.tweets.daehwa.find(x=>x.id_str==tweet.id_str);
+      if(state.tweets.daehwa.find(x=>x.id_str==tweet.id_str)!=undefined){//중복 넘기기
+        console.log('dh exists!')
         return;
       }
-      var orgUser = tweet.retweeted_status==undefined ? tweet.user :tweet.retweeted_status.user;//리트윗, 원트윗 유저 선택
-      var orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
-      tweet.orgUser = JSON.parse(JSON.stringify(orgUser));
-      tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
+      TweetDataAgent.TweetInit(tweet);
+      if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
+        return;
+      }
+      if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+        if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
+          return;
+        }
+      }
       state.tweets.daehwa.splice(state.tweets.daehwa.length,0, tweet);//대화는 오래된 트윗이 위에 위치
     },
     DaehwaAutoAdd(state, tweet){

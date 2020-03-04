@@ -89,7 +89,7 @@ export default {
         else if(e.keyCode==99|| e.keyCode==67){//c, 대화 트윗 불러오기
           e.preventDefault();
           var tweet =this.selectPanel.GetSelectTweet();
-
+          if(!tweet.orgTweet.in_reply_to_status_id_str) return;//대화 없는건 스킵 
           this.$store.dispatch('DaehwaAutoAdd', tweet);//캐시데이터가 있는지부터 체크 
 
           if(this.$store.state.tweets.daehwa[0].orgTweet.in_reply_to_status_id_str){//캐시 정리가 끝난 후 대화가 있을 경우에 api 콜
