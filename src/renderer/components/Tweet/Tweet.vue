@@ -2,7 +2,7 @@
   <div>
     <div class="small-tweet" v-if="option.isSmallTweet && !isFocus"
       @mouseenter="Hover" @mouseleave="HoverOut"
-      :class="{'selected': isFocus}" tabindex="-1" @keydown.up="ArrowUp" @keydown.down="ArrowDown" @focus="Focused" v-on:focusout="FocusOut"
+      :class="{'selected': isFocus}" tabindex="-1" @keydown.up="ArrowUp" @keydown.down="ArrowDown" @focus="FocusedSmall"
       @keydown.right="ArrowRight" @keydown.left="ArrowLeft"
       @mousedown="Click">
       <div class="small-mute-area" v-if="tweet.isMuted" @click="ClickMute">
@@ -21,7 +21,7 @@
     </div>
 
   <!--트윗 일반 태그!!!!!!!!!!!!-->
-  <div v-if="option.isSmallTweet==false"
+  <div ref="tweet" v-if="option.isSmallTweet==false || isFocus"
    @mouseenter="Hover" @mouseleave="HoverOut"
   :class="{'tweet': true,'selected': isFocus}" tabindex="-1" @keydown.up="ArrowUp" @keydown.down="ArrowDown" @focus="Focused" v-on:focusout="FocusOut"
     @keydown.right="ArrowRight" @keydown.left="ArrowLeft"
@@ -194,17 +194,12 @@ export default {
       return false;
     },
     Hover(e){
-      if(this.qtTweet)
+      if(this.qtTweet && !this.option.isSmallTweet)
         this.$refs.qtTweet.Hover();
     },
     HoverOut(e){
-      try{if(this.qtTweet)
+      if(this.qtTweet && !this.option.isSmallTweet)
         this.$refs.qtTweet.HoverOut();
-      }
-      catch(e){
-        console.log(this)
-        console.log(new Error().stack);
-      }
     },
     ImageClick(e){
       var ipcRenderer = require('electron').ipcRenderer;
@@ -233,19 +228,27 @@ export default {
       this.EventBus.$emit('ArrowDown', e);
     },
     Focused(e){
-      e.preventDefault();
-      if(this.qtTweet){
+      if(this.qtTweet && !this.option.isSmallTweet){
         this.$refs.qtTweet.Focused();
       }
       this.isFocus=true;
       this.EventBus.$emit('TweetFocus', this.tweet.id);//대화쪽 트윗인지 일반쪽 트윗인지 표시 여부
     },
     FocusOut(e){
-      if(this.qtTweet){
+      console.log('focus out')
+      if(this.qtTweet && !this.option.isSmallTweet){
         this.$refs.qtTweet.FocusOut();
       }
       this.isFocus=false;
       this.EventBus.$emit('FocusOut', this.tweet.id);
+    },
+    FocusedSmall(e){
+      console.log('small click')
+      this.isFocus=true;
+      this.$nextTick(()=>{
+        this.$refs.tweet.$el.focus();
+      })
+      return true;
     },
     propic() {
       var user=undefined;
@@ -282,7 +285,7 @@ export default {
   // align-items: stretch;
   border-bottom: dashed 1px rgba(0, 0, 0, 0.12);
 }
-.tweet:hover{
+.tweet:hover, .small-tweet:hover{
   background-color: #b7c7eb !important;
 }
 .tweet:focus{
