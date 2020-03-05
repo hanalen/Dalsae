@@ -222,6 +222,7 @@ export default {
   overflow: auto;
   .panel-left{
     flex: 1 50%;
+    width: 100%;
   }
   .panel-right{
     flex: 1 50%;
