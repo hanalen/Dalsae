@@ -1,5 +1,28 @@
 <template>
-  <div @mouseenter="Hover" @mouseleave="HoverOut"
+  <div>
+    <div class="small-tweet" v-if="option.isSmallTweet && !isFocus"
+      @mouseenter="Hover" @mouseleave="HoverOut"
+      :class="{'selected': isFocus}" tabindex="-1" @keydown.up="ArrowUp" @keydown.down="ArrowDown" @focus="Focused" v-on:focusout="FocusOut"
+      @keydown.right="ArrowRight" @keydown.left="ArrowLeft"
+      @mousedown="Click">
+      <div class="small-mute-area" v-if="tweet.isMuted" @click="ClickMute">
+        <span>뮤트 된 트윗입니다. 클릭 시 표시 합니다.</span>
+      </div>
+      <div class="small-tweet-area" v-if="tweet.isMuted==false">
+        <div class="daehwa">
+          <i class="far fa-plus-square" v-if="tweet.orgTweet.in_reply_to_status_id_str!=undefined" :style="{'margin-left':-4}"></i>
+        </div>
+        <img class="small-propic" v-bind:src="propic()" v-if="option.isShowPropic" />
+        <div class="small-tweet-content" :class="{'noti':Noti()}">
+          <div class="small-text" v-html="TweetText">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!--트윗 일반 태그!!!!!!!!!!!!-->
+  <div v-if="option.isSmallTweet==false"
+   @mouseenter="Hover" @mouseleave="HoverOut"
   :class="{'tweet': true,'selected': isFocus}" tabindex="-1" @keydown.up="ArrowUp" @keydown.down="ArrowDown" @focus="Focused" v-on:focusout="FocusOut"
     @keydown.right="ArrowRight" @keydown.left="ArrowLeft"
     @mousedown="Click">
@@ -64,8 +87,9 @@
     </div>
   </div>
     
-    <ContextMenu v-if="tweet.isMuted==false" ref="context" :tweet="tweet"/>
     </div>
+    <ContextMenu v-if="tweet.isMuted==false" ref="context" :tweet="tweet"/>
+  </div>
 </template>
 
 <script>
@@ -174,8 +198,13 @@ export default {
         this.$refs.qtTweet.Hover();
     },
     HoverOut(e){
-      if(this.qtTweet)
+      try{if(this.qtTweet)
         this.$refs.qtTweet.HoverOut();
+      }
+      catch(e){
+        console.log(this)
+        console.log(new Error().stack);
+      }
     },
     ImageClick(e){
       var ipcRenderer = require('electron').ipcRenderer;
@@ -373,6 +402,45 @@ export default {
     width: 25px;
     height: 25px;
     border-radius: 4px;
+  }
+}
+
+.small-tweet{
+  height: 30px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 4px;
+  .small-mute-area{
+    height: 20px;
+    padding:2px 0px 2px 6px;
+  }
+  .small-tweet-area{
+    display: flex;
+    position: relative;
+    .small-propic{
+      margin-left: 4px;
+      object-fit: contain;
+      border-radius: 4px;
+      margin-bottom: auto;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+      width: 20px;
+    }
+    .small-tweet-content{
+      height: 30px;
+      margin-left: 4px;
+      max-height: 30px;
+      font-size: 12px;
+      min-width: 0;
+      // overflow: hidden;
+      .small-text{
+        width: 100%;
+        height: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
 }
 </style>
