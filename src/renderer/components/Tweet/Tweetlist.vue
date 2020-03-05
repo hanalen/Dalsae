@@ -4,7 +4,7 @@
     <Tweet 
     ref="list"
       v-for="(item,index) in tweets"
-      v-bind:key="item.id"
+      v-bind:key="index"
       :option="options"
       :tweet="item"
       :index="index"

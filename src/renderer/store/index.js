@@ -149,9 +149,6 @@ export default new Vuex.Store({
         var id =state.tweets.home.find(x=>x.id_str==tweet.id_str);
         var index = 0;
         if(id==undefined){//중복 넘기기
-          if(state.tweets.home.length==0){
-            index=0;
-          }
           TweetDataAgent.TweetInit(tweet);
           if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
             console.log('block tweet')
@@ -162,9 +159,6 @@ export default new Vuex.Store({
               var id =state.tweets.mention.find(x=>x.id_str==tweet.id_str);
               var index = 0;
               if(id==undefined){//중복 넘기기
-                if(state.tweets.mention.length==0){
-                  index=0;
-                }
                 TweetDataAgent.TweetInit(tweet);
                 if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
                   return;
@@ -175,8 +169,11 @@ export default new Vuex.Store({
                   }
                 }
                 tweet.isHighlight=true;
-                index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.mention);
-                console.log('index: '+ index);
+                if(state.tweets.mention.length==0){
+                  index=0;
+                }else{
+                  index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.mention);
+                }
                 state.tweets.mention.splice(index, 0, tweet);
         
               }else{
@@ -192,9 +189,13 @@ export default new Vuex.Store({
               }
             }
           }
-          index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
+          if(state.tweets.home.length==0){
+            index=0;
+          }
+          else{
+            index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
+          }
           state.tweets.home.splice(index, 0, tweet);
-
         }else{
           console.log('tweet exists')
         }
@@ -205,9 +206,6 @@ export default new Vuex.Store({
         var id =state.tweets.mention.find(x=>x.id_str==tweet.id_str);
         var index = 0;
         if(id==undefined){//중복 넘기기
-          if(state.tweets.mention.length==0){
-            index=0;
-          }
           TweetDataAgent.TweetInit(tweet);
           if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
             console.log('block tweet')
@@ -219,7 +217,12 @@ export default new Vuex.Store({
             }
           }
           tweet.isHighlight=true;
-          index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
+          if(state.tweets.mention.length==0){
+            index=0;
+          }
+          else{
+            index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
+          }
           state.tweets.mention.splice(index, 0, tweet);
 
         }else{
