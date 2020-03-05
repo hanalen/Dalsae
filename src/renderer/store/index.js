@@ -82,6 +82,7 @@ export default new Vuex.Store({
     },//트위터에서 리스폰스 받은 계정 정보
     DalsaeOptions: {
       uiOptions: {
+        isSmallTweet:false,//트윗 한줄 표시
         isShowPropic: true,//인장 표시
         isBigPropic: true,//인장 크게 표시
         isShowPreview:true,//이미지 미리보기 표시
@@ -353,6 +354,7 @@ export default new Vuex.Store({
       state.tweets.daehwa=[];
     },
     UIOption(state, uiOption){
+      state.DalsaeOptions.uiOptions.isSmallTweet=uiOption.isSmallTweet;
       state.DalsaeOptions.uiOptions.isShowPropic=uiOption.isShowPropic;
       state.DalsaeOptions.uiOptions.isBigPropic=uiOption.isBigPropic;
       state.DalsaeOptions.uiOptions.isShowPreview=uiOption.isShowPreview;

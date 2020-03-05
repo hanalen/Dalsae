@@ -16,6 +16,11 @@
       <input v-model="option.isShowPreview" @change="OptionChange" type="checkbox" class="custom-control-input" id="switchShowPreview" true-color="#ff6565">
       <label class="custom-control-label" for="switchShowPreview">이미지 미리보기를 표시 합니다.</label>
     </div>
+    <div class="custom-control custom-switch">
+      <input v-model="option.isSmallTweet" @change="OptionChange" type="checkbox" class="custom-control-input" id="switchSmallTweet" true-color="#ff6565">
+      <label class="custom-control-label" for="switchSmallTweet">트윗을 한 줄로 표시 합니다.</label>
+    </div>
+    
     
     <br/>
     <h4>트윗 입력 칸 설정</h4>
@@ -83,6 +88,7 @@ export default {
   data() {
     return {
       option:{
+        isSmallTweet:false,//트윗 한줄 표시
         isShowPropic: true,//인장 표시
         isBigPropic: true,//인장 크게 표시
         isShowPreview:true,//이미지 미리보기 표시
