@@ -126,16 +126,15 @@ export default {
   background-color: #a3d9fe !important;
 }
 
-
+.small-tweet.not-read{
+  font-weight: bold;
+}
 .small-tweet{
   height: 30px;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
   padding: 4px;
-  .not-read{
-    font-weight: bold;
-  }
   .small-mute-area{
     height: 20px;
     padding:2px 0px 2px 6px;
