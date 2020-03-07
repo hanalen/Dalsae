@@ -174,6 +174,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .context-menu {
+  z-index: 10;
   position:fixed;
   overflow: hidden;
   background-color: #f5f5f5;
