@@ -25,7 +25,7 @@
           <div class="cross"></div>
         </button>
       </div>
-      <b-button v-if="option.isSmallInput" class="btn" variant="primary" @click="sendCallBack();ClearInput();">트윗하기</b-button>
+      <b-button v-if="option.isSmallInput" class="btn" variant="primary" @click="SendTweet">트윗하기</b-button>
     </div>
     <FindFollowing
       ref="find"
@@ -36,7 +36,7 @@
     <div class="bottom" :style="{ padding: option.isSmallInput&&arrImage.length == 0 ? 0+'px' : 4+'px'}">
       <div v-if="!option.isSmallInput">
         <span class="count">{{txtCounting}}</span>
-        <b-button variant="primary" @click="sendCallBack();ClearInput();">트윗하기</b-button>
+        <b-button variant="primary" @click="SendTweet">트윗하기</b-button>
       </div>
 
       <div>
@@ -157,6 +157,9 @@ export default {
       })
     },
     SendTweet(){
+      if(this.tweetText.length==0 && this.arrImage.length==0) {
+        return;
+      }
       this.sendCallBack();
       this.ClearInput();
       this.EventBus.$emit('FocusPanel','');
