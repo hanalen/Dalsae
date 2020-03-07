@@ -148,9 +148,10 @@ export default {
         }
         else if(e.keyCode==72||e.keyCode==104){//h, 해시태그, 해시 미구현
         }
-        else if(e.keyCode==127){//del, 트윗 삭제
+        else if(e.keyCode==127|| e.keyCode==46){//del, 트윗 삭제
           e.preventDefault();
-          this.EventBus.$emit('DeleteTweet');
+          var tweet=this.selectPanel.GetSelectTweet();
+          this.EventBus.$emit('DeleteTweet', tweet);
         }
     });
 		this.EventBus.$on('focusTweet', (e) => {

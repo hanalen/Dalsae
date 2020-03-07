@@ -21,6 +21,7 @@ export default{
 		tweet.orgUser=JSON.parse(JSON.stringify(orgUser));
 		tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
 		tweet.isReaded=false;
+		tweet.isDelete=false;
 		return tweet;
 	},
 	CheckBlock(tweet, hashBlock){//블락일 경우 return true

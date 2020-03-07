@@ -9,7 +9,7 @@
 			</div>
 			<img class="small-propic" v-bind:src="propic()" v-if="option.isShowPropic" />
 			<div class="small-tweet-content" :class="{'noti':Noti()}">
-				<div class="small-text" v-html="TweetText">
+				<div class="small-text" v-html="TweetText" :class="{'delete': tweet.isDelete}">
 				</div>
 			</div>
 		</div>
@@ -164,6 +164,9 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        .delete{
+          text-decoration: line-through;
+        }
       }
     }
   }

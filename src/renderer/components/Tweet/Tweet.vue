@@ -22,7 +22,7 @@
         >{{TweetName}}</span><i v-if="tweet.orgUser.protected" class="fas fa-lock"></i>
       </div>
       <div class="tweet-content" :class="{'noti':Noti()}">
-        <div v-html="TweetText">
+        <div v-html="TweetText" :class="{'delete': tweet.isDelete}">
         </div>
       </div>
       <div class="retweet-info" v-if="tweet.retweeted_status!=undefined"> 
@@ -272,8 +272,10 @@ export default {
     
   }
   .tweet-content {
-    // flex: 1;
     line-height: 1.3;
+    .delete{
+      text-decoration: line-through;
+    }
   }
   .tweet-content.noti{
       span{
@@ -320,45 +322,6 @@ export default {
     width: 25px;
     height: 25px;
     border-radius: 4px;
-  }
-}
-
-.small-tweet{
-  height: 30px;
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  padding: 4px;
-  .small-mute-area{
-    height: 20px;
-    padding:2px 0px 2px 6px;
-  }
-  .small-tweet-area{
-    display: flex;
-    position: relative;
-    .small-propic{
-      margin-left: 4px;
-      object-fit: contain;
-      border-radius: 4px;
-      margin-bottom: auto;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-      width: 20px;
-    }
-    .small-tweet-content{
-      height: 30px;
-      margin-left: 4px;
-      max-height: 30px;
-      font-size: 12px;
-      min-width: 0;
-      // overflow: hidden;
-      .small-text{
-        width: 100%;
-        height: 16px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
   }
 }
 </style>

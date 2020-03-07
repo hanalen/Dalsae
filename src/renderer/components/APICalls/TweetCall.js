@@ -193,7 +193,7 @@ export default{
 		var method='POST';
 		var arr=[];
 		arr['id']=tweetId;
-		var url='//api.twitter.com/1.1/statuses/destroy/:'+twwetId+'.json';
+		var url='https://api.twitter.com/1.1/statuses/destroy/'+tweetId+'.json';
 		var callUrl=OAuth.GetURL(url, method ,arr);
 		var sendData=OAuth.CreateData(arr);
 		axios({

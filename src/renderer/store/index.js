@@ -309,7 +309,7 @@ export default new Vuex.Store({
       for (let [key, value] of Object.entries(state.tweets)){
         value.forEach(function(tempTweet){
           if(tempTweet.orgTweet.id_str==tweet.id_str){
-            value.pop(tempTweet);
+            tempTweet.isDelete=true;
           }
         }); 
       };
