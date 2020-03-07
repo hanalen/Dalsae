@@ -47,7 +47,7 @@ export default {
     bottom: 0px;
     width: 100%;
     height: auto;
-    background-color: hsl(0, 90%, 81%);
+    background-color: #76c6fe;
     padding-left:14px;
     i{
       font-size:20px;

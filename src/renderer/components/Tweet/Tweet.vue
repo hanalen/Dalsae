@@ -200,8 +200,8 @@ export default {
   // align-items: stretch;
   border-bottom: dashed 1px rgba(0, 0, 0, 0.12);
 }
-.tweet:hover, .small-tweet:hover{
-  background-color: #b7c7eb !important;
+.tweet:hover{
+  background-color: #a3d9fe !important;
 }
 .tweet:focus{
   outline: none;
@@ -226,17 +226,14 @@ export default {
 }
 
 .tweet-odd{
-  background: #ffe0e0!important;
+  background: white !important;
 }
 .tweet-even{
-  background: hsl(0, 100%, 90%)!important;
+  background: #e8f5fe !important;
 }
 
-.selected-focus-out{
-  background-color: #f7e2d4 !important;
-}
 .tweet.selected{
-    background-color: #b7c7eb !important;
+  background-color: #bce3fe !important;
 }
 .tweet.not-read{
   font-weight: bold;

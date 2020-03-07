@@ -160,15 +160,15 @@ h4{
 	height: 100%;
 	min-width: 200px;
 	// overflow: scroll;
-	background-color: hsl(0, 70%, 90%);
+	background-color: #dff1fe;
 	// width: 500px;
   padding: 8px;
 }
 .custom-control-label{
   font-size:12px;
   &::before{
-    border-color:hsl(0, 60%, 80%);
-    background-color:hsl(0, 60%, 80%);
+    border-color:hsl(200, 100%, 80%);
+    background-color:hsl(200, 60%, 80%);
   }
   &::after{
     background-color:rgb(255,255,255)!important;

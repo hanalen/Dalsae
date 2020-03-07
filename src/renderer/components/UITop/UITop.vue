@@ -114,7 +114,7 @@ export default {
 .ui-top-normal{
     font-size: 14px !important;
     display: flex;
-    background-color: #ffe0e0;
+    background-color: white;
     .propic{
         margin: 4px;
     }

@@ -394,7 +394,7 @@ textarea {
   .tweet-over {
     background-color: #ffe0e0;
   }
-  background-color: #ffe0e0;
+  background-color: white;
   flex: 1;
   display: flex;
   flex-direction: column;
