@@ -432,13 +432,9 @@ export default new Vuex.Store({
   },
   actions: {
     Account(context, account){
-      console.log('action account')
-      console.log(account)
       context.commit('Account', account);
     },
     Option(context, option){//최초 파일 로드 시 넣는 놈
-      console.log('action option')
-      console.log(option)
       context.commit('Option', option);
     },
     UIOption(context, uioption){//옵션 변경 시 호출 되는 놈
@@ -488,14 +484,6 @@ export default new Vuex.Store({
     },
     Delete(context, tweet){
       context.commit('Delete', tweet);
-    },
-    GetImage({commit}){
-      commit('')
-    },
-    getCount ({ commit }) {
-      browser.runtime.sendMessage({type: "storeinit", key: "count"}).then(count => {
-        commit('setCount', count)
-      })
     },
     AccountChange(context, user_id){
       context.commit('AccountChange', user_id);
