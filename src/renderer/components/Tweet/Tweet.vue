@@ -229,7 +229,7 @@ export default {
   background: white !important;
 }
 .tweet-even{
-  background: #e8f5fe !important;
+  background: #f5f8fa !important;
 }
 
 .tweet.selected{

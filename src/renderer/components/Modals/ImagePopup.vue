@@ -307,7 +307,7 @@ export default {
 	overflow: hidden;
 	margin:auto;
 	.img-div{
-		height: calc(85vh - 120px);
+		height: calc(85vh - 140px);
 		display:flex;
 		justify-content: center;
 		align-items: center;
@@ -359,7 +359,9 @@ video{
 	cursor: pointer;
 }
 .bottom{
-	height: 100px;
+	height: 120px;
+	width: 100%;
+	display: flex;
 	position: fixed;
 	bottom: 10px;
 	.img-preview{
@@ -372,10 +374,10 @@ video{
 		max-height: 100px;
 		max-width: 25%;
 		.bottom-preview{
-			  width: 100px;
-				height: 100px;
-				object-fit: cover;
-				border-radius: 12px;
+			width: 100px;
+			height: 100px;
+			object-fit: cover;
+			border-radius: 12px;
 		}
 		.bottom-preview:hover{
 			cursor: pointer;
