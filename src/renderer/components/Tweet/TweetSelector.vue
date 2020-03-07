@@ -9,14 +9,14 @@
       :tweet="tweet"
       :index="index"
       :isDaehwa="false"
-      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'selected': isFocus}"/>
+      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'selected': isFocus, 'not-read':option.isUseRead && !tweet.isReaded}"/>
 		<SmallTweet ref="small"
 			v-if="option.isSmallTweet && !isFocus"
 			:option="option"
       :tweet="tweet"
       :index="index"
       :isDaehwa="false"
-      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'selected': isFocus}"/>
+      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'selected': isFocus, 'not-read':option.isUseRead && !tweet.isReaded}"/>
     <ContextMenu v-if="tweet.isMuted==false" ref="context" :tweet="tweet"/>
   </div>
 </template>
@@ -106,6 +106,10 @@ export default {
         this.$refs.qtTweet.Focused();
       }
       this.isFocus=true;
+      if(this.option.isUseRead){//읽은 트윗 표시 여부 
+        if(!this.tweet.isReaded)
+          this.$store.dispatch('TweetRead', this.tweet);
+      }
       this.EventBus.$emit('TweetFocus', this.tweet.id);//대화쪽 트윗인지 일반쪽 트윗인지 표시 여부
     },
     FocusOut(e){

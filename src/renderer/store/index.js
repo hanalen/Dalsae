@@ -86,6 +86,7 @@ export default new Vuex.Store({
         isShowPropic: true,//인장 표시
         isBigPropic: true,//인장 크게 표시
         isShowPreview:true,//이미지 미리보기 표시
+        isUseRead:false,//읽은 트윗 여부
 
         isSmallInput:false,//트윗 입력칸 작게 표시
 
@@ -368,6 +369,7 @@ export default new Vuex.Store({
       state.DalsaeOptions.uiOptions.isLoadOrgImg=uiOption.isLoadOrgImg;
       state.DalsaeOptions.uiOptions.isMuteMention=uiOption.isMuteMention;
       state.DalsaeOptions.uiOptions.isShowMute=uiOption.isShowMute;
+      state.DalsaeOptions.uiOptions.isUseRead=uiOption.isUseRead;
     },
     AccountChange(state, user_id){
       var account = state.Account.accountList.find(x=>x.user_id==user_id)
@@ -421,6 +423,9 @@ export default new Vuex.Store({
     },
     ShowMuteTweet(state, tweet){
       tweet.isMuted=false;
+    },
+    TweetRead(state, tweet){
+      tweet.isReaded=true;
     }
   },
   methods:{
@@ -506,6 +511,9 @@ export default new Vuex.Store({
     },
     ShowMuteTweet(context, tweet){
       context.commit('ShowMuteTweet', tweet);
+    },
+    TweetRead(context, tweet){
+      context.commit('TweetRead', tweet);
     }
   }
 });

@@ -223,7 +223,10 @@ export default {
 }
 .tweet.selected{
     background-color: #b7c7eb !important;
-} 
+}
+.tweet.not-read{
+  font-weight: bold;
+}
 .daehwa{//답멘일 경우 표시하는 애
   margin-left: 4px;
   width: 14px;

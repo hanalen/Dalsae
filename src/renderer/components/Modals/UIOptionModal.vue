@@ -20,6 +20,10 @@
       <input v-model="option.isSmallTweet" @change="OptionChange" type="checkbox" class="custom-control-input" id="switchSmallTweet" true-color="#ff6565">
       <label class="custom-control-label" for="switchSmallTweet">트윗을 한 줄로 표시 합니다.</label>
     </div>
+    <div class="custom-control custom-switch">
+      <input v-model="option.isUseRead" @change="OptionChange" type="checkbox" class="custom-control-input" id="switchUseRead" true-color="#ff6565">
+      <label class="custom-control-label" for="switchUseRead">읽지 않은 트윗을 굵게 표시 합니다.</label>
+    </div>
     
     
     <br/>
@@ -92,6 +96,7 @@ export default {
         isShowPropic: true,//인장 표시
         isBigPropic: true,//인장 크게 표시
         isShowPreview:true,//이미지 미리보기 표시
+        isUseRead:false,//읽은 트윗 여부
 
         isSmallInput:false,//트윗 입력칸 작게 표시
 

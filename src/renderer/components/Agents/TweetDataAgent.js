@@ -7,14 +7,6 @@ export default{
 			var left=new Date(nTweet.created_at);
 			var right=new Date(tweet.created_at)
 			if(left <= right){
-				// console.log('-----------------------')
-				// console.log(new Error().stack)
-				// console.log(index);
-				// console.log(listTweet)
-				// console.log(nTweet)
-				// console.log(tweet)
-				// console.log(left);
-				// console.log(right);
 				index++;
 				return index;
 			}
@@ -28,6 +20,7 @@ export default{
 		orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
 		tweet.orgUser=JSON.parse(JSON.stringify(orgUser));
 		tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
+		tweet.isReaded=false;
 		return tweet;
 	},
 	CheckBlock(tweet, hashBlock){//블락일 경우 return true
