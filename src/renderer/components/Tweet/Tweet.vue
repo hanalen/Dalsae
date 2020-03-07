@@ -1,31 +1,5 @@
 <template>
-  <div>
-    <div class="small-tweet" v-if="option.isSmallTweet && !isFocus"
-      @mouseenter="Hover" @mouseleave="HoverOut"
-      :class="{'selected': isFocus}" tabindex="-1" @keydown.up="ArrowUp" @keydown.down="ArrowDown" @focus="FocusedSmall"
-      @keydown.right="ArrowRight" @keydown.left="ArrowLeft"
-      @mousedown="Click">
-      <div class="small-mute-area" v-if="tweet.isMuted" @click="ClickMute">
-        <span>뮤트 된 트윗입니다. 클릭 시 표시 합니다.</span>
-      </div>
-      <div class="small-tweet-area" v-if="tweet.isMuted==false">
-        <div class="daehwa">
-          <i class="far fa-plus-square" v-if="tweet.orgTweet.in_reply_to_status_id_str!=undefined" :style="{'margin-left':-4}"></i>
-        </div>
-        <img class="small-propic" v-bind:src="propic()" v-if="option.isShowPropic" />
-        <div class="small-tweet-content" :class="{'noti':Noti()}">
-          <div class="small-text" v-html="TweetText">
-          </div>
-        </div>
-      </div>
-    </div>
-
-  <!--트윗 일반 태그!!!!!!!!!!!!-->
-  <div ref="tweet" v-if="option.isSmallTweet==false || isFocus"
-   @mouseenter="Hover" @mouseleave="HoverOut"
-  :class="{'tweet': true,'selected': isFocus}" tabindex="-1" @keydown.up="ArrowUp" @keydown.down="ArrowDown" @focus="Focused" v-on:focusout="FocusOut"
-    @keydown.right="ArrowRight" @keydown.left="ArrowLeft"
-    @mousedown="Click">
+  <div ref="tweet" class="tweet">
   <!-- @keydown="keyDown"> --><!--keydown은 list에서 처리 한다-->
   <div class="mute-area" v-if="tweet.isMuted" @click="ClickMute">
     <span>뮤트 된 트윗입니다. 클릭 시 표시 합니다.</span>
@@ -87,8 +61,6 @@
     </div>
   </div>
     
-    </div>
-    <ContextMenu v-if="tweet.isMuted==false" ref="context" :tweet="tweet"/>
   </div>
 </template>
 
@@ -117,25 +89,7 @@ export default {
     };
   },
   created:function(){
-    if(this.tweet.orgTweet.quoted_status!=undefined){
-      this.qtIdStr=this.tweet.orgTweet.quoted_status_id_str;
-      this.$nextTick(()=>{
-        this.EventBus.$emit('LoadQTTweet', this.tweet);
-      });
-      this.EventBus.$on('LoadedQTTweet', (vals)=>{//트윗 로딩 후 on을 요청한 객체에만 걸 수 있게
-        var tweet = vals['tweet'];
-        var id=vals['id_str'];
-        if(id!=this.qtIdStr) return;
-
-        this.$nextTick(()=>{
-          var orgUser = tweet.retweeted_status==undefined ? tweet.user :tweet.retweeted_status.user;//리트윗, 원트윗 유저 선택
-          var orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
-          tweet.orgUser = JSON.parse(JSON.stringify(orgUser));
-          tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
-          this.qtTweet = tweet;
-        });
-      });
-    }
+    
   },
   computed:{
     TweetDate(){
@@ -175,6 +129,10 @@ export default {
     }
   },
   methods: {
+    ImageClick(e){
+      var ipcRenderer = require('electron').ipcRenderer;
+      ipcRenderer.send('child', this.tweet, this.option);
+    },
     ClickMute(e){
       this.$store.dispatch('ShowMuteTweet', this.tweet);
     },
@@ -192,63 +150,6 @@ export default {
           return true;
       }
       return false;
-    },
-    Hover(e){
-      if(this.qtTweet && !this.option.isSmallTweet)
-        this.$refs.qtTweet.Hover();
-    },
-    HoverOut(e){
-      if(this.qtTweet && !this.option.isSmallTweet)
-        this.$refs.qtTweet.HoverOut();
-    },
-    ImageClick(e){
-      var ipcRenderer = require('electron').ipcRenderer;
-      ipcRenderer.send('child', this.tweet, this.option);
-    },
-    Click(e){
-      if(e.button==2 || e.button==3){
-        e.preventDefault();
-        this.$refs.context.Show(e);
-      }
-    },
-    ShowContextMenu(){
-      var pos= this.$el.getBoundingClientRect()
-      var event = new Object();
-      event.clientX=pos.x;
-      event.clientY=pos.y;
-      this.$refs.context.Show(event);
-    },
-    keyDown(e){
-      this.EventBus.$emit('tweetKeyDown', e);
-    },
-    ArrowUp(e){
-      this.EventBus.$emit('ArrowUp', e);
-    },
-    ArrowDown(e){
-      this.EventBus.$emit('ArrowDown', e);
-    },
-    Focused(e){
-      if(this.qtTweet && !this.option.isSmallTweet){
-        this.$refs.qtTweet.Focused();
-      }
-      this.isFocus=true;
-      this.EventBus.$emit('TweetFocus', this.tweet.id);//대화쪽 트윗인지 일반쪽 트윗인지 표시 여부
-    },
-    FocusOut(e){
-      console.log('focus out')
-      if(this.qtTweet && !this.option.isSmallTweet){
-        this.$refs.qtTweet.FocusOut();
-      }
-      this.isFocus=false;
-      this.EventBus.$emit('FocusOut', this.tweet.id);
-    },
-    FocusedSmall(e){
-      console.log('small click')
-      this.isFocus=true;
-      this.$nextTick(()=>{
-        this.$refs.tweet.$el.focus();
-      })
-      return true;
     },
     propic() {
       var user=undefined;

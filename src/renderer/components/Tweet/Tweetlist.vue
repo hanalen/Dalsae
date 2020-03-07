@@ -1,7 +1,7 @@
 <template>
   <div ref="panel" tabindex="-1" class="tweet-list" @keydown="KeyDown">
     <loading v-if="isMoreLoading" name="loadingBottom"/>
-    <Tweet 
+    <TweetSelector 
     ref="list"
       v-for="(item,index) in tweets"
       v-bind:key="index"
@@ -9,14 +9,13 @@
       :tweet="item"
       :index="index"
       :isDaehwa="false"
-      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0}"
     />
     <loading v-if="isLoading" name="loadingTop"/>
   </div>
 </template>
 
 <script>
-import Tweet from "./Tweet.vue";
+import TweetSelector from "./TweetSelector.vue";
 import Loading from "../ToolBox/Loading.vue"
 export default {
   name: "tweetlist",
@@ -28,7 +27,7 @@ export default {
     }
   },
   components:{
-    Tweet,
+    TweetSelector,
     Loading,
   },
   props: {
