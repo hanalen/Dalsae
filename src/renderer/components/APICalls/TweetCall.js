@@ -31,8 +31,6 @@ async function Media(media, publickey, secretkey){
 
 export default{
 	async Tweet(tweetText, replyId, media, publickey, secretkey, callback){
-		console.log(tweetText)
-
 		var method='POST';
 		var arr=[];
 		arr['status']=tweetText;
