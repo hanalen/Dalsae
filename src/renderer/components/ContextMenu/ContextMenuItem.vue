@@ -27,7 +27,10 @@ export default {
 		Click(e){
 			e.preventDefault();
 			if(this.callback!=undefined){
-				this.callback(this.menuText);
+				if(this.url)
+					this.callback(this.url);
+				else
+					this.callback(this.menuText);
 			}
 		},
 		Focused(e){
@@ -52,6 +55,7 @@ export default {
   components:{
   },
   props: {
+		url:undefined,
 		menuText:undefined,
 		hotkey:undefined,
 		callback:undefined,

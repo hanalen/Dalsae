@@ -7,8 +7,8 @@
         :menuText="tweet.orgTweet.extended_entities.media[0].display_url"
         :hotkey="'G'" :callback="Media" :mouseenter="Hover"
         ref="Media"/>
-      <ContextMenuItem v-for="(url, index) in tweet.orgTweet.entities.urls" :key="index"
-                    :menuText="url.display_url" :hotkey="'T'" :callback="Url" ref="Url" :mouseenter="Hover"/>
+      <ContextMenuItem v-for="(url, index) in tweet.orgTweet.entities.urls" :key="index" :url="url"
+                    :menuText="url.display_url" :hotkey="''" :callback="Url" ref="Url" :mouseenter="Hover"/>
       <div class="context-group"></div>
       <ContextMenuItem :menuText="'답글'" :hotkey="'R'" :callback="Reply" ref="Reply" :mouseenter="Hover"/>
       <ContextMenuItem :menuText="'모두에게 답글'" :hotkey="'A'" :callback="ReplyAll" :mouseenter="Hover"/>
@@ -18,7 +18,7 @@
       <ContextMenuItem :menuText="'관심글'" :hotkey="'F'" :callback="Favorite" :mouseenter="Hover"/>
       <div class="context-group"></div>
       <ContextMenuItem :menuText="'웹에서 보기'" :hotkey="'B'" :callback="ViewWeb" :mouseenter="Hover"/>
-      <ContextMenuItem :menuText="'트윗 복사'" :hotkey="'Ctrl+C'" :callback="Copy" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'트윗 복사(미구현)'" :hotkey="'Ctrl+C'" :callback="Copy" :mouseenter="Hover"/>
       <ContextMenuItem :menuText="'트윗 삭제'" :hotkey="'Delete'" :callback="Delete" :mouseenter="Hover"/>
     </div>
   </div>
@@ -77,17 +77,18 @@ export default {
       this.$store.dispatch('AddOpen', this.tweet);
       this.Hide();
     },
-    Url(){
-      //url entities 내부 변수 3개
-      //expanded_url
-      //url
-      //display_url
+    Url(url){
+      const { shell } = require('electron')
+      shell.openExternal(url.expanded_url)
+      this.$store.dispatch('AddOpen', this.tweet);
+      this.Hide();
     },
     Copy(){
       this.Hide();
     },
     Delete(){
-
+      this.EventBus.$emit('DeleteTweet', this.tweet);
+      this.Hide();
     },
 		Focused(e){
 			// console.log('focus....')
@@ -116,7 +117,6 @@ export default {
       this.$children[this.selectIndex].$el.focus();
     },
     Show(e) {
-      console.log('context show')
       this.isVisible = true;
       this.$nextTick(() => {
         var x=e.clientX;
