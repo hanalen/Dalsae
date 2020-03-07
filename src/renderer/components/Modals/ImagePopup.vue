@@ -131,7 +131,12 @@ export default {
 		console.log(this.tweet);
 	},
 	mounted(){
-		setTimeout(() => this.$el.focus(), 200);
+		setTimeout(() => {
+			if(this.$el){
+				// this.$el.focus();
+			}
+		}
+		,200);
 	},
 	methods:{
  		Save(){
