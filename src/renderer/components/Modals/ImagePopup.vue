@@ -1,6 +1,6 @@
 <template>
 	<div ref="imgModal" class="image-modal" tabindex="-1" @keydown="KeyDown" @keydown.left="Prev" @keydown.right="Next">
-		<div class="img-bg" ref="imgBg">
+		<div class="img-bg" ref="imgBg" v-if="tweet!=undefined">
 			<Tweet ref="tweet" v-show="uiOption.isShowTweet" :tweet="tweet" :option="uiOption" class="tweet-odd"/>
       <div class="image-content" v-if="Video.type=='photo'">
 				<div class="arrow" v-if="tweet.orgTweet.extended_entities.media.length > 1 && !isZoom">
@@ -89,14 +89,7 @@ export default {
 	created: function(){
 		var ipcRenderer = require('electron').ipcRenderer;
 		ipcRenderer.on('tweet', (event, tweet, uiOption) => {
-			for(var i=0;i<this.listProgressPercent.length;i++){
-				this.listProgressPercent[i]=0;
-			}
-			if(this.$refs.progress!=undefined){
-				this.$refs.progress.forEach((pro)=>{
-					pro.SetValue(0);
-				})
-			}
+			this.Clear();
 			this.tweet=tweet;
 			this.uiOption=uiOption;
 		});
@@ -107,16 +100,10 @@ export default {
 			});
 		});
 		ipcRenderer.on('keydown', (event, key)=>{
-			console.log(event);
 			this.KeyDown(key);
 		});
     ipcRenderer.on('hide', ()=>{
-      this.tweet=undefined;
-			var videoElement = this.$refs.video;
-			if(videoElement){
-				videoElement.pause();
-	      videoElement.removeAttribute('src');
-			}
+			this.Clear();
     });
 		this.EventBus.$on('Save', (id)=>{//id: 트윗 id
 			if(id!=this.tweet.orgTweet.id_str) return;
@@ -126,19 +113,45 @@ export default {
 			if(id!=this.tweet.orgTweet.id_str) return;
 			this.SaveAll();
 		});
+		
+		// setTimeout(() => {
+		// 	if(this.$el){
+		// 		this.$refs.imgModal.focus();
+		// 	}
+		// }
+		// ,200);
 	},
   mounted:function(){
 		console.log(this.tweet);
 	},
 	mounted(){
-		setTimeout(() => {
-			if(this.$el){
-				// this.$el.focus();
-			}
-		}
-		,200);
 	},
 	methods:{
+		Clear(){
+			for(var i=0;i<this.listProgressPercent.length;i++){
+				this.listProgressPercent[i]=0;
+			}
+			if(this.$refs.progress!=undefined){
+				this.$refs.progress.forEach((pro)=>{
+					pro.SetValue(0);
+				})
+			}
+			this.tweet=undefined;
+			this.index=0;
+			this.isZoom=false;
+			this.isDrag=false;
+			var videoElement = this.$refs.video;
+			this.prevX=0;
+			this.prevY=0;
+			this.startX=0;
+			this.startY=0;
+			this.marginLeft=0;
+			this.marginTop=0;
+			if(videoElement){
+				videoElement.pause();
+	      videoElement.removeAttribute('src');
+			}
+		},
  		Save(){
 			this.DownloadImage(this.tweet.orgTweet.extended_entities.media[this.index], this.$refs.progress[this.index]);
     },

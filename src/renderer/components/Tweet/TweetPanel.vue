@@ -127,15 +127,10 @@ export default {
           var tweet=this.selectPanel.GetSelectTweet();
           this.EventBus.$emit('Favorite', tweet);
         }
-        else if(e.keyCode==70||e.keyCode==102){//t, 리트윗
+        else if(e.keyCode==84||e.keyCode==116){//t, 리트윗
           e.preventDefault();
           var tweet=this.selectPanel.GetSelectTweet();
           this.EventBus.$emit('Retweet', tweet);
-        }
-        else if(e.keyCode==70||e.keyCode==102){//f, 관글
-          e.preventDefault();
-          var tweet=this.selectPanel.GetSelectTweet();
-          this.EventBus.$emit('Favorite', tweet);
         }
         else if(e.keyCode==71||e.keyCode==103){//g, 이미지열기
           e.preventDefault();

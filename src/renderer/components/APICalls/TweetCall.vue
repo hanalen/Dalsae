@@ -79,6 +79,11 @@ export default {
 			console.log('favo ok')
 			console.log(tweet);
 		},
+		ResUnFavorite(tweet){
+			this.$store.dispatch('UnFavorite', tweet);
+			console.log('un favo ok')
+			console.log(tweet);
+		},
 		ResUnFavoriet(tweet){
 			this.$store.dispatch('UnFavorite', tweet);
 			console.log('un favo ok')

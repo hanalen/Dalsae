@@ -281,7 +281,7 @@ export default new Vuex.Store({
     UnRetweet(state, tweet){
       for (let [key, value] of Object.entries(state.tweets)){
         value.forEach(function(tempTweet){
-          if(tempTweet.orgTweet.id_str==tweet.retweeted_status.id_str){
+          if(tempTweet.orgTweet.id_str==tweet.id_str){
             tempTweet.orgTweet.retweeted=false;
           }
         }); 
@@ -290,7 +290,7 @@ export default new Vuex.Store({
     Favorite(state, tweet){
       for (let [key, value] of Object.entries(state.tweets)){
         value.forEach(function(tempTweet){
-          if(tempTweet.orgTweet.id_str==tweet.retweeted_status.id_str){
+          if(tempTweet.orgTweet.id_str==tweet.id_str){
             tempTweet.orgTweet.favorited=true;
           }
         }); 
@@ -299,7 +299,7 @@ export default new Vuex.Store({
     UnFavorite(state, tweet){
       for (let [key, value] of Object.entries(state.tweets)){
         value.forEach(function(tempTweet){
-          if(tempTweet.orgTweet.id_str==tweet.retweeted_status.id_str){
+          if(tempTweet.orgTweet.id_str==tweet.id_str){
             tempTweet.orgTweet.favorited=false;
           }
         }); 
