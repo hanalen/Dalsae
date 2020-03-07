@@ -26,6 +26,7 @@ export default {
 	},
 	methods:{
 		BeforeOpen(e){
+			this.pin='';
 			this.ReqToken();
 		},
 		ReqToken(){
