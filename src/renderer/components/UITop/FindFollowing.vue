@@ -1,14 +1,13 @@
 <template>
   <div v-if="isShow" class="find-following">
-    <div class="dis-flex" ref="followingList">
-      
-        <following-item v-for="(item, index) in list"
+    <div class="dis-flex">
+      <following-item v-for="(item, index) in list"
         v-bind:key="item.index"
         v-bind:class="{selected: index === selectIndex}"
         :name="item.name"
         :screen_name="item.screen_name"
         :profile_image_url="item.profile_image_url" 
-        ref="divlist"
+        ref="list"
         />
     </div>
   </div>
@@ -43,34 +42,30 @@ export default {
       if(this.selectIndex >= this.list.length){
         this.selectIndex = this.list.length - 1;
       }
-      this.$refs.followingList.scrollTop=this.selectIndex*59
+      this.$refs.list[this.selectIndex].Focus();
     });
     this.EventBus.$on('arrowUp', () => {
       this.selectIndex--;
       if(this.selectIndex < 0){
         this.selectIndex = 0;
       }
-      this.$refs.followingList.scrollTop=this.selectIndex*59
+      this.$refs.list[this.selectIndex].Focus();
     });
   },
 };
 </script>
 <style lang="scss" scoped>
 .find-following{
-    position: absolute;
-    top:100px;
-    z-index: 10;
+  position: absolute;
+  top:100px;
+  z-index: 10;
+  border-radius: 8px;
+  border: 1px dashed black;
+  overflow: hidden;
+  .dis-flex{
+    overflow-y: scroll;
     max-height: 300px;
-    .dis-flex{
-        display: flex;
-        flex-direction: column;
-        overflow:scroll;
-        overflow-x: hidden;
-        overflow-y: auto;
-        max-width: 500px;
-        max-height: 300px;
-        width: 100%;
-        
-    }
+    max-width: 500px;
+  }
 }
 </style>

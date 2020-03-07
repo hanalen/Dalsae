@@ -196,7 +196,7 @@ export default {
     },
     ClearInput() {
       this.txtCounting = "(0 / 280)";
-      this.isMention = false;
+      this.HideMention();
       this.tweetTextBinding = "";//양방향 바인딩용 값, 이 값을 바꿔야 ui 밑 전송 데이터가 적용 된다.
       this.tweetText = "";
       this.tweetLength = 0;
@@ -204,14 +204,13 @@ export default {
       this.arrImage=[];
     },
     ReplaceMentionID(screen_name) {
-      this.isMention = false;
-      // console.log(this.tweetTextBinding+'/'+this.tweetText);
       this.tweetTextBinding = this.tweetText.replace(
         this.word,
         "@" + screen_name + " "
       );
       this.tweetText = this.tweetTextBinding;
       this.$refs.inputTweet.focus();
+      this.HideMention();
     },
     ArrowUp(e) {
       if (!this.isMention) {
@@ -323,8 +322,12 @@ export default {
         this.word = word;
         this.CutMentionID(word.replace("@", ""));
       } else {
-        this.isMention = false;
+        this.HideMention();
       }
+    },
+    HideMention(){
+      this.isMention=false;
+      this.listMention=[];
     },
     CutMentionID(word) {
       if (word.length == 0) return;

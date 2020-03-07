@@ -1,59 +1,61 @@
 <template>
-<div ref="followitem" :class="{'following-item':true, 'selected' :selected}" @click="IDClick">
-    <img v-bind:src="profile_image_url"/>
+  <div ref="followitem" :class="{'following-item':true, 'selected' :selected}" @click="IDClick" tabindex="-1">
+    <img v-bind:src="profile_image_url" />
     <div>
-        <span class="bold">{{name}}</span><br>
-        <span class="thin">{{screen_name}}</span>
+      <span class="bold">{{name}}</span>
+      <br />
+      <span class="thin">{{screen_name}}</span>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
-import {EventBus} from '../../main.js';
+import { EventBus } from "../../main.js";
 export default {
   name: "followingitem",
-  components:{
-  },
+  components: {},
   props: {
-      profile_image_url:'',
-      name:'',
-      screen_name:'',
-      selected:true
+    profile_image_url: "",
+    name: "",
+    screen_name: "",
+    selected: true
   },
-  created:function(){
-  },
-  methods:{
-      IDClick(e){
-        this.EventBus.$emit('mentionSelect', this.screen_name);
-      }
+  created: function() {},
+  methods: {
+    IDClick(e) {
+      this.EventBus.$emit("mentionSelect", this.screen_name);
+    },
+    Focus(e){
+      this.$refs.followitem.scrollIntoView();
+    },
   }
 };
 </script>
 <style lang="scss" scoped>
-div:hover{
-    background-color: rgb(216, 216, 216);
-    
-    cursor: pointer;
+.following-item:hover {
+  background-color: #a3d9fe;
+  cursor: pointer;
 }
-.selected{
-    background-color: rgb(110, 110, 110) !important;
+.selected {
+  background-color: #a3d9fe !important;
 }
-.following-item{
-    display: flex;
-    background-color: white;
-    width: 100%;
-    border-bottom: 1px solid black;
-    
-    .bold{
-        font-weight: bold;
-    }
-    .thin{
-        color: gray;
-    }
-    img{
+.following-item {
+  display: flex;
+  background-color: white;
+  width: 100%;
+//   height: 60px;
+  padding: 4px;
+  border-bottom: dashed 1px rgba(0, 0, 0, 0.12);
+  .bold {
+    font-weight: bold;
+  }
+  .thin {
+    color: hsla(0, 0, 20, 1.0);
+  }
+  img {
     border-radius: 5px;
-    margin: 5px;
+    width: 30px;
+    height: 30px;
+  }
 }
-}
-
 </style>
