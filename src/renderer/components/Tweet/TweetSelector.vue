@@ -1,7 +1,6 @@
 <template>
   <div class="tweet-selector" tabindex="-1" @mouseenter="Hover" @mouseleave="HoverOut" @keydown.up="ArrowUp" @keydown.down="ArrowDown"
 	@focus="Focused" v-on:focusout="FocusOut"
-    @keydown.right="ArrowRight" @keydown.left="ArrowLeft"
     @mousedown="Click">
     <Tweet ref="tweet"
 			v-if="!option.isSmallTweet || isFocus"
@@ -9,6 +8,7 @@
       :tweet="tweet"
       :index="index"
       :isDaehwa="false"
+      :qtTweet="qtTweet"
       :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'selected': isFocus, 'not-read':option.isUseRead && !tweet.isReaded}"/>
 		<SmallTweet ref="small"
 			v-if="option.isSmallTweet && !isFocus"
@@ -73,11 +73,11 @@ export default {
   methods: {
     Hover(e){
       if(this.qtTweet && !this.option.isSmallTweet)
-        this.$refs.qtTweet.Hover();
+        this.$refs.tweet.Hover();
     },
     HoverOut(e){
       if(this.qtTweet && !this.option.isSmallTweet)
-        this.$refs.qtTweet.HoverOut();
+        this.$refs.tweet.HoverOut();
     },
     Click(e){
       if(e.button==2 || e.button==3){
@@ -103,7 +103,7 @@ export default {
     },
     Focused(e){
       if(this.qtTweet && !this.option.isSmallTweet){
-        this.$refs.qtTweet.Focused();
+        this.$refs.tweet.Focused();
       }
       this.isFocus=true;
       if(this.option.isUseRead){//읽은 트윗 표시 여부 
@@ -114,7 +114,7 @@ export default {
     },
     FocusOut(e){
       if(this.qtTweet && !this.option.isSmallTweet){
-        this.$refs.qtTweet.FocusOut();
+        this.$refs.tweet.FocusOut();
       }
       this.isFocus=false;
       this.EventBus.$emit('FocusOut', this.tweet.id);

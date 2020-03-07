@@ -78,13 +78,13 @@ export default {
     tweet: undefined,
     option: undefined,
     selected:false,
+    qtTweet:undefined,
     index:undefined,
   },
   data() {
     return {
       preview: false,
       isFocus:false,
-      qtTweet:undefined,
       qtIdStr:undefined
     };
   },
@@ -129,6 +129,20 @@ export default {
     }
   },
   methods: {
+    Hover(e){
+      if(this.qtTweet && !this.option.isSmallTweet)
+        this.$refs.qtTweet.Hover();
+    },
+    HoverOut(e){
+      if(this.qtTweet && !this.option.isSmallTweet)
+        this.$refs.qtTweet.HoverOut();
+    },
+    Focused(e){
+      this.$refs.qtTweet.Focused();
+    },
+    FocusOut(e){
+      this.$refs.qtTweet.FocusOut();
+    },
     ImageClick(e){
       var ipcRenderer = require('electron').ipcRenderer;
       ipcRenderer.send('child', this.tweet, this.option);
