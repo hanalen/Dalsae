@@ -440,7 +440,7 @@ textarea {
       flex-direction: column;
       .add-image {
         width: 100%;
-        // height: 140px;
+        height: 140px;
       }
     }
     .right {
