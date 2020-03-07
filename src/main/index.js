@@ -143,7 +143,7 @@ var muteOptionWin=null;
 
 ipcMain.on('OpenMuteOptionPopup', (event, option)=>{
   if(muteOptionWin) return;//2번 생성 막기
-  muteOptionWin = new BrowserWindow({show:false,width:1500, height:800, x:2000, y:0, devTools :false});
+  muteOptionWin = new BrowserWindow({show:false,width:540, height:400, devTools :false});
   const path = process.env.NODE_ENV === 'development'
         ? 'http://localhost:9080/#/MuteOption'
         : `file://${__dirname}/index.html#MuteOption`
