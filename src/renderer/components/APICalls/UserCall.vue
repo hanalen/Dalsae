@@ -33,8 +33,8 @@ export default {
 			this.ReqHome(undefined, undefined);
 			this.ReqMention(undefined, undefined);
 			this.ReqUserInfo();
-      // this.ReqFollowingList();
-      // this.ReqFollowerList();
+      this.ReqFollowingList();
+      this.ReqFollowerList();
     },
     ReqHome(maxId, sinceId){
       if(this.isLoadingHome){//이미 로딩 중이면 넘기기
