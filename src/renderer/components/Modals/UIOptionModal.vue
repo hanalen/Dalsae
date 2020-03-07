@@ -39,11 +39,11 @@
       <input v-model="option.isSendCheck" @change="OptionChange" type="checkbox" class="custom-control-input" id="switchSendCheck" true-color="#ff6565">
       <label class="custom-control-label" for="switchSendCheck">트윗 전송 시 확인 창을 띄웁니다.</label>
     </div>
-    <div class="custom-control custom-switch">
+    <div class="custom-control custom-switch" style="min-height:36px">
       <input v-model="option.isSendEnter" @change="OptionChange" type="checkbox" class="custom-control-input" id="switchSendEnter" true-color="#ff6565">
       <label class="custom-control-label" for="switchSendEnter">Enter키로 트윗을 전송 합니다.<br/>해제 시 Ctrl+Enter로 전송.</label>
     </div>
-    <div class="custom-control custom-switch">
+    <div class="custom-control custom-switch" style="min-height:36px">
       <input v-model="option.isSendRTProtected" @change="OptionChange" type="checkbox" class="custom-control-input" id="switchsendRTProtected">
       <label class="custom-control-label" for="switchsendRTProtected">잠금 사용자의 트윗도 리트윗 합니다.<br/>아이디는 *** 처리 됩니다.</label>
     </div>
@@ -155,14 +155,16 @@ h4{
 .option-modal{
   color:rgba(44,44,44,.85);
 	display: flex;
-	// flex: 1;
 	flex-direction: column;
-	height: 100%;
+	height: calc(100% - 44px);
+  margin-bottom: 44px;
 	min-width: 200px;
-	// overflow: scroll;
+	overflow-y: scroll;
 	background-color: #dff1fe;
-	// width: 500px;
   padding: 8px;
+}
+.custom-control{
+  height: auto;
 }
 .custom-control-label{
   font-size:12px;
