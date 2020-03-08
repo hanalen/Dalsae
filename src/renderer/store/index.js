@@ -32,7 +32,8 @@ export default new Vuex.Store({
     // createPersistedState(),
     // createSharedMutations({ predicate: ["Account", "Option","AddHome"] })
   ],
-  strict: process.env.NODE_ENV !== 'production',
+  strict: false,
+  // strict: process.env.NODE_ENV !== 'production',
   state: {
     tweets:
     {
