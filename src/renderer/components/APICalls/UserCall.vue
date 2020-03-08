@@ -110,18 +110,18 @@ export default {
       this.EventBus.$emit('FocusPanel', 'daehwa');
 		},
     ResFollowing(resUsers){
+      this.$store.dispatch('FollowingList', resUsers.users);
       if(resUsers.next_cursor!=0){//다 땡겨왔을 경우 0으로 옴
         this.ReqFollowingList(resUsers.next_cursor);
       }
-      console.log(resUsers)
-      this.$store.dispatch('FollowingList', resUsers.users);
+      // console.log(resUsers)
     },
     ResFollower(resUsers){
+      this.$store.dispatch('FollowerList', resUsers.users);
       if(resUsers.next_cursor!=0){//다 땡겨왔을 경우 0으로 옴
         this.ReqFollowerList(resUsers.next_cursor);
       }
-      console.log(resUsers)
-      this.$store.dispatch('FollowerList', resUsers.users);
+      // console.log(resUsers)
     },
     ErrResFollowing(err, cursor){
       console.log(err);

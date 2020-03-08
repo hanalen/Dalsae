@@ -111,12 +111,6 @@ export default new Vuex.Store({
       skin:[],
       hotkey:[],
     },
-    Friends:[
-      {
-        following:[],
-        follower:[]
-      }
-    ],
     Blocks:[
 
     ],
