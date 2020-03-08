@@ -119,6 +119,9 @@ export default {
       this.isFocus=false;
       this.EventBus.$emit('FocusOut', this.tweet.id);
     },
+    GetQtTweet(){
+      return this.$refs.tweet.GetQtTweet();
+    },
   }
 };
 </script>

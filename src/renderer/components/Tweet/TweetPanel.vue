@@ -110,6 +110,7 @@ export default {
           var tweet= this.selectPanel.GetQTTweet();
           if(tweet){
             this.$store.dispatch('Daehwa', tweet);
+            this.EventBus.$emit('FocusPanel', 'daehwa');//패널 변경
           }
         }
         else if(e.keyCode==65 || e.keyCode == 97){//a,전체 답변

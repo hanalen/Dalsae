@@ -187,6 +187,9 @@ export default {
     },
     hidepreview() {
       this.preview = false;
+    },
+    GetQtTweet(){
+      return this.qtTweet;
     }
   }
 };

@@ -22,7 +22,7 @@ export default {
   data:function(){
     return{
       selectIndex : 0,
-      isLoading:true,
+      isLoading:false,
       isMoreLoading:false,
     }
   },
@@ -57,7 +57,9 @@ export default {
       return this.tweets[this.selectIndex];
     },
     GetQTTweet(){
-      return this.$refs.list[this.selectIndex].qtTweet;
+      console.log(this.$refs.list[this.selectIndex]);
+      console.log(this.$refs.list[this.selectIndex].GetQtTweet)
+      return this.$refs.list[this.selectIndex].GetQtTweet();
     },
     ResTweets(vals){
       var loading = vals['isLoading'];
