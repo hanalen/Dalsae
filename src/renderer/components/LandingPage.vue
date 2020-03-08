@@ -1,41 +1,43 @@
 <template>
   <div class="app">
-    <ImageModal ref="imageModal" v-if="isShowImage" :uiOption="this.$store.state.DalsaeOptions.uiOptions"/>
-    <AccountSelectModal ref="accountModal" v-if="isShowAccount"/>
+    <ImageModal ref="imageModal" v-if="isShowImage" :uiOption="this.$store.state.DalsaeOptions.uiOptions" />
+    <AccountSelectModal ref="accountModal" v-if="isShowAccount" />
     <div class="dalsae">
-      <UIOptionModal v-if="isShowUIOption"/>
+      <transition name="optionModal">
+        <UIOptionModal v-if="isShowUIOption" class="option-wrap" />
+      </transition>
       <div id="main-page">
         <UITop v-bind:following="this.$store.state.following" :uiOption="this.$store.state.DalsaeOptions.uiOptions" />
-        <TweetPanel/>
-        <UIBottom/>
-        <InputPin/>
-        <UserCall/>
-        <TweetCall/>
-        <FileAgent/>
-        <IPCAgent/>
+        <TweetPanel />
+        <UIBottom />
+        <InputPin />
+        <UserCall />
+        <TweetCall />
+        <FileAgent />
+        <IPCAgent />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import TweetPanel from "./Tweet/TweetPanel.vue"
+import TweetPanel from "./Tweet/TweetPanel.vue";
 import UITop from "./UITop/UITop.vue";
-import UIBottom from "./UIBottom.vue"
-import InputPin from "./Modals/InputPin.vue"
-import ApiUser from "./APICalls/UserCall.js"
-import UserCall from "./APICalls/UserCall.vue"
-import TweetCall from "./APICalls/TweetCall.vue"
-import FileAgent from "./Agents/FileAgent.vue"
-import IPCAgent from "./Agents/IPCAgent.vue"
-import OAuth from "../oauth.js"
-import UIOptionModal from './Modals/UIOptionModal.vue'
-import ImageModal from './Modals/ImageModal.vue'
-import AccountSelectModal from './Modals/AccountSelectModal.vue'
+import UIBottom from "./UIBottom.vue";
+import InputPin from "./Modals/InputPin.vue";
+import ApiUser from "./APICalls/UserCall.js";
+import UserCall from "./APICalls/UserCall.vue";
+import TweetCall from "./APICalls/TweetCall.vue";
+import FileAgent from "./Agents/FileAgent.vue";
+import IPCAgent from "./Agents/IPCAgent.vue";
+import OAuth from "../oauth.js";
+import UIOptionModal from "./Modals/UIOptionModal.vue";
+import ImageModal from "./Modals/ImageModal.vue";
+import AccountSelectModal from "./Modals/AccountSelectModal.vue";
 
 export default {
-  name: 'landing-page',
-  components: { 
+  name: "landing-page",
+  components: {
     TweetPanel,
     UITop,
     UIBottom,
@@ -48,97 +50,98 @@ export default {
     ImageModal,
     AccountSelectModal,
   },
-  data () {
+  data() {
     return {
-      isShowUIOption:false,
-      isShowImage:false,
-      isShowAccount:false,
-    }
+      isShowUIOption: false,
+      isShowImage: false,
+      isShowAccount: false,
+    };
   },
   methods: {
-    open (link) {
-      this.$electron.shell.openExternal(link)
+    open(link) {
+      this.$electron.shell.openExternal(link);
     },
-    ClosePopup(){
-      this.$modal.hide('input-pin', {
-        show: false
+    ClosePopup() {
+      this.$modal.hide("input-pin", {
+        show: false,
       });
     },
-  
-    StartDalsae(){
-       if(this.$store.state.Account==undefined ||this.$store.state.Account.accountList==undefined||
-          this.$store.state.Account.accountList.length==0){//등록 된 계정이 없을 경우
-        this.$nextTick(() =>{//이벤트에서 show가 되기 전에 focus 호출 시 focus가 되지 않는 문제가 있어서 nextTick사용
-          this.$modal.show('input-pin', {
-            show: true
-          })
+
+    StartDalsae() {
+      if (this.$store.state.Account == undefined || this.$store.state.Account.accountList == undefined || this.$store.state.Account.accountList.length == 0) {
+        //등록 된 계정이 없을 경우
+        this.$nextTick(() => {
+          //이벤트에서 show가 되기 전에 focus 호출 시 focus가 되지 않는 문제가 있어서 nextTick사용
+          this.$modal.show("input-pin", {
+            show: true,
+          });
         });
-      }
-      else{
-        this.$nextTick(() =>{//이벤트에서 show가 되기 전에 focus 호출 시 focus가 되지 않는 문제가 있어서 nextTick사용
-          this.EventBus.$emit('StartDalsae');
+      } else {
+        this.$nextTick(() => {
+          //이벤트에서 show가 되기 전에 focus 호출 시 focus가 되지 않는 문제가 있어서 nextTick사용
+          this.EventBus.$emit("StartDalsae");
         });
       }
     },
-    ShowImage(tweet){
-      this.isShowImage=true;
-      this.$nextTick(()=>{
+    ShowImage(tweet) {
+      this.isShowImage = true;
+      this.$nextTick(() => {
         // this.$refs.imageModal.tweet = tweet;
         this.$refs.imageModal.SetTweet(tweet);
       });
     },
-    HideImage(){
-      this.isShowImage=false;
+    HideImage() {
+      this.isShowImage = false;
     },
   },
-  created: function(){
-    this.$nextTick(()=>{
-      this.EventBus.$emit('LoadFiles');
+  created: function() {
+    this.$nextTick(() => {
+      this.EventBus.$emit("LoadFiles");
     });
 
-    const { ipcRenderer } = require('electron');
-    ipcRenderer.on('update_downloaded', ()=>{
-      var yes = confirm('달새의 새 업데이트가 다운로드 되었습니다. 확인을 누르면 재시작됩니다.');
-      if(yes==true){
-        ipcRenderer.send('restart_app');
+    const { ipcRenderer } = require("electron");
+    ipcRenderer.on("update_downloaded", () => {
+      var yes = confirm("달새의 새 업데이트가 다운로드 되었습니다. 확인을 누르면 재시작됩니다.");
+      if (yes == true) {
+        ipcRenderer.send("restart_app");
       }
     });
   },
-  mounted:function(){
-    this.EventBus.$on('ShowAccountModal', (isShow)=>{
-      this.isShowAccount=isShow;
+  mounted: function() {
+    this.EventBus.$on("ShowAccountModal", isShow => {
+      this.isShowAccount = isShow;
     });
-    this.EventBus.$on('ClosePopup', () => {
-        this.ClosePopup();
+    this.EventBus.$on("ClosePopup", () => {
+      this.ClosePopup();
     });
-    this.EventBus.$on('FileLoaded',()=>{
-      console.log('file loaded')
+    this.EventBus.$on("FileLoaded", () => {
+      console.log("file loaded");
       this.StartDalsae();
     });
-    this.EventBus.$on('OpenUIOption', ()=>{
+    this.EventBus.$on("OpenUIOption", () => {
       this.isShowUIOption = !this.isShowUIOption;
     });
-    this.EventBus.$on('CloseUIOption',()=>{
+    this.EventBus.$on("CloseUIOption", () => {
       this.isShowUIOption = false;
     });
-    this.EventBus.$on('ShowTweetImage', (tweet)=>{
+    this.EventBus.$on("ShowTweetImage", tweet => {
       this.ShowImage(tweet);
     });
-    this.EventBus.$on('HideTweetImage', ()=>{
-      console.log('a')
+    this.EventBus.$on("HideTweetImage", () => {
+      console.log("a");
       this.HideImage();
     });
-  }
-}
+  },
+};
 </script>
 
-
 <style lang="scss">
-html,body{
-    margin: 0px;
-    overflow: hidden;
+html,
+body {
+  margin: 0px;
+  overflow: hidden;
 }
-.dalsae{
+.dalsae {
   display: flex;
   flex-direction: row;
   width: 100vw;
@@ -155,5 +158,26 @@ html,body{
   // -moz-osx-font-smoothing: grayscale;
   // color: #2c3e50;
   // margin-top: 60px;
+}
+.option-wrap {
+  position: fixed;
+  display: block;
+  overflow: auto;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: calc(100vh - 44px);
+  z-index: 1040;
+}
+.optionModal-enter,
+.optionModal-leave-to {
+  position: fixed;
+  display: block;
+  width: 250px;
+  transform: translateX(-250px);
+}
+.optionModal-enter-active,
+.optionModal-leave-active {
+  transition: transform 0.5s;
 }
 </style>
