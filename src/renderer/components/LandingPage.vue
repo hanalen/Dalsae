@@ -3,7 +3,7 @@
     <ImageModal ref="imageModal" v-if="isShowImage" :uiOption="this.$store.state.DalsaeOptions.uiOptions" />
     <AccountSelectModal ref="accountModal" v-if="isShowAccount" />
     <div class="dalsae">
-      <transition name="optionModal">
+      <transition name="option-slide">
         <UIOptionModal v-if="isShowUIOption" class="option-wrap" />
       </transition>
       <div id="main-page">
@@ -169,15 +169,15 @@ body {
   height: calc(100vh - 44px);
   z-index: 1040;
 }
-.optionModal-enter,
-.optionModal-leave-to {
+.option-slide-enter,
+.option-slide-leave-to {
   position: fixed;
   display: block;
   width: 250px;
   transform: translateX(-250px);
 }
-.optionModal-enter-active,
-.optionModal-leave-active {
+.option-slide-enter-active,
+.option-slide-leave-active {
   transition: transform 0.5s;
 }
 </style>
