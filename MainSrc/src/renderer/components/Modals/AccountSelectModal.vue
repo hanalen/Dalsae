@@ -41,7 +41,9 @@ export default {
 			console.log(userData);
 			console.log(this.$store.state.Account.selectAccount);
 			if(this.$store.state.Account.selectAccount.user_id != userData.user_id){//같은 계정이 아닐때만 변경 진행
+				this.EventBus.$emit('StopStreaming');
 				this.$store.dispatch('AccountChange', userData.user_id);//vuex로 사용자 id_str만 던져서 계정 변경 
+				this.EventBus.$emit('StartStreaming');
 				this.EventBus.$emit('StartDalsae');
 			}
 			this.EventBus.$emit('ShowAccountModal', false);
@@ -50,6 +52,7 @@ export default {
 			this.EventBus.$emit('ShowAccountModal', false);
 		},
 		AddAccount(e){
+			this.EventBus.$emit('StopStreaming');
 			this.$store.dispatch('AccountClear');
 			this.$modal.show('input-pin', {
 				show: true

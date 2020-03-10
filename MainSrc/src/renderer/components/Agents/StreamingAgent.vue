@@ -1,5 +1,5 @@
 <template>
-  <div class="streaming-agent" v-if="selectAccount!=undefined">
+  <div class="streaming-agent">
   </div>
 </template>
 
@@ -31,7 +31,14 @@ export default {
 //     });  
 // }
 // fun();
-    this.ConnectStreamingHub();
+    // this.ConnectStreamingHub();
+
+    this.EventBus.$on('StopStreaming',()=>{
+      this.StopStreaming();
+    });
+    this.EventBus.$on('StartStreaming',()=>{
+      this.StartStreaming();
+    });
   },
   data() {
     return {
@@ -57,26 +64,6 @@ export default {
         },3000);
       });
     },
-    AxiosProxy(){
-      var arr=[];
-      var url="https://userstream.twitter.com/1.1/user.json";
-      axios.get("http://127.0.0.1", {
-        proxy: {
-          host: "127.0.0.1",
-          port: 8811
-        },
-         headers:{
-          'Content-Type':'application/x-www-form-urlencoded;encoding=utf-8',
-          'Authorization': OAuth.GetHeader(arr, 'GET', '127.0.0.1', APIKey.ConsumerKey, APIKey.ConsumerSecretKey)
-			  },
-      })
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error);
-      });
-    },
     SendKeys(){
       this.connection.invoke("Keys", this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret,
       APIKey.ConsumerKey, APIKey.ConsumerSecretKey)
@@ -86,6 +73,22 @@ export default {
         })
         .catch(err => console.error(err.toString()));
       
+    },
+    StartStreaming(){
+      if(this.connection){//이미 연결이 성립 되어 있을 경우 key만 update
+        this.SendKeys();
+      }
+      else{
+        this.ConnectStreamingHub();
+      }
+    },
+    StopStreaming(){
+      this.connection.invoke("StopStreaming")
+      .then(function()
+      {
+
+      })
+      .catch(err => console.error(err.toString()));
     },
     SetStreaming(){
       this.connection.onclose(()=>{

@@ -18,6 +18,11 @@ namespace StreamingBridge.Hubs
 			OAuth.instence.SetKey(publicAppKey, secretAppKey, publicUserKey, secretUserKey);
 		}
 
+		public async Task StopStreaming()
+		{
+			UserStreaming.instence.DisconnectStreaming();
+		}
+
 		public async Task ResponseStreaming(string json)
 		{
 			await Clients.All.SendAsync("ResponseStreaming", json);

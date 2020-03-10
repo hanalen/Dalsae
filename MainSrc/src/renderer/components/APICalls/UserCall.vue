@@ -139,7 +139,8 @@ export default {
   },
   mounted: function() {//EventBus등록용 함수들
     this.EventBus.$on('StartDalsae', () => {
-			this.StartDalsae();
+      this.StartDalsae();
+      this.EventBus.$emit('StartStreaming');
     });
     this.EventBus.$on('ReqHome', () => {
       var maxid=undefined;
