@@ -1,5 +1,5 @@
 <template>
-  <div class="streaming-agent">
+  <div class="streaming-agent" v-if="selectAccount!=undefined">
   </div>
 </template>
 
@@ -15,6 +15,11 @@ export default {
   name: "streamingagent",
   props: {
   },
+  computed:{
+    selectAccount(){
+      return this.$store.state.Account.selectAccount;
+    }
+  },
   created() {
 // 	var exec = require('child_process').execFile;
 
@@ -26,40 +31,12 @@ export default {
 //     });  
 // }
 // fun();
-
-    // this.AxiosProxy();
-    // return;
-    // var http = require("http");
-    // var arr=[];
-    // var url="https://userstream.twitter.com/1.1/user.json";
-    // var options = {
-    //   host: "127.0.0.1",
-    //   port: 8811,
-    //   path: "",
-    //   timeout: 300,
-    //   headers:{
-		// 		'Content-Type':'application/x-www-form-urlencoded;encoding=utf-8',
-		// 		'Authorization': OAuth.GetHeader(arr, 'GET', url, APIKey.ConsumerKey, APIKey.ConsumerSecretKey)
-		// 	},
-    // };
-    // http.get(options, function(res) {
-    //   console.log('gettttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt')
-    //   console.log(res);
-    //   res.pipe(process.stdout);
-    // }).error((err)=>{
-    //     console.log('err')
-    //     console.log(err)
-    // });
-
     this.ConnectStreamingHub();
   },
   data() {
     return {
       connection:undefined,
     };
-  },
-  computed:{
-  
   },
   methods: {
     ConnectStreamingHub(){
@@ -70,6 +47,7 @@ export default {
         .build();
       this.connection.start().then(function () {
         console.log('connect tweet hub!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        vThis.SendKeys();
         vThis.SetStreaming();
       }).catch(function(err){
         console.log('error~~~~')
@@ -98,6 +76,16 @@ export default {
       .catch(error => {
         console.log(error);
       });
+    },
+    SendKeys(){
+      this.connection.invoke("Keys", this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret,
+      APIKey.ConsumerKey, APIKey.ConsumerSecretKey)
+        .then(function()
+        {
+          
+        })
+        .catch(err => console.error(err.toString()));
+      
     },
     SetStreaming(){
       this.connection.onclose(()=>{
