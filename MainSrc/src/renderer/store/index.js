@@ -421,7 +421,64 @@ export default new Vuex.Store({
     },
     TweetRead(state, tweet){
       tweet.isReaded=true;
-    }
+    },
+    AddStreaming(state, tweet){
+      console.log('add streming');
+      console.log(tweet);
+      var id =state.tweets.home.find(x=>x.id_str==tweet.id_str);
+      var index = 0;
+      if(id==undefined){//중복 넘기기
+        TweetDataAgent.TweetInit(tweet);
+        if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
+          console.log('block tweet')
+          return;
+        }
+        if(TweetDataAgent.CheckHighlight(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.userData.screen_name)){
+          var func=function(){
+            var id =state.tweets.mention.find(x=>x.id_str==tweet.id_str);
+            var index = 0;
+            if(id==undefined){//중복 넘기기
+              TweetDataAgent.TweetInit(tweet);
+              if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
+                return;
+              }
+              if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+                if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
+                  return;
+                }
+              }
+              tweet.isHighlight=true;
+              if(state.tweets.mention.length==0){
+                index=0;
+              }else{
+                index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.mention);
+              }
+              state.tweets.mention.splice(index, 0, tweet);
+      
+            }else{
+              console.log('tweet exists')
+            }
+          }
+          func();
+        }
+        else{
+          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+            if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
+              return;
+            }
+          }
+        }
+        if(state.tweets.home.length==0){
+          index=0;
+        }
+        else{
+          index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
+        }
+        state.tweets.home.splice(index, 0, tweet);
+      }else{
+        console.log('tweet exists')
+      }
+    },
   },
   methods:{
   },
@@ -497,6 +554,9 @@ export default new Vuex.Store({
     },
     TweetRead(context, tweet){
       context.commit('TweetRead', tweet);
-    }
+    },
+    AddStreaming(context, tweet){
+      context.commit('AddStreaming', tweet);
+    },
   }
 });

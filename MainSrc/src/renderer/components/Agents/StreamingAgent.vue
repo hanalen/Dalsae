@@ -100,9 +100,16 @@ export default {
     },
     RecvStreaming(){
       this.connection.on("ResponseStreaming", (json) => {
-        console.log(json)
-        // this.EventBus.$emit('MonitorEvent', door);
+        this.ParseJson(json);
+        // console.log(json)
       });
+    },
+    ParseJson(json){
+      var tweet = JSON.parse(json);
+      if(tweet.id_str!=undefined){
+        // console.log(tweet);
+        this.$store.dispatch('AddStreaming', tweet);
+      }
     },
 	},
 	mounted: function() {//EventBus등록용 함수들
