@@ -64,6 +64,7 @@
     }
   },
   "dependencies": {
+    "@microsoft/signalr": "^3.1.2",
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.4",
@@ -74,6 +75,7 @@
     "encoding": "^0.1.12",
     "fs-extra": "^8.1.0",
     "hmacsha1": "^1.0.0",
+    "http-proxy": "^1.18.0",
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "uuid": "^3.3.3",
