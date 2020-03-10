@@ -65,7 +65,7 @@ export default {
     ConnectStreamingHub(){
       var vThis=this;
       this.connection = new HubConnectionBuilder()
-        .withUrl('http://localhost:2260/TweetHub', { accessTokenFactory: () => 'administrator' })
+        .withUrl('http://localhost:5001/TweetHub', { accessTokenFactory: () => 'administrator' })
         .configureLogging(LogLevel.Information)
         .build();
       this.connection.start().then(function () {
