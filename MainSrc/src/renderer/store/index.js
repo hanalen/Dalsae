@@ -423,8 +423,6 @@ export default new Vuex.Store({
       tweet.isReaded=true;
     },
     AddStreaming(state, tweet){
-      console.log('add streming');
-      console.log(tweet);
       var id =state.tweets.home.find(x=>x.id_str==tweet.id_str);
       var index = 0;
       if(id==undefined){//중복 넘기기
