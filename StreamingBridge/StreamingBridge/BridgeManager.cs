@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using System.IO.Compression;
 
 namespace StreamingBridge
 {
@@ -85,10 +86,10 @@ namespace StreamingBridge
 				form.ConnectionChanged(isConnected);
 		}
 
-		List<string> listMsg = new List<string>();
+		List<byte[]> listMsg = new List<byte[]>();
 		public async void ResponseJson(string json)
 		{
-			listMsg.Add(json);
+			listMsg.Add(Zip(json));
 			Form1 form = Application.OpenForms[0] as Form1;
 			if (form != null)
 				form.Recv();
@@ -106,6 +107,35 @@ namespace StreamingBridge
 			catch(Exception e)
 			{
 				LogManager.Log(e);
+			}
+		}
+
+
+		public static void CopyTo(Stream src, Stream dest)
+		{
+			byte[] bytes = new byte[4096];
+
+			int cnt;
+
+			while ((cnt = src.Read(bytes, 0, bytes.Length)) != 0)
+			{
+				dest.Write(bytes, 0, cnt);
+			}
+		}
+
+		public static byte[] Zip(string str)
+		{
+			var bytes = Encoding.UTF8.GetBytes(str);
+
+			using (var msi = new MemoryStream(bytes))
+			using (var mso = new MemoryStream())
+			{
+				using (var gs = new GZipStream(mso, CompressionMode.Compress))
+				{
+					CopyTo(msi, gs);
+				}
+
+				return mso.ToArray();
 			}
 		}
 	}
