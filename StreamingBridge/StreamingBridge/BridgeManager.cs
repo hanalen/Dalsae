@@ -29,11 +29,37 @@ namespace StreamingBridge
 			  .WithUrl("http://localhost:5001/TweetHub")
 			  .Build();
 			await connection.StartAsync();
-			connection.Closed += async (error) =>
-			{
-				await Task.Delay(3000);
-				await connection.StartAsync();
-			};
+			connection.Closed += Connection_Closed;
+			connection.Reconnected += Connection_Reconnected;
+			connection.Reconnecting += Connection_Reconnecting;
+			var v1 = connection.HandshakeTimeout;
+			var v2 = connection.ServerTimeout;
+			var v3 = connection.KeepAliveInterval;
+			connection.HandshakeTimeout = TimeSpan.FromSeconds(60);
+			connection.ServerTimeout = TimeSpan.FromSeconds(60);
+			connection.KeepAliveInterval = TimeSpan.FromSeconds(60);
+		}
+
+		private Task Connection_Reconnecting(Exception arg)
+		{
+			Log("Reconnecting");
+			Log(arg);
+			return null;
+		}
+
+		private Task Connection_Reconnected(string arg)
+		{
+			Log("Reconnected");
+			Log(arg);
+			return null;
+		}
+
+		private async Task Connection_Closed(Exception arg)
+		{
+			Log("Connection Closesd");
+			Log(arg);
+			await Task.Delay(3000);
+			await connection.StartAsync();
 		}
 
 		private BridgeManager()
@@ -50,30 +76,66 @@ namespace StreamingBridge
 			}
 		}
 		private static readonly object obj = new object();
+		List<string> listMsg = new List<string>();
 		public async void ResponseJson(string json)
 		{
+			listMsg.Add(json);
 			Form1 form = Application.OpenForms[0] as Form1;
 			if (form != null)
 			{
 				form.Recv();
 			}
-			else
+			//lock (obj)
+			//{
+			//	using (FileStream fs = new FileStream(@"Recv.txt", FileMode.Append))
+			//	using (StreamWriter writer = new StreamWriter(fs))
+			//	{
+			//		writer.WriteLine(json);
+			//		writer.Flush();
+			//	}
+			//}
+			try
 			{
-				Debug.Print("Resv Form NULL");
+				for(int i = 0; i < listMsg.Count; i++)
+				{
+					if(connection.State == HubConnectionState.Connected)
+					{
+						await connection.SendAsync("ResponseStreaming", listMsg[i]);
+						listMsg.RemoveAt(i);
+					}
+				}
 			}
+			catch(Exception e)
+			{
+				Log(e);
+			}
+		}
+
+		public void Log(string msg)
+		{
 			lock (obj)
 			{
-				using (FileStream fs = new FileStream(@"Recv.txt", FileMode.Append))
+				using (FileStream fs = new FileStream(@"Log.txt", FileMode.Append))
 				using (StreamWriter writer = new StreamWriter(fs))
 				{
-					writer.WriteLine(json);
+					writer.WriteLine($"{DateTime.Now.ToShortTimeString()}: {msg}");
 					writer.Flush();
 				}
 			}
-			connection.SendAsync("ResponseStreaming", json);
 		}
 
-
-
+		public void Log(Exception e)
+		{
+			lock (obj)
+			{
+				using (FileStream fs = new FileStream(@"Log.txt", FileMode.Append))
+				using (StreamWriter writer = new StreamWriter(fs))
+				{
+					writer.WriteLine($"{DateTime.Now.ToShortTimeString()}: {e.Message}");
+					writer.WriteLine($"{DateTime.Now.ToShortTimeString()}: {e.StackTrace}");
+					writer.Flush();
+				}
+			}
+		}
 	}
 }

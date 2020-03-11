@@ -1,5 +1,7 @@
 <template>
   <div class="streaming-agent">
+    <span>{{count}}
+    </span>
   </div>
 </template>
 
@@ -43,6 +45,7 @@ export default {
   data() {
     return {
       connection:undefined,
+      count:0,
     };
   },
   methods: {
@@ -105,6 +108,11 @@ export default {
       });
     },
     ParseJson(json){
+      if(json.length==0){
+        console.log('heart beat')
+        return;
+      }
+      this.count++;
       var tweet = JSON.parse(json);
       if(tweet.id_str!=undefined){
         // console.log(tweet);
@@ -118,6 +126,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+span{
+  position: fixed;
+  left: 50px;
+  top: 50px;
+  color: red;
+}
 </style>

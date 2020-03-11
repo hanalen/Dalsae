@@ -19,6 +19,7 @@ namespace StreamingBridge
 		public Form1()
 		{
 			InitializeComponent();
+			this.ShowInTaskbar = true;
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)

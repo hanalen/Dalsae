@@ -13,6 +13,19 @@ namespace StreamingBridge.Hubs
 {
 	public class TweetHub:Hub
 	{
+		public override Task OnDisconnectedAsync(Exception exception)
+		{
+			lock (obj)
+			{
+				using (FileStream fs = new FileStream(@"Log.txt", FileMode.Append))
+				using (StreamWriter writer = new StreamWriter(fs))
+				{
+					writer.WriteLine($"{DateTime.Now.ToShortTimeString()}: Disconnected");
+					writer.Flush();
+				}
+			}
+			return null;
+		}
 		public override Task OnConnectedAsync()
 		{
 			return base.OnConnectedAsync();
