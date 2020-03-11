@@ -110,35 +110,37 @@ export default {
       }
     },
     Focus(e){//panel변경 시 호출 되는 focus
-      if(e!=undefined){
-        e.preventDefault();
-      }
-      if(this.selectIndex==-1){//최초 세팅 시 index 설정이 안 되는 문제가 있어서 이와 같이 설정... 좋진 않은 코드다
-        this.selectIndex=this.tweets.length-1;
-      }
-      var focusEl=undefined;
-      if(this.tweets.length==0){
-        focusEl=this.$refs.panel;
-      }
-      else{
-        if(this.$refs.list!=undefined){
-          focusEl = this.$refs.list[this.selectIndex];
+      this.$nextTick(()=>{
+        if(e!=undefined){
+          e.preventDefault();
+        }
+        if(this.selectIndex==-1){//최초 세팅 시 index 설정이 안 되는 문제가 있어서 이와 같이 설정... 좋진 않은 코드다
+          this.selectIndex=this.tweets.length-1;
+        }
+        var focusEl=undefined;
+        if(this.tweets.length==0){
+          focusEl=this.$refs.panel;
         }
         else{
-          setTimeout(() => {//대화패널 표시 시 포커스가 안 되는 문제가 있음.... 왜지....
+          if(this.$refs.list!=undefined){
             focusEl = this.$refs.list[this.selectIndex];
-            focusEl.$el.focus(); 
-          }, 100);
+          }
+          else{
+            setTimeout(() => {//대화패널 표시 시 포커스가 안 되는 문제가 있음.... 왜지....
+              focusEl = this.$refs.list[this.selectIndex];
+              focusEl.$el.focus(); 
+            }, 100);
+          }
         }
-      }
-      if(focusEl!=undefined){
-        this.$nextTick(() =>{//이벤트에서 show가 되기 전에 focus 호출 시 focus가 되지 않는 문제가 있어서 nextTick사용
-          focusEl.$el.focus(); 
-        });
-      }
-      else{
-        this.$el.focus();
-      }
+        if(focusEl!=undefined){
+          // this.$nextTick(() =>{//이벤트에서 show가 되기 전에 focus 호출 시 focus가 되지 않는 문제가 있어서 nextTick사용
+            focusEl.$el.focus(); 
+          // });
+        }
+        else{
+          this.$el.focus();
+        }
+      })
     },
     FocusOut(id){
     },
