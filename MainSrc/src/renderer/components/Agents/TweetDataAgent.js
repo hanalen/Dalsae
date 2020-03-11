@@ -66,7 +66,7 @@ export default{
 				}
 			}
 			var listMention=tweet.orgTweet.entities.user_mentions;//멘션에 내가 포함된 여부 체크
-			for(var i=0;i<listMention;i++){
+			for(var i=0;i<listMention.length;i++){
 				if(listMention[i].screen_name==myScreenName){
 					console.log('high!')
 					return true;
