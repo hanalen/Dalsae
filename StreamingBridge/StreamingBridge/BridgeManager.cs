@@ -58,8 +58,19 @@ namespace StreamingBridge
 		{
 			Log("Connection Closesd");
 			Log(arg);
-			await Task.Delay(3000);
-			await connection.StartAsync();
+			while (true)
+			{
+				try
+				{
+					await connection.StartAsync();
+					break;
+				}
+				catch(Exception e)
+				{
+					Log(e);
+					await Task.Delay(3000);
+				}
+			}
 		}
 
 		private BridgeManager()
@@ -131,8 +142,8 @@ namespace StreamingBridge
 				using (FileStream fs = new FileStream(@"Log.txt", FileMode.Append))
 				using (StreamWriter writer = new StreamWriter(fs))
 				{
-					writer.WriteLine($"{DateTime.Now.ToShortTimeString()}: {e.Message}");
-					writer.WriteLine($"{DateTime.Now.ToShortTimeString()}: {e.StackTrace}");
+					writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.Message}");
+					writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.StackTrace}");
 					writer.Flush();
 				}
 			}

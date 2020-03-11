@@ -15,15 +15,7 @@ namespace StreamingBridge.Hubs
 	{
 		public override Task OnDisconnectedAsync(Exception exception)
 		{
-			lock (obj)
-			{
-				using (FileStream fs = new FileStream(@"Log.txt", FileMode.Append))
-				using (StreamWriter writer = new StreamWriter(fs))
-				{
-					writer.WriteLine($"{DateTime.Now.ToShortTimeString()}: Disconnected");
-					writer.Flush();
-				}
-			}
+			Log(exception);
 			return null;
 		}
 		public override Task OnConnectedAsync()
@@ -62,6 +54,20 @@ namespace StreamingBridge.Hubs
 				}
 			}
 			Clients.All.SendAsync("ResponseStreaming", json);
+		}
+
+		public void Log(Exception e)
+		{
+			lock (obj)
+			{
+				using (FileStream fs = new FileStream(@"Log.txt", FileMode.Append))
+				using (StreamWriter writer = new StreamWriter(fs))
+				{
+					writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.Message}");
+					writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.StackTrace}");
+					writer.Flush();
+				}
+			}
 		}
 	}
 }
