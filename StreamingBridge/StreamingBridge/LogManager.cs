@@ -15,8 +15,15 @@ namespace StreamingBridge
 				using (FileStream fs = new FileStream(@"Log.txt", FileMode.Append))
 				using (StreamWriter writer = new StreamWriter(fs))
 				{
-					writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.Message}");
-					writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.StackTrace}");
+					if (e != null)
+					{
+						writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.Message}");
+						writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.StackTrace}");
+					}
+					else
+					{
+						writer.WriteLine($"{DateTime.Now:HH:mm:ss}: 원인불명 예외");
+					}
 					writer.Flush();
 				}
 			}
