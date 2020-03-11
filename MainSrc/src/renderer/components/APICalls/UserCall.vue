@@ -107,7 +107,7 @@ export default {
       this.isLoadingDaehwa=false;
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'daehwa'});
       this.$store.dispatch('Daehwa', tweet);
-      this.EventBus.$emit('FocusPanel', 'daehwa');
+      this.EventBus.$emit('FocusDaehwa');
 		},
     ResFollowing(resUsers){
       this.$store.dispatch('FollowingList', resUsers.users);

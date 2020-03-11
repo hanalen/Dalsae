@@ -176,10 +176,12 @@ export default {
       this.selectPanel.Focus(undefined);
     });
     this.EventBus.$on('FocusPanel', (selectPanelName)=>{
-      if(this.selectPanelName=='daehwa' && selectPanelName!='daehwa'){//대화패널에서 나갈 경우 클리어
+      if(selectPanelName==''){
+      }
+      else if(this.selectPanelName=='daehwa' && selectPanelName!='daehwa'){//대화패널에서 나갈 경우 클리어
         this.$store.dispatch('ClearDaehwa');
       }
-      if(selectPanelName!='' &&selectPanelName != undefined){
+      else if(selectPanelName!='' &&selectPanelName != undefined){
         this.selectPanelName=selectPanelName;
       }
       this.selectPanel.Focus();
