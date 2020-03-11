@@ -52,15 +52,15 @@ namespace StreamingBridge
 			{
 				routes.MapHub<TweetHub>("/TweetHub", option=>
 				{
-					option.ApplicationMaxBufferSize = 131072;//서버가 받을 수 있는 최대 바이트, 128kb
-					option.TransportMaxBufferSize = 131072;//클라이언트가 받을 수 있는 최대 바이트, 128kb
+					option.ApplicationMaxBufferSize = 524288;//서버가 받을 수 있는 최대 바이트, 128kb
+					option.TransportMaxBufferSize = 524288;//클라이언트가 받을 수 있는 최대 바이트, 128kb
 				});
 			});
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapRazorPages();
-			});
+			//app.UseEndpoints(endpoints =>
+			//{
+			//	endpoints.MapRazorPages();
+			//});
 		}
 	}
 }

@@ -15,8 +15,8 @@ namespace StreamingBridge.Hubs
 	{
 		public override Task OnDisconnectedAsync(Exception exception)
 		{
-			Log(exception);
-			return null;
+			LogManager.Log(exception);
+			return base.OnDisconnectedAsync(exception);
 		}
 		public override Task OnConnectedAsync()
 		{
@@ -37,37 +37,9 @@ namespace StreamingBridge.Hubs
 		{
 			Form1 form = Application.OpenForms[0] as Form1;
 			if (form != null)
-			{
 				form.Send();
-			}
-			else
-			{
-				Debug.Print("Send Form NULL");
-			}
-			lock (obj)
-			{
-				using (FileStream fs = new FileStream(@"Send.txt", FileMode.Append))
-				using (StreamWriter writer = new StreamWriter(fs))
-				{
-					writer.WriteLine(json);
-					writer.Flush();
-				}
-			}
 			Clients.All.SendAsync("ResponseStreaming", json);
 		}
 
-		public void Log(Exception e)
-		{
-			lock (obj)
-			{
-				using (FileStream fs = new FileStream(@"Log.txt", FileMode.Append))
-				using (StreamWriter writer = new StreamWriter(fs))
-				{
-					writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.Message}");
-					writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.StackTrace}");
-					writer.Flush();
-				}
-			}
-		}
 	}
 }
