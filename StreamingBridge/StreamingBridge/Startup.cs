@@ -50,7 +50,11 @@ namespace StreamingBridge
 			app.UseAuthorization();
 			app.UseEndpoints(routes =>
 			{
-				routes.MapHub<TweetHub>("/TweetHub");
+				routes.MapHub<TweetHub>("/TweetHub", option=>
+				{
+					option.ApplicationMaxBufferSize = 131072;//서버가 받을 수 있는 최대 바이트, 128kb
+					option.TransportMaxBufferSize = 131072;//클라이언트가 받을 수 있는 최대 바이트, 128kb
+				});
 			});
 
 			app.UseEndpoints(endpoints =>
