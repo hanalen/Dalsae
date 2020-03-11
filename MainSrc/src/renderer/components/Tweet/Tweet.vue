@@ -21,7 +21,7 @@
           :class="{'protected':Protected}"
         >{{TweetName}}</span><i v-if="tweet.orgUser.protected" class="fas fa-lock"></i>
       </div>
-      <div class="tweet-content" :class="{'noti':Noti()}">
+      <div class="tweet-content">
         <div v-html="TweetText" :class="{'delete': tweet.isDelete}">
         </div>
       </div>
@@ -150,21 +150,21 @@ export default {
     ClickMute(e){
       this.$store.dispatch('ShowMuteTweet', this.tweet);
     },
-    Noti(){
-      var userid=this.$store.state.Account.selectAccount.user_id;
-      var mentions=this.tweet.orgTweet.entities.user_mentions;
-      for(var i=0;i<mentions.length;i++){
-        if(userid==mentions[i].id_str)
-          return true;
-      }
-      var highlight=this.$store.state.DalsaeOptions.highlight;
-      if(highlight==undefined) return false;
-      for(var i=0;i<highlight.length;i++){
-        if(this.tweet.orgTweet.full_text.indexOf(highlight[i])>=0)
-          return true;
-      }
-      return false;
-    },
+    // Noti(){
+    //   var userid=this.$store.state.Account.selectAccount.user_id;
+    //   var mentions=this.tweet.orgTweet.entities.user_mentions;
+    //   for(var i=0;i<mentions.length;i++){
+    //     if(userid==mentions[i].id_str)
+    //       return true;
+    //   }
+    //   var highlight=this.$store.state.DalsaeOptions.highlight;
+    //   if(highlight==undefined) return false;
+    //   for(var i=0;i<highlight.length;i++){
+    //     if(this.tweet.orgTweet.full_text.indexOf(highlight[i])>=0)
+    //       return true;
+    //   }
+    //   return false;
+    // },
     propic() {
       var user=undefined;
       if(this.tweet.retweeted_status!=undefined){//리트윗일 경우 인장 표시가 다름

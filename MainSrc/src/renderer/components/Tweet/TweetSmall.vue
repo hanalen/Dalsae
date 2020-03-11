@@ -8,7 +8,7 @@
 				<i class="far fa-plus-square" v-if="tweet.orgTweet.in_reply_to_status_id_str!=undefined" :style="{'margin-left':-4}"></i>
 			</div>
 			<img class="small-propic" v-bind:src="propic()" v-if="option.isShowPropic" />
-			<div class="small-tweet-content" :class="{'noti':Noti()}">
+			<div class="small-tweet-content">
 				<div class="small-text" v-html="TweetText" :class="{'delete': tweet.isDelete}">
 				</div>
 			</div>
@@ -69,21 +69,6 @@ export default {
   methods: {
     ClickMute(e){
       this.$store.dispatch('ShowMuteTweet', this.tweet);
-    },
-    Noti(){
-      var userid=this.$store.state.Account.selectAccount.user_id;
-      var mentions=this.tweet.orgTweet.entities.user_mentions;
-      for(var i=0;i<mentions.length;i++){
-        if(userid==mentions[i].id_str)
-          return true;
-      }
-      var highlight=this.$store.state.DalsaeOptions.highlight;
-      if(highlight==undefined) return false;
-      for(var i=0;i<highlight.length;i++){
-        if(this.tweet.orgTweet.full_text.indexOf(highlight[i])>=0)
-          return true;
-      }
-      return false;
     },
     propic() {
       var user=undefined;

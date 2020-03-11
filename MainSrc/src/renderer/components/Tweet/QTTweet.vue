@@ -12,7 +12,7 @@
           :class="{'protected':Protected}"
         >{{TweetName}}</span>
       </div>
-      <div class="tweet-content" :class="{'noti':Noti()}">
+      <div class="tweet-content">
         <div v-html="TweetText">
         </div>
       </div>
@@ -97,21 +97,6 @@ export default {
     }
   },
   methods: {
-    Noti(){
-      var userid=this.$store.state.Account.selectAccount.user_id;
-      var mentions=this.tweet.orgTweet.entities.user_mentions;
-      for(var i=0;i<mentions.length;i++){
-        if(userid==mentions[i].id_str)
-          return true;
-      }
-      var highlight=this.$store.state.DalsaeOptions.highlight;
-      if(highlight==undefined) return false;
-      for(var i=0;i<highlight.length;i++){
-        if(this.tweet.orgTweet.full_text.indexOf(highlight[i])>=0)
-          return true;
-      }
-      return false;
-    },
     Focused(){
       this.isFocus=true;
     },
