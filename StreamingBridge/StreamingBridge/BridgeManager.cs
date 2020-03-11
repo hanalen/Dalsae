@@ -8,6 +8,7 @@ using StreamingBridge.Hubs;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Threading.Tasks;
 using System.IO;
+using System.Windows.Forms;
 
 namespace StreamingBridge
 {
@@ -42,16 +43,34 @@ namespace StreamingBridge
 
 		public void ConnectionChanged(bool isConnected)
 		{
-
+			Form1 form = Application.OpenForms[0] as Form1;
+			if (form != null)
+			{
+				form.ConnectionChanged(isConnected);
+			}
 		}
-
+		private static readonly object obj = new object();
 		public async void ResponseJson(string json)
 		{
-			//await connection.InvokeAsync<string>("ResponseJson", json);
-			await connection.SendAsync("ResponseStreaming", json);
-			//await connection.InvokeAsync("ResponseJson", json);
-			//await TweetHub.instence.ResponseStreaming(json);
-			Debug.Print(json);
+			Form1 form = Application.OpenForms[0] as Form1;
+			if (form != null)
+			{
+				form.Recv();
+			}
+			else
+			{
+				Debug.Print("Resv Form NULL");
+			}
+			lock (obj)
+			{
+				using (FileStream fs = new FileStream(@"Recv.txt", FileMode.Append))
+				using (StreamWriter writer = new StreamWriter(fs))
+				{
+					writer.WriteLine(json);
+					writer.Flush();
+				}
+			}
+			connection.SendAsync("ResponseStreaming", json);
 		}
 
 

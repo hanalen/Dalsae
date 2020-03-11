@@ -80,8 +80,7 @@ namespace StreamingBridge
 					using (streamRead = new StreamReader(stream))
 					{
 						string json;
-						if (OnChangedStatus != null)
-							BridgeManager.instence.ConnectionChanged(true);
+						BridgeManager.instence.ConnectionChanged(true);
 						while ((json = streamRead.ReadLine()) != null)
 						{
 							if (string.IsNullOrWhiteSpace(json)) continue;

@@ -2,8 +2,12 @@
 using StreamingBridge.Packet;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StreamingBridge.Hubs
 {
@@ -22,10 +26,29 @@ namespace StreamingBridge.Hubs
 		{
 			UserStreaming.instence.DisconnectStreaming();
 		}
+		private static readonly object obj = new object();
 
 		public async Task ResponseStreaming(string json)
 		{
-			await Clients.All.SendAsync("ResponseStreaming", json);
+			Form1 form = Application.OpenForms[0] as Form1;
+			if (form != null)
+			{
+				form.Send();
+			}
+			else
+			{
+				Debug.Print("Send Form NULL");
+			}
+			lock (obj)
+			{
+				using (FileStream fs = new FileStream(@"Send.txt", FileMode.Append))
+				using (StreamWriter writer = new StreamWriter(fs))
+				{
+					writer.WriteLine(json);
+					writer.Flush();
+				}
+			}
+			Clients.All.SendAsync("ResponseStreaming", json);
 		}
 	}
 }
