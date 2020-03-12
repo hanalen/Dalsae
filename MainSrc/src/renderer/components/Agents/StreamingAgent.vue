@@ -49,6 +49,16 @@ export default {
     };
   },
   methods: {
+    UnZip(packet){
+      const { deflate, unzip } = require('zlib');
+      const buffer = Buffer.from(packet, 'base64');
+      unzip(buffer, (err, buffer) => {
+        if (err) {
+        }
+        var json = buffer.toString();
+        this.ParseJson(json);
+      });
+    },
     ConnectStreamingHub(){
       var vThis=this;
       this.connection = new HubConnectionBuilder()
@@ -102,18 +112,15 @@ export default {
       this.RecvStreaming(this.connection);
     },
     RecvStreaming(){
-      this.connection.on("ResponseStreaming", (json) => {
-        this.ParseJson(json);
-        // console.log(json)
+      this.connection.on("ResponseStreaming", (packet) => {
+        this.UnZip(packet);
       });
     },
     ParseJson(json){
-      if(json.length==0){
-        console.log('heart beat')
-        return;
-      }
+      if(json.length<10) return;//이상 패킷으로 예상 됨
       this.count++;
       var tweet = JSON.parse(json);
+      console.log(tweet);
       if(tweet.id_str!=undefined){
         // console.log(tweet);
         this.$store.dispatch('AddStreaming', tweet);
