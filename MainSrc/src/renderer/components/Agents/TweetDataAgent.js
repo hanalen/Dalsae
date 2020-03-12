@@ -1,13 +1,13 @@
 export default{
 	GetTweetIndex(tweet, listTweet){
 		var index=0;
-		for(var i=listTweet.length-1;i>-1;i--){
+		for(var i=0;i<listTweet.length;i++){
 			var nTweet = listTweet[i];  
 			index=i;
-			var left=new Date(nTweet.created_at);
-			var right=new Date(tweet.created_at)
-			if(left <= right){
-				index++;
+			var nowTweetTime = new Date(nTweet.created_at);
+			var newTweetTime = new Date(tweet.created_at)
+			if(nowTweetTime > newTweetTime){
+				index--;//splice때문에--해야 index가 맞음
 				return index;
 			}
 		}
@@ -20,6 +20,8 @@ export default{
 		orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
 		tweet.orgUser=JSON.parse(JSON.stringify(orgUser));
 		tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
+		tweet.orgTweet.id=tweet.orgTweet.id_str;
+		tweet.id=tweet.id_str;
 		tweet.isReaded=false;
 		tweet.isDelete=false;
 		tweet.isFocus=false;
