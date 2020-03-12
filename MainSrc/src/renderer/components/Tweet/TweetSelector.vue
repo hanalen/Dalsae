@@ -105,6 +105,7 @@ export default {
       if(this.qtTweet && !this.option.isSmallTweet){
         this.$refs.tweet.Focused();
       }
+      this.tweet.isFocus=true;
       this.isFocus=true;
       if(this.option.isUseRead){//읽은 트윗 표시 여부 
         if(!this.tweet.isReaded)
@@ -116,6 +117,7 @@ export default {
       if(this.qtTweet && !this.option.isSmallTweet){
         this.$refs.tweet.FocusOut();
       }
+      this.tweet.isFocus=false;
       this.isFocus=false;
       this.EventBus.$emit('FocusOut', this.tweet.id);
     },

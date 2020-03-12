@@ -22,6 +22,7 @@ export default{
 		tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
 		tweet.isReaded=false;
 		tweet.isDelete=false;
+		tweet.isFocus=false;
 		return tweet;
 	},
 	CheckBlock(tweet, hashBlock){//블락일 경우 return true

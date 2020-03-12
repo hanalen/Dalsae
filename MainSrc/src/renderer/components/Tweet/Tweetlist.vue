@@ -13,6 +13,11 @@
           :data-active="active"
           :size-dependencies="[
             item.orgTweet,
+            item.isFocus,
+            item.isReaded,
+            item.isDelete,
+            item.orgTweet.retweeted,
+            item.orgTweet.favorited
           ]"
           >
           <!-- <span style="background-color=#red;">{{item.orgTweet.full_text}}</span> -->
