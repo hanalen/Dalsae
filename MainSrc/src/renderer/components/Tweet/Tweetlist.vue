@@ -1,7 +1,30 @@
 <template>
   <div ref="panel" tabindex="-1" class="tweet-list" @keydown="KeyDown">
-    <loading v-if="isMoreLoading" name="loadingBottom"/>
-    <TweetSelector 
+    <!-- <loading v-if="isMoreLoading" name="loadingBottom"/> -->
+    <DynamicScroller
+    :items="tweets"
+    :min-item-size="options.isSmallTweet ? 30 : 84"
+    class="scroller">
+      <template v-slot="{ item, index, active }">
+        <DynamicScrollerItem
+          :item="item"
+          :active="item.tweet!=undefined"
+          :data-index="index"
+          :data-active="true"
+          :size-dependencies="[
+            item.orgTweet.full_text,
+          ]"
+          >
+          <!-- <span style="background-color=#red;">{{item.orgTweet.full_text}}</span> -->
+          <TweetSelector 
+            :option="options"
+            :tweet="item"
+            :index="index"
+            :isDaehwa="false"/>
+        </DynamicScrollerItem>
+      </template>
+    </DynamicScroller>
+    <!-- <TweetSelector 
     ref="list"
       v-for="(item,index) in tweets"
       v-bind:key="index"
@@ -9,12 +32,14 @@
       :tweet="item"
       :index="index"
       :isDaehwa="false"
-    />
-    <loading v-if="isLoading" name="loadingTop"/>
+    /> -->
+    <!-- <loading v-if="isLoading" name="loadingTop"/> -->
   </div>
 </template>
 
 <script>
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import {VueVirtualScroller, DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
 import TweetSelector from "./TweetSelector.vue";
 import Loading from "../ToolBox/Loading.vue"
 export default {
@@ -27,6 +52,9 @@ export default {
     }
   },
   components:{
+    VueVirtualScroller,
+    DynamicScroller,
+    DynamicScrollerItem,
     TweetSelector,
     Loading,
   },
@@ -149,9 +177,24 @@ export default {
 </script>
 <style lang="scss" scoped>
 .tweet-list{
-  display: flex;
+  overflow: hidden;
+  height: 100%;
+  // overflow-y: auto;
+  // display: flex;
   background-color: #ffeded;
-  flex-direction:column-reverse;
+  // flex-direction:column-reverse;
 }
 
+.scroller{
+  height: 100% !important;
+  overflow-y: auto;
+
+}
+.vue-recycle-scroller .scroller .ready .direction-vertical{
+  overflow-y: auto;
+  height: 100%;
+}
+.vue-recycle-scroller__item-view{
+  transform: translateY(0px) !important;
+}
 </style>
