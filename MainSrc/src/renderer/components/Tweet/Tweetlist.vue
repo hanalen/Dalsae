@@ -8,11 +8,11 @@
       <template v-slot="{ item, index, active }">
         <DynamicScrollerItem
           :item="item"
-          :active="item.tweet!=undefined"
+          :active="active"
           :data-index="index"
-          :data-active="true"
+          :data-active="active"
           :size-dependencies="[
-            item.orgTweet.full_text,
+            item.orgTweet,
           ]"
           >
           <!-- <span style="background-color=#red;">{{item.orgTweet.full_text}}</span> -->
