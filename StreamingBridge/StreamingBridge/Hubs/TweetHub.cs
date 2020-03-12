@@ -33,12 +33,12 @@ namespace StreamingBridge.Hubs
 		}
 		private static readonly object obj = new object();
 
-		public async Task ResponseStreaming(string json)
+		public async Task ResponseStreaming(byte[] zipJson)
 		{
 			Form1 form = Application.OpenForms[0] as Form1;
 			if (form != null)
 				form.Send();
-			Clients.All.SendAsync("ResponseStreaming", json);
+			Clients.All.SendAsync("ResponseStreaming", zipJson);
 		}
 
 	}
