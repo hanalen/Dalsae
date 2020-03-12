@@ -47,6 +47,10 @@ export default {
     };
   },
   created:function(){
+    this.EventBus.$on('TweetFocus', (id)=>{//트윗이동 시 전역으로 포
+      if(id==this.tweet.id_str)
+        this.Focus();
+    });
     if(this.tweet.orgTweet.quoted_status!=undefined){
       this.qtIdStr=this.tweet.orgTweet.quoted_status_id_str;
       this.$nextTick(()=>{
@@ -101,7 +105,14 @@ export default {
     ArrowDown(e){
       this.EventBus.$emit('ArrowDown', e);
     },
+    Focus(){
+      this.$nextTick(()=>{
+        this.$el.focus();
+      })
+    },
     Focused(e){
+      console.log('tweet focus index: '+this.index);
+      this.EventBus.$emit('FocusedTweet', this.index);
       if(this.qtTweet && !this.option.isSmallTweet){
         this.$refs.tweet.Focused();
       }
@@ -111,7 +122,6 @@ export default {
         if(!this.tweet.isReaded)
           this.$store.dispatch('TweetRead', this.tweet);
       }
-      this.EventBus.$emit('TweetFocus', this.tweet.id);//대화쪽 트윗인지 일반쪽 트윗인지 표시 여부
     },
     FocusOut(e){
       if(this.qtTweet && !this.option.isSmallTweet){

@@ -4,12 +4,14 @@
       <TweetList
       ref="homePanel"
       :panelName="'home'"
+      :isShow="selectPanelName=='home'"
       v-show="selectPanelName=='home'"
       v-bind:options="this.$store.state.DalsaeOptions.uiOptions"
       v-bind:tweets="this.$store.state.tweets.home"
       />
       <TweetList
         ref="mentionPanel"
+        :isShow="selectPanelName=='mention'"
         :panelName="'mention'"
         v-show="selectPanelName=='mention'"
         v-bind:options="this.$store.state.DalsaeOptions.uiOptions"
@@ -17,6 +19,7 @@
       />
       <TweetList
         ref="favPanel"
+        :isShow="selectPanelName=='fav'"
         :panelName="'fav'"
         v-show="selectPanelName=='fav'"
         v-bind:options="this.$store.state.DalsaeOptions.uiOptions"
@@ -24,6 +27,7 @@
       />
       <TweetList
         ref="daehwaPanel"
+        :isShow="selectPanelName=='daehwa'"
         :panelName="'daehwa'"
         v-show="selectPanelName=='daehwa'"
         v-bind:options="this.$store.state.DalsaeOptions.uiOptions"
@@ -163,9 +167,6 @@ export default {
     });
     this.EventBus.$on('ArrowDown', (e)=>{//e: event
       this.selectPanel.Next(e);
-    });
-    this.EventBus.$on('TweetFocus', (id)=>{//id: tweet id
-      this.selectPanel.Focused(id);
     });
     this.EventBus.$on('FocusOut', (id)=>{
       this.selectPanel.FocusOut(id);

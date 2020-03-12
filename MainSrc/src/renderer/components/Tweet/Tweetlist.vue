@@ -1,7 +1,7 @@
 <template>
   <div ref="panel" tabindex="-1" class="tweet-list" @keydown="KeyDown">
     <!-- <loading v-if="isMoreLoading" name="loadingBottom"/> -->
-    <DynamicScroller
+    <DynamicScroller ref="scroll"
     :items="tweets"
     :min-item-size="options.isSmallTweet ? 30 : 84"
     class="scroller">
@@ -66,7 +66,11 @@ export default {
   props: {
     panelName:undefined,
     tweets: undefined,
-    options: undefined
+    options: undefined,
+    isShow:{
+      type:Boolean,
+      default:false,
+    }
   },
   mounted: function() {//EventBus등록용 함수들
     if(this.tweets!=undefined){
@@ -75,6 +79,10 @@ export default {
     this.EventBus.$on('LoadingTweetPanel', (vals) => {
       this.ResTweets(vals);
     });
+    this.EventBus.$on('FocusedTweet', (index)=>{//트윗 클릭, 포커스 시 트윗의 index를 받아 저장
+      if(this.isShow)
+        this.selectIndex=index;
+    })
   },
   watch: { 
     tweets: function(newVal, oldVal) { // 트윗 최초 세팅 시 index설정
@@ -106,9 +114,19 @@ export default {
     },
     FocusTweet(e){//트윗 포커스 
       e.preventDefault();
-      this.$refs.list[this.selectIndex].$el.focus();
+      var id = this.tweets[this.selectIndex].id_str;
+      if(this.selectIndex==this.tweets.length-1){//end키로 이동 시 한타임 안 맞음
+        this.$refs.scroll.scrollToBottom();//스크롤 패널 맨아래로 이동 후 트윗 포커스
+        this.$nextTick(()=>{
+          this.EventBus.$emit('TweetFocus', id);//실제 포커스는 여기서...
+        })
+      }
+      else{
+        this.$refs.scroll.scrollToItem(this.selectIndex);//스크롤만 이동 시키는 기능....
+        this.EventBus.$emit('TweetFocus', id);//실제 포커스는 여기서...
+      }
     },
-    Prev(e){
+    Next(e){
       //위로 가는 거. 키보드 위 키
       if(this.tweets===undefined) return;
       this.selectIndex++;
@@ -118,7 +136,7 @@ export default {
       }
       this.FocusTweet(e);
     },
-    Next(e){
+    Prev(e){
       //아래로 가는 거. 키보드 아래 키
       if(this.tweets===undefined) return;
       this.selectIndex--;
@@ -127,21 +145,21 @@ export default {
       }
       this.FocusTweet(e);
     },
-    Home(e){
+    End(e){
       if(this.tweets===undefined) return;
       this.selectIndex=this.tweets.length-1;
       this.FocusTweet(e);
     },
-    End(e){
+    Home(e){
       if(this.tweets===undefined) return;
       this.selectIndex=0;
       this.FocusTweet(e);
     },
-    Focused(id){//트윗 클릭 시 호출 되는 이벤트
-      if(this.tweets!=undefined){
-        this.selectIndex=this.tweets.findIndex(x=>x.id==id);
-      }
-    },
+    // Focused(id){//트윗 클릭 시 호출 되는 이벤트
+    //   if(this.tweets!=undefined){
+    //     this.selectIndex=this.tweets.findIndex(x=>x.id_str==id);
+    //   }
+    // },
     Focus(e){//panel변경 시 호출 되는 focus
       this.$nextTick(()=>{
         if(e!=undefined){
