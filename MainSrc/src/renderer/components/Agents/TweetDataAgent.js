@@ -6,8 +6,10 @@ export default{
 			index=i;
 			var nowTweetTime = new Date(nTweet.created_at);
 			var newTweetTime = new Date(tweet.created_at)
-			if(nowTweetTime > newTweetTime){
+			if(nowTweetTime < newTweetTime){
 				index--;//splice때문에--해야 index가 맞음
+				if(index<0)
+					index=0;
 				return index;
 			}
 		}
