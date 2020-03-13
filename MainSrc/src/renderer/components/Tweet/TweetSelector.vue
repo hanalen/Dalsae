@@ -8,7 +8,7 @@
       :tweet="tweet"
       :index="index"
       :isDaehwa="false"
-      :qtTweet="qtTweet"
+      :qtTweet="tweet.qtTweet"
       :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'selected': isFocus, 'not-read':option.isUseRead && !tweet.isReaded}"/>
 		<SmallTweet ref="small"
 			v-if="option.isSmallTweet && !isFocus"
@@ -42,7 +42,6 @@ export default {
   data() {
     return {
 			isFocus:false,
-			qtTweet:undefined,
       qtIdStr:undefined
     };
   },
@@ -66,7 +65,7 @@ export default {
           var orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
           tweet.orgUser = JSON.parse(JSON.stringify(orgUser));
           tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
-          this.qtTweet = tweet;
+          this.$store.dispatch('AddQtTweet', {'tweet': this.tweet, 'qtTweet': tweet});
         });
       });
     }
@@ -96,15 +95,6 @@ export default {
       event.clientY=pos.y;
       this.$refs.context.Show(event);
     },
-    keyDown(e){
-      this.EventBus.$emit('tweetKeyDown', e);
-    },
-    ArrowUp(e){
-      this.EventBus.$emit('ArrowUp', e);
-    },
-    ArrowDown(e){
-      this.EventBus.$emit('ArrowDown', e);
-    },
     Focus(){
       this.$nextTick(()=>{
         this.$el.focus();
@@ -113,9 +103,6 @@ export default {
     Focused(e){
       console.log('tweet focus index: '+this.index);
       this.EventBus.$emit('FocusedTweet', this.index);
-      if(this.qtTweet && !this.option.isSmallTweet){
-        this.$refs.tweet.Focused();
-      }
       this.tweet.isFocus=true;
       this.isFocus=true;
       if(this.option.isUseRead){//읽은 트윗 표시 여부 
@@ -124,9 +111,6 @@ export default {
       }
     },
     FocusOut(e){
-      if(this.qtTweet && !this.option.isSmallTweet){
-        this.$refs.tweet.FocusOut();
-      }
       this.tweet.isFocus=false;
       this.isFocus=false;
       this.EventBus.$emit('FocusOut', this.tweet.id);

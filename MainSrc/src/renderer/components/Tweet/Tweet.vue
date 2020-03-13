@@ -34,7 +34,7 @@
         <i v-if="tweet.orgTweet.favorited" class="fas fa-heart"></i>
       </div>
       <div class="tweet-timestamp">{{TweetDate}}</div>
-      <QTTweet ref="qtTweet" v-if="qtTweet!=undefined" :tweet="qtTweet" :option="option"/>
+      <QTTweet ref="qtTweet" v-if="qtTweet!=undefined" :tweet="qtTweet" :isFocus="tweet.isFocus" :option="option"/>
     </div>
     <div
       class="tweet-images"
@@ -84,7 +84,6 @@ export default {
   data() {
     return {
       preview: false,
-      isFocus:false,
       qtIdStr:undefined
     };
   },
@@ -130,18 +129,12 @@ export default {
   },
   methods: {
     Hover(e){
-      if(this.qtTweet && !this.option.isSmallTweet)
+      if(this.tweet.qtTweet && !this.option.isSmallTweet)
         this.$refs.qtTweet.Hover();
     },
     HoverOut(e){
-      if(this.qtTweet && !this.option.isSmallTweet)
+      if(this.tweet.qtTweet && !this.option.isSmallTweet)
         this.$refs.qtTweet.HoverOut();
-    },
-    Focused(e){
-      this.$refs.qtTweet.Focused();
-    },
-    FocusOut(e){
-      this.$refs.qtTweet.FocusOut();
     },
     ImageClick(e){
       var ipcRenderer = require('electron').ipcRenderer;
@@ -150,21 +143,6 @@ export default {
     ClickMute(e){
       this.$store.dispatch('ShowMuteTweet', this.tweet);
     },
-    // Noti(){
-    //   var userid=this.$store.state.Account.selectAccount.user_id;
-    //   var mentions=this.tweet.orgTweet.entities.user_mentions;
-    //   for(var i=0;i<mentions.length;i++){
-    //     if(userid==mentions[i].id_str)
-    //       return true;
-    //   }
-    //   var highlight=this.$store.state.DalsaeOptions.highlight;
-    //   if(highlight==undefined) return false;
-    //   for(var i=0;i<highlight.length;i++){
-    //     if(this.tweet.orgTweet.full_text.indexOf(highlight[i])>=0)
-    //       return true;
-    //   }
-    //   return false;
-    // },
     propic() {
       var user=undefined;
       if(this.tweet.retweeted_status!=undefined){//리트윗일 경우 인장 표시가 다름

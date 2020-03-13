@@ -477,6 +477,11 @@ export default new Vuex.Store({
         console.log('tweet exists')
       }
     },
+    AddQtTweet(state, vals){
+      var tweet=vals['tweet'];
+      var qtTweet=vals['qtTweet'];
+      tweet.qtTweet=qtTweet;
+    }
   },
   methods:{
   },
@@ -555,6 +560,9 @@ export default new Vuex.Store({
     },
     AddStreaming(context, tweet){
       context.commit('AddStreaming', tweet);
+    },
+    AddQtTweet(context, vals){
+      context.commit('AddQtTweet', vals)
     },
   }
 });

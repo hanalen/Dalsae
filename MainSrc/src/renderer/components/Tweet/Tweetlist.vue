@@ -16,6 +16,7 @@
             item.isFocus,
             item.isReaded,
             item.isDelete,
+            item.qtTweet,
             item.orgTweet.retweeted,
             item.orgTweet.favorited
           ]"
@@ -155,11 +156,6 @@ export default {
       this.selectIndex=0;
       this.FocusTweet(e);
     },
-    // Focused(id){//트윗 클릭 시 호출 되는 이벤트
-    //   if(this.tweets!=undefined){
-    //     this.selectIndex=this.tweets.findIndex(x=>x.id_str==id);
-    //   }
-    // },
     Focus(e){//panel변경 시 호출 되는 focus
       this.$nextTick(()=>{
         if(e!=undefined){
@@ -192,8 +188,6 @@ export default {
           this.$el.focus();
         }
       })
-    },
-    FocusOut(id){
     },
   }
 };

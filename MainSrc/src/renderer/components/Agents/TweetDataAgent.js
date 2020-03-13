@@ -25,6 +25,7 @@ export default{
 		tweet.isReaded=false;
 		tweet.isDelete=false;
 		tweet.isFocus=false;
+		tweet.qtTweet=undefined;
 		return tweet;
 	},
 	CheckBlock(tweet, hashBlock){//블락일 경우 return true

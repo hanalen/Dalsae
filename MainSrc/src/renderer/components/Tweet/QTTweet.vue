@@ -48,6 +48,10 @@ export default {
     ContextMenu,
   },
   props: {
+    isFocus:{
+      type:Boolean,
+      default:false,
+    },
     tweet: undefined,
     option: undefined,
     selected:false,
@@ -57,7 +61,6 @@ export default {
   data() {
     return {
       isHover:false,
-      isFocus:false,
     };
   },
   computed:{
@@ -97,12 +100,6 @@ export default {
     }
   },
   methods: {
-    Focused(){
-      this.isFocus=true;
-    },
-    FocusOut(){
-      this.isFocus=false;
-    },
     Hover(){
       this.isHover=true;
     },

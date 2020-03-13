@@ -168,9 +168,6 @@ export default {
     this.EventBus.$on('ArrowDown', (e)=>{//e: event
       this.selectPanel.Next(e);
     });
-    this.EventBus.$on('FocusOut', (id)=>{
-      this.selectPanel.FocusOut(id);
-    });
     this.EventBus.$on('FocusDaehwa', ()=>{
       this.prevPanelName=this.selectPanelName;
       this.selectPanelName='daehwa';
