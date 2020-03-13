@@ -61,10 +61,7 @@ export default {
       default:false,
     }
   },
-  mounted: function() {//EventBus등록용 함수들
-    if(this.tweets!=undefined){
-      this.selectIndex=this.tweets.length-1;
-    }
+  mounted: function() {
     this.EventBus.$on('LoadingTweetPanel', (vals) => {
       this.ResTweets(vals);
     });
