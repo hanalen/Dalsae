@@ -1,6 +1,6 @@
 <template>
   <div ref="panel" tabindex="-1" class="tweet-list" @keydown="KeyDown" @keydown.up="ArrowUp" @keydown.down="ArrowDown">
-    <!-- <loading v-if="isMoreLoading" name="loadingBottom"/> -->
+    <loading v-if="isMoreLoading" name="loadingBottom"/>
     <DynamicScroller ref="scroll"
     :items="tweets"
     :min-item-size="options.isSmallTweet ? 30 : 84"
@@ -19,7 +19,6 @@
             item.isDelete,
           ]"
           >
-          <!-- <span style="background-color=#red;">{{item.orgTweet.full_text}}</span> -->
           <TweetSelector 
             :option="options"
             :tweet="item"
@@ -28,16 +27,7 @@
         </DynamicScrollerItem>
       </template>
     </DynamicScroller>
-    <!-- <TweetSelector 
-    ref="list"
-      v-for="(item,index) in tweets"
-      v-bind:key="index"
-      :option="options"
-      :tweet="item"
-      :index="index"
-      :isDaehwa="false"
-    /> -->
-    <!-- <loading v-if="isLoading" name="loadingTop"/> -->
+    <loading v-if="isLoading" name="loadingTop"/>
   </div>
 </template>
 
@@ -97,8 +87,6 @@ export default {
       return this.tweets[this.selectIndex];
     },
     GetQTTweet(){
-      console.log(this.$refs.list[this.selectIndex]);
-      console.log(this.$refs.list[this.selectIndex].GetQtTweet)
       return this.$refs.list[this.selectIndex].GetQtTweet();
     },
     ResTweets(vals){
@@ -112,10 +100,10 @@ export default {
       this.EventBus.$emit('TweetKeyDown', e);
     },
     ArrowUp(e){
-      this.EventBus.$emit('ArrowUp', e)
+      this.Prev(e);
     },
     ArrowDown(e){
-      this.EventBus.$emit('ArrowDown', e)
+      this.Next(e);
     },
     FocusTweet(e){//트윗 포커스 
       if(e)
@@ -134,6 +122,7 @@ export default {
     },
     Next(e){
       //위로 가는 거. 키보드 위 키
+      e.preventDefault();
       if(this.tweets===undefined) return;
       this.selectIndex++;
       if(this.selectIndex >= this.tweets.length){
@@ -144,6 +133,7 @@ export default {
     },
     Prev(e){
       //아래로 가는 거. 키보드 아래 키
+      e.preventDefault();
       if(this.tweets===undefined) return;
       this.selectIndex--;
       if(this.selectIndex<0){

@@ -101,6 +101,7 @@ export default {
       })
     },
     Focused(e){
+      e.preventDefault();
       console.log('tweet focus index: '+this.index);
       this.EventBus.$emit('FocusedTweet', this.index);
       this.tweet.isFocus=true;
