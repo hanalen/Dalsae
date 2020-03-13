@@ -153,7 +153,7 @@ export default {
     },
     Focus(e){//panel변경 시 호출 되는 focus
       this.$nextTick(()=>{
-        if(e!=undefined){
+        if(e){
           e.preventDefault();
         }
         if(this.selectIndex==-1){//최초 세팅 시 index 설정이 안 되는 문제가 있어서 이와 같이 설정... 좋진 않은 코드다
@@ -161,26 +161,10 @@ export default {
         }
         var focusEl=undefined;
         if(this.tweets.length==0){
-          focusEl=this.$refs.panel;
+          focusEl=this.$refs.panel.focus();
         }
         else{
-          if(this.$refs.list!=undefined){
-            focusEl = this.$refs.list[this.selectIndex];
-          }
-          else{
-            setTimeout(() => {//대화패널 표시 시 포커스가 안 되는 문제가 있음.... 왜지....
-              focusEl = this.$refs.list[this.selectIndex];
-              focusEl.$el.focus(); 
-            }, 100);
-          }
-        }
-        if(focusEl!=undefined){
-          // this.$nextTick(() =>{//이벤트에서 show가 되기 전에 focus 호출 시 focus가 되지 않는 문제가 있어서 nextTick사용
-            focusEl.$el.focus(); 
-          // });
-        }
-        else{
-          this.$el.focus();
+          this.FocusTweet(e);
         }
       })
     },
