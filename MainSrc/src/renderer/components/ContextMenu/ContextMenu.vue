@@ -1,5 +1,5 @@
 <template>
-  <div ref="context" v-if="isVisible" class="context-menu" @keydown.down="ArrowDown" @keydown.up="ArrowUp"
+  <div ref="context" v-show="isVisible" class="context-menu" @keydown.down="ArrowDown" @keydown.up="ArrowUp"
       @keydown.enter="Enter" @keydown.esc="Esc" tabindex="-1"
 			v-bind:style="[{'left':x+'px', 'top':y+'px'}]" v-on:focusout="FocusOut" @focus="Focused">
     <div class="context-list" ref="list" tabindex="-1">
@@ -30,6 +30,7 @@ export default {
   name: "contextmenu",
   data: function() {
     return {
+      tweet:undefined,
       isVisible: false,
       x: 300,
       y: 0,
@@ -116,7 +117,14 @@ export default {
       }
       this.$children[this.selectIndex].$el.focus();
     },
-    Show(e) {
+    Show(e, tweet) {
+      if(e==undefined){
+        e=new Object();
+        var pos = document.activeElement.getBoundingClientRect();
+        e.clientX = pos.x;
+        e.clientY = pos.y;
+      }
+      this.tweet=tweet;
       this.isVisible = true;
       this.$nextTick(() => {
         var x=e.clientX;
@@ -167,9 +175,6 @@ export default {
   components: {
     ContextMenuItem
   },
-  props: {
-    tweet: undefined
-  }
 };
 </script>
 <style lang="scss" scoped>

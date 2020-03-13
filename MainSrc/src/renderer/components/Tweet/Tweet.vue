@@ -60,7 +60,6 @@
       />
     </div>
   </div>
-  <ContextMenu v-if="tweet.isMuted==false" ref="context" :tweet="tweet"/>
     
   </div>
 </template>
@@ -129,25 +128,10 @@ export default {
     }
   },
   methods: {
-    ShowContextMenu(e){
-      var event = new Object();
-      if(e!=undefined){
-        event.clientX=e.screenX;
-        event.clientY=e.screenY;
-      }
-      else{
-        var pos= this.$el.getBoundingClientRect()
-        event.clientX=pos.x;
-        event.clientY=pos.y;
-      }
-      console.log(event)
-      this.$refs.context.Show(event);
-    },
     Click(e){
       if(e.button==2 || e.button==3){
-        console.log(e)
         e.preventDefault();
-        this.ShowContextMenu(e);
+        this.EventBus.$emit('ShowContext', {'e':e, 'tweet':this.tweet});
       }
     },
     Hover(e){

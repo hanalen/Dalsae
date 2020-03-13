@@ -43,7 +43,7 @@
 import {EventBus} from '../../main.js';
 import ContextMenu from '../ContextMenu/ContextMenu.vue'
 export default {
-  name: "tweet",
+  name: "qttweet",
   components:{
     ContextMenu,
   },

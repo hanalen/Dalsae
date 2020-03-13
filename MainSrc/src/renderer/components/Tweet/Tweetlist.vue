@@ -28,6 +28,7 @@
       </template>
     </DynamicScroller>
     <loading v-if="isLoading" name="loadingTop"/>
+    <ContextMenu ref="context"/>
   </div>
 </template>
 
@@ -35,6 +36,7 @@
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import {VueVirtualScroller, DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
 import TweetSelector from "./TweetSelector.vue";
+import ContextMenu from '../ContextMenu/ContextMenu.vue'
 import Loading from "../ToolBox/Loading.vue"
 export default {
   name: "tweetlist",
@@ -51,6 +53,7 @@ export default {
     DynamicScrollerItem,
     TweetSelector,
     Loading,
+    ContextMenu,
   },
   props: {
     panelName:undefined,
@@ -68,7 +71,14 @@ export default {
     this.EventBus.$on('FocusedTweet', (index)=>{//트윗 클릭, 포커스 시 트윗의 index를 받아 저장
       if(this.isShow)
         this.selectIndex=index;
-    })
+    });
+    this.EventBus.$on('ShowContext', (vals)=>{
+      if(!this.isShow) return;
+
+      var tweet=vals['tweet'];
+      var e=vals['e'];
+      this.$refs.context.Show(e,tweet);
+    });
   },
   watch: { 
     tweets: function(newVal, oldVal) { // 트윗 최초 세팅 시 index설정
@@ -78,7 +88,8 @@ export default {
   },
   methods:{
     ShowContextMenu(){
-      this.$refs.list[this.selectIndex].ShowContextMenu();
+      this.$refs.context.Show(undefined,this.tweets[this.selectIndex]);
+      // this.$refs.list[this.selectIndex].ShowContextMenu();
     },
     GetSelectTweet(){
       return this.tweets[this.selectIndex];
