@@ -1,11 +1,12 @@
 <template>
-  <div ref="panel" tabindex="-1" class="tweet-list" @keydown="KeyDown">
+  <div ref="panel" tabindex="-1" class="tweet-list" @keydown="KeyDown" @keydown.up="ArrowUp" @keydown.down="ArrowDown">
     <!-- <loading v-if="isMoreLoading" name="loadingBottom"/> -->
     <DynamicScroller ref="scroll"
     :items="tweets"
     :min-item-size="options.isSmallTweet ? 30 : 84"
     class="scroller">
       <template v-slot="{ item, index, active }">
+        <!--qttweet, retweet, fav 추가하면 height가 1인 애들이 나옴... 일단 그부분 보류-->
         <DynamicScrollerItem
           :item="item"
           :active="active"
@@ -16,9 +17,6 @@
             item.isFocus,
             item.isReaded,
             item.isDelete,
-            item.qtTweet,
-            item.orgTweet.retweeted,
-            item.orgTweet.favorited
           ]"
           >
           <!-- <span style="background-color=#red;">{{item.orgTweet.full_text}}</span> -->
@@ -113,8 +111,15 @@ export default {
     KeyDown(e){
       this.EventBus.$emit('TweetKeyDown', e);
     },
+    ArrowUp(e){
+      this.EventBus.$emit('ArrowUp', e)
+    },
+    ArrowDown(e){
+      this.EventBus.$emit('ArrowDown', e)
+    },
     FocusTweet(e){//트윗 포커스 
-      e.preventDefault();
+      if(e)
+        e.preventDefault();
       var id = this.tweets[this.selectIndex].id_str;
       if(this.selectIndex==this.tweets.length-1){//end키로 이동 시 한타임 안 맞음
         this.$refs.scroll.scrollToBottom();//스크롤 패널 맨아래로 이동 후 트윗 포커스

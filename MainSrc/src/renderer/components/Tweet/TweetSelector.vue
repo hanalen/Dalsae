@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet-selector" tabindex="-1" @mouseenter="Hover" @mouseleave="HoverOut" @keydown.up="ArrowUp" @keydown.down="ArrowDown"
+  <div class="tweet-selector" tabindex="-1" @mouseenter="Hover" @mouseleave="HoverOut" 
 	@focus="Focused" v-on:focusout="FocusOut"
     @mousedown="Click">
     <Tweet ref="tweet"
