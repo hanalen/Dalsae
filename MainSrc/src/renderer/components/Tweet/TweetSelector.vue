@@ -42,7 +42,6 @@ export default {
   data() {
     return {
 			isFocus:false,
-      qtIdStr:undefined
     };
   },
   created:function(){
@@ -51,23 +50,7 @@ export default {
         this.Focus();
     });
     if(this.tweet.orgTweet.quoted_status!=undefined){
-      this.qtIdStr=this.tweet.orgTweet.quoted_status_id_str;
-      this.$nextTick(()=>{
-        this.EventBus.$emit('LoadQTTweet', this.tweet);
-      });
-      this.EventBus.$on('LoadedQTTweet', (vals)=>{//트윗 로딩 후 on을 요청한 객체에만 걸 수 있게
-        var tweet = vals['tweet'];
-        var id=vals['id_str'];
-        if(id!=this.qtIdStr) return;
-
-        this.$nextTick(()=>{
-          var orgUser = tweet.retweeted_status==undefined ? tweet.user :tweet.retweeted_status.user;//리트윗, 원트윗 유저 선택
-          var orgTweet=tweet.retweeted_status==undefined? tweet : tweet.retweeted_status;//원본 트윗 저장
-          tweet.orgUser = JSON.parse(JSON.stringify(orgUser));
-          tweet.orgTweet=JSON.parse(JSON.stringify(orgTweet));
-          this.$store.dispatch('AddQtTweet', {'tweet': this.tweet, 'qtTweet': tweet});
-        });
-      });
+      this.EventBus.$emit('LoadQTTweet', this.tweet);
     }
   },
   computed:{

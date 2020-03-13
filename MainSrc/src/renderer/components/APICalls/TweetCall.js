@@ -65,10 +65,10 @@ export default{
 			console.log(err);
 		});
 	},
-	QTTweet(tweetId, publickey, secretkey, callback, errCallback){
+	QTTweet(tweet, publickey, secretkey, callback, errCallback){
 		var method='GET';
 		var arr=[];
-		arr['id']=tweetId;
+		arr['id']=tweet.orgTweet.quoted_status_id_str;
 		arr['tweet_mode']='extended';
 		var url='https://api.twitter.com/1.1/statuses/show.json';
 		var callUrl=OAuth.GetURL(url, method ,arr);
@@ -82,7 +82,7 @@ export default{
 			},
 			data:sendData
 		}).then((res)=>{
-			callback(res.data, tweetId);
+			callback(res.data, tweet);
 		}).catch((err)=>{
 			console.log('load qt error!');
 			console.log(err);

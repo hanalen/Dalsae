@@ -59,11 +59,11 @@ export default {
 			// console.log('retweet ok')
 			// console.log(tweet);
 		},
-		ReqQTTweet(qtId){
-			ApiTweet.QTTweet(qtId, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResQT, this.ErrQT);
+		ReqQTTweet(tweet){
+			ApiTweet.QTTweet(tweet, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResQT, this.ErrQT);
 		},
-		ResQT(tweet, qtIdStr){
-			this.EventBus.$emit('LoadedQTTweet', {'tweet': tweet, 'id_str': qtIdStr});
+		ResQT(qtTweet, tweet){
+			this.$store.dispatch('AddQtTweet', {'tweet': tweet, 'qtTweet': qtTweet});
 		},
 		ErrQT(err){
 			console.log('qt laod error')
@@ -124,7 +124,7 @@ export default {
       }
 		});
 		this.EventBus.$on('LoadQTTweet',(tweet)=>{
-			this.ReqQTTweet(tweet.orgTweet.quoted_status_id_str);
+			this.ReqQTTweet(tweet);
 		});
 		this.EventBus.$on('DeleteTweet', (tweet)=>{
 			if(tweet.orgUser.id_str==this.selectAccount.userData.id_str){

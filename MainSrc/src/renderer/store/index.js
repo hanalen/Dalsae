@@ -480,6 +480,7 @@ export default new Vuex.Store({
     AddQtTweet(state, vals){
       var tweet=vals['tweet'];
       var qtTweet=vals['qtTweet'];
+      TweetDataAgent.TweetInit(qtTweet);
       tweet.qtTweet=qtTweet;
     }
   },
