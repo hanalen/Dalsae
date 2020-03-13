@@ -120,26 +120,26 @@ export default {
         this.EventBus.$emit('TweetFocus', id);//실제 포커스는 여기서...
       }
     },
-    Next(e){
-      //위로 가는 거. 키보드 위 키
+    Next(e){//키보드 아래 키
       e.preventDefault();
       if(this.tweets===undefined) return;
       this.selectIndex++;
       if(this.selectIndex >= this.tweets.length){
         this.selectIndex = this.tweets.length-1;
-        this.EventBus.$emit('FocusInput');
       }
       this.FocusTweet(e);
     },
-    Prev(e){
-      //아래로 가는 거. 키보드 아래 키
+    Prev(e){//키보드 위 키
       e.preventDefault();
       if(this.tweets===undefined) return;
       this.selectIndex--;
       if(this.selectIndex<0){
         this.selectIndex=0;
+        this.EventBus.$emit('FocusInput');
       }
-      this.FocusTweet(e);
+      else{
+        this.FocusTweet(e);
+      }
     },
     End(e){
       if(this.tweets===undefined) return;
