@@ -1,5 +1,5 @@
 <template>
-  <div ref="tweet" class="tweet">
+  <div ref="tweet" class="tweet" @mousedown="Click">
   <!-- @keydown="keyDown"> --><!--keydown은 list에서 처리 한다-->
   <div class="mute-area" v-if="tweet.isMuted" @click="ClickMute">
     <span>뮤트 된 트윗입니다. 클릭 시 표시 합니다.</span>
@@ -60,6 +60,7 @@
       />
     </div>
   </div>
+  <ContextMenu v-if="tweet.isMuted==false" ref="context" :tweet="tweet"/>
     
   </div>
 </template>
@@ -128,6 +129,27 @@ export default {
     }
   },
   methods: {
+    ShowContextMenu(e){
+      var event = new Object();
+      if(e!=undefined){
+        event.clientX=e.screenX;
+        event.clientY=e.screenY;
+      }
+      else{
+        var pos= this.$el.getBoundingClientRect()
+        event.clientX=pos.x;
+        event.clientY=pos.y;
+      }
+      console.log(event)
+      this.$refs.context.Show(event);
+    },
+    Click(e){
+      if(e.button==2 || e.button==3){
+        console.log(e)
+        e.preventDefault();
+        this.ShowContextMenu(e);
+      }
+    },
     Hover(e){
       if(this.tweet.qtTweet && !this.option.isSmallTweet)
         this.$refs.qtTweet.Hover();

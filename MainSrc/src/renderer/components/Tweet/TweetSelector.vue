@@ -1,7 +1,6 @@
 <template>
   <div class="tweet-selector" tabindex="-1" @mouseenter="Hover" @mouseleave="HoverOut" 
-	@focus="Focused" v-on:focusout="FocusOut"
-    @mousedown="Click">
+	@focus="Focused" v-on:focusout="FocusOut">
     <Tweet ref="tweet"
 			v-if="!option.isSmallTweet || isFocus"
 			:option="option"
@@ -17,7 +16,6 @@
       :index="index"
       :isDaehwa="false"
       :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'selected': isFocus, 'not-read':option.isUseRead && !tweet.isReaded}"/>
-    <ContextMenu v-if="tweet.isMuted==false" ref="context" :tweet="tweet"/>
   </div>
 </template>
 
@@ -65,18 +63,8 @@ export default {
       if(this.qtTweet && !this.option.isSmallTweet)
         this.$refs.tweet.HoverOut();
     },
-    Click(e){
-      if(e.button==2 || e.button==3){
-        e.preventDefault();
-        this.$refs.context.Show(e);
-      }
-    },
     ShowContextMenu(){
-      var pos= this.$el.getBoundingClientRect()
-      var event = new Object();
-      event.clientX=pos.x;
-      event.clientY=pos.y;
-      this.$refs.context.Show(event);
+      this.$refs.tweet.ShowContextMenu();
     },
     Focus(){
       this.$nextTick(()=>{
