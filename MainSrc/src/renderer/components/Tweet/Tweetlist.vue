@@ -132,6 +132,8 @@ export default {
       var scroller = this.$refs.scroll.$refs.scroller;
       var child = scroller.$children;
       var nowItem=undefined;
+      if(index<0) index = 0;
+      else if(index>=this.tweets.length) index--;
       for(var i=0;child.length;i++){
         if(child[i].id==this.tweets[index].id){
           nowItem=child[i];
