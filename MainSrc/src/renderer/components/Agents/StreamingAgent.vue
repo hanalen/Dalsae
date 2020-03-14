@@ -23,22 +23,13 @@ export default {
     }
   },
   created() {
-// 	var exec = require('child_process').execFile;
-
-// var fun =function(){
-//    console.log("fun() start");
-//    exec('Dalsae.exe', function(err, data) {  
-//         console.log(err)
-//         console.log(data.toString());                       
-//     });  
-// }
-// fun();
-    // this.ConnectStreamingHub();
+	  
 
     this.EventBus.$on('StopStreaming',()=>{
       this.StopStreaming();
     });
     this.EventBus.$on('StartStreaming',()=>{
+      this.ExecBridge();
       this.StartStreaming();
     });
   },
@@ -49,6 +40,14 @@ export default {
     };
   },
   methods: {
+    ExecBridge(){
+      var exec = require('child_process').execFile;
+
+      exec('StreamingBridge/netcoreapp3.1/StreamingBridge.exe', function(err, data) {  
+        console.log(err)
+        console.log(data.toString());                       
+      });  
+    },
     UnZip(packet){
       const { deflate, unzip } = require('zlib');
       const buffer = Buffer.from(packet, 'base64');
