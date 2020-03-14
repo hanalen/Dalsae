@@ -16,3 +16,4 @@ MainSrc/src/renderer/APIKey.js
 StreamingBridge/.vs
 StreamingBridge/StreamingBridge/bin
 StreamingBridge/StreamingBridge/obj
+MainSrc/StreamingBridge/*
