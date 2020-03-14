@@ -2,20 +2,22 @@
   <div class="tweet-selector" tabindex="-1" @mouseenter="Hover" @mouseleave="HoverOut" 
 	@focus="Focused" v-on:focusout="FocusOut">
     <Tweet ref="tweet"
-			v-if="!option.isSmallTweet || isFocus"
+			v-if="(!option.isSmallTweet) || ( option.isSmallTweet &&( isFocus || isSelected))"
 			:option="option"
       :tweet="tweet"
       :index="index"
       :isDaehwa="false"
       :qtTweet="tweet.qtTweet"
-      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'selected': isFocus, 'not-read':option.isUseRead && !tweet.isReaded}"/>
+      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'focused': isFocus, 'not-read':option.isUseRead && !tweet.isReaded,
+                'selected': isSelected}"/>
 		<SmallTweet ref="small"
-			v-if="option.isSmallTweet && !isFocus"
+			v-if="option.isSmallTweet && !isFocus && !isSelected"
 			:option="option"
       :tweet="tweet"
       :index="index"
       :isDaehwa="false"
-      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'selected': isFocus, 'not-read':option.isUseRead && !tweet.isReaded}"/>
+      :isSelected="isSelected"
+      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'focused': isFocus, 'not-read':option.isUseRead && !tweet.isReaded}"/>
   </div>
 </template>
 
@@ -36,6 +38,10 @@ export default {
     tweet: undefined,
     option: undefined,
     index:undefined,
+    isSelected:{
+      type:Boolean,
+      default:false,
+    }
   },
   data() {
     return {

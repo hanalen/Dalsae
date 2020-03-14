@@ -23,6 +23,7 @@
             :option="options"
             :tweet="item"
             :index="index"
+            :isSelected="index==selectIndex"
             :isDaehwa="false"/>
         </DynamicScrollerItem>
       </template>

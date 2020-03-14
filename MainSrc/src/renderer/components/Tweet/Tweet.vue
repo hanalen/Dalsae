@@ -77,7 +77,6 @@ export default {
   props: {
     tweet: undefined,
     option: undefined,
-    selected:false,
     qtTweet:undefined,
     index:undefined,
   },
@@ -213,14 +212,18 @@ export default {
 }
 
 .tweet-odd{
-  background: white !important;
+  background: white ;
 }
 .tweet-even{
-  background: #f5f8fa !important;
+  background: #f5f8fa;
+}
+
+.tweet.focused{
+  background-color: #bce3fe !important;
 }
 
 .tweet.selected{
-  background-color: #bce3fe !important;
+  background-color: #e7f5fe;
 }
 .tweet.not-read{
   font-weight: bold;
