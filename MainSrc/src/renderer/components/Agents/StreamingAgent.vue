@@ -1,7 +1,5 @@
 <template>
   <div class="streaming-agent">
-    <span>{{count}}
-    </span>
   </div>
 </template>
 
@@ -36,7 +34,6 @@ export default {
   data() {
     return {
       connection:undefined,
-      count:0,
     };
   },
   methods: {
@@ -117,7 +114,6 @@ export default {
     },
     ParseJson(json){
       if(json.length<10) return;//이상 패킷으로 예상 됨
-      this.count++;
       var tweet = JSON.parse(json);
       console.log(tweet);
       if(tweet.id_str!=undefined){
