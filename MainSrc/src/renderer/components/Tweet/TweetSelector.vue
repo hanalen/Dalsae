@@ -68,12 +68,11 @@ export default {
     },
     Focus(){
       this.$nextTick(()=>{
-        this.$el.focus();
+        this.$el.focus({preventScroll: true});
       })
     },
     Focused(e){
       e.preventDefault();
-      console.log('tweet focus index: '+this.index);
       this.EventBus.$emit('FocusedTweet', this.index);
       this.tweet.isFocus=true;
       this.isFocus=true;

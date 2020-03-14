@@ -120,12 +120,38 @@ export default {
       if(this.selectIndex==this.tweets.length-1){//end키로 이동 시 한타임 안 맞음
         this.$refs.scroll.scrollToBottom();//스크롤 패널 맨아래로 이동 후 트윗 포커스
         this.$nextTick(()=>{
-          this.EventBus.$emit('TweetFocus', id);//실제 포커스는 여기서...
+          this.EventBus.$emit('TweetFocus', id);//트윗의 실제 포커스는 emit
         })
       }
       else{
-        this.$refs.scroll.scrollToItem(this.selectIndex);//스크롤만 이동 시키는 기능....
-        this.EventBus.$emit('TweetFocus', id);//실제 포커스는 여기서...
+        this.ScrollToTweet(this.selectIndex);
+        this.EventBus.$emit('TweetFocus', id);//트윗의 실제 포커스는 emit
+      }
+    },
+    ScrollToTweet(index){//focus 되는 트윗 index에 맞게끔 스크롤을 이동 시키는 기능
+      var scroller = this.$refs.scroll.$refs.scroller;
+      var child = scroller.$children;
+      var nowItem=undefined;
+      for(var i=0;child.length;i++){
+        if(child[i].id==this.tweets[index].id){
+          nowItem=child[i];
+          break;
+        }
+      }
+      if(nowItem==undefined) return;//focus 할 VirtualScrollItem을 못 찾음
+
+      var tweetPos = nowItem.$el.getBoundingClientRect();
+      var panelPos = this.$refs.panel.getBoundingClientRect();
+      var tweetBottom = tweetPos.y + tweetPos.height;
+      var panelBottom = panelPos.y + panelPos.height;
+
+      if( tweetBottom > panelBottom){
+        var scroll = scroller.getScroll();
+        var scrollTo =scroll.start + tweetBottom - panelBottom;//스크롤이 이동 값은 맨위가 0기준, top으로 계산 해야 맞음
+        scroller.scrollToPosition(scrollTo);
+      }
+      else if(tweetPos.top < panelPos.y){
+        this.$refs.scroll.scrollToItem(index);//내려가는 건 복잡한 로직 없이 단순히 index이동만 해도 됨
       }
     },
     Next(e){//키보드 아래 키
