@@ -39,7 +39,7 @@ namespace StreamingBridge
 			// notifyIcon1
 			//
 			this.notifyIcon1.Visible = true;
-			this.notifyIcon1.Text = "달새 호흡기222";
+			this.notifyIcon1.Text = "달새 호흡기";
 			this.notifyIcon1.Icon = SystemIcons.Application;
 			this.notifyIcon1.MouseClick += NotifyIcon1_MouseClick;
 			// 

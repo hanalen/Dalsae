@@ -19,7 +19,8 @@ namespace StreamingBridge
 		public Form1()
 		{
 			InitializeComponent();
-			this.ShowInTaskbar = true;
+			this.Hide();
+			//this.ShowInTaskbar = true;//시작줄 아이콘 표시 여부
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -38,10 +39,12 @@ namespace StreamingBridge
 			this.Invoke(new MethodInvoker(
 			  delegate ()
 				  {
-					  if (isConnected)
-						  this.lbStatus.Text = $"스트리밍 호흡기 연결 됨";
-					  else
-						  this.lbStatus.Text = $"스트리밍 호흡기 연결 끊어짐";
+					  this.lbStatus.Text = $"스트리밍 호흡기 아마도 연결 됨";
+
+					  //if (isConnected)
+						 // this.lbStatus.Text = $"스트리밍 호흡기 연결 됨";
+					  //else
+						 // this.lbStatus.Text = $"스트리밍 호흡기 연결 끊어짐";
 				  }
 			  )
 			);
