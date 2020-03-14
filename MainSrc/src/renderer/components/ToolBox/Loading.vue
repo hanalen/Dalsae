@@ -26,31 +26,15 @@ export default {
 
 <style lang="scss">
 .loading{
-    flex: none;
-    // position: fixed !important;
-    // left: 0 !important;
-    // bottom: 0!important;
-    width: 100% ;
-    height: 100% ;
-    // color: red!important;
-    // background-color: rgba(0, 0, 0, 0.1) !important;
-    text-align: center;
-		
-    // img{
-    //     position: absolute !important;
-    //     top:50%;
-    //     left:50%;
-    //     width: 50px;
-    //     height: 50px;
-    // }
+  width: 100% ;
+  height: 66px;
+  text-align: center;
 }
 .lds-ring {
   display: inline-block;
   position: relative;
   width: 64px;
   height: 64px;
-	top:50%;
-	// left:50%;
 }
 .lds-ring div {
   box-sizing: border-box;
@@ -62,7 +46,7 @@ export default {
   border: 6px solid black;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #ffcfcf transparent transparent transparent;
+  border-color: #76c6fe transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;

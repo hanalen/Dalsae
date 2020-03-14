@@ -1,6 +1,6 @@
 <template>
   <div ref="panel" tabindex="-1" class="tweet-list" @keydown="KeyDown" @keydown.up="ArrowUp" @keydown.down="ArrowDown">
-    <loading v-if="isMoreLoading" name="loadingBottom"/>
+    <loading v-if="isLoading" name="loadingTop"/>
     <DynamicScroller ref="scroll"
     :items="tweets"
     :min-item-size="options.isSmallTweet ? 30 : 84"
@@ -27,7 +27,7 @@
         </DynamicScrollerItem>
       </template>
     </DynamicScroller>
-    <loading v-if="isLoading" name="loadingTop"/>
+    <loading v-if="isMoreLoading" name="loadingBottom"/>
     <ContextMenu ref="context"/>
   </div>
 </template>
@@ -213,10 +213,8 @@ export default {
 .tweet-list{
   overflow: hidden;
   height: 100%;
-  // overflow-y: auto;
-  // display: flex;
-  background-color: #ffeded;
-  // flex-direction:column-reverse;
+  display: flex;
+  flex-direction: column;
 }
 
 .scroller{
