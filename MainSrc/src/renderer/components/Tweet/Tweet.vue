@@ -22,7 +22,7 @@
         >{{TweetName}}</span><i v-if="tweet.orgUser.protected" class="fas fa-lock"></i>
       </div>
       <div class="tweet-content">
-        <div v-html="TweetText" :class="{'delete': tweet.isDelete}">
+        <div v-html="TweetText" :class="{'delete': tweet.isDelete, 'highlight': tweet.isHighlight}">
         </div>
       </div>
       <div class="retweet-info" v-if="tweet.retweeted_status!=undefined"> 
@@ -245,7 +245,7 @@ export default {
   width: 73px;
 }
 .tweet-text {
-  font-size: 14px;
+  font-size: 15px;
   flex: 1;
   // display: flex;
   flex-direction: column;
@@ -262,6 +262,9 @@ export default {
     line-height: 1.3;
     .delete{
       text-decoration: line-through;
+    }
+    .highlight{
+      color: #007bff;
     }
   }
   .tweet-content.noti{
