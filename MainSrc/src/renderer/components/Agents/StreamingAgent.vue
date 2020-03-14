@@ -38,6 +38,7 @@ export default {
   },
   methods: {
     ExecBridge(){
+      if(process.env.NODE_ENV === 'development') return;
       var exec = require('child_process').execFile;
 
       exec('StreamingBridge/netcoreapp3.1/StreamingBridge.exe', function(err, data) {  
