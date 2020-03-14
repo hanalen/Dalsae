@@ -17,6 +17,7 @@ export default {
   },
   data() {
     return {
+      isAddNewAccount:false,
       isLoadingHome:false,
       isLoadingMention:false,
       isLoadingFav:false,
@@ -32,9 +33,14 @@ export default {
     StartDalsae(){
 			this.ReqHome(undefined, undefined);
 			this.ReqMention(undefined, undefined);
-			this.ReqUserInfo();
-      this.ReqFollowingList();
-      this.ReqFollowerList();
+      this.ReqUserInfo();
+      if(this.selectAccount.userData==undefined){//OAuth인증 진행 시 userdata없으므로 정보 수신 수 각종 req를 날린다
+        this.isAddNewAccount=true;
+      }
+      else{
+        this.ReqFollowingList();
+        this.ReqFollowerList();
+      }
     },
     ReqHome(maxId, sinceId){
       if(this.isLoadingHome){//이미 로딩 중이면 넘기기
@@ -79,7 +85,6 @@ export default {
                              this.ResFollowing, this.ErrResFollowing);
     },
     ReqFollowerList(cursor){
-      console.log('req follower list')
       var userid=this.selectAccount.userData.id_str;
       if(cursor==undefined){
         cursor=-1;
@@ -91,6 +96,11 @@ export default {
       this.$store.dispatch('UpdateUser', userinfo);
       this.EventBus.$emit('ResUserInfo', userinfo);
       this.EventBus.$emit('SaveAccount');
+      if(this.isAddNewAccount){
+        this.isAddNewAccount=false;
+        this.ReqFollowingList();
+        this.ReqFollowerList();
+      }
     },
     ResHome(listTweet){
       this.isLoadingHome=false;
@@ -140,6 +150,7 @@ export default {
   mounted: function() {//EventBus등록용 함수들
     this.EventBus.$on('StartDalsae', () => {
       this.StartDalsae();
+      console.log('start dalsae recv')
       this.EventBus.$emit('StartStreaming');
     });
     this.EventBus.$on('ReqHome', () => {
