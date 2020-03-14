@@ -19,8 +19,23 @@ namespace StreamingBridge
 		public Form1()
 		{
 			InitializeComponent();
-			this.Hide();
+			Visible = false;
 			//this.ShowInTaskbar = true;//시작줄 아이콘 표시 여부
+		}
+
+		private bool isFirstShow { get; set; } = true;
+		private void Form1_Shown(object sender, System.EventArgs e)
+		{
+			if (isFirstShow)
+			{
+				isFirstShow = false;
+				this.Hide();
+			}
+		}
+
+		private void Form1_Load(object sender, System.EventArgs e)
+		{
+			this.Hide();
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -32,6 +47,7 @@ namespace StreamingBridge
 		private void NotifyIcon1_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
 		{
 			this.Show();
+			this.Focus();
 		}
 
 		public void ConnectionChanged(bool isConnected)

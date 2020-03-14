@@ -20,10 +20,10 @@ namespace StreamingBridge
 						writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.Message}");
 						writer.WriteLine($"{DateTime.Now:HH:mm:ss}: {e.StackTrace}");
 					}
-					else
-					{
-						writer.WriteLine($"{DateTime.Now:HH:mm:ss}: 원인불명 예외");
-					}
+					//else
+					//{
+					//	writer.WriteLine($"{DateTime.Now:HH:mm:ss}: 원인불명 예외");
+					//}
 					writer.Flush();
 				}
 			}

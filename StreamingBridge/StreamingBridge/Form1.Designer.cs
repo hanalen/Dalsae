@@ -82,12 +82,16 @@ namespace StreamingBridge
 			this.MaximizeBox = false;
 			this.Name = "Form1";
 			this.ShowInTaskbar = false;
-			this.Text = "Form1";
+			this.Text = "스트리밍 호흡기 브릿지";
+			this.Load += Form1_Load;
+			this.Shown += Form1_Shown;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
+
+
 
 
 
