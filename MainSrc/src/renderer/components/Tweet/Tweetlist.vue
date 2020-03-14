@@ -64,6 +64,11 @@ export default {
       default:false,
     }
   },
+  computed:{
+    tweetLength(){//index 설정을 위한 값
+      return this.tweets.length;
+    }
+  },
   mounted: function() {
     this.EventBus.$on('LoadingTweetPanel', (vals) => {
       this.ResTweets(vals);
@@ -81,9 +86,8 @@ export default {
     });
   },
   watch: { 
-    tweets: function(newVal, oldVal) { // 트윗 최초 세팅 시 index설정
-      // this.selectIndex=newVal.length -1 ;
-      // console.log('tweet change');
+    tweetLength: function(newVal, oldVal){//스트리밍으로 인해 트윗이 추가 되면 index를 올려줘야함
+      this.selectIndex += newVal - oldVal;//1개만 바뀌지 않을 수 있으니 - 계산
     }
   },
   methods:{
