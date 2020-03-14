@@ -1,5 +1,5 @@
 <template>
-  <div ref="context" v-show="isVisible" class="context-menu" @keydown.down="ArrowDown" @keydown.up="ArrowUp"
+  <div ref="context" v-if="tweet!=undefined" v-show="isVisible" class="context-menu" @keydown.down="ArrowDown" @keydown.up="ArrowUp"
       @keydown.enter="Enter" @keydown.esc="Esc" tabindex="-1"
 			v-bind:style="[{'left':x+'px', 'top':y+'px'}]" v-on:focusout="FocusOut" @focus="Focused">
     <div class="context-list" ref="list" tabindex="-1">
