@@ -218,7 +218,7 @@ export default new Vuex.Store({
             index=0;
           }
           else{
-            index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
+            index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.mention);
           }
           state.tweets.mention.splice(index, 0, tweet);
 
