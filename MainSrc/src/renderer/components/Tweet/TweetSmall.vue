@@ -8,6 +8,9 @@
 				<i class="far fa-plus-square" v-if="tweet.orgTweet.in_reply_to_status_id_str!=undefined" :style="{'margin-left':-4}"></i>
 			</div>
 			<img class="small-propic" v-bind:src="propic()" v-if="option.isShowPropic" />
+      <div class="small-tweet-name">
+        {{tweet.user.screen_name}}
+      </div>
 			<div class="small-tweet-content">
 				<div class="small-text" v-html="TweetText" :class="{'delete': tweet.isDelete}">
 				</div>
@@ -127,6 +130,14 @@ export default {
   .small-tweet-area{
     display: flex;
     position: relative;
+    .daehwa{
+      min-width: 14px;
+    }
+    .small-tweet-name{
+      font-weight: 700;
+      font-size: 14px;
+      margin-left: 4px;
+    }
     .small-propic{
       margin-left: 4px;
       object-fit: contain;
