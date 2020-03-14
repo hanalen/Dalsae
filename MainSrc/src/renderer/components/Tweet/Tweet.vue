@@ -245,7 +245,7 @@ export default {
   width: 73px;
 }
 .tweet-text {
-  font-size: 15px;
+  font-size: 14px;
   flex: 1;
   // display: flex;
   flex-direction: column;
