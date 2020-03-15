@@ -27,7 +27,7 @@
     "files": [
       "dist/electron/**/*"
     ],
-    "extraFiles":[
+    "extraFiles": [
       "StreamingBridge"
     ],
     "dmg": {
