@@ -1,5 +1,5 @@
 // #region 프로그램 구동에 필요한 코드 및 로그
-const {app, BrowserWindow, Menu, protocol, ipcMain, ipcRenderer} = require('electron');
+const {app, BrowserWindow, Menu, MenuItem, protocol, ipcMain, ipcRenderer} = require('electron');
 const log = require('electron-log');
 const {autoUpdater} = require("electron-updater");
 const windowStateKeeper = require('electron-window-state');//윈도우 창 크기,위치 저장하는 애
@@ -69,6 +69,34 @@ function createWindow () {
 //#endregion
 
 //#region 이미지 윈도우
+const template = [
+  {
+     label: '파일',
+     submenu: [
+      {
+        label: '데이터 폴더 열기',
+        click: function() {
+          const {shell} = require('electron') // deconstructing assignment
+          shell.openItem(app.getPath('userData')+'/Dalsae')
+        },
+        // accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I'//단축키
+      },
+      {
+        label: '이미지 폴더 열기',
+        click: function() {
+          const {shell} = require('electron') // deconstructing assignment
+          shell.openItem(app.getPath('userData')+'/Dalsae/Image')
+        },
+        // accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I'//단축키
+      }
+    ]
+  }
+]
+
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)
+
 
 var imageWin=[];
 let imageWindowState=undefined;
