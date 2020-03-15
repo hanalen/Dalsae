@@ -4,6 +4,7 @@
 </template>
 
 <script>
+const app = require('electron').remote.app
 import {EventBus} from '../../main.js';
 import axios from 'axios'
 import FileStream from 'fs-extra'
@@ -15,21 +16,49 @@ export default {
   },
   data() {
     return {
-			accountPath:'Data/Switter.json',
-			optionFilePath : "Data/option.json",
-			hotkeyFilePath : "Data/hotkey.ini",
+			// accountPath:'Data/Switter.json',
+			// optionFilePath : "Data/option.json",
+			// hotkeyFilePath : "Data/hotkey.ini",
 
-			dataFolderPath : "Data",
-			skinFolderPath : "Skin",
-			imageFolderPath : "Image",
-			tempFolderPath : "Temp",
-			soundFolderPath : "Sound",
+			// dataFolderPath : "Data",
+			// skinFolderPath : "Skin",
+			// imageFolderPath : "Image",
+			// tempFolderPath : "Temp",
+			// soundFolderPath : "Sound",
     };
   },
   computed:{
     selectAccount(){
       return this.$store.state.Account.selectAccount;
-    }
+		},
+		appPath(){
+			console.log(app)
+			return app.getPath('userData');
+		},
+		accountPath(){
+			return this.appPath + '/Dalsae/Data/Switter.json';
+		},
+		optionFilePath(){
+			return this.appPath + "/Dalsae/Data/option.json"
+		},
+		hotkeyFilePath(){
+			return this.appPath + "/Dalsae/Data/hotkey.ini"
+		},
+		dataFolderPath(){
+			return this.appPath + "/Dalsae/Data"
+		},
+		skinFolderPath(){
+			return this.appPath + "/Dalsae/Skin"
+		},
+		imageFolderPath(){
+		 return this.appPath + "/Dalsae/Image"
+		},
+		tempFolderPath(){
+			return this.appPath + "/Dalsae/Temp"
+		},
+		soundFolderPath(){
+			return this.appPath + "/Dalsae/Sound"
+		},
   },
   methods: {
 		CheckFolders(){

@@ -36,6 +36,7 @@
 </template>
 
 <script>
+const app = require('electron').remote.app
 import ApiOAuth from "../APICalls/OAuthCall.js"
 import Tweet from "../Tweet/Tweet.vue"
 import {EventBus} from '../../main.js';
@@ -164,7 +165,7 @@ export default {
 			var url = media.media_url;
 			var fs = require('fs');
 			var fileName = url.substring(url.lastIndexOf('/'),9999999999);
-			var file = fs.createWriteStream('Image/'+fileName);
+			var file = fs.createWriteStream(app.getPath('userData')+'/Dalsae/Image/'+fileName);
 
 			const request = http.get(url).on('response', function(res) {
       const len = parseInt(res.headers['content-length'], 10)
