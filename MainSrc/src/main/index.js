@@ -96,12 +96,12 @@ const windowStateKeeper2 = require('electron-window-state');//윈도우 창 크�
     win.loadURL(modalPath);
 
     imageWin.push(win);
-    ImageWindowHide(win);
+    ImageWindowSetEvent(win);
   }
 }
 
 
-function ImageWindowHide(win){
+function ImageWindowSetEvent(win){
   win.on('close', (e)=>{
     if(mainWindow!=null){
       e.preventDefault();
@@ -114,7 +114,7 @@ function ImageWindowHide(win){
     }
   });
   win.on('show', (e)=>{
-    win.webContents.send('focus');
+    win.webContents.send('Focus');
   });
   const electronLocalshortcut = require('electron-localshortcut');
   electronLocalshortcut.register(win, 'ESC', () => {
@@ -123,6 +123,12 @@ function ImageWindowHide(win){
   electronLocalshortcut.register(win, 'ENTER', () => {
     win.close();
   });
+  electronLocalshortcut.register(win, 'Ctrl+S', ()=>{
+    win.webContents.send('Save')
+  })
+  electronLocalshortcut.register(win, 'Ctrl+A', ()=>{
+    win.webContents.send('SaveAll')
+  })
 }
 var imageIndex=0;
 

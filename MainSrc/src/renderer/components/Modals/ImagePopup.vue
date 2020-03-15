@@ -31,7 +31,7 @@
         </video>
       </div>
 		</div>
-		<ContextMenu ref="context" :id="tweet.orgTweet.id_str" :index="index" :images="tweet.orgTweet.extended_entities.media"/>
+		<ContextMenu ref="context" v-if="tweet!=undefined" :id="tweet.orgTweet.id_str" :index="index" :images="tweet.orgTweet.extended_entities.media"/>
 	</div>
 </template>
 
@@ -88,14 +88,19 @@ export default {
 	},
 	created: function(){
 		var ipcRenderer = require('electron').ipcRenderer;
+		ipcRenderer.on('Save', () => {
+			this.Save();
+		});
 		ipcRenderer.on('tweet', (event, tweet, uiOption) => {
 			this.Clear();
 			this.tweet=tweet;
 			this.uiOption=uiOption;
 		});
-		ipcRenderer.on('focus', (event)=>{
+		ipcRenderer.on('SaveAll', () => {
+			this.SaveAll();
+		});
+		ipcRenderer.on('Focus', (event)=>{
 			this.$nextTick(()=>{
-				console.log(this.$refs.imgModal)
 				this.$refs.imgModal.focus();
 			});
 		});
@@ -103,6 +108,7 @@ export default {
 			this.KeyDown(key);
 		});
     ipcRenderer.on('hide', ()=>{
+			console.log('hide')
 			this.Clear();
     });
 		this.EventBus.$on('Save', (id)=>{//id: 트윗 id
@@ -113,13 +119,6 @@ export default {
 			if(id!=this.tweet.orgTweet.id_str) return;
 			this.SaveAll();
 		});
-		
-		// setTimeout(() => {
-		// 	if(this.$el){
-		// 		this.$refs.imgModal.focus();
-		// 	}
-		// }
-		// ,200);
 	},
   mounted:function(){
 		console.log(this.tweet);
