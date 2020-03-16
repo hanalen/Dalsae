@@ -23,6 +23,38 @@ if (process.env.NODE_ENV !== 'development') {
 }
 // #endregion
 
+
+//#region path설정
+const configPath=app.getPath('userData')+'/Dalsae/config.json';//폴더 경로 저장하는 파일
+var config=undefined;
+function CreateConfig(){
+  const fs = require('fs-extra');//경로 설정 파일 찾기
+  if(fs.existsSync(configPath)){
+    config = fs.readJsonSync(configPath, { throws: false });
+  }
+  ipcMain.on('GetConfigPath', ()=>{//FileAgent에서 설정을 요청하면 설정 send
+    sendStatusToWindow('called configPath')
+    sendStatusToWindow(config)
+    mainWindow.webContents.send('ConfigPath', config);
+  });
+}
+function ConfigChange(path){//설정 바뀌면 FileAgent에 쏴줘야함
+  if(path==undefined) return;
+  if(path.length==0) return;
+  const fs = require('fs-extra');//경로 설정 파일 찾기
+  config=new Object();
+  config.path=path[0];
+  sendStatusToWindow('config change')
+  sendStatusToWindow(config)
+  sendStatusToWindow(path[0])
+  mainWindow.webContents.send('ConfigChange', config);
+  fs.writeJson(configPath, config, 'utf-8')
+  .then(() => {
+  })
+}
+
+//#endregion
+
 // #region 메인윈도우
 let mainWindow
 
@@ -44,6 +76,7 @@ function createWindow () {
     minWidth:440,
     webPreferences: {webSecurity: false}
   })
+  CreateConfig();
   mainWindowState.manage(mainWindow);
   if(process.env.NODE_ENV === 'development'){
     mainWindow.webContents.openDevTools()
@@ -88,7 +121,18 @@ const template = [
           shell.openItem(app.getPath('userData')+'/Dalsae/Image')
         },
         // accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I'//단축키
-      }
+      },
+      {
+        label: '데이터 폴더 선택',
+        click: function() {
+          const { dialog } = require('electron')
+          var dir = dialog.showOpenDialog(mainWindow, {
+            properties: ['openDirectory']
+        });
+        ConfigChange(dir);
+      },
+        // accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I'//단축키
+      },
     ]
   }
 ]

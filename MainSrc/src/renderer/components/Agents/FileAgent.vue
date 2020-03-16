@@ -13,54 +13,91 @@ export default {
   props: {
   },
   created() {
+		const { ipcRenderer } = require('electron');
+		ipcRenderer.on('ConfigPath',(event, path)=>{
+			if(path == undefined){
+				this.configPath = app.getPath('userData');
+			}
+			else{
+				this.configPath=path.path;
+			}
+			this.CheckFolders();
+			this.LoadAll();
+		});
+		ipcRenderer.on('ConfigChange',(event, path)=>{
+			this.ConfigChange(path);
+		});
+		this.EventBus.$on('LoadFiles', () => {
+      ipcRenderer.send('GetConfigPath');
+		});
+		this.EventBus.$on('SaveAccount',()=>{
+			this.SaveAccount();
+		});
+		this.EventBus.$on('SaveOption',()=>{
+			this.SaveOption();
+		});
+  
   },
   data() {
     return {
-			// accountPath:'Data/Switter.json',
-			// optionFilePath : "Data/option.json",
-			// hotkeyFilePath : "Data/hotkey.ini",
-
-			// dataFolderPath : "Data",
-			// skinFolderPath : "Skin",
-			// imageFolderPath : "Image",
-			// tempFolderPath : "Temp",
-			// soundFolderPath : "Sound",
+			configPath:'',
     };
   },
   computed:{
     selectAccount(){
       return this.$store.state.Account.selectAccount;
 		},
-		appPath(){
-			console.log(app)
-			return app.getPath('userData');
-		},
 		accountPath(){
-			return this.appPath + '/Dalsae/Data/Switter.json';
+			return this.configPath + '/Dalsae/Data/Switter.json';
 		},
 		optionFilePath(){
-			return this.appPath + "/Dalsae/Data/option.json"
+			return this.configPath + "/Dalsae/Data/option.json"
 		},
 		hotkeyFilePath(){
-			return this.appPath + "/Dalsae/Data/hotkey.ini"
+			return this.configPath + "/Dalsae/Data/hotkey.ini"
 		},
 		dataFolderPath(){
-			return this.appPath + "/Dalsae/Data"
+			return this.configPath + "/Dalsae/Data"
 		},
 		skinFolderPath(){
-			return this.appPath + "/Dalsae/Skin"
+			return this.configPath + "/Dalsae/Skin"
 		},
 		imageFolderPath(){
-		 return this.appPath + "/Dalsae/Image"
+		 return this.configPath + "/Dalsae/Image"
 		},
 		tempFolderPath(){
-			return this.appPath + "/Dalsae/Temp"
+			return this.configPath + "/Dalsae/Temp"
 		},
 		soundFolderPath(){
-			return this.appPath + "/Dalsae/Sound"
+			return this.configPath + "/Dalsae/Sound"
 		},
   },
   methods: {
+		ConfigChange(config){//config: object
+			const fs = require('fs-extra');
+			if(config==undefined){
+				this.configPath = app.getPath('userData');
+				this.CheckFolders();
+			}
+			else if(fs.existsSync(config.path)==false){
+				try{
+					fs.mkdirsSync(config.path);
+					this.configPath=config.path;
+				}
+				catch(err){//폴더 생성에 문제가 있는 거이므로 기본값으로 넣고 종료
+					console.log(err)
+					this.configPath = app.getPath('userData')
+				}
+			}
+			else{
+				var pathFrom = this.configPath;
+				this.configPath=config.path;
+				console.log('path from: '+pathFrom)
+				console.log('path to: '+this.configPath)
+				this.CheckFolders();
+				this.SaveAll();
+			}
+		},
 		CheckFolders(){
 			const fs = require('fs-extra');
 			if(fs.existsSync(this.dataFolderPath)==false){
@@ -112,19 +149,6 @@ export default {
 			}
 			this.EventBus.$emit('FileLoaded');
 		}
-	},
-	mounted: function() {//EventBus등록용 함수들
-    this.EventBus.$on('LoadFiles', () => {
-			this.CheckFolders();
-			this.LoadAll();
-		});
-		this.EventBus.$on('SaveAccount',()=>{
-			this.SaveAccount();
-		});
-		this.EventBus.$on('SaveOption',()=>{
-			this.SaveOption();
-		});
-  
 	},
 };
 </script>
