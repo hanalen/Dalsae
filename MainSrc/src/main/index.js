@@ -107,7 +107,7 @@ const template = [
      label: '파일',
      submenu: [
       {
-        label: '데이터 폴더 열기',
+        label: '설정 저장 폴더 열기',
         click: function() {
           const {shell} = require('electron') // deconstructing assignment
           shell.openItem(app.getPath('userData')+'/Dalsae')
@@ -123,7 +123,7 @@ const template = [
         // accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I'//단축키
       },
       {
-        label: '데이터 폴더 선택',
+        label: '설정 저장 폴더 위치 변경',
         click: function() {
           const { dialog } = require('electron')
           var dir = dialog.showOpenDialog(mainWindow, {
