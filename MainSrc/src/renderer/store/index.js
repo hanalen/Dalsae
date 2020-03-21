@@ -148,7 +148,7 @@ export default new Vuex.Store({
         if(id==undefined){//중복 넘기기
           TweetDataAgent.TweetInit(tweet);
           if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
-            console.log('block tweet')
+            // console.log('block tweet')
             return;
           }
           if(TweetDataAgent.CheckHighlight(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.userData.screen_name)){
@@ -176,7 +176,7 @@ export default new Vuex.Store({
                 TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
         
               }else{
-                console.log('tweet exists')
+                // console.log('tweet exists')
               }
             }
             func();
@@ -199,7 +199,7 @@ export default new Vuex.Store({
           TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
           console.log(resTweet)
         }else{
-          console.log('tweet exists')
+          // console.log('tweet exists')
         }
       });
     },
@@ -210,7 +210,7 @@ export default new Vuex.Store({
         if(id==undefined){//중복 넘기기
           TweetDataAgent.TweetInit(tweet);
           if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
-            console.log('block tweet')
+            // console.log('block tweet')
             return;
           }
           if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
@@ -230,7 +230,7 @@ export default new Vuex.Store({
           TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
 
         }else{
-          console.log('tweet exists')
+          // console.log('tweet exists')
         }
       });
     },
@@ -245,7 +245,7 @@ export default new Vuex.Store({
     UpdateUserInfo(state, userinfo){
       state.Account.accountList.forEach(function(account){
         if(account.user_id==userinfo.id_str){//계정 목록에 있는 데이터도 갱신 
-          console.log('userdata update')
+          // console.log('userdata update')
           account.userData=userinfo;
           return false;
         }
@@ -256,7 +256,7 @@ export default new Vuex.Store({
       var userinfo=payload.userinfo;
 
       if(userinfo==undefined||Object.keys(userinfo).length==0){
-        console.log('userinfo null');
+        // console.log('userinfo null');
         return;
       }  
       if(state.Account.accountList==undefined){//json파일이 없었을 경우 해당 list가 null
@@ -264,7 +264,7 @@ export default new Vuex.Store({
       }
       for(var i=0;i<state.Account.accountList.length;i++){
         if(state.Account.accountList[i].user_id==payload.userinfo.user_id){
-            console.log('이미 있다')
+            // console.log('이미 있다')
             return;
           }
       }
@@ -319,7 +319,7 @@ export default new Vuex.Store({
     Daehwa(state, tweet){
       var find=state.tweets.daehwa.find(x=>x.id_str==tweet.id_str);
       if(state.tweets.daehwa.find(x=>x.id_str==tweet.id_str)!=undefined){//중복 넘기기
-        console.log('dh exists!')
+        // console.log('dh exists!')
         return;
       }
       TweetDataAgent.TweetInit(tweet);
@@ -407,7 +407,7 @@ export default new Vuex.Store({
         }
         TweetDataAgent.TweetInit(tweet);
         if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
-          console.log('block tweet')
+          // console.log('block tweet')
           return;
         }
         if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
@@ -420,7 +420,7 @@ export default new Vuex.Store({
         state.tweets.mention.splice(index, 0, tweet);
 
       }else{
-        console.log('tweet exists')
+        // console.log('tweet exists')
       }
     },
     ShowMuteTweet(state, tweet){
@@ -435,7 +435,7 @@ export default new Vuex.Store({
       if(id==undefined){//중복 넘기기
         TweetDataAgent.TweetInit(tweet);
         if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
-          console.log('block tweet')
+          // console.log('block tweet')
           return;
         }
         if(TweetDataAgent.CheckHighlight(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.userData.screen_name)){
@@ -461,7 +461,7 @@ export default new Vuex.Store({
               state.tweets.mention.splice(index, 0, tweet);
       
             }else{
-              console.log('tweet exists')
+              // console.log('tweet exists')
             }
           }
           func();
@@ -481,7 +481,7 @@ export default new Vuex.Store({
         }
         state.tweets.home.splice(index, 0, tweet);
       }else{
-        console.log('tweet exists')
+        // console.log('tweet exists')
       }
     },
     AddQtTweet(state, vals){

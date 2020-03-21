@@ -51,7 +51,7 @@ export default {
 		},
     ResTweet(tweet){
 			// this.$store.dispatch('SendTweet', tweet);
-			console.log('send Tweet ok')
+			// console.log('send Tweet ok')
       console.log(tweet);
     },
     ResRetweet(tweet){
@@ -66,32 +66,32 @@ export default {
 			this.$store.dispatch('AddQtTweet', {'tweet': tweet, 'qtTweet': qtTweet});
 		},
 		ErrQT(err){
-			console.log('qt laod error')
+			// console.log('qt laod error')
 
 		},
 		ResUnRetweet(tweet){
 			this.$store.dispatch('UnRetweet', tweet);
-			console.log('un retweet ok')
+			// console.log('un retweet ok')
 			console.log(tweet);
 		},
 		ResFavoriet(tweet){
 			this.$store.dispatch('Favorite', tweet);
-			console.log('favo ok')
+			// console.log('favo ok')
 			console.log(tweet);
 		},
 		ResUnFavorite(tweet){
 			this.$store.dispatch('UnFavorite', tweet);
-			console.log('un favo ok')
+			// console.log('un favo ok')
 			console.log(tweet);
 		},
 		ResUnFavoriet(tweet){
 			this.$store.dispatch('UnFavorite', tweet);
-			console.log('un favo ok')
+			// console.log('un favo ok')
 			console.log(tweet);
 		},
 		ResDelete(tweet){
 			this.$store.dispatch('Delete', tweet);
-			console.log('delete twwet ok')
+			// console.log('delete twwet ok')
 			console.log(tweet);
 		},
     ErrRetweet(err, tweetID){

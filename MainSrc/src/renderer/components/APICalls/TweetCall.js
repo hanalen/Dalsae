@@ -19,11 +19,11 @@ async function Media(media, publickey, secretkey){
 			},
 			data:sendData
 		}).then((res)=>{
-			console.log('media ok');
+			// console.log('media ok');
 			console.log(res);
 			ret=res;
 		}).catch((err)=>{
-			console.log('media error!');
+			// console.log('media error!');
 			console.log(err);
 		});
 		return ret;
@@ -58,10 +58,10 @@ export default{
 			},
 			data:sendData
 		}).then((res)=>{
-			console.log('retweet ok');
+			// console.log('retweet ok');
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('send tweet error!');
+			// console.log('send tweet error!');
 			console.log(err);
 		});
 	},
@@ -84,7 +84,7 @@ export default{
 		}).then((res)=>{
 			callback(res.data, tweet);
 		}).catch((err)=>{
-			console.log('load qt error!');
+			// console.log('load qt error!');
 			console.log(err);
 			errCallback(err);
 		});
@@ -106,10 +106,10 @@ export default{
 			},
 			data:sendData
 		}).then((res)=>{
-			console.log('retweet ok');
+			// console.log('retweet ok');
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('retweet error!');
+			// console.log('retweet error!');
 			console.log(err);
 			errCallback(err);
 		});
@@ -131,10 +131,10 @@ export default{
 			},
 			data:sendData
 		}).then((res)=>{
-			console.log('un retweet ok');
+			// console.log('un retweet ok');
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('un retweet error!');
+			// console.log('un retweet error!');
 			console.log(err);
 			errCallback(err);
 		});
@@ -156,10 +156,10 @@ export default{
 			},
 			data:sendData
 		}).then((res)=>{
-			console.log('fav ok');
+			// console.log('fav ok');
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('fav error!');
+			// console.log('fav error!');
 			console.log(err);
 		});
 	},
@@ -180,10 +180,10 @@ export default{
 			},
 			data:sendData
 		}).then((res)=>{
-			console.log('un fav ok');
+			// console.log('un fav ok');
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('un fav error!');
+			// console.log('un fav error!');
 			console.log(err);
 		});
 	},
@@ -203,10 +203,10 @@ export default{
 			},
 			data:sendData
 		}).then((res)=>{
-			console.log('delete tweet ok');
+			// console.log('delete tweet ok');
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('delete tweet error!');
+			// console.log('delete tweet error!');
 			console.log(err);
 		});
 	},

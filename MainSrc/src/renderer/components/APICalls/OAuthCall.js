@@ -36,7 +36,7 @@ export default{
       shell.openExternal(url);
 			callback(arrOAuth);
 		}).catch((err)=>{
-			console.log('get token error!');
+			// console.log('get token error!');
 			console.log(err);
 		});
 	},
@@ -67,7 +67,7 @@ export default{
 			// console.log(arrOAuth);
 			callback(arrOAuth);
 		}).catch((err)=>{
-			console.log('get token error!');
+			// console.log('get token error!');
 			console.log(err);
 		});
 	}

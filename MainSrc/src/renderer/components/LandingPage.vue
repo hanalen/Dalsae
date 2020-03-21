@@ -115,7 +115,7 @@ export default {
         this.ClosePopup();
     });
     this.EventBus.$on('FileLoaded',()=>{
-      console.log('file loaded')
+      // console.log('file loaded')
       this.StartDalsae();
     });
     this.EventBus.$on('OpenUIOption', ()=>{

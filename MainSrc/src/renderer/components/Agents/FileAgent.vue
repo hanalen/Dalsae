@@ -92,8 +92,8 @@ export default {
 			else{
 				var pathFrom = this.configPath;
 				this.configPath=config.path;
-				console.log('path from: '+pathFrom)
-				console.log('path to: '+this.configPath)
+				// console.log('path from: '+pathFrom)
+				// console.log('path to: '+this.configPath)
 				this.CheckFolders();
 				this.SaveAll();
 			}
@@ -125,7 +125,7 @@ export default {
 			var account = this.$store.state.Account;
 			fs.writeJson(this.accountPath, account, 'utf-8')
 			.then(() => {
-				console.log('success!')
+				// console.log('success!')
 			})
 
 		},
@@ -134,7 +134,7 @@ export default {
 			var option = this.$store.state.DalsaeOptions;
 			fs.writeJson(this.optionFilePath, option, 'utf-8')
 			.then(() => {
-				console.log('option save success!')
+				// console.log('option save success!')
 			})
 		},
   	LoadAll(){

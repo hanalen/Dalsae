@@ -109,7 +109,6 @@ export default {
 			this.KeyDown(key);
 		});
     ipcRenderer.on('hide', ()=>{
-			console.log('hide')
 			this.Clear();
     });
 		this.EventBus.$on('Save', (id)=>{//id: 트윗 id
@@ -122,7 +121,6 @@ export default {
 		});
 	},
   mounted:function(){
-		console.log(this.tweet);
 	},
 	mounted(){
 	},

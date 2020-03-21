@@ -111,10 +111,10 @@ export default {
         })
         .on('end', function() {
 					file.end()
-					console.log('down ok~')
+					// console.log('down ok~')
         })
         .on('error', function (err) {
-					console.log('img down error!!!')
+					// console.log('img down error!!!')
 					console.log(err)
         })
     	})
@@ -184,19 +184,16 @@ export default {
 			}
 		},
 		KeyDownEsc(e){
-			console.log('esc~~~')
 			this.EventBus.$emit('HideTweetImage')
 		},
 		KeyDown(e){
-			console.log(e);
-			console.log('esc~~~')
 			// this.EventBus.$emit('HideTweetImage')
 		},
 		CloseClick(e){
 			this.EventBus.$emit('HideTweetImage');
 		},
 		SetTweet(tweet){
-			console.log(JSON.stringify(tweet))
+			// console.log(JSON.stringify(tweet))
 			this.tweet=tweet;
 		},
 	}

@@ -10,7 +10,7 @@ export default{
 		obj.full_text=tweet.full_text;
 		obj.isMuted=tweet.isMuted;
 		obj.created_at=tweet.created_at;
-		
+
 		return obj;
 	},
 	CreateNonResponsiveTweet(resTweet, tweet){//resTweet: 동적 변수 할당 된 트윗, tweet: 원본 트윗
@@ -93,7 +93,7 @@ export default{
 		try{
 			for(var i=0;i<muteOption.highlight.length;i++){
 				if(tweet.orgTweet.full_text.toLowerCase().indexOf(muteOption.highlight[i].toLowerCase())>-1){
-					console.log('high!')
+					// console.log('high!')
 					return true;
 				}
 			}
@@ -106,9 +106,9 @@ export default{
 			}
 		}
 		catch(e){
-			console.log('err high')
-			console.log(tweet);
-			console.log(muteOption)
+			// console.log('err high')
+			// console.log(tweet);
+			// console.log(muteOption)
 		}
 		
 		return false;

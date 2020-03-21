@@ -22,7 +22,7 @@ export default{
 			// console.log('get userinfo ok');
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('get userinfo error!');
+			// console.log('get userinfo error!');
 			console.log(err);
 		});
 	},
@@ -47,7 +47,7 @@ export default{
 			// console.log(res);
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('get home error!');
+			// console.log('get home error!');
 			console.log(err);
 		});
 	},
@@ -60,7 +60,7 @@ export default{
 		// arr['since_id']=((sinceId== undefined || sinceId==0) ? 0 : sinceId);
 		var url = 'https://api.twitter.com/1.1/statuses/mentions_timeline.json';
 		var callurl= OAuth.GetURL(url, method, arr);
-		console.log('url: '+url)
+		// console.log('url: '+url)
 		axios({
 			method:method,
 			url:callurl,
@@ -71,7 +71,7 @@ export default{
 		}).then((res)=>{
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('get mention error!');
+			// console.log('get mention error!');
 			console.log(err);
 		});
 	},
@@ -93,7 +93,7 @@ export default{
 		}).then((res)=>{
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('load daehwa  error!');
+			// console.log('load daehwa  error!');
 			console.log(err);
 			errCallback(err);
 		});
@@ -121,7 +121,7 @@ export default{
 		}).then((res)=>{
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('get following list error!');
+			// console.log('get following list error!');
 			console.log(err);
 			errCallback(err, cursor);//리밋일 경우에 대비 해서 cursor도 같이 에러 콜백
 		});
@@ -138,7 +138,7 @@ export default{
 		arr['count']=200;//max 200
 		var url = 'https://api.twitter.com/1.1/followers/list.json';
 		var callurl= OAuth.GetURL(url, method, arr);
-		console.log('url: '+url)
+		// console.log('url: '+url)
 		axios({
 			method:method,
 			url:callurl,
@@ -149,7 +149,7 @@ export default{
 		}).then((res)=>{
 			callback(res.data);
 		}).catch((err)=>{
-			console.log('get follower list error!');
+			// console.log('get follower list error!');
 			console.log(err);
 			errCallback(err, cursor);//리밋일 경우에 대비 해서 cursor도 같이 에러 콜백
 		});

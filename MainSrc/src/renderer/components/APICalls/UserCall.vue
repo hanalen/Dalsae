@@ -143,14 +143,14 @@ export default {
     },
     ErrResDaewha(err){
       this.isLoadingDaehwa = false;
-      console.log('err load daehwa');
+      // console.log('err load daehwa');
       console.log(err);
     }
   },
   mounted: function() {//EventBus등록용 함수들
     this.EventBus.$on('StartDalsae', () => {
       this.StartDalsae();
-      console.log('start dalsae recv')
+      // console.log('start dalsae recv')
       this.EventBus.$emit('StartStreaming');
     });
     this.EventBus.$on('ReqHome', () => {
