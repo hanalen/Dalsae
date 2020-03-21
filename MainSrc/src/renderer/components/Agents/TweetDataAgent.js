@@ -1,4 +1,30 @@
 export default{
+	CreateResponsiveTweet(tweet){//vuex메모리 과부하를 방지하기 위해 동적 반응(watch)해야 할 변수만 할당 후 리턴 합니다.
+		var obj=new Object();
+		obj.isReaded=tweet.isReaded;
+		obj.isDelete=tweet.isDelete;
+		obj.isFocus=tweet.isFocus;
+		obj.qtTweet=tweet.qtTweet;
+		obj.id_str=tweet.id_str;
+		obj.id=tweet.id;
+		obj.full_text=tweet.full_text;
+		obj.isMuted=tweet.isMuted;
+		obj.created_at=tweet.created_at;
+		
+		return obj;
+	},
+	CreateNonResponsiveTweet(resTweet, tweet){//resTweet: 동적 변수 할당 된 트윗, tweet: 원본 트윗
+		resTweet.orgTweet=tweet.orgTweet;
+		resTweet.orgUser=tweet.orgUser;
+		if(tweet.retweeted_status!=undefined){
+			resTweet.user=tweet.user;
+		}
+		resTweet.user=tweet.user;
+		resTweet.entities=tweet.entities;
+		resTweet.id=tweet.id;
+		resTweet.id_str=tweet.id_str;
+		resTweet.retweeted_status=tweet.retweeted_status;
+	},
 	GetTweetIndex(tweet, listTweet){
 		var index=0;
 		for(var i=0;i<listTweet.length;i++){

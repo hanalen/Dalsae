@@ -171,7 +171,9 @@ export default new Vuex.Store({
                 }else{
                   index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.mention);
                 }
-                state.tweets.mention.splice(index, 0, tweet);
+                var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
+                state.tweets.mention.splice(index, 0, resTweet);
+                TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
         
               }else{
                 console.log('tweet exists')
@@ -192,7 +194,10 @@ export default new Vuex.Store({
           else{
             index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
           }
-          state.tweets.home.splice(index, 0, tweet);
+          var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
+          state.tweets.home.splice(index, 0, resTweet);
+          TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
+          console.log(resTweet)
         }else{
           console.log('tweet exists')
         }
@@ -220,7 +225,9 @@ export default new Vuex.Store({
           else{
             index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.mention);
           }
-          state.tweets.mention.splice(index, 0, tweet);
+          var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
+          state.tweets.mention.splice(index, 0, resTweet);
+          TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
 
         }else{
           console.log('tweet exists')

@@ -149,21 +149,9 @@ export default {
       this.$store.dispatch('ShowMuteTweet', this.tweet);
     },
     propic() {
-      var user=undefined;
-      if(this.tweet.retweeted_status!=undefined){//리트윗일 경우 인장 표시가 다름
-        user=this.tweet.retweeted_status.user;
-      }
-      else{
-        user=this.tweet.user;
-      }
-      if(user==undefined){
-        return '';
-      }
-      else{
-        return this.option.isBigPropic
-          ? user.profile_image_url_https.replace("_normal", "_bigger")
-          : user.profile_image_url_https;
-      }
+      return this.option.isBigPropic
+        ? this.tweet.orgUser.profile_image_url_https.replace("_normal", "_bigger")
+        : this.tweet.orgUser.profile_image_url_https;
     },
     showpreview() {
       this.preview = true;
