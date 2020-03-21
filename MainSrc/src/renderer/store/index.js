@@ -197,7 +197,7 @@ export default new Vuex.Store({
           var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
           state.tweets.home.splice(index, 0, resTweet);
           TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
-          console.log(resTweet)
+          // console.log(resTweet)
         }else{
           // console.log('tweet exists')
         }

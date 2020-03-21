@@ -34,7 +34,7 @@ function StringToBase64(str){//string to base64
 }
 
 function ReqHome(){
-	console.log('req home');
+	// console.log('req home');
 	// OAuthRefresh();
 }
 
@@ -67,7 +67,7 @@ function CalcSignature(arr, param, method, url, secretKey){
 	});
 
 	str = str.substring(0, str.length - 1 );//마지막& 지우기
-	console.log('str: '+str);
+	// console.log('str: '+str);
 	var baseStr=CalcBaseString(method, url, str);
 
 	//Keys.ConsumerSecretKey
@@ -192,7 +192,7 @@ export default{
 		// str+=' oauth_callback="oob"';
 
 		str = str.substring(0, str.length - 1 );//마지막, 지우기
-		console.log('header: '+str);
+		// console.log('header: '+str);
 		return str;
 	},
 }
