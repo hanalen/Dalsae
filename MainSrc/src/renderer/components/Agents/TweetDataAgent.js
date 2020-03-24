@@ -10,6 +10,7 @@ export default{
 		obj.full_text=tweet.full_text;
 		obj.isMuted=tweet.isMuted;
 		obj.created_at=tweet.created_at;
+		obj.isHighlight=tweet.isHighlight;
 
 		return obj;
 	},
