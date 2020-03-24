@@ -33,25 +33,37 @@ export default {
       text:'',
       reader:undefined,
       decoder: new TextDecoder(),
+      controller:undefined,//stop하기 위한 컨트롤러
     };
   },
   methods: {
     StartStreaming(){
+      this.reader=undefined;
+      this.text='';
+      this.controller = new AbortController();
+      var signal = this.controller.signal;
+
       var method='GET';
       var arr=[];
       var orgUrl='https://userstream.twitter.com/1.1/user.json'
       var url = 'http://127.0.0.1:8811/userstream.twitter.com/1.1/user.json';
+      var signal=this.signal;
       fetch(url,
         {
           method: 'GET',
           headers: {
             'Content-Type':'application/x-www-form-urlencoded;encoding=utf-8',
             'Authorization': OAuth.GetHeader(arr, method, orgUrl, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret)
-          }
+          },
+          signal
         })
         .then(this.SteamingResponse)
         .then(this.StreamingClosed)
-        .catch(this.StreamingError);
+        .catch(this.StreamingError)
+    },
+    StopStreaming(){
+      console.log('stop streaming')
+      this.controller.abort();
     },
     SteamingResponse(response) {
       this.text='';
@@ -61,14 +73,14 @@ export default {
     StreamingClosed(result) {
       console.log('Streaming Closed!', result)
       setTimeout(() => {
-        this.StartStreaming2();
+        this.StartStreaming();
       }, 3000);
     },
     StreamingError(err) {
       console.log('Streaming Error')
       console.error(err)
       setTimeout(() => {
-        this.StartStreaming2();
+        this.StartStreaming();
       }, 3000);
     },
     ReadStreaming() {
@@ -76,11 +88,18 @@ export default {
     },
     AppendJson(result) {
       var chunk = this.decoder.decode(result.value || new Uint8Array, {stream: !result.done});
-      console.log(chunk)
-      console.log(this.text)
-      if(chunk!=='\r\n'){
-        this.text+=chunk;
-        this.ParseJson(this.text);
+      if(chunk!=='\r\n'){//keep-alive 패킷이 아닌 게 들어 왔을 때에만 동작
+        this.text += chunk;
+        if(this.text.charAt(this.text.length - 1)=='\n'){//패킷의 마지막 문자는 \r\n, 완성 된 json일 경우에만 파싱 시도
+          var listJson = this.text.split('\r\n');//json 끝문자로 쪼개서 parse시도한다
+          if(listJson.length>2){
+            console.log(listJson)
+          }
+          for(var i=0;i<listJson.length;i++){
+            this.ParseJson(listJson[i]);
+          }
+          this.text='';
+        }
       }
       if (result.done) {
         return this.text;
@@ -90,15 +109,15 @@ export default {
     },
     ParseJson(json){
       if(json.length<10) return;//이상 패킷으로 예상 됨
+      
       try{
         var tweet = JSON.parse(json);
-        this.text='';
-        console.log(tweet);
         if(tweet.id_str!=undefined){
           this.$store.dispatch('AddStreaming', tweet);
         }
       }
       catch(ex){
+        console.log('-------------------------------------------------------------------------------------------------------')
         console.log(ex);
         console.log(json);
       }
