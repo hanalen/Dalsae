@@ -92,9 +92,6 @@ export default {
         this.text += chunk;
         if(this.text.charAt(this.text.length - 1)=='\n'){//패킷의 마지막 문자는 \r\n, 완성 된 json일 경우에만 파싱 시도
           var listJson = this.text.split('\r\n');//json 끝문자로 쪼개서 parse시도한다
-          if(listJson.length>2){
-            console.log(listJson)
-          }
           for(var i=0;i<listJson.length;i++){
             this.ParseJson(listJson[i]);
           }
