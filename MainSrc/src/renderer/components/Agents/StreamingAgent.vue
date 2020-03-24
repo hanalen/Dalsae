@@ -4,11 +4,11 @@
 </template>
 
 <script>
+//스트리밍 예제 코드 https://gist.github.com/jfsiii/034152ecfa908cf66178
 import {EventBus} from '../../main.js';
 import APIKey from '../../APIKey.js'
 import OAuth from '../../oauth.js'
 import axios from 'axios'
- import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
 import { ipcMain } from 'electron';
 import FileStream from 'fs-extra'
 export default {
@@ -21,105 +21,86 @@ export default {
     }
   },
   created() {
-	  
-
     this.EventBus.$on('StopStreaming',()=>{
       this.StopStreaming();
     });
     this.EventBus.$on('StartStreaming',()=>{
-      this.ExecBridge();
       this.StartStreaming();
     });
   },
   data() {
     return {
-      connection:undefined,
+      text:'',
+      reader:undefined,
+      decoder: new TextDecoder(),
     };
   },
   methods: {
-    ExecBridge(){
-      if(process.env.NODE_ENV === 'development') return;
-      var exec = require('child_process').execFile;
-
-      exec('StreamingBridge/netcoreapp3.1/StreamingBridge.exe', function(err, data) {  
-        console.log(err)
-        console.log(data.toString());                       
-      });  
-    },
-    UnZip(packet){
-      const { deflate, unzip } = require('zlib');
-      const buffer = Buffer.from(packet, 'base64');
-      unzip(buffer, (err, buffer) => {
-        if (err) {
-        }
-        var json = buffer.toString();
-        this.ParseJson(json);
-      });
-    },
-    ConnectStreamingHub(){
-      var vThis=this;
-      this.connection = new HubConnectionBuilder()
-        .withUrl('http://localhost:5001/TweetHub', { accessTokenFactory: () => 'administrator' })
-        .configureLogging(LogLevel.Information)
-        .build();
-      this.connection.start().then(function () {
-        console.log('connect tweet hub!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        vThis.SendKeys();
-        vThis.SetStreaming();
-      }).catch(function(err){
-        console.log('error~~~~')
-        console.log(err);
-        setTimeout(()=>{
-          vThis.ConnectStreamingHub();
-        },3000);
-      });
-    },
-    SendKeys(){
-      this.connection.invoke("Keys", this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret,
-      APIKey.ConsumerKey, APIKey.ConsumerSecretKey)
-        .then(function()
-        {
-          
-        })
-        .catch(err => console.error(err.toString()));
-      
-    },
     StartStreaming(){
-      if(this.connection){//이미 연결이 성립 되어 있을 경우 key만 update
-        this.SendKeys();
+      var method='GET';
+      var arr=[];
+      var orgUrl='https://userstream.twitter.com/1.1/user.json'
+      var url = 'http://127.0.0.1:8811/userstream.twitter.com/1.1/user.json';
+      fetch(url,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type':'application/x-www-form-urlencoded;encoding=utf-8',
+            'Authorization': OAuth.GetHeader(arr, method, orgUrl, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret)
+          }
+        })
+        .then(this.SteamingResponse)
+        .then(this.StreamingClosed)
+        .catch(this.StreamingError);
+    },
+    SteamingResponse(response) {
+      this.text='';
+      this.reader = response.body.getReader()
+      return this.ReadStreaming();
+    },
+    StreamingClosed(result) {
+      console.log('Streaming Closed!', result)
+      setTimeout(() => {
+        this.StartStreaming2();
+      }, 3000);
+    },
+    StreamingError(err) {
+      console.log('Streaming Error')
+      console.error(err)
+      setTimeout(() => {
+        this.StartStreaming2();
+      }, 3000);
+    },
+    ReadStreaming() {
+      return this.reader.read().then(this.AppendJson);
+    },
+    AppendJson(result) {
+      var chunk = this.decoder.decode(result.value || new Uint8Array, {stream: !result.done});
+      console.log(chunk)
+      console.log(this.text)
+      if(chunk!=='\r\n'){
+        this.text+=chunk;
+        this.ParseJson(this.text);
       }
-      else{
-        this.ConnectStreamingHub();
+      if (result.done) {
+        return this.text;
+      } else {
+        return this.ReadStreaming();
       }
-    },
-    StopStreaming(){
-      this.connection.invoke("StopStreaming")
-      .then(function()
-      {
-
-      })
-      .catch(err => console.error(err.toString()));
-    },
-    SetStreaming(){
-      this.connection.onclose(()=>{
-        console.log('ws disconnected!');
-        this.EventBus.$emit('WebSocketDisconnected');
-        this.ConnectStreamingHub();
-      });
-      this.RecvStreaming(this.connection);
-    },
-    RecvStreaming(){
-      this.connection.on("ResponseStreaming", (packet) => {
-        this.UnZip(packet);
-      });
     },
     ParseJson(json){
       if(json.length<10) return;//이상 패킷으로 예상 됨
-      var tweet = JSON.parse(json);
-      console.log(tweet);
-      if(tweet.id_str!=undefined){
-        // console.log(tweet);
-        this.$store.dispatch('AddStreaming', tweet);
+      try{
+        var tweet = JSON.parse(json);
+        this.text='';
+        console.log(tweet);
+        if(tweet.id_str!=undefined){
+          this.$store.dispatch('AddStreaming', tweet);
+        }
+      }
+      catch(ex){
+        console.log(ex);
+        console.log(json);
       }
     },
 	},
