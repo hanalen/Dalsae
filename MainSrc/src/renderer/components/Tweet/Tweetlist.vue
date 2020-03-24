@@ -88,7 +88,11 @@ export default {
   },
   watch: { 
     tweetLength: function(newVal, oldVal){//스트리밍으로 인해 트윗이 추가 되면 index를 올려줘야함
+      if(this.isShow==false && this.selectIndex==0) return;//최초 로딩 시 문제가 있어서 회피 목적
       this.selectIndex += newVal - oldVal;//1개만 바뀌지 않을 수 있으니 - 계산
+      if(this.selectIndex>=this.tweets.length){
+        this.selectIndex=this.tweets.length - 1;
+      }
     }
   },
   methods:{
@@ -139,7 +143,7 @@ export default {
       var nowItem=undefined;
       if(index<0) index = 0;
       else if(index>=this.tweets.length) index--;
-      for(var i=0;child.length;i++){
+      for(var i=0;i<child.length;i++){
         if(child[i].id==this.tweets[index].id){
           nowItem=child[i];
           break;
