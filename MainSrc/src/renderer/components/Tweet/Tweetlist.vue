@@ -126,16 +126,8 @@ export default {
       if(e)
         e.preventDefault();
       var id = this.tweets[this.selectIndex].id_str;
-      if(this.selectIndex==this.tweets.length-1){//end키로 이동 시 한타임 안 맞음
-        this.$refs.scroll.scrollToBottom();//스크롤 패널 맨아래로 이동 후 트윗 포커스
-        this.$nextTick(()=>{
-          this.EventBus.$emit('TweetFocus', id);//트윗의 실제 포커스는 emit
-        })
-      }
-      else{
-        this.ScrollToTweet(this.selectIndex);
-        this.EventBus.$emit('TweetFocus', id);//트윗의 실제 포커스는 emit
-      }
+      this.ScrollToTweet(this.selectIndex);
+      this.EventBus.$emit('TweetFocus', id);//트윗의 실제 포커스는 emit
     },
     ScrollToTweet(index){//focus 되는 트윗 index에 맞게끔 스크롤을 이동 시키는 기능
       var scroller = this.$refs.scroll.$refs.scroller;
@@ -149,8 +141,10 @@ export default {
           break;
         }
       }
-      if(nowItem==undefined) return;//focus 할 VirtualScrollItem을 못 찾음
-
+      if(nowItem==undefined){//focus 할 VirtualScrollItem이 스크롤 밖에 있을 경우
+        this.$refs.scroll.scrollToItem(index);
+        return;
+      }
       var tweetPos = nowItem.$el.getBoundingClientRect();
       var panelPos = this.$refs.panel.getBoundingClientRect();
       var tweetBottom = tweetPos.y + tweetPos.height;
