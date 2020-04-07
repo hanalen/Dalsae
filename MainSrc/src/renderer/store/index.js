@@ -173,6 +173,9 @@ export default new Vuex.Store({
                 }
                 var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
                 state.tweets.mention.splice(index, 0, resTweet);
+                if(state.tweets.mention.length>1600){
+                  state.tweet.mention.splice(state.tweets.mention.length-1,1);
+                }
                 TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
         
               }else{
@@ -197,6 +200,9 @@ export default new Vuex.Store({
           var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
           state.tweets.home.splice(index, 0, resTweet);
           TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
+          if(state.tweets.home.length>1600){
+            state.tweet.home.splice(state.tweets.home.length-1,1);
+          }
           // console.log(resTweet)
         }else{
           // console.log('tweet exists')
@@ -228,7 +234,9 @@ export default new Vuex.Store({
           var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
           state.tweets.mention.splice(index, 0, resTweet);
           TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
-
+          if(state.tweets.mention.length>1600){
+            state.tweet.mention.splice(state.tweets.mention.length-1,1);
+          }
         }else{
           // console.log('tweet exists')
         }
@@ -461,6 +469,9 @@ export default new Vuex.Store({
               var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
               state.tweets.mention.splice(index, 0, resTweet);
               TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
+              if(state.tweets.mention.length>1600){
+                state.tweet.mention.splice(state.tweets.mention.length-1,1);
+              }
             }else{
               // console.log('tweet exists')
             }
@@ -483,6 +494,9 @@ export default new Vuex.Store({
         var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
         state.tweets.home.splice(index, 0, resTweet);
         TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
+        if(state.tweets.home.length>1600){
+          state.tweet.home.splice(state.tweets.home.length-1,1);
+        }
       }else{
         // console.log('tweet exists')
       }
