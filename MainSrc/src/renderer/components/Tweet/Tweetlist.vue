@@ -181,12 +181,14 @@ export default {
       }
     },
     End(e){
+      this.ScrollToTweet(this.tweets.length-1)
       return;//홈엔드 로직에 문제 있어 일단 막음
       if(this.tweets===undefined) return;
       this.selectIndex=this.tweets.length-1;
       this.FocusTweet(e);
     },
     Home(e){
+      this.ScrollToTweet(0);
       return;//홈엔드 로직에 문제 있어 일단 막음
       if(this.tweets===undefined) return;
       this.selectIndex=0;
