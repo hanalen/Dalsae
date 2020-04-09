@@ -21,7 +21,9 @@ export default {
     ipcRenderer.on('WindowFocused', (event)=>{
       this.EventBus.$emit('FocusInput');
     });
-
+    ipcRenderer.on('Hotkey', (event, key)=>{
+      console.log('hotkey: '+key);
+    })
   },
   data() {
     return {
