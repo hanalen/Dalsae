@@ -33,8 +33,6 @@ function CreateConfig(){
     config = fs.readJsonSync(configPath, { throws: false });
   }
   ipcMain.on('GetConfigPath', ()=>{//FileAgent에서 설정을 요청하면 설정 send
-    sendStatusToWindow('called configPath')
-    sendStatusToWindow(config)
     mainWindow.webContents.send('ConfigPath', config);
   });
 }
@@ -44,9 +42,6 @@ function ConfigChange(path){//설정 바뀌면 FileAgent에 쏴줘야함
   const fs = require('fs-extra');//경로 설정 파일 찾기
   config=new Object();
   config.path=path[0];
-  sendStatusToWindow('config change')
-  sendStatusToWindow(config)
-  sendStatusToWindow(path[0])
   mainWindow.webContents.send('ConfigChange', config);
   fs.writeJson(configPath, config, 'utf-8')
   .then(() => {
@@ -89,32 +84,33 @@ function LoadHotkey(){
   var path= config == undefined ? app.getPath('userData') : config.path;
   const fs = require('fs-extra');
   if(fs.existsSync(path+'/Dalsae/Data/Hotkey.json')){
-    var newHotkey = fs.readJsonSync(config.path+'/Dalsae/Data/Hotkey.json', { throws: false });
-    if(Object.keys(newHotkey).length==23){//단축키 값 정상 여부 확인
-      hotkey=newHotkey;
+    var newHotkey = fs.readJsonSync(path+'/Dalsae/Data/Hotkey.json', { throws: false });
+    if(newHotkey){//null check..
+      if(Object.keys(newHotkey).length==23){//단축키 값 정상 여부 확인
+        hotkey=newHotkey;
+      }
     }
   }
   KeyRegister(mainWindow)
 }
 function SaveHotkey(newHotkey){
+  var path= config == undefined ? app.getPath('userData') : config.path;
   hotkey=newHotkey;
   const fs = require('fs-extra');
-  fs.writeJson(config.path+'/Dalsae/Data/Hotkey.json', hotkey, 'utf-8')
+  fs.writeJson(path+'/Dalsae/Data/Hotkey.json', hotkey, 'utf-8')
   .then(() => {
   })
+  KeyRegister(mainWindow)
 }
 function KeyRegister(win){
   const shortcut = require('electron-localshortcut');
   shortcut.unregisterAll(win);//단축키가 바뀔 경우 기존 단축키 전부 지우고 새로 등록을 진행 한다.
   Object.keys(hotkey).forEach((key)=>{
-    sendStatusToWindow('hotkey !!!!!!!')
-    sendStatusToWindow(hotkey[key])
     var str='';
     str += hotkey[key].isCtrl ? 'Ctrl+' : '';
     str += hotkey[key].isAlt ? 'Alt+' : '';
     str += hotkey[key].isShift ? 'Shift+' : '';
     str += hotkey[key].key;
-    sendStatusToWindow('hotkey: '+str)
     shortcut.register(win, str, ()=>{
       win.webContents.send('Hotkey', key);
     })
@@ -133,7 +129,6 @@ function createWindow () {
     defaultWidth: 600,
     defaultHeight: 800
   });
-  sendStatusToWindow(mainWindowState)
   mainWindow = new BrowserWindow({
     'x': mainWindowState.x,
     'y': mainWindowState.y,
@@ -304,8 +299,6 @@ ipcMain.on('OpenMuteOptionPopup', (event, option)=>{
 })
 
 ipcMain.on('MuteOptionSave', (event,muteOption)=>{
-  sendStatusToWindow('muteOption Save')
-  sendStatusToWindow(muteOption);
   mainWindow.webContents.send('MuteOptionSave', muteOption)
 });
 
@@ -313,6 +306,34 @@ ipcMain.on('CloseMuteOptionPopup',()=>{
   muteOptionWin.close();
 });
 
+//#endregion
+
+//#region 단축키 팝업
+var hotkeyWindow=null;
+
+ipcMain.on('OpenHotkeyOptionPopup', (event)=>{
+  if(hotkeyWindow) return;//2번 생성 막기
+  hotkeyWindow = new BrowserWindow({show:false,width:720, height:590, devTools :false});
+  const path = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:9080/#/HotkeyOption'
+        : `file://${__dirname}/index.html#HotkeyOption`
+        hotkeyWindow.loadURL(path);
+  hotkeyWindow.on('ready-to-show', ()=>{
+    hotkeyWindow.webContents.send('Hotkey', hotkey)
+    hotkeyWindow.show();
+  })
+  hotkeyWindow.on('closed', (e)=>{
+    hotkeyWindow=null;
+  });
+})
+
+ipcMain.on('HotkeyOptionSave', (event, newHotkey)=>{
+  SaveHotkey(newHotkey);
+});
+
+ipcMain.on('CloseHotkeyOptionPopup',()=>{
+  hotkeyWindow.close();
+});
 //#endregion
 
 //#region 자동업데이트

@@ -156,9 +156,14 @@ export default {
     };
   },
   created: function() {
-    this.$nextTick(()=>{
-      this.SetHotkey();
-    })
+		var ipcRenderer = require('electron').ipcRenderer;
+		ipcRenderer.on('Hotkey', (event, hotkey) => {
+			this.hotkey=hotkey;
+			this.$nextTick(()=>{
+				this.SetHotkey();
+			})
+		});
+    
   },
   methods: {
     SetHotkey(){//키 읽은 거 출력
@@ -202,7 +207,10 @@ export default {
         obj.isShift= str.indexOf('Shift') > -1 
         obj.key = str.replace('Ctrl+','').replace('Shift+','').replace('Alt+')
         hotkey[key]=obj;
-      })
+			})
+			var ipcRenderer = require('electron').ipcRenderer;
+			ipcRenderer.send('HotkeyOptionSave', hotkey)
+			ipcRenderer.send('CloseHotkeyOptionPopup');
     }
   },
 };
@@ -210,6 +218,7 @@ export default {
 
 <style lang="scss" scoped>
 .hotkey-popup{
+	font-size: 14px;
   .hotkey-area{
     display: flex;
     .left{

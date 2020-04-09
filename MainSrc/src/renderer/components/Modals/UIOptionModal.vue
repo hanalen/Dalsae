@@ -82,7 +82,11 @@
     <div class="custom-control custom-switch">
       <b-button variant="primary" @click="ClickMuteOption">새창으로 여는 것이야</b-button>
     </div>
-
+    <br/>
+    <h4>단축키 설정</h4>
+    <div class="custom-control custom-switch">
+      <b-button variant="primary" @click="ClickHotkeyOption">새창으로 여는 것이야</b-button>
+    </div>
   </div>
 </template>
 
@@ -127,6 +131,10 @@ export default {
     ClickMuteOption(e){
       var ipcRenderer = require('electron').ipcRenderer;
       ipcRenderer.send('OpenMuteOptionPopup', this.$store.state.DalsaeOptions.muteOptions);
+    },
+    ClickHotkeyOption(e){
+      var ipcRenderer = require('electron').ipcRenderer;
+      ipcRenderer.send('OpenHotkeyOptionPopup');
     },
   },
   created: function(){

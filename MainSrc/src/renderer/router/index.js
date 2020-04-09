@@ -20,14 +20,12 @@ export default new Router({
       path: '/MuteOption',
       name:'MuteOption',
       component: require('@/components/Modals/MuteOptionPopup').default, 
-      // props: (route) => ({ query: route.query.id }) 
-   },
-    // {
-    //   path:'/image',
-    //   name:'image',
-    //   component:require('@/components/Modals/ImageModal').default,
-    //   props:true,
-    // },
+    },
+    {
+      path: '/HotkeyOption',
+      name:'HotkeyOption',
+      component: require('@/components/Modals/HotkeyPopup').default, 
+    },
     {
       path: '*',
       redirect: '/'
