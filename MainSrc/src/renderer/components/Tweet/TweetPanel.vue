@@ -126,7 +126,7 @@ export default {
         var tweet=this.selectPanel.GetSelectTweet();
         this.EventBus.$emit('Retweet', tweet);
       }
-      else if(hotkeyType==103){//g, 이미지열기
+      else if(hotkeyType=='showImage'){//g, 이미지열기
         var tweet=this.selectPanel.GetSelectTweet();
         var ipcRenderer = require('electron').ipcRenderer;
         ipcRenderer.send('child', tweet, this.$store.state.DalsaeOptions.uiOptions);
