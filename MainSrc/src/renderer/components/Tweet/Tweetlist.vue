@@ -1,5 +1,5 @@
 <template>
-  <div ref="panel" tabindex="-1" class="tweet-list" @keydown="KeyDown" @keydown.up="ArrowUp" @keydown.down="ArrowDown">
+  <div ref="panel" tabindex="-1" class="tweet-list" @keydown.up="ArrowUp" @keydown.down="ArrowDown">
     <loading v-if="isLoading" name="loadingTop"/>
     <DynamicScroller ref="scroll"
     :items="tweets"
@@ -112,9 +112,6 @@ export default {
       if(name==this.panelName){
         this.isLoading=loading;
       }
-    },
-    KeyDown(e){
-      this.EventBus.$emit('TweetKeyDown', e);
     },
     ArrowUp(e){
       this.Prev(e);

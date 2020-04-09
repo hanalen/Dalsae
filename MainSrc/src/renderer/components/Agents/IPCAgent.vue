@@ -22,7 +22,7 @@ export default {
       this.EventBus.$emit('FocusInput');
     });
     ipcRenderer.on('Hotkey', (event, key)=>{
-      console.log('hotkey: '+key);
+      this.EventBus.$emit('HotkeyDown', key)
     })
   },
   data() {
