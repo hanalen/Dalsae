@@ -9,7 +9,7 @@
 			</div>
 			<img class="small-propic" v-bind:src="propic()" v-if="option.isShowPropic" />
       <div class="small-tweet-name">
-        {{tweet.user.screen_name}}
+        {{tweet.orgTweet.user.screen_name}}
       </div>
 			<div class="small-tweet-content">
 				<div class="small-text" v-html="TweetText" :class="{'delete': tweet.isDelete}">
