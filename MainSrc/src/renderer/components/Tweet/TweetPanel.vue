@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet-panal">
+  <div class="tweet-panal" @keydown="KeyDown">
     <div class="panel-left">
       <TweetList
       ref="homePanel"
@@ -49,6 +49,9 @@ export default {
       prevPanelName:'home',
 		}
   },
+  props: {
+    hotKey:undefined,
+  },
   computed:{
     selectPanel(){
       switch(this.selectPanelName){
@@ -67,7 +70,44 @@ export default {
     }
   },
   mounted: function() {//EventBus등록용 함수들
-    this.EventBus.$on('HotkeyDown', (hotkeyType) => {
+		this.EventBus.$on('focusTweet', (e) => {
+      this.selectPanel.Focus(e);
+    });
+    this.EventBus.$on('ArrowUp', (e)=>{//e: event
+      this.selectPanel.Prev(e);
+    });
+    this.EventBus.$on('ArrowDown', (e)=>{//e: event
+      this.selectPanel.Next(e);
+    });
+    this.EventBus.$on('FocusDaehwa', ()=>{
+      this.prevPanelName=this.selectPanelName;
+      this.selectPanelName='daehwa';
+      this.selectPanel.Focus(undefined);
+    });
+    this.EventBus.$on('FocusPanel', (selectPanelName)=>{
+      if(selectPanelName==''){
+      }
+      else if(this.selectPanelName=='daehwa' && selectPanelName!='daehwa'){//대화패널에서 나갈 경우 클리어
+        this.$store.dispatch('ClearDaehwa');
+      }
+      else if(selectPanelName!='' &&selectPanelName != undefined){
+        this.selectPanelName=selectPanelName;
+      }
+      this.selectPanel.Focus();
+    });
+  },
+  methods:{
+    KeyDown(e){//단축키...동작.....한다......
+      Object.keys(this.hotKey).forEach((key)=>{
+        if(this.hotKey[key].isCtrl==e.ctrlKey && this.hotKey[key].isAlt==e.altKey &&
+            this.hotKey[key].isShift==e.shiftKey && this.hotKey[key].key==e.key.toUpperCase()){
+          e.preventDefault();
+          e.stopPropagation();
+          this.HotKeyDown(key);
+        }
+      })
+    },
+    HotKeyDown(hotkeyType){
       if(hotkeyType=='showTL'){
         this.$store.dispatch('ClearDaehwa');
         this.selectPanelName='home';
@@ -143,34 +183,7 @@ export default {
         var tweet=this.selectPanel.GetSelectTweet();
         this.EventBus.$emit('DeleteTweet', tweet);
       }
-    });
-		this.EventBus.$on('focusTweet', (e) => {
-      this.selectPanel.Focus(e);
-    });
-    this.EventBus.$on('ArrowUp', (e)=>{//e: event
-      this.selectPanel.Prev(e);
-    });
-    this.EventBus.$on('ArrowDown', (e)=>{//e: event
-      this.selectPanel.Next(e);
-    });
-    this.EventBus.$on('FocusDaehwa', ()=>{
-      this.prevPanelName=this.selectPanelName;
-      this.selectPanelName='daehwa';
-      this.selectPanel.Focus(undefined);
-    });
-    this.EventBus.$on('FocusPanel', (selectPanelName)=>{
-      if(selectPanelName==''){
-      }
-      else if(this.selectPanelName=='daehwa' && selectPanelName!='daehwa'){//대화패널에서 나갈 경우 클리어
-        this.$store.dispatch('ClearDaehwa');
-      }
-      else if(selectPanelName!='' &&selectPanelName != undefined){
-        this.selectPanelName=selectPanelName;
-      }
-      this.selectPanel.Focus();
-    });
-  },
-  methods:{
+    },
     ReqTweets(panelName){
       var panel=this.selectPanelName;
 
@@ -190,8 +203,6 @@ export default {
   },
   components:{
     TweetList,
-  },
-  props: {
   },
 };
 </script>

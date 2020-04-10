@@ -29,11 +29,11 @@
           <span class="title">답변 하기</span>
           <div class="hotkey">
             <span>모두에게 답변 하기</span>
-            <input ref="reply" class="input" type="text" @keydown="KeyDown" @focusout="FocusOut"/>
+            <input ref="replyAll" class="input" type="text" @keydown="KeyDown" @focusout="FocusOut"/>
           </div>
           <div class="hotkey">
             <span>작성자에게 답변 하기</span>
-            <input ref="replyAll" class="input" type="text" @keydown="KeyDown"/>
+            <input ref="reply" class="input" type="text" @keydown="KeyDown"/>
           </div>
           <div class="hotkey">
             <span>쪽지 보내기</span>

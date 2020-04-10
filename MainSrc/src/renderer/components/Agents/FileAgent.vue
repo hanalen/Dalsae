@@ -119,6 +119,15 @@ export default {
 		SaveAll(){
 			this.SaveAccount();
 			this.SaveOption();
+			this.SaveHotkey();
+		},
+		SaveHotkey(){
+			const fs = require('fs-extra');
+			var hotkey = this.$store.state.DalsaeOptions.hotKey;
+			fs.writeJson(this.hotkeyFilePath, hotkey, 'utf-8')
+			.then(() => {
+				// console.log('success!')
+			})
 		},
 		SaveAccount(){
 			const fs = require('fs-extra');
@@ -144,8 +153,12 @@ export default {
 				this.$store.dispatch('Account', account);
 			}
 			if(fs.existsSync(this.optionFilePath)){
-				const account = fs.readJsonSync(this.optionFilePath, { throws: false });
-				this.$store.dispatch('Option', account);
+				const option = fs.readJsonSync(this.optionFilePath, { throws: false });
+				this.$store.dispatch('Option', option);
+			}
+			if(fs.existsSync(this.hotkeyFilePath)){
+				const hotkey = fs.readJsonSync(this.hotkeyFilePath, { throws: false });
+				this.$store.dispatch('Hotkey', hotkey);
 			}
 			this.EventBus.$emit('FileLoaded');
 		}

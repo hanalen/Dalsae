@@ -134,7 +134,7 @@ export default {
     },
     ClickHotkeyOption(e){
       var ipcRenderer = require('electron').ipcRenderer;
-      ipcRenderer.send('OpenHotkeyOptionPopup');
+      ipcRenderer.send('OpenHotkeyOptionPopup', this.$store.state.DalsaeOptions.hotKey);
     },
   },
   created: function(){

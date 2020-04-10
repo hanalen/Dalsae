@@ -50,74 +50,6 @@ function ConfigChange(path){//설정 바뀌면 FileAgent에 쏴줘야함
 
 //#endregion
 
-//#region 단축키 설정
-var hotkey={//기본 단축키
-  showTL:{isCtrl:false, isShift:false, isAlt:false, key:'1'},
-  showMention:{isCtrl:false, isShift:false, isAlt:false, key:'2'},
-  showDM:{isCtrl:false, isShift:false, isAlt:false, key:'3'},
-  showFavorite:{isCtrl:false, isShift:false, isAlt:false, key:'4'},
-  showUrl:{isCtrl:false, isShift:false, isAlt:false, key:'5'},
-  
-  reply:{isCtrl:false, isShift:false, isAlt:false, key:'r'},
-  replyAll:{isCtrl:false, isShift:false, isAlt:false, key:'a'},
-  sendDM:{isCtrl:false, isShift:false, isAlt:false, key:'d'},
-  
-  loading:{isCtrl:false, isShift:false, isAlt:false, key:'space'},
-  copy:{isCtrl:true, isShift:false, isAlt:false, key:'c'},
-  cancle:{isCtrl:false, isShift:false, isAlt:false, key:'escape'},
-  
-  loadConv:{isCtrl:false, isShift:false, isAlt:false, key:'c'},
-  showQt:{isCtrl:false, isShift:false, isAlt:false, key:'x'},
-  retweet:{isCtrl:false, isShift:false, isAlt:false, key:'t'},
-  sendQt:{isCtrl:false, isShift:false, isAlt:false, key:'w'},
-  sendFavorite:{isCtrl:false, isShift:false, isAlt:false, key:'f'},
-  hash:{isCtrl:false, isShift:false, isAlt:false, key:'h'},
-  delete:{isCtrl:false, isShift:false, isAlt:false, key:'delete'},
-  
-  input:{isCtrl:false, isShift:false, isAlt:false, key:'u'},
-  showContext:{isCtrl:false, isShift:false, isAlt:false, key:'v'},
-  home:{isCtrl:false, isShift:false, isAlt:false, key:'home'},
-  end:{isCtrl:false, isShift:false, isAlt:false, key:'end'},
-  showImage:{isCtrl:false, isShift:false, isAlt:false, key:'g'},
-}
-function LoadHotkey(){
-  var path= config == undefined ? app.getPath('userData') : config.path;
-  const fs = require('fs-extra');
-  if(fs.existsSync(path+'/Dalsae/Data/Hotkey.json')){
-    var newHotkey = fs.readJsonSync(path+'/Dalsae/Data/Hotkey.json', { throws: false });
-    if(newHotkey){//null check..
-      if(Object.keys(newHotkey).length==23){//단축키 값 정상 여부 확인
-        hotkey=newHotkey;
-      }
-    }
-  }
-  KeyRegister(mainWindow)
-}
-function SaveHotkey(newHotkey){
-  var path= config == undefined ? app.getPath('userData') : config.path;
-  hotkey=newHotkey;
-  const fs = require('fs-extra');
-  fs.writeJson(path+'/Dalsae/Data/Hotkey.json', hotkey, 'utf-8')
-  .then(() => {
-  })
-  KeyRegister(mainWindow)
-}
-function KeyRegister(win){
-  const shortcut = require('electron-localshortcut');
-  shortcut.unregisterAll(win);//단축키가 바뀔 경우 기존 단축키 전부 지우고 새로 등록을 진행 한다.
-  Object.keys(hotkey).forEach((key)=>{
-    var str='';
-    str += hotkey[key].isCtrl ? 'Ctrl+' : '';
-    str += hotkey[key].isAlt ? 'Alt+' : '';
-    str += hotkey[key].isShift ? 'Shift+' : '';
-    str += hotkey[key].key;
-    shortcut.register(win, str, ()=>{
-      win.webContents.send('Hotkey', key);
-    })
-  })
-}
-//#endregion
-
 // #region 메인윈도우
 let mainWindow
 
@@ -139,7 +71,6 @@ function createWindow () {
     webPreferences: {webSecurity: false}
   })
   CreateConfig();
-  LoadHotkey();
   mainWindowState.manage(mainWindow);
   if(process.env.NODE_ENV === 'development'){
     mainWindow.webContents.openDevTools()
@@ -311,7 +242,7 @@ ipcMain.on('CloseMuteOptionPopup',()=>{
 //#region 단축키 팝업
 var hotkeyWindow=null;
 
-ipcMain.on('OpenHotkeyOptionPopup', (event)=>{
+ipcMain.on('OpenHotkeyOptionPopup', (event, hotkey)=>{
   if(hotkeyWindow) return;//2번 생성 막기
   hotkeyWindow = new BrowserWindow({show:false,width:720, height:590, devTools :false});
   const path = process.env.NODE_ENV === 'development'
@@ -328,7 +259,7 @@ ipcMain.on('OpenHotkeyOptionPopup', (event)=>{
 })
 
 ipcMain.on('HotkeyOptionSave', (event, newHotkey)=>{
-  SaveHotkey(newHotkey);
+  mainWindow.webContents.send('SaveHotkey', newHotkey);
 });
 
 ipcMain.on('CloseHotkeyOptionPopup',()=>{

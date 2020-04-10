@@ -6,7 +6,7 @@
       <UIOptionModal v-if="isShowUIOption"/>
       <div id="main-page">
         <UITop v-bind:following="this.$store.state.following" :uiOption="this.$store.state.DalsaeOptions.uiOptions" />
-        <TweetPanel/>
+        <TweetPanel :hotKey="this.$store.state.DalsaeOptions.hotKey"/>
         <UIBottom/>
         <InputPin/>
         <UserCall/>
@@ -59,6 +59,9 @@ export default {
     }
   },
   methods: {
+    KeyDown(e){
+      console.log(e)
+    },
     open (link) {
       this.$electron.shell.openExternal(link)
     },

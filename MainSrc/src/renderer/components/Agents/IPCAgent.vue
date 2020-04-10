@@ -21,9 +21,9 @@ export default {
     ipcRenderer.on('WindowFocused', (event)=>{
       this.EventBus.$emit('FocusInput');
     });
-    ipcRenderer.on('Hotkey', (event, key)=>{
-      this.EventBus.$emit('HotkeyDown', key)
-    })
+    ipcRenderer.on('SaveHotkey', (event, hotkey)=>{
+      this.$store.dispatch('Hotkey', hotkey)
+    });
   },
   data() {
     return {
