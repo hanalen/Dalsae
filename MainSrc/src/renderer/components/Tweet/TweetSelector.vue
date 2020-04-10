@@ -8,7 +8,7 @@
       :index="index"
       :isDaehwa="false"
       :qtTweet="tweet.qtTweet"
-      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'focused': isFocus, 'not-read':option.isUseRead && !tweet.isReaded,
+      :class="{'tweet-odd':tweet.isOdd,'tweet-even': !tweet.isOdd, 'focused': isFocus, 'not-read':option.isUseRead && !tweet.isReaded,
                 'selected': isSelected}"/>
 		<SmallTweet ref="small"
 			v-if="option.isSmallTweet && !isFocus && !isSelected"
@@ -17,7 +17,7 @@
       :index="index"
       :isDaehwa="false"
       :isSelected="isSelected"
-      :class="{'tweet-odd':index%2==1,'tweet-even':index%2==0, 'focused': isFocus, 'not-read':option.isUseRead && !tweet.isReaded}"/>
+      :class="{'tweet-odd':tweet.isOdd,'tweet-even':!tweet.isOdd, 'focused': isFocus, 'not-read':option.isUseRead && !tweet.isReaded}"/>
   </div>
 </template>
 

@@ -11,6 +11,7 @@ export default{
 		obj.isMuted=tweet.isMuted;
 		obj.created_at=tweet.created_at;
 		obj.isHighlight=tweet.isHighlight;
+		obj.isOdd=false;//odd, even 색상
 
 		return obj;
 	},
@@ -115,5 +116,18 @@ export default{
 		return false;
 	},
 	CheckIsMe(tweet, id_str){
+	},
+	ChangeOddEven(listTweet, index, tweet){
+		if(listTweet.length==0) return;
+		var isOdd= listTweet[index].isOdd;
+		if(index==0){
+			tweet.isOdd = !isOdd;
+		}
+		else{
+			for(var i=index;i>-1;i--){
+				listTweet[i].isOdd=isOdd;
+				isOdd = !isOdd;
+			}
+		}
 	}
 }

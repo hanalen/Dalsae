@@ -203,6 +203,7 @@ export default new Vuex.Store({
                   index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.mention);
                 }
                 var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
+                TweetDataAgent.ChangeOddEven(state.tweets.mention, index, resTweet);
                 state.tweets.mention.splice(index, 0, resTweet);
                 if(state.tweets.mention.length>1600){
                   state.tweet.mention.splice(state.tweets.mention.length-1,1);
@@ -229,6 +230,7 @@ export default new Vuex.Store({
             index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
           }
           var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
+          TweetDataAgent.ChangeOddEven(state.tweets.home, index, resTweet);
           state.tweets.home.splice(index, 0, resTweet);
           TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
           if(state.tweets.home.length>1600){
@@ -263,6 +265,7 @@ export default new Vuex.Store({
             index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.mention);
           }
           var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
+          TweetDataAgent.ChangeOddEven(state.tweets.mention, index, resTweet);
           state.tweets.mention.splice(index, 0, resTweet);
           TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
           if(state.tweets.mention.length>1600){
@@ -275,6 +278,7 @@ export default new Vuex.Store({
     },
     AddOpen(state, tweet){
       if(state.tweets.open.find(x=>x.id_str==tweet.id_str)==undefined){
+        TweetDataAgent.ChangeOddEven(state.tweets.open, index, resTweet);
         state.tweets.open.splice(0, 0, tweet);
       }
     },
@@ -498,6 +502,7 @@ export default new Vuex.Store({
                 index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.mention);
               }
               var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
+              TweetDataAgent.ChangeOddEven(state.tweets.mention, index, resTweet);
               state.tweets.mention.splice(index, 0, resTweet);
               TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
               if(state.tweets.mention.length>1600){
@@ -523,6 +528,7 @@ export default new Vuex.Store({
           index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.home);
         }
         var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
+        TweetDataAgent.ChangeOddEven(state.tweets.home, index, resTweet);
         state.tweets.home.splice(index, 0, resTweet);
         TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
         if(state.tweets.home.length>1600){
