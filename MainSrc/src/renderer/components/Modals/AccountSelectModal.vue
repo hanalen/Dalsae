@@ -49,11 +49,13 @@ export default {
 			this.EventBus.$emit('ShowAccountModal', false);
 		},
 		AddAccount(e){
+			var userid=this.$store.state.Account.selectAccount.user_id;
 			this.EventBus.$emit('StopStreaming');
 			this.$store.dispatch('AccountClear');
 			this.$modal.show('input-pin', {
 				show: true
 			});
+			this.EventBus.$emit('AddAccount', userid);//input pin을 그냥 닫을 경우 아이디 백업
 			this.Close(undefined);
 		},
 	}

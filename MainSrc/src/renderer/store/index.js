@@ -302,10 +302,10 @@ export default new Vuex.Store({
         state.Account.accountList=[];
       }
       for(var i=0;i<state.Account.accountList.length;i++){
-        if(state.Account.accountList[i].user_id==payload.userinfo.user_id){
-            // console.log('이미 있다')
-            return;
-          }
+        if(state.Account.accountList[i].user_id==payload.userinfo.user_id){//이미 등록 된 계정일 경우
+          state.Account.selectAccount=payload.userinfo;
+          return;
+        }
       }
       state.Account.selectAccount=payload.userinfo;
       state.Account.accountList.push(payload.userinfo);

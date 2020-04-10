@@ -1,5 +1,5 @@
 <template>
-	<modal name="input-pin" :width="350" :height="100" @before-open="BeforeOpen">
+	<modal name="input-pin" :width="350" :height="100" @before-open="BeforeOpen" @before-close="BeforeClose">
 		<div class="input-pin">
 			<span>로그인 후 나온 숫자를 입력 해주세요</span>
 			<input v-model="pin"/>
@@ -19,8 +19,15 @@ export default {
 			pin:'',
 			publicKey:'',
 			secretKey:'',
+			isIssued:false,
+			userid:'',
     }
-  },
+	},
+	created:function(){
+		this.EventBus.$on('AddAccount', (userid)=>{
+			this.userid=userid;
+		});
+	},
   mounted:function(){
 	
 	},
@@ -41,6 +48,7 @@ export default {
 			this.secretKey= oauth['oauth_token_secret'];
 		},
 		ResAccessToken(arrOAuth){
+			this.isIssued=true;
 			this.$store.dispatch('AddToken', arrOAuth);
 			this.EventBus.$emit('ClosePopup');
 			this.EventBus.$emit('StartDalsae');
@@ -52,8 +60,12 @@ export default {
 		beforeOpen (event) {
       console.log('before open')
     },
-    beforeClose (event) {
-      console.log('before close')
+    BeforeClose (event) {
+			if(this.isIssued==false){
+				this.$store.dispatch('AccountChange', this.userid);//인증 안 하고 닫아버리면 전에 선택 했던 계정 재선택
+				this.EventBus.$emit('StartStreaming');
+				this.EventBus.$emit('StartDalsae');
+			}
     }
 	}
 }
