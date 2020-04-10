@@ -17,6 +17,8 @@
             item.isFocus,
             item.isReaded,
             item.isDelete,
+            item.orgTweet.retweeted,
+            item.orgTweet.favorited
           ]"
           >
           <TweetSelector 
