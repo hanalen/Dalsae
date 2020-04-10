@@ -25,7 +25,7 @@
 					</div>
 			</div>
       <div class="video" v-if="Video.type!='photo'">
-        <video ref="video" controls autoplay muted>
+        <video ref="video" controls autoplay muted loop>
           <source :src="Video.video_info.variants[0].url"
           :type="Video.video_info.variants[0].content_type">
         </video>
