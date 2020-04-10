@@ -101,19 +101,31 @@ export default {
     ErrFavorite(err, tweetID){
       console.log(err);
       this.RetryFavorite(tweetID);
-    }
+		},
+		ConfirmRetweet(tweet){
+			if(tweet.orgTweet.retweeted){
+				this.UnRetweet(tweet.orgTweet.id_str);
+			}
+			else{
+				this.Retweet(tweet.orgTweet.id_str);
+			}
+		},
+		ConfirmSendTweet(vals){
+			this.SendTweet(vals['text'], vals['media'], vals['replyId']);
+		}
 	},
 	mounted: function() {//EventBus등록용 함수들
     this.EventBus.$on('SendTweet', (vals) => {
-			this.SendTweet(vals['text'], vals['media'], vals['replyId']);
+			if(this.$store.state.DalsaeOptions.uiOptions.isSendCheck){
+				if(confirm('트윗을 전송 하시겠습니까?')==false) return;
+			}
+			this.ConfirmSendTweet(vals)
     });
     this.EventBus.$on('Retweet', (tweet) => {
-			if(tweet.orgTweet.retweeted){
-        this.UnRetweet(tweet.orgTweet.id_str);
-      }
-      else{
-				this.Retweet(tweet.orgTweet.id_str);
-      }
+			if(this.$store.state.DalsaeOptions.uiOptions.isSendRTCheck){
+				if(confirm('리트윗 하시겠습니까?') == false) return;
+			}
+			this.ConfirmRetweet(tweet);
 		});
 		this.EventBus.$on('Favorite', (tweet) => {
 			if(tweet.orgTweet.favorited){
