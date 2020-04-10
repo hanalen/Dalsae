@@ -121,7 +121,7 @@ export default new Vuex.Store({
         replyAll:{isCtrl:false, isShift:false, isAlt:false, key:'a'},
         sendDM:{isCtrl:false, isShift:false, isAlt:false, key:'d'},
         
-        loading:{isCtrl:false, isShift:false, isAlt:false, key:'space'},
+        loading:{isCtrl:false, isShift:false, isAlt:false, key:' '},
         copy:{isCtrl:true, isShift:false, isAlt:false, key:'c'},
         cancle:{isCtrl:false, isShift:false, isAlt:false, key:'escape'},
         

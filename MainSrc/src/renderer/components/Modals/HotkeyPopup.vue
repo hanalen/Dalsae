@@ -173,6 +173,7 @@ export default {
         str += hotkey.isAlt ? 'Alt+' : '' 
         str += hotkey.isShift ? 'Shift+' : '' 
         str += (hotkey.key.charAt(0).toUpperCase()+hotkey.key.substring(1,999));
+        if(str==' ') str = 'Space'; //space는 키가 ' '로 나옴...ㅡㅡ
         this.$refs[key].value =str;
       })
     },
@@ -189,7 +190,12 @@ export default {
         e.target.value+='Alt+'
       }
       if(e.code !='ControlLeft'&& e.code !='ShiftLeft' && e.code!='AltLeft'){
-        e.target.value+=(e.key.charAt(0).toUpperCase()+e.key.substring(1,999));//키는 첫글자만 대문자로. home->Home
+        if(e.key== ' '){//space의 key는 ' '
+          e.target.value+='Space';
+        }
+        else{
+          e.target.value+=(e.key.charAt(0).toUpperCase()+e.key.substring(1,999));//키는 첫글자만 대문자로. home->Home
+        }
       }
     },
     FocusOut(e){
@@ -206,8 +212,11 @@ export default {
         obj.isAlt= str.indexOf('Alt') > -1 
         obj.isShift= str.indexOf('Shift') > -1 
         obj.key = str.replace('Ctrl+','').replace('Shift+','').replace('Alt+')
+        if(obj.key=='Space'){//space -> ' '
+          obj.key = ' ';
+        }
         hotkey[key]=obj;
-			})
+      })
 			var ipcRenderer = require('electron').ipcRenderer;
 			ipcRenderer.send('HotkeyOptionSave', hotkey)
 			ipcRenderer.send('CloseHotkeyOptionPopup');

@@ -36,6 +36,9 @@ export default {
 		this.EventBus.$on('SaveOption',()=>{
 			this.SaveOption();
 		});
+		this.EventBus.$on('SaveHotkey', ()=>{
+			this.SaveHotkey();
+		});
   
   },
   data() {
@@ -54,7 +57,7 @@ export default {
 			return this.configPath + "/Dalsae/Data/option.json"
 		},
 		hotkeyFilePath(){
-			return this.configPath + "/Dalsae/Data/hotkey.ini"
+			return this.configPath + "/Dalsae/Data/hotkey.json"
 		},
 		dataFolderPath(){
 			return this.configPath + "/Dalsae/Data"

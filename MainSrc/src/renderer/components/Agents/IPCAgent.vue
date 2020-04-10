@@ -23,6 +23,7 @@ export default {
     });
     ipcRenderer.on('SaveHotkey', (event, hotkey)=>{
       this.$store.dispatch('Hotkey', hotkey)
+			this.EventBus.$emit('SaveHotkey');
     });
   },
   data() {
