@@ -43,7 +43,7 @@
       @mouseleave="hidepreview"
       @click="ImageClick"
     >
-    <i v-if="tweet.orgTweet.extended_entities.media[0].type!='photo'" class="far fa-play-circle fa-3x"></i>
+    <i v-if="tweet.orgTweet.extended_entities.media[0].type!='photo'" class="far fa-play-circle fa-3x" :class="{'video':true}"></i>
       <img
         class="tweet-image"
         v-for="image in tweet.orgTweet.extended_entities.media"
@@ -304,5 +304,12 @@ export default {
     height: 25px;
     border-radius: 4px;
   }
+}
+.video{
+  z-index: 10;
+  position: absolute;
+  color: #007bff;
+  margin-left: 25px;
+  margin-top: 25px;
 }
 </style>
