@@ -276,6 +276,40 @@ export default new Vuex.Store({
         }
       });
     },
+    AddFavorite(state, listTweet){
+      listTweet.forEach(tweet => {
+        var id =state.tweets.fav.find(x=>x.id_str==tweet.id_str);
+        var index = 0;
+        if(id==undefined){//중복 넘기기
+          TweetDataAgent.TweetInit(tweet);
+          if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
+            // console.log('block tweet')
+            return;
+          }
+          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+            if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
+              return;
+            }
+          }
+          tweet.isHighlight=TweetDataAgent.CheckHighlight(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.userData.screen_name);
+          if(state.tweets.fav.length==0){
+            index=0;
+          }
+          else{
+            index = TweetDataAgent.GetTweetIndex(tweet, state.tweets.fav);
+          }
+          var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
+          TweetDataAgent.ChangeOddEven(state.tweets.fav, index, resTweet);
+          state.tweets.fav.splice(index, 0, resTweet);
+          TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
+          if(state.tweets.fav.length>1600){
+            state.tweet.fav.splice(state.tweets.fav.length-1,1);
+          }
+        }else{
+          // console.log('tweet exists')
+        }
+      });
+    },
     AddOpen(state, tweet){
       if(state.tweets.open.find(x=>x.id_str==tweet.id_str)==undefined){
         TweetDataAgent.ChangeOddEven(state.tweets.open, index, resTweet);
@@ -571,6 +605,9 @@ export default new Vuex.Store({
     },
     AddMention(context, listTweet){
       context.commit('AddMention', listTweet);
+    },
+    AddFavorite(context, listTweet){
+      context.commit('AddFavorite', listTweet);
     },
     AddOpen(context, tweet){
       context.commit('AddOpen', tweet);

@@ -32,7 +32,8 @@ export default {
   methods: {
     StartDalsae(){
 			this.ReqHome(undefined, undefined);
-			this.ReqMention(undefined, undefined);
+      this.ReqMention(undefined, undefined);
+      this.ReqFavorite(undefined, undefined);
       this.ReqUserInfo();
       if(this.selectAccount.userData==undefined){//OAuth인증 진행 시 userdata없으므로 정보 수신 수 각종 req를 날린다
         this.isAddNewAccount=true;
@@ -59,6 +60,11 @@ export default {
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'mention'})
       this.isLoadingMention=true;
       ApiUser.ReqMention(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResMention);
+    },
+    ReqFavorite(maxId, sinceId){
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'mention'})
+      this.isLoadingFav=true;
+      ApiUser.ReqFavorite(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResFavorite);
     },
     ReqDaehwa(tweet){
       if(this.isLoadingDaehwa){
@@ -113,6 +119,11 @@ export default {
       this.$store.dispatch('AddMention', listTweet);
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'mention'});
     },
+    ResFavorite(listTweet){
+      this.isLoadingFav=false;
+      this.$store.dispatch('AddFavorite', listTweet);
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'favorite'});
+    },
 		ResDaehwa(tweet){
       this.isLoadingDaehwa=false;
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'daehwa'});
@@ -132,6 +143,9 @@ export default {
         this.ReqFollowerList(resUsers.next_cursor);
       }
       // console.log(resUsers)
+    },
+    ErrResFavorite(err){
+      console.log(err)
     },
     ErrResFollowing(err, cursor){
       console.log(err);

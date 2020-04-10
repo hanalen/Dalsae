@@ -19,9 +19,9 @@
       />
       <TweetList
         ref="favPanel"
-        :isShow="selectPanelName=='fav'"
-        :panelName="'fav'"
-        v-show="selectPanelName=='fav'"
+        :isShow="selectPanelName=='favorite'"
+        :panelName="'favorite'"
+        v-show="selectPanelName=='favorite'"
         v-bind:options="this.$store.state.DalsaeOptions.uiOptions"
         v-bind:tweets="this.$store.state.tweets.fav"
       />
@@ -60,7 +60,7 @@ export default {
         case 'mention':
           return this.$refs.mentionPanel;
           break;
-        case 'fav':
+        case 'favorite':
           return this.$refs.favPanel;
           break;
         case 'daehwa':
@@ -112,6 +112,12 @@ export default {
         this.selectPanelName='mention';
         this.prevPanelName='mention';
         this.EventBus.$emit('HideContext')
+        this.selectPanel.Focus();
+      }
+      else if(hotkeyType=='showFavorite'){
+        this.$store.dispatch('ClearDaehwa');
+        this.selectPanelName='favorite';
+        this.prevPanelName='favorite';
         this.selectPanel.Focus();
       }
       else if(hotkeyType=='home'){
@@ -199,8 +205,8 @@ export default {
         this.EventBus.$emit('ReqMention');
         // this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':this.selectPanelName})
       }
-      else if(panel=='fav'){
-        this.EventBus.$emit('ReqFav');
+      else if(panel=='favorite'){
+        this.EventBus.$emit('ReqFavorite');
         // this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':this.selectPanelName})
       }
     }
