@@ -179,6 +179,8 @@ export default {
         this.EventBus.$emit('FocusInput');
       }
       else if(hotkeyType=='hash'){//h, 해시태그, 해시 미구현
+        var tweet=this.selectPanel.GetSelectTweet();
+        this.EventBus.$emit('AddHashTag', tweet);
       }
       else if(hotkeyType=='delete'){//del, 트윗 삭제
         this.EventBus.$emit('HideContext')

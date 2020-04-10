@@ -117,6 +117,13 @@ export default {
     this.EventBus.$on("RemoveAddImage", (index)=>{
         this.arrImage.splice(index, 1);
     });
+    this.EventBus.$on('AddHashTag', (tweet)=>{
+      tweet.orgTweet.entities.hashtags.forEach((hash)=>{
+        var index = this.$refs.inputTweet.selectionStart;//커서 위치
+        this.tweetTextBinding = [this.tweetTextBinding.slice(0, index), '#'+hash.text+' ', this.tweetTextBinding.slice(index)].join('');
+      })
+      this.FocusInput();
+    });
   },
   methods: {
     Paste(e){
