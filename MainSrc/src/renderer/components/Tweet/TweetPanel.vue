@@ -105,23 +105,29 @@ export default {
         this.selectPanelName='home';
         this.prevPanelName='home';
         this.selectPanel.Focus();
+        this.EventBus.$emit('HideContext')
       }
       else if(hotkeyType=='showMention'){
         this.$store.dispatch('ClearDaehwa');
         this.selectPanelName='mention';
         this.prevPanelName='mention';
+        this.EventBus.$emit('HideContext')
         this.selectPanel.Focus();
       }
       else if(hotkeyType=='home'){
+        this.EventBus.$emit('HideContext')
         this.selectPanel.Home();
       }
       else if(hotkeyType=='end'){
+        this.EventBus.$emit('HideContext')
         this.selectPanel.End();
       }
       else if(hotkeyType=='loading'){
+        this.EventBus.$emit('HideContext')
         this.ReqTweets(this.selectPanelName);
       }
       else if(hotkeyType=='loadConv'){
+        this.EventBus.$emit('HideContext')
         var tweet =this.selectPanel.GetSelectTweet();
         if(!tweet.orgTweet.in_reply_to_status_id_str) return;//대화 없는건 스킵 
         this.$store.dispatch('DaehwaAutoAdd', tweet);//캐시데이터가 있는지부터 체크 
@@ -136,6 +142,7 @@ export default {
         }
       }
       else if(hotkeyType=='showQt'){//x, qt트윗 등록 
+        this.EventBus.$emit('HideContext')
         var tweet= this.selectPanel.GetQTTweet();
         if(tweet){
           this.$store.dispatch('Daehwa', tweet);
@@ -151,10 +158,12 @@ export default {
         this.EventBus.$emit('Reply', tweet);
       }
       else if(hotkeyType=='sendFavorite'){//f, 관글
+        this.EventBus.$emit('HideContext')
         var tweet=this.selectPanel.GetSelectTweet();
         this.EventBus.$emit('Favorite', tweet);
       }
       else if(hotkeyType=='retweet'){//t, 리트윗
+        this.EventBus.$emit('HideContext')
         var tweet=this.selectPanel.GetSelectTweet();
         this.EventBus.$emit('Retweet', tweet);
       }
@@ -172,6 +181,7 @@ export default {
       else if(hotkeyType=='hash'){//h, 해시태그, 해시 미구현
       }
       else if(hotkeyType=='delete'){//del, 트윗 삭제
+        this.EventBus.$emit('HideContext')
         var tweet=this.selectPanel.GetSelectTweet();
         this.EventBus.$emit('DeleteTweet', tweet);
       }

@@ -10,15 +10,15 @@
       <ContextMenuItem v-for="(url, index) in tweet.orgTweet.entities.urls" :key="index" :url="url"
                     :menuText="url.display_url" :hotkey="''" :callback="Url" ref="Url" :mouseenter="Hover"/>
       <div class="context-group"></div>
-      <ContextMenuItem :menuText="'답글'" :hotkey="'R'" :callback="Reply" ref="Reply" :mouseenter="Hover"/>
-      <ContextMenuItem :menuText="'모두에게 답글'" :hotkey="'A'" :callback="ReplyAll" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'답글'" :hotkey="'reply'" :callback="Reply" ref="Reply" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'모두에게 답글'" :hotkey="'replyAll'" :callback="ReplyAll" :mouseenter="Hover"/>
       <div class="context-group"></div>
-      <ContextMenuItem :menuText="'리트윗'" :hotkey="'T'" :callback="Retweet" :mouseenter="Hover"/>
-      <ContextMenuItem :menuText="'인용'" :hotkey="'W'" :callback="QT" :mouseenter="Hover"/>
-      <ContextMenuItem :menuText="'관심글'" :hotkey="'F'" :callback="Favorite" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'리트윗'" :hotkey="'retweet'" :callback="Retweet" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'인용'" :hotkey="'sendQt'" :callback="QT" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'관심글'" :hotkey="'sendFavorite'" :callback="Favorite" :mouseenter="Hover"/>
       <div class="context-group"></div>
-      <ContextMenuItem :menuText="'웹에서 보기'" :hotkey="'B'" :callback="ViewWeb" :mouseenter="Hover"/>
-      <ContextMenuItem :menuText="'트윗 복사(미구현)'" :hotkey="'Ctrl+C'" :callback="Copy" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'웹에서 보기'" :hotkey="''" :callback="ViewWeb" :mouseenter="Hover"/>
+      <ContextMenuItem :menuText="'트윗 복사(미구현)'" :hotkey="'Copy'" :callback="Copy" :mouseenter="Hover"/>
       <ContextMenuItem :menuText="'트윗 삭제'" :hotkey="'Delete'" :callback="Delete" :mouseenter="Hover"/>
     </div>
   </div>
@@ -38,7 +38,10 @@ export default {
     };
   },
   computed: {},
-  mounted: function() {
+  created: function() {
+    this.EventBus.$on('HideContext', ()=>{
+      this.Hide();
+    })
   },
   methods: {
     Hover(item){

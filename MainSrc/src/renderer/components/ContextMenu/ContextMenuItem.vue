@@ -6,7 +6,7 @@
 		 		<span>{{menuText}}</span>
 			</div>
 			<div class="context-item-right">
-		 		<span>{{hotkey}}</span>
+		 		<span>{{hotkeyText}}</span>
 			</div>
 		</div>
   </div>
@@ -22,6 +22,18 @@ export default {
 		}
   },
   computed:{
+		hotkeyText(){
+			if(this.hotkey=='') return '';
+
+			var hotkey = this.$store.state.DalsaeOptions.hotKey[this.hotkey];
+			if(hotkey==undefined) return '';
+
+			var str = hotkey.isCtrl ? 'Ctrl+' : ''
+			str += hotkey.isAlt ? 'Alt+' : '' 
+			str += hotkey.isShift ? 'Shift+' : '' 
+			str += (hotkey.key.charAt(0).toUpperCase()+hotkey.key.substring(1,999));
+			return str;
+		}
 	},
 	methods:{
 		Click(e){
