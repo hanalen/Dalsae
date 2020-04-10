@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet-panal" @keydown="KeyDown">
+  <div class="tweet-panal">
     <div class="panel-left">
       <TweetList
       ref="homePanel"
@@ -50,7 +50,6 @@ export default {
 		}
   },
   props: {
-    hotKey:undefined,
   },
   computed:{
     selectPanel(){
@@ -70,6 +69,9 @@ export default {
     }
   },
   mounted: function() {//EventBus등록용 함수들
+    this.EventBus.$on('HotKeyDown', (hotkey)=>{
+      this.HotKeyDown(hotkey);
+    });
 		this.EventBus.$on('focusTweet', (e) => {
       this.selectPanel.Focus(e);
     });
@@ -97,16 +99,6 @@ export default {
     });
   },
   methods:{
-    KeyDown(e){//단축키...동작.....한다......
-      Object.keys(this.hotKey).forEach((key)=>{
-        if(this.hotKey[key].isCtrl==e.ctrlKey && this.hotKey[key].isAlt==e.altKey &&
-            this.hotKey[key].isShift==e.shiftKey && this.hotKey[key].key==e.key.toUpperCase()){
-          e.preventDefault();
-          e.stopPropagation();
-          this.HotKeyDown(key);
-        }
-      })
-    },
     HotKeyDown(hotkeyType){
       if(hotkeyType=='showTL'){
         this.$store.dispatch('ClearDaehwa');

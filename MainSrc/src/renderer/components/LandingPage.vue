@@ -6,7 +6,7 @@
       <UIOptionModal v-if="isShowUIOption"/>
       <div id="main-page">
         <UITop v-bind:following="this.$store.state.following" :uiOption="this.$store.state.DalsaeOptions.uiOptions" />
-        <TweetPanel :hotKey="this.$store.state.DalsaeOptions.hotKey"/>
+        <TweetPanel/>
         <UIBottom/>
         <InputPin/>
         <UserCall/>
@@ -56,11 +56,20 @@ export default {
       isShowUIOption:false,
       isShowImage:false,
       isShowAccount:false,
+      hotKey:this.$store.state.DalsaeOptions.hotKey,
     }
   },
   methods: {
     KeyDown(e){
-      console.log(e)
+      if(document.activeElement.tagName=='TEXTAREA') return;
+      Object.keys(this.hotKey).forEach((key)=>{
+        if(this.hotKey[key].isCtrl==e.ctrlKey && this.hotKey[key].isAlt==e.altKey &&
+            this.hotKey[key].isShift==e.shiftKey && this.hotKey[key].key.toUpperCase()==e.key.toUpperCase()){
+          e.preventDefault();
+          e.stopPropagation();
+          this.EventBus.$emit('HotKeyDown', key)
+        }
+      })
     },
     open (link) {
       this.$electron.shell.openExternal(link)
@@ -99,6 +108,7 @@ export default {
   },
   created: function(){
     this.$nextTick(()=>{
+      document.addEventListener('keydown', this.KeyDown);
       this.EventBus.$emit('LoadFiles');
     });
 
