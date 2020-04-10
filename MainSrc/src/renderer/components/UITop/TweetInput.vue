@@ -249,22 +249,19 @@ export default {
       if (this.isMention) {
         var v = this.$refs.find.GetSelectScreenName();
         this.ReplaceMentionID(v);
-        return;
       }
-      if(e.ctrlKey){
+      else if(this.$store.state.DalsaeOptions.uiOptions.isSendEnter){
         this.SendTweet();
       }
-      else if(e.shiftKey){//new line
+      else if(e.ctrlKey){
+        this.SendTweet();
+      }
+      else if(e.shiftKey || !e.ctrlKey){//new line
         var index = e.target.selectionStart;//커서 위치
         this.tweetTextBinding = [this.tweetTextBinding.slice(0, index), '\r\n', this.tweetTextBinding.slice(index)].join('');
       }
-      else{
-        if(this.tweetTextBinding.length==0 && this.arrImage.length==0){//입력 중인 트윗이 없을 경우 패널 포커스
-          this.EventBus.$emit('FocusPanel','');
-        }
-        else{
-          this.SendTweet();
-        }
+      else if(this.tweetTextBinding.length==0 && this.arrImage.length==0){//입력 중인 트윗이 없을 경우 패널 포커스
+        this.EventBus.$emit('FocusPanel','');
       }
     },
     GetTweetLength(str) {
