@@ -26,13 +26,13 @@
       <div class="right" v-if="user!=undefined">
         <div class="buttons" v-if="user.screen_name!=tokenData.screen_name">
           <i class="fas fa-ellipsis-h fa-2x" @click="ClickContext"></i>
-          <button class="btn-follow" type="button">{{FollowText}}</button>
+          <button class="btn-follow" type="button" @click="ClickFollow">{{FollowText}}</button>
         </div>
         <div class="profile-name" v-if="user!=undefined">
           <span class="name">{{user.name}}</span>
           <i :class="{'name': true}" v-if="user.protected" class="fas fa-lock"></i><br/>
           <span class="screen-name">@{{user.screen_name}}</span>
-          <span class="follow-by" v-if="user.followed_by">님은 나를 팔로우 하고 있습니다.</span><br/><br/>
+          <span class="follow-by" v-if="FollowBy">님은 나를 팔로우 하고 있습니다.</span><br/><br/>
         </div>
         <span v-if="user!=undefined" class="bio">{{user.description}}</span><br/>
         <i :class="{'witch':true}" class="far fa-compass"></i>
@@ -46,7 +46,7 @@
       </div>
     </div>
     <div class="friends-list">
-      <UserList ref="userList"/>
+      <UserList ref="userList" :listUser="listUser"/>
     </div>
     <ProfileCall :selectAccount="tokenData"/>
     <ProfileContext ref="context"/>
@@ -69,10 +69,17 @@ export default {
     return {
       screenName:'',
       tokenData:undefined,
-			user:undefined,
+      user:undefined,
+      listUser:[],
+      listFollower:[],
     };
   },
   computed:{
+    FollowBy(){
+      for(var i=0;i<this.listFollower.length;i++)
+        if(this.user.screen_name==this.listFollower[i].screen_name)
+          return true;
+    },
     FollowText(){
       return this.user.following? '언팔로우' : '팔로잉'
     },
@@ -83,18 +90,36 @@ export default {
   },
   created: function() {
     var ipcRenderer = require('electron').ipcRenderer;
-		ipcRenderer.on('Profile', (event, screenName, userData) => {
+		ipcRenderer.on('Profile', (event, screenName, userData, listFollower) => {
+      this.listFollower=listFollower;
       this.tokenData=userData;
       this.screenName=screenName;
-      this.EventBus.$emit('ReqProfile', screenName);
+      this.$nextTick(()=>{
+        this.EventBus.$emit('ReqProfile', screenName);
+      })
 		});
-		ipcRenderer.on('tweet', (event, tweet, uiOption) => {
-			this.Clear();
-			this.tweet=tweet;
-			this.uiOption=uiOption;
-    });
     this.EventBus.$on('ResProfile', (user)=>{
       this.user=user;
+    })
+    this.EventBus.$on('ResFollow', (vals)=>{
+      var user = vals['user']
+      this.user.following=vals['follow'];
+      this.listUser.forEach((user)=>{
+        user.following=vals['follow'];
+      })
+    })
+    this.EventBus.$on('ResBlock', (vals)=>{
+      var user = vals['user']
+      this.user.blocking=vals['block'];
+      this.listUser.forEach((user)=>{
+        user.blocking=vals['block'];
+      })
+    })
+    this.EventBus.$on('ResFollowingList', (listUser)=>{
+      this.listUser=listUser.users
+    })
+    this.EventBus.$on('ResFollowerList', (listUser)=>{
+      this.listUser=listUser.users
     })
     this.EventBus.$on('UserClick', (user)=>{
       this.user=user;
@@ -129,11 +154,16 @@ export default {
     ClickTweet(e){
 
     },
+    ClickFollow(e){
+      this.EventBus.$emit('ReqFollow', this.user);
+    },
     ClickFollowingList(e){
       this.$refs.userList.ChangeList(this.user.name, this.user.screen_name, true)
+      this.EventBus.$emit('ReqFollowingList', this.user);
     },
     ClickFollowerList(e){
       this.$refs.userList.ChangeList(this.user.name, this.user.screen_name, false)
+      this.EventBus.$emit('ReqFollowerList', this.user);
     },
   },
 };

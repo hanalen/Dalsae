@@ -1,8 +1,8 @@
 <template>
   <div class="user-list">
     <span class="title">{{title}}</span>
-    <div class="list" v-if="users!=undefined">
-      <UserItem v-for="(item, index) in users" :key="index" :user="item"/>
+    <div class="list" v-if="listUser!=undefined">
+      <UserItem v-for="(item, index) in listUser" :key="index" :user="item"/>
     </div>
   </div>
 </template>
@@ -17,10 +17,10 @@ export default {
   data: function() {
     return {
       title:'',
-      users:[],
     };
   },
 	props:{
+    listUser:undefined,
 	},
   created: function() {
   },
@@ -49,6 +49,7 @@ export default {
 .list{
 	width: 100%;
 	height: 470px;
-	overflow: auto;
+	overflow-x:hidden;
+  overflow-y: auto;
 }
 </style>

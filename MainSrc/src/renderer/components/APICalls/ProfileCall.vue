@@ -19,19 +19,19 @@ export default {
 			this.ReqProfile(screenName)
 		});
 		this.EventBus.$on('ReqFollow', (user) => {
-			ApiProfile.ReqProfile(screenName);
+			this.ReqFollow(user);
 		});
 		this.EventBus.$on('ReqBlock', (user) => {
-			ApiProfile.ReqProfile(screenName);
+			this.ReqBlock(user)
 		});
 		this.EventBus.$on('ReqMute', (screenName) => {
-			ApiProfile.ReqProfile(screenName);
+			// this.req
 		});
-		this.EventBus.$on('ReqFollowingList', (screenName) => {
-			ApiProfile.ReqProfile(screenName);
+		this.EventBus.$on('ReqFollowingList', (user) => {
+			this.ReqFollowingList(user.screen_name);
 		});
-		this.EventBus.$on('ReqFollowerList', (screenName) => {
-			ApiProfile.ReqProfile(screenName);
+		this.EventBus.$on('ReqFollowerList', (user) => {
+			this.ReqFollowerList(user.screen_name)
 		});
   },
   data() {
@@ -46,27 +46,27 @@ export default {
 		},
 		ReqFollow(user){
 			if(user.following)
-				ApiProfile.ReqUnFollow(screenName, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret,
-					this.ResProfile, this.ErrProfile);
+				ApiProfile.ReqUnFollow(user.screen_name, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret,
+					this.ResUnFollow, this.ErrFollow);
 			else
-				ApiProfile.ReqFollow(screenName, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret,
-					this.ResProfile, this.ErrProfile);
+				ApiProfile.ReqFollow(user.screen_name, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret,
+					this.ResFollow, this.ErrFollow);
 		},
 		ReqBlock(user){
 			if(user.blocking)
-				ApiProfile.ReqUnBlock(screenName, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, 
-					this.ResProfile, this.ErrProfile);
+				ApiProfile.ReqUnBlock(user.screen_name, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, 
+					this.ResUnBlock, this.ErrBlock);
 			else
-				ApiProfile.ReqBlock(screenName, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, 
-					this.ResProfile, this.ErrProfile);
+				ApiProfile.ReqBlock(user.screen_name, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, 
+					this.ResBlock, this.ErrBlock);
 		},
 		ReqFollowingList(screenName){
 			ApiProfile.ReqFollowingList(screenName, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, 
-				this.ResProfile, this.ErrProfile);
+				this.ResFollwingList, this.ErrFollowingList);
 		},
-		ReqFollwerList(screenName){
+		ReqFollowerList(screenName){
 			ApiProfile.ReqFollowerList(screenName, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, 
-				this.ResProfile, this.ErrProfile);
+				this.ResFollwerList, this.ErrFollwerList);
 		},
 		ReqMute(user){
 			// ApiProfile.ReqProfile(screenName, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResProfile, this.ErrProfile);
@@ -75,22 +75,22 @@ export default {
 			this.EventBus.$emit('ResProfile', user);
 		},
 		ResFollow(user){
-
+			this.EventBus.$emit('ResFollow', {'user':user, 'follow':true});
 		},
 		ResUnFollow(user){
-
+			this.EventBus.$emit('ResFollow', {'user':user, 'follow':false});
 		},
 		ResBlock(user){
-
+			this.EventBus.$emit('ResBlock', {'user':user, 'block':true})
 		},
 		ResUnBlock(user){
-
+			this.EventBus.$emit('ResBlock', {'user':user, 'block':false})
 		},
 		ResFollwerList(listUser){
-
+			this.EventBus.$emit('ResFollowerList', listUser)
 		},
 		ResFollwingList(listUser){
-
+			this.EventBus.$emit('ResFollowingList', listUser)
 		},
 		ErrProfile(err){
 

@@ -49,6 +49,12 @@ export default {
 		
   },
   methods: {
+		Block(e){
+
+		},
+		ClickFollow(e){
+			this.EventBus.$emit('ReqFollow', this.user)
+		},
 		Click(e){
 			this.EventBus.$emit('UserClick', this.user);
 		},
@@ -94,7 +100,7 @@ export default {
 				.btn-follow{
 					height: 30px;
 					margin-top: 4px;
-					width: 70px;
+					width: 80px;
 				}
 				i{
 					font-size:30px;

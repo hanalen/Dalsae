@@ -27,7 +27,7 @@ export default {
     });
 
     this.EventBus.$on('ShowProfile', (screenName)=>{
-      ipcRenderer.send('ShowProfile', screenName, this.$store.state.Account.selectAccount);
+      ipcRenderer.send('ShowProfile', screenName, this.$store.state.Account.selectAccount, this.$store.state.follower);
     });
   },
   data() {

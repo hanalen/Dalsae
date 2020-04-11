@@ -270,7 +270,7 @@ ipcMain.on('CloseHotkeyOptionPopup',()=>{
 //#region 프로필 팝업
 var profileWindow=null;
 
-ipcMain.on('ShowProfile', (event, screenName, userData)=>{
+ipcMain.on('ShowProfile', (event, screenName, userData, listFollower)=>{
   if(profileWindow) return;//2번 생성 막기
   profileWindow = new BrowserWindow({show:false,width:620, height:900, devTools :false, resizable:true,webPreferences: {webSecurity: false}});
   const path = process.env.NODE_ENV === 'development'
@@ -278,7 +278,7 @@ ipcMain.on('ShowProfile', (event, screenName, userData)=>{
         : `file://${__dirname}/index.html#Profile`
         profileWindow.loadURL(path);
         profileWindow.on('ready-to-show', ()=>{
-        profileWindow.webContents.send('Profile', screenName, userData);
+        profileWindow.webContents.send('Profile', screenName, userData, listFollower);
         profileWindow.show();
   })
   profileWindow.on('closed', (e)=>{
