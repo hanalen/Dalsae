@@ -1,14 +1,16 @@
 <template>
-	<div class="profile-context" @mousedown="Close" v-show="isShow">
+	<div class="profile-context" v-show="isShow">
+		<div class="back" @mousedown="Close">
+		</div>
 		<div class="context" :style="{'left':x+'px','top':y+'px'}">
 			<div class="context-item" v-if="user!=undefined && user.following" @click="ClickOffRetweet">
 				<span>리트윗 끄기</span>
 			</div>
-			<div class="context-item">
+			<div class="context-item" @click="ClickMute">
 				<span>뮤트 하기</span>
 			</div>
-			<div class="context-item">
-				<span>차단 하기</span>
+			<div class="context-item" @click="ClickBlock">
+				<span>{{user.blocking ? '차단 해제' : '차단 하기' }}</span>
 			</div>
 		</div>
 	</div>
@@ -46,12 +48,15 @@ export default {
 		},
 		ClickOffRetweet(){
 			this.EventBus.$emit('RetweetOff', this.user)
+			this.isShow=false;
 		},
 		ClickMute(){
 			this.EventBus.$emit('Mute', this.user);
+			this.isShow=false;
 		},
-		ClickBlock(){
-			this.EventBus.$emit('Block', this.user)
+		ClickBlock(e){
+			this.EventBus.$emit('ReqBlock', this.user)
+			this.isShow=false;
 		},
   },
 };
@@ -65,6 +70,14 @@ export default {
 	position: fixed;
 	left: 0;
 	top: 0;
+	.back{
+		width: 600px;
+		height: 900px;
+		background-color: rgba(165, 165, 165, 0.39);
+		position: fixed;
+		left: 0;
+		top: 0;
+	}
 	.context{
 		position: fixed;
 		background-color:white;

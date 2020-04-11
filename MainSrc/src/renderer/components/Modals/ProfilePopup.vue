@@ -102,17 +102,21 @@ export default {
       this.user=user;
     })
     this.EventBus.$on('ResFollow', (vals)=>{
-      var user = vals['user']
-      this.user.following=vals['follow'];
+      var bUser = vals['user']
+      if(this.user.screen_name==bUser.screen_name)
+        this.user.following=vals['follow'];
       this.listUser.forEach((user)=>{
-        user.following=vals['follow'];
+        if(user.screen_name==bUser.screen_name)
+          user.following=vals['follow'];
       })
     })
     this.EventBus.$on('ResBlock', (vals)=>{
-      var user = vals['user']
-      this.user.blocking=vals['block'];
+      var bUser = vals['user']
+      if(this.user.screen_name==bUser.screen_name)
+        this.user.blocking=vals['block'];
       this.listUser.forEach((user)=>{
-        user.blocking=vals['block'];
+        if(user.screen_name==bUser.screen_name)
+          user.blocking=vals['block'];
       })
     })
     this.EventBus.$on('ResFollowingList', (listUser)=>{
