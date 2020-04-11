@@ -77,6 +77,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .context-menu-item{
+	font-size: 14px;
 	color: black;
 	.line{
 		border-bottom: 1px solid rgb(151, 151, 151);

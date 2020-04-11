@@ -267,6 +267,30 @@ ipcMain.on('CloseHotkeyOptionPopup',()=>{
 });
 //#endregion
 
+//#region 프로필 팝업
+var profileWindow=null;
+
+ipcMain.on('ShowProfile', (event, screenName, userData)=>{
+  if(profileWindow) return;//2번 생성 막기
+  profileWindow = new BrowserWindow({show:false,width:620, height:900, devTools :false, resizable:true,webPreferences: {webSecurity: false}});
+  const path = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:9080/#/Profile'
+        : `file://${__dirname}/index.html#Profile`
+        profileWindow.loadURL(path);
+        profileWindow.on('ready-to-show', ()=>{
+        profileWindow.webContents.send('Profile', screenName, userData);
+        profileWindow.show();
+  })
+  profileWindow.on('closed', (e)=>{
+    profileWindow=null;
+  });
+})
+
+ipcMain.on('CloseProfilePopup',()=>{
+  profileWindow.close();
+});
+//#endregion
+
 //#region 자동업데이트
 
 ipcMain.on('restart_app', ()=>{

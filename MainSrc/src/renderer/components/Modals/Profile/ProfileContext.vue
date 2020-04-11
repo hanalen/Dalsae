@@ -1,0 +1,90 @@
+<template>
+	<div class="profile-context" @mousedown="Close" v-show="isShow">
+		<div class="context" :style="{'left':x+'px','top':y+'px'}">
+			<div class="context-item" v-if="user!=undefined && user.following" @click="ClickOffRetweet">
+				<span>리트윗 끄기</span>
+			</div>
+			<div class="context-item">
+				<span>뮤트 하기</span>
+			</div>
+			<div class="context-item">
+				<span>차단 하기</span>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+export default {
+  name: "profilecontext",
+  components: {
+  },
+  data: function() {
+    return {
+			isShow:false,
+			x: 300,
+			y: 0,
+			user:undefined,
+    };
+	},
+	props:{
+	},
+  computed:{
+  },
+  created: function() {
+		
+  },
+  methods: {
+		Close(e){
+			this.isShow=false;
+		},
+		Show(e, user){
+			this.user=user;
+			this.isShow=true;
+			this.x=e.clientX-40;
+			this.y=e.clientY-10;
+		},
+		ClickOffRetweet(){
+			this.EventBus.$emit('RetweetOff', this.user)
+		},
+		ClickMute(){
+			this.EventBus.$emit('Mute', this.user);
+		},
+		ClickBlock(){
+			this.EventBus.$emit('Block', this.user)
+		},
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.profile-context{
+	width: 600px;
+	height: 900px;
+	background-color: rgba(165, 165, 165, 0.39);
+	position: fixed;
+	left: 0;
+	top: 0;
+	.context{
+		position: fixed;
+		background-color:white;
+		z-index: 20;
+		width: 120px;
+		border-radius: 10px;
+		// height: 500px;
+		.context-item{
+			width: 100%;
+			padding:4px;
+			height: 30px;
+			border-bottom: dashed 1px rgb(211, 211, 211);
+			span{
+				margin-left: 10px;
+			}
+		}
+		.context-item:hover{
+			background-color: rgb(211, 211, 211);
+			border-radius: 10px;
+		}
+	}
+}
+</style>

@@ -27,6 +27,11 @@ export default new Router({
       component: require('@/components/Modals/HotkeyPopup').default, 
     },
     {
+      path: '/Profile',
+      name:'Profile',
+      component: require('@/components/Modals/ProfilePopup').default, 
+    },
+    {
       path: '*',
       redirect: '/'
     }

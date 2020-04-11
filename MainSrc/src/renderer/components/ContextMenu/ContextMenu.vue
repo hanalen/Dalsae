@@ -17,6 +17,9 @@
       <ContextMenuItem :menuText="'인용'" :hotkey="'sendQt'" :callback="QT" :mouseenter="Hover"/>
       <ContextMenuItem :menuText="'관심글'" :hotkey="'sendFavorite'" :callback="Favorite" :mouseenter="Hover"/>
       <div class="context-group"></div>
+      <ContextMenuItem v-for="(user, index) in users" :key="index" :menuText="'@'+user+' 의 프로필 보기'"
+          :hotkey="''" :callback="ShowProfile" :mouseenter="Hover"/>
+      <div class="context-group"></div>
       <ContextMenuItem :menuText="'웹에서 보기'" :hotkey="''" :callback="ViewWeb" :mouseenter="Hover"/>
       <ContextMenuItem :menuText="'트윗 복사(미구현)'" :hotkey="'Copy'" :callback="Copy" :mouseenter="Hover"/>
       <ContextMenuItem :menuText="'트윗 삭제'" :hotkey="'Delete'" :callback="Delete" :mouseenter="Hover"/>
@@ -37,7 +40,23 @@ export default {
       selectIndex: 0
     };
   },
-  computed: {},
+  computed: {
+    users(){
+      var arr=[];
+      arr.push(this.tweet.user.screen_name);
+      if(arr.find(x=>x==this.tweet.orgTweet.user.screen_name)==undefined){
+        arr.push(this.tweet.orgTweet.user.screen_name);
+      }
+      if(this.tweet.entities.user_mentions!=undefined){
+        this.tweet.entities.user_mentions.forEach(user => {
+          if(arr.find(x=>x==user.screen_name)==undefined){//중복 안되게
+            arr.push(user.screen_name);
+          }
+        });
+      }
+      return arr;
+    }
+  },
   created: function() {
     this.EventBus.$on('HideContext', ()=>{
       this.Hide();
@@ -72,7 +91,6 @@ export default {
       this.Hide();
     },
     QT(){
-
       this.Hide();
     },
     ViewWeb(){
@@ -80,6 +98,11 @@ export default {
       shell.openExternal('https://twitter.com/'+this.tweet.orgTweet.user.screen_name+'/status/'+this.tweet.orgTweet.id_str)
       this.$store.dispatch('AddOpen', this.tweet);
       this.Hide();
+    },
+    ShowProfile(text){
+      var end = text.indexOf(' ');
+      var screenName = text.substring(1, end);
+      this.EventBus.$emit('ShowProfile', screenName);
     },
     Url(url){
       const { shell } = require('electron')

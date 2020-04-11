@@ -25,6 +25,10 @@ export default {
       this.$store.dispatch('Hotkey', hotkey)
 			this.EventBus.$emit('SaveHotkey');
     });
+
+    this.EventBus.$on('ShowProfile', (screenName)=>{
+      ipcRenderer.send('ShowProfile', screenName, this.$store.state.Account.selectAccount);
+    });
   },
   data() {
     return {
