@@ -5,7 +5,7 @@
       <i class="far fa-bell fa-2x" @click="ClickMention"></i>
       <!-- <i class="far fa-envelope fa-2x" @click="ClickDM"></i> -->
       <i class="far fa-heart fa-2x" @click="ClickFavorite"></i>
-      <!-- <i class="fas fa-link fa-2x" @click="ClickLink"></i> -->
+      <i class="fas fa-link fa-2x" @click="ClickLink"></i>
   </div>
 </template>
 
@@ -33,7 +33,7 @@ export default {
       this.EventBus.$emit('FocusPanel', 'favorite');
     },
     ClickLink(e){
-      this.EventBus.$emit('FocusPanel', 'link');
+      this.EventBus.$emit('FocusPanel', 'openLink');
     },
     
   }

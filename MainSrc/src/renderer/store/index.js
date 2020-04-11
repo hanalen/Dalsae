@@ -40,8 +40,8 @@ export default new Vuex.Store({
       home:[],
       mention:[],
       fav:[],
-      open:[],
       user:[],
+      openLink:[],
       daehwa:[],
     },
     Account:{//로그인 등록 된 계정 목록
@@ -311,9 +311,11 @@ export default new Vuex.Store({
       });
     },
     AddOpen(state, tweet){
-      if(state.tweets.open.find(x=>x.id_str==tweet.id_str)==undefined){
-        TweetDataAgent.ChangeOddEven(state.tweets.open, index, resTweet);
-        state.tweets.open.splice(0, 0, tweet);
+      if(state.tweets.openLink.find(x=>x.id_str==tweet.id_str)==undefined){
+        var resTweet=TweetDataAgent.CreateResponsiveTweet(tweet);
+        TweetDataAgent.ChangeOddEven(state.tweets.openLink, 0, resTweet);
+        state.tweets.openLink.splice(0, 0, tweet);
+        TweetDataAgent.CreateNonResponsiveTweet(resTweet, tweet);
       }
     },
     updateOauth(state, oauth){

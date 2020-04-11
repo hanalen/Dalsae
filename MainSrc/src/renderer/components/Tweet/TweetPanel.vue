@@ -26,6 +26,14 @@
         v-bind:tweets="this.$store.state.tweets.fav"
       />
       <TweetList
+        ref="openLink"
+        :isShow="selectPanelName=='openLink'"
+        :panelName="'openLink'"
+        v-show="selectPanelName=='openLink'"
+        v-bind:options="this.$store.state.DalsaeOptions.uiOptions"
+        v-bind:tweets="this.$store.state.tweets.openLink"
+      />
+      <TweetList
         ref="daehwaPanel"
         :isShow="selectPanelName=='daehwa'"
         :panelName="'daehwa'"
@@ -65,6 +73,8 @@ export default {
           break;
         case 'daehwa':
           return this.$refs.daehwaPanel;
+        case 'openLink':
+          return this.$refs.openLink;
       }
     }
   },
@@ -118,6 +128,12 @@ export default {
         this.$store.dispatch('ClearDaehwa');
         this.selectPanelName='favorite';
         this.prevPanelName='favorite';
+        this.selectPanel.Focus();
+      }
+      else if(hotkeyType=='showUrl'){
+        this.$store.dispatch('ClearDaehwa');
+        this.selectPanelName='openLink';
+        this.prevPanelName='openLink';
         this.selectPanel.Focus();
       }
       else if(hotkeyType=='home'){
