@@ -12,7 +12,7 @@
 				</div>
 				<div class="buttons">
           <i @click="ClickContext" class="fas fa-ellipsis-h fa-2x"></i>
-					<button class="btn-follow" type="button" @click="ClickFollow">{{FollowText}}</button>
+					<button class="btn-follow" type="button" v-if="!user.blocking && !user.blocked_by" @click="ClickFollow">{{FollowText}}</button>
 					<button class="btn-follow" type="button" @click="Block" v-if="user.blocking">차단 됨</button>
 					<button class="btn-follow" type="button" @click="Block" v-if="user.blocked_by">차단 되어있음</button>
 				</div>
