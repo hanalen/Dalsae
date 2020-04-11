@@ -32,7 +32,7 @@
           <span class="name">{{user.name}}</span>
           <i :class="{'name': true}" v-if="user.protected" class="fas fa-lock"></i><br/>
           <span class="screen-name">@{{user.screen_name}}</span>
-          <span class="follow-by" v-if="!user.followed_by">님은 나를 팔로우 하고 있습니다.</span><br/><br/>
+          <span class="follow-by" v-if="user.followed_by">님은 나를 팔로우 하고 있습니다.</span><br/><br/>
         </div>
         <span v-if="user!=undefined" class="bio">{{user.description}}</span><br/>
         <i :class="{'witch':true}" class="far fa-compass"></i>

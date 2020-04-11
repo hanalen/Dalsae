@@ -8,7 +8,7 @@
 				<div class="profile-name">
 					<span class="name">{{user.name}}</span><br/>
 					<span class="screen-name">@{{user.screen_name}}</span>
-          <span class="follow-by" v-if="!user.followed_by">님은 나를 팔로우 하고 있습니다.</span>
+          <span class="follow-by" v-if="user.followed_by">님은 나를 팔로우 하고 있습니다.</span>
 				</div>
 				<div class="buttons">
           <i @click="ClickContext" class="fas fa-ellipsis-h fa-2x"></i>
