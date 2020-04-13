@@ -99,7 +99,32 @@ export default{
 			// console.log('get home error!');
 			console.log(err);
 		});
-	},
+  },
+  ReqUser(screenName, sinceID, publickey, secretkey, callback){
+    var method='GET';
+		var arr=[];
+		arr['count']= '200';
+		arr['tweet_mode']='extended';
+		arr['screen_name']=screenName;
+		arr['since_id']=sinceID;
+    var url = 'https://api.twitter.com/1.1/statuses/user_timeline.json'
+		var callUrl=OAuth.GetURL(url, method ,arr);
+		axios({
+			method:method,
+			url:callUrl,
+			headers:{
+				'Content-Type':'application/x-www-form-urlencoded;encoding=utf-8',
+				// 'Access-Control-Allow-Origin':'*',
+				'Authorization': OAuth.GetHeader(arr, method, url, publickey, secretkey)
+			},
+		}).then((res)=>{
+			// console.log(res);
+			callback(res.data);
+		}).catch((err)=>{
+			// console.log('get home error!');
+			console.log(err);
+		});
+  },
 	ReqDaehwa(tweetid, publickey, secretkey, callback, errCallback){
 		var method='GET';
 		var arr=[];

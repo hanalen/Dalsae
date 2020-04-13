@@ -156,7 +156,8 @@ export default {
       this.ShowContext(e, this.user);
     },
     ClickTweet(e){
-
+     var ipcRenderer = require('electron').ipcRenderer;
+	  	ipcRenderer.send('LoadUserTweet', this.user.screen_name);
     },
     ClickFollow(e){
       this.EventBus.$emit('ReqFollow', this.user);

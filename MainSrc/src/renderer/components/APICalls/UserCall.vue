@@ -22,6 +22,7 @@ export default {
       isLoadingMention:false,
       isLoadingFav:false,
       isLoadingDaehwa:false,
+      isLoadingUser:false,
     };
   },
   computed:{
@@ -62,9 +63,16 @@ export default {
       ApiUser.ReqMention(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResMention);
     },
     ReqFavorite(maxId, sinceId){
-      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'mention'})
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'favorite'})
       this.isLoadingFav=true;
       ApiUser.ReqFavorite(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResFavorite);
+    },
+    ReqUserTweet(screenName, maxid, sinceId){
+      console.log('ReqUserTweet screenname: '+screenName)
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'user'})
+      this.isLoadingUser=true;
+      this.EventBus.$emit('FocusPanel', 'user');
+      ApiUser.ReqUser(screenName, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResUser);
     },
     ReqDaehwa(tweet){
       if(this.isLoadingDaehwa){
@@ -129,7 +137,12 @@ export default {
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'daehwa'});
       this.$store.dispatch('Daehwa', tweet);
       this.EventBus.$emit('FocusDaehwa');
-		},
+    },
+    ResUser(listTweet){
+      this.isLoadingUser=false;
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'user'});
+      this.$store.dispatch('AddUserTweet', listTweet);
+    },
     ResFollowing(resUsers){
       this.$store.dispatch('FollowingList', resUsers.users);
       if(resUsers.next_cursor!=0){//다 땡겨왔을 경우 0으로 옴
@@ -193,6 +206,9 @@ export default {
     this.EventBus.$on('ReqDaehwa', (tweet)=>{
       this.ReqDaehwa(tweet);
     });
+    this.EventBus.$on('LoadUserTweet', (screenName)=>{
+      this.ReqUserTweet(screenName)
+    })
 	},
 };
 </script>

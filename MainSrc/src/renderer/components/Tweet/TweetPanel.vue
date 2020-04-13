@@ -26,6 +26,14 @@
         v-bind:tweets="this.$store.state.tweets.fav"
       />
       <TweetList
+        ref="user"
+        :isShow="selectPanelName=='user'"
+        :panelName="'user'"
+        v-show="selectPanelName=='user'"
+        v-bind:options="this.$store.state.DalsaeOptions.uiOptions"
+        v-bind:tweets="this.$store.state.tweets.user"
+      />
+      <TweetList
         ref="openLink"
         :isShow="selectPanelName=='openLink'"
         :panelName="'openLink'"
@@ -75,6 +83,8 @@ export default {
           return this.$refs.daehwaPanel;
         case 'openLink':
           return this.$refs.openLink;
+        case 'user':
+          return this.$refs.user;
       }
     }
   },

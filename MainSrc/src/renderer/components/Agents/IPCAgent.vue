@@ -25,6 +25,9 @@ export default {
       this.$store.dispatch('Hotkey', hotkey)
 			this.EventBus.$emit('SaveHotkey');
     });
+    ipcRenderer.on('LoadUserTweet', (event, screen_name)=>{
+      this.EventBus.$emit('LoadUserTweet', screen_name);
+    });
 
     this.EventBus.$on('ShowProfile', (screenName)=>{
       ipcRenderer.send('ShowProfile', screenName, this.$store.state.Account.selectAccount, this.$store.state.follower);

@@ -286,6 +286,11 @@ ipcMain.on('ShowProfile', (event, screenName, userData, listFollower)=>{
   });
 })
 
+ipcMain.on('LoadUserTweet',(event, screen_name)=>{
+  sendStatusToWindow('LoadUserTweet');
+  mainWindow.webContents.send('LoadUserTweet', screen_name)
+});
+
 ipcMain.on('CloseProfilePopup',()=>{
   profileWindow.close();
 });
