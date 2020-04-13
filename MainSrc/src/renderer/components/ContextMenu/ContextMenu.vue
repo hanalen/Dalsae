@@ -7,7 +7,7 @@
         :menuText="tweet.orgTweet.extended_entities.media[0].display_url"
         :hotkey="'G'" :callback="Media" :mouseenter="Hover"
         ref="Media"/>
-      <ContextMenuItem v-for="(url, index) in tweet.orgTweet.entities.urls" :key="index" :url="url"
+      <ContextMenuItem v-for="(url, index) in tweet.orgTweet.entities.urls" :key="url.url" :url="url"
                     :menuText="url.display_url" :hotkey="''" :callback="Url" ref="Url" :mouseenter="Hover"/>
       <div class="context-group"></div>
       <ContextMenuItem :menuText="'답글'" :hotkey="'reply'" :callback="Reply" ref="Reply" :mouseenter="Hover"/>
@@ -17,7 +17,7 @@
       <ContextMenuItem :menuText="'인용'" :hotkey="'sendQt'" :callback="QT" :mouseenter="Hover"/>
       <ContextMenuItem :menuText="'관심글'" :hotkey="'sendFavorite'" :callback="Favorite" :mouseenter="Hover"/>
       <div class="context-group"></div>
-      <ContextMenuItem v-for="(user, index) in users" :key="index" :menuText="'@'+user+' 의 프로필 보기'"
+      <ContextMenuItem v-for="(user, index) in users" :key="user.id_str" :menuText="'@'+user+' 의 프로필 보기'"
           :hotkey="''" :callback="ShowProfile" :mouseenter="Hover"/>
       <div class="context-group"></div>
       <ContextMenuItem :menuText="'웹에서 보기'" :hotkey="''" :callback="ViewWeb" :mouseenter="Hover"/>
@@ -177,10 +177,10 @@ export default {
     FocusChild(e) {
       if(e.preventDefault)
         e.preventDefault();
-      if(this.$refs.Media){
+      if(this.tweet.orgTweet.extended_entities){
         this.$refs.Media.$el.focus();
       }
-      else if(this.$refs.Url){
+      else if(this.tweet.orgTweet.entities.urls.length>0){
         this.$refs.Url[0].$el.focus();
       }
       else{
