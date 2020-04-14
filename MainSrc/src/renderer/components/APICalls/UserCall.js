@@ -78,7 +78,7 @@ export default{
 	ReqFavorite(maxId, sinceId, publickey, secretkey, callback){
 		var method='GET';
 		var arr=[];
-		arr['count']= '200';
+		arr['count']= '10';
 		arr['tweet_mode']='extended';
 		arr['max_id']=maxId;
 		arr['since_id']=sinceId;
@@ -93,7 +93,7 @@ export default{
 				'Authorization': OAuth.GetHeader(arr, method, url, publickey, secretkey)
 			},
 		}).then((res)=>{
-			// console.log(res);
+			console.log(JSON.stringify(res.data));
 			callback(res.data);
 		}).catch((err)=>{
 			// console.log('get home error!');

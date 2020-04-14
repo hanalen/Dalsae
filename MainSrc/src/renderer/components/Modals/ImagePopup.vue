@@ -160,7 +160,7 @@ export default {
 		DownloadImage(media, progress){
 			//progress show, hide 해야 함
 			var http = require('http');
-			var url = media.media_url;
+			var url = media.media_url_https+':orig';
 			var fs = require('fs');
 			var fileName = url.substring(url.lastIndexOf('/'),9999999999);
 			var file = fs.createWriteStream(app.getPath('userData')+'/Dalsae/Image/'+fileName);

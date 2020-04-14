@@ -32,8 +32,13 @@ export default new Router({
       component: require('@/components/Modals/ProfilePopup').default, 
     },
     {
+      path: '/Favorite',
+      name:'Favorite',
+      component: require('@/components/Modals/FavoritePopup').default, 
+    },
+    {
       path: '*',
-      redirect: '/'
+      redirect: '/Profile'
     }
   ]
 })
