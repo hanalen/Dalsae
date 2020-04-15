@@ -65,7 +65,7 @@ export default {
       var url = this.media.media_url + ':orig';
 			var fs = require('fs');
       var fileName = this.media.media_url.substring(this.media.media_url.lastIndexOf('/')+1,9999999999);
-			var file = fs.createWriteStream(app.getPath('userData')+'/Dalsae/Image/'+fileName);
+			var file = fs.createWriteStream(this.path+'/Dalsae/Image/'+fileName);
 			const request = http.get(url).on('response', function(res) {
       const len = parseInt(res.headers['content-length'], 10)
       let downloaded = 0

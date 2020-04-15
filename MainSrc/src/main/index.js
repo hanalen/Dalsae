@@ -200,7 +200,7 @@ var imageIndex=0;
 
 ipcMain.on('child', (event, tweet, option)=>{
   imageWindowState.manage(imageWin[imageIndex]);
-  imageWin[imageIndex].webContents.send('tweet', tweet, option)
+  imageWin[imageIndex].webContents.send('tweet', tweet, option, config)
 
   imageWin[imageIndex].show();
   imageIndex++;
@@ -305,9 +305,9 @@ ipcMain.on('FavoritePopup', (event, tokenData)=>{
   const path = process.env.NODE_ENV === 'development'
         ? 'http://localhost:9080/#/Favorite'
         : `file://${__dirname}/index.html#Favorite`
-    favoriteWindow.loadURL(path);
-    favoriteWindow.on('ready-to-show', ()=>{
-    favoriteWindow.webContents.send('UserData', tokenData)
+  favoriteWindow.loadURL(path);
+  favoriteWindow.on('ready-to-show', ()=>{
+    favoriteWindow.webContents.send('UserData', tokenData, config)
     favoriteWindow.show();
   })
   favoriteWindow.on('closed', (e)=>{

@@ -53,7 +53,7 @@
 		</div>
 		<div class="save-list">
 			<div class="panel">
-				<DownloadItem v-for="(media, index) in listDownloadMedia" :media="media" :key="index"/>
+				<DownloadItem v-for="(media, index) in listDownloadMedia" :media="media" :key="index" :path="path"/>
 			</div>
 		</div>
 		<ProfileCall :selectAccount="tokenData"/>
@@ -107,9 +107,15 @@ export default {
     });
 
     var ipcRenderer = require('electron').ipcRenderer;
-		ipcRenderer.on('UserData', (event, tokenData) => {
+		ipcRenderer.on('UserData', (event, tokenData, configPath) => {
 			this.tokenData=tokenData;
 			this.userData=tokenData.userData;
+			if(configPath){
+				this.path=configPath.path;
+			}
+			else{
+				this.path=app.getPath('userData');
+			}
 		});
 		this.EventBus.$on('FocusedTweet', (index)=>{
 			this.tweet=this.listMediaTweet[index];

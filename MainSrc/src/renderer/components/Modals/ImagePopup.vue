@@ -71,6 +71,7 @@ export default {
   },
   data () {
     return {
+			path:'',
 			uiOption:undefined,
 			listProgressPercent:Array(0,0,0,0),
 			isZoom:false,
@@ -92,10 +93,16 @@ export default {
 		ipcRenderer.on('Save', () => {
 			this.Save();
 		});
-		ipcRenderer.on('tweet', (event, tweet, uiOption) => {
+		ipcRenderer.on('tweet', (event, tweet, uiOption, configPath) => {
 			this.Clear();
 			this.tweet=tweet;
 			this.uiOption=uiOption;
+			if(configPath){
+				this.path=configPath.path
+			}
+			else{
+				this.path=app.getPath('userData')
+			}
 		});
 		ipcRenderer.on('SaveAll', () => {
 			this.SaveAll();
@@ -159,17 +166,17 @@ export default {
 		},
 		DownloadImage(media, progress){
 			//progress show, hide 해야 함
+			var vthis=this;
 			var http = require('http');
-			var url = media.media_url_https+':orig';
+			var url = media.media_url+':orig';
 			var fs = require('fs');
-			var fileName = url.substring(url.lastIndexOf('/'),9999999999);
-			var file = fs.createWriteStream(app.getPath('userData')+'/Dalsae/Image/'+fileName);
+			var fileName = media.media_url.substring(media.media_url.lastIndexOf('/'),9999999999);
+			var file = fs.createWriteStream(this.path+'/Dalsae/Image/'+fileName);
 
 			const request = http.get(url).on('response', function(res) {
       const len = parseInt(res.headers['content-length'], 10)
       let downloaded = 0
 			let percent = 0
-			var vthis=this;
       res
         .on('data', function(chunk) {
           file.write(chunk)
