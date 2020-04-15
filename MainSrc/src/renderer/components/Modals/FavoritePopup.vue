@@ -86,7 +86,6 @@ export default {
 			userData:undefined,
       tokenData:undefined,
 			index:0,
-			listFollowing:[],
 			listMediaTweet:[],
 			listProgressPercent:Array(0,0,0,0),
 			tweet:undefined,
@@ -104,8 +103,7 @@ export default {
     });
 
     var ipcRenderer = require('electron').ipcRenderer;
-		ipcRenderer.on('UserData', (event, tokenData, listFollowing) => {
-      this.listFollowing=listFollowing;
+		ipcRenderer.on('UserData', (event, tokenData) => {
 			this.tokenData=tokenData;
 			this.userData=tokenData.userData;
 		});

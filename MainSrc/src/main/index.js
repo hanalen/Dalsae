@@ -299,7 +299,7 @@ ipcMain.on('CloseProfilePopup',()=>{
 //#region 관글 윈도우
 var favoriteWindow=null;
 
-ipcMain.on('FavoritePopup', (event, tokenData, listFollowing)=>{
+ipcMain.on('FavoritePopup', (event, tokenData)=>{
   if(favoriteWindow) return;//2번 생성 막기
   favoriteWindow = new BrowserWindow({show:false,width:1200, height:900, devTools :false, webPreferences: {webSecurity: false}});
   const path = process.env.NODE_ENV === 'development'
@@ -307,7 +307,7 @@ ipcMain.on('FavoritePopup', (event, tokenData, listFollowing)=>{
         : `file://${__dirname}/index.html#Favorite`
     favoriteWindow.loadURL(path);
     favoriteWindow.on('ready-to-show', ()=>{
-    favoriteWindow.webContents.send('UserData', tokenData, listFollowing)
+    favoriteWindow.webContents.send('UserData', tokenData)
     favoriteWindow.show();
   })
   favoriteWindow.on('closed', (e)=>{
