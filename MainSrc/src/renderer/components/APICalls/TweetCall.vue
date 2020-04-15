@@ -12,7 +12,7 @@ import axios from 'axios'
 export default {
   name: "usercall",
   props: {
-		userToken:undefined,
+		tokenData:undefined,
   },
   created() {
   },
@@ -22,8 +22,8 @@ export default {
   },
   computed:{
     selectAccount(){
-			if(userToken)
-				return userToken;
+			if(this.tokenData)
+				return this.tokenData;
 			else
       	return this.$store.state.Account.selectAccount;
     }
@@ -42,7 +42,7 @@ export default {
 			// ApiTweet.Retweet(tweetId, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResRetweet);
 		},
 		Favorite(tweetId){
-			ApiTweet.Favorite(tweetId, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResFavoriet, this.ErrFavorite);
+			ApiTweet.Favorite(tweetId, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResFavorite, this.ErrFavorite);
 		},
 		UnFavorite(tweetId){
 			ApiTweet.UnFavorite(tweetId, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResUnFavorite, this.ErrFavorite);
@@ -78,17 +78,17 @@ export default {
 			// console.log('un retweet ok')
 			console.log(tweet);
 		},
-		ResFavoriet(tweet){
-			if(userToken){
-				this.EventBus.$emit('Favorite', tweet);
+		ResFavorite(tweet){
+			if(this.tokenData){
+				this.EventBus.$emit('ResFavorite', tweet);
 			}
 			else{
 				this.$store.dispatch('Favorite', tweet);
 			}
 		},
 		ResUnFavorite(tweet){
-			if(userToken){
-				this.EventBus.$emit('UnFavorite', tweet);
+			if(this.tokenData){
+				this.EventBus.$emit('ResUnFavorite', tweet);
 			}
 			else{
 				this.$store.dispatch('UnFavorite', tweet);
@@ -96,8 +96,6 @@ export default {
 		},
 		ResDelete(tweet){
 			this.$store.dispatch('Delete', tweet);
-			// console.log('delete twwet ok')
-			console.log(tweet);
 		},
     ErrRetweet(err, tweetID){
       console.log(err);
@@ -133,10 +131,13 @@ export default {
 			this.ConfirmRetweet(tweet);
 		});
 		this.EventBus.$on('Favorite', (tweet) => {
+			console.log('favorite eventbus')
 			if(tweet.orgTweet.favorited){
+				console.log('un fav')
         this.UnFavorite(tweet.orgTweet.id_str);
       }
       else{
+				console.log('fav')
 				this.Favorite(tweet.orgTweet.id_str);
       }
 		});

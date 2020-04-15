@@ -57,11 +57,13 @@
 			</div>
 		</div>
 		<UserCall :tokenData="tokenData"/>
+		<TweetCall :tokenData="tokenData"/>
   </div>
 </template>
 
 <script>
 const app = require('electron').remote.app
+import TweetCall from '../APICalls/TweetCall.vue'
 import UserCall from '../APICalls/UserCall.vue'
 import UserItem from './Profile/UserItem.vue'
 // import UserCall from '../APICalls/UserCall.js'
@@ -76,6 +78,7 @@ export default {
     ProgressBar,
     DownloadItem,
 		UserItem,
+		TweetCall,
 		UserCall,
   },
   data: function() {
@@ -121,6 +124,34 @@ export default {
 		this.EventBus.$on('DownloadComplete', (media)=>{
 			media.isComplete=true;
 		})
+		this.EventBus.$on('ResFavorite', (tweet)=>{
+			for(var i=0;i<this.listTweet.length;i++){
+				if(tweet.id_str==this.listTweet[i].id_str){
+					this.listTweet[i].orgTweet.favorited=true;
+					break;
+				}
+			}
+			for(var i=0;i<this.listMediaTweet.length;i++){
+				if(tweet.id_str==this.listMediaTweet[i].id_str){
+					this.listMediaTweet[i].orgTweet.favorited=true;
+					break;
+				}
+			}
+		});
+		this.EventBus.$on('ResUnFavorite', (tweet)=>{
+			for(var i=0;i<this.listTweet.length;i++){
+				if(tweet.id_str==this.listTweet[i].id_str){
+					this.listTweet[i].orgTweet.favorited=false;
+					break;
+				}
+			}
+			for(var i=0;i<this.listMediaTweet.length;i++){
+				if(tweet.id_str==this.listMediaTweet[i].id_str){
+					this.listMediaTweet[i].orgTweet.favorited=false;
+					break;
+				}
+			}
+		});
 		this.CheckComplete();
   },
   methods: {
@@ -135,7 +166,8 @@ export default {
       else if(e.key.toUpperCase()=='A' && e.ctrlKey){
 				this.SaveAll()
 			}
-			else if(e.key.toUpperCase()=='F' && e.ctrlKey){
+			else if(e.key.toUpperCase()=='F' && !e.ctrlKey && !e.altKey && !e.shiftKey){
+				console.log('key f')
 				this.EventBus.$emit('Favorite', this.tweet);
 			}
 		},
