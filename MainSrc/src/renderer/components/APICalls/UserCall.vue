@@ -130,6 +130,7 @@ export default {
     ResFavorite(listTweet){
       this.isLoadingFav=false;
       this.$store.dispatch('AddFavorite', listTweet);
+      this.EventBus.$emit('ResFavoriteList', listTweet);
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'favorite'});
     },
 		ResDaehwa(tweet){
@@ -158,6 +159,7 @@ export default {
       // console.log(resUsers)
     },
     ErrResFavorite(err){
+      this.EventBus.$emit('ErrFavoriteList', err);
       console.log(err)
     },
     ErrResFollowing(err, cursor){
@@ -197,8 +199,14 @@ export default {
     this.EventBus.$on('ReqMention', () => {
 			this.StartDalsae();
     });
-    this.EventBus.$on('ReqFavorite', () => {
-			this.StartDalsae();
+    this.EventBus.$on('ReqFavorite', (vals) => {
+      if(vals==undefined)
+        this.ReqFavorite(undefined, undefined);
+      else if(vals){
+        var maxid = vals['maxid']
+        var sinceid = vals['sinceid']
+        this.ReqFavorite(maxid, sinceid)
+      }
     });
     this.EventBus.$on('Reqqqqq', () => {
 			this.StartDalsae();
