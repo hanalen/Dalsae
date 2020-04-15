@@ -296,6 +296,31 @@ ipcMain.on('CloseProfilePopup',()=>{
 });
 //#endregion
 
+//#region 관글 윈도우
+var favoriteWindow=null;
+
+ipcMain.on('FavoritePopup', (event, tokenData, userData, listFollowing)=>{
+  if(favoriteWindow) return;//2번 생성 막기
+  favoriteWindow = new BrowserWindow({show:false,width:1200, height:900, devTools :false, webPreferences: {webSecurity: false}});
+  const path = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:9080/#/Favorite'
+        : `file://${__dirname}/index.html#Favorite`
+    favoriteWindow.loadURL(path);
+    favoriteWindow.on('ready-to-show', ()=>{
+    favoriteWindow.webContents.send('UserData', tokenData, userData, listFollowing)
+    favoriteWindow.show();
+  })
+  favoriteWindow.on('closed', (e)=>{
+    favoriteWindow=null;
+  });
+})
+
+ipcMain.on('CloseMuteOptionPopup',()=>{
+  favoriteWindow.close();
+});
+
+//#endregion
+
 //#region 자동업데이트
 
 ipcMain.on('restart_app', ()=>{
