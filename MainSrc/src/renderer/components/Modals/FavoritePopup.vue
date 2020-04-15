@@ -9,7 +9,8 @@
 			<div v-if="isStarted">
 				<span>상태: {{info}} | </span>
 				<span>관심글 수: {{this.listTweet.length}} / {{userData.favourites_count}} | </span><br/>
-				<span>1~4: 이미지 순서 선택 / ctrl+s: 현재 이미지 저장 / ctrl+a: 전체 이미지 저장 / ↑,↓: 트윗 선택</span>
+				<span>1~4: 이미지 순서 선택 / ctrl+s: 현재 이미지 저장 / ctrl+a: 전체 이미지 저장 / ↑,↓: 트윗 선택</span><br/>
+				<button type="button" @click="Start">더 불러오기</button>
 			</div>
 		</div>
 		<div class="body" v-if="listMediaTweet.length>0">
@@ -35,7 +36,6 @@
 						<div v-for="(image,i) in tweet.orgTweet.extended_entities.media" @click="index=i"
 							:key="i" class="img-preview">
 								<img :src="image.media_url_https" class="bottom-preview"/>
-								<ProgressBar ref="progress" :percent="listProgressPercent[i]"/>
 						</div>
 					</div>
 				</div>
@@ -87,10 +87,8 @@ export default {
       tokenData:undefined,
 			index:0,
 			listMediaTweet:[],
-			listProgressPercent:Array(0,0,0,0),
 			tweet:undefined,
 			listTweet:[],
-      listSaveMedia:[],
       listDownloadMedia:[],
     };
   },
@@ -119,7 +117,11 @@ export default {
 		this.EventBus.$on('ErrFavoriteList', (err)=>{
 			this.ErrFavoriteList(err);
 		});
-		
+
+		this.EventBus.$on('DownloadComplete', (media)=>{
+			media.isComplete=true;
+		})
+		this.CheckComplete();
   },
   methods: {
 		KeyDown(e){
@@ -133,12 +135,27 @@ export default {
       else if(e.key.toUpperCase()=='A' && e.ctrlKey){
 				this.SaveAll()
 			}
+			else if(e.key.toUpperCase()=='F' && e.ctrlKey){
+				this.EventBus.$emit('Favorite', this.tweet);
+			}
+		},
+		CheckComplete(){
+			for(var i=0;i<this.listDownloadMedia.length;i++){
+				if(this.listDownloadMedia[i].isComplete){
+					this.listDownloadMedia.splice(i,1);
+					i--;
+				}
+			}
+			setTimeout(() => {
+				this.CheckComplete();
+			}, 3000);
 		},
 		Save(index){
-			this.listDownloadMedia.push(this.tweet.extended_entities.media[index])
+			var media =this.tweet.extended_entities.media[index];
+			media.isComplete=false;
+			this.listDownloadMedia.push(media)
 		},
 		SaveAll(){
-      console.log('save all')
       this.tweet.extended_entities.media.forEach((media)=>{
         this.listDownloadMedia.push(media)
       })
@@ -173,6 +190,7 @@ export default {
 				}
 				this.listTweet.push(newTweet);
 			})
+			this.info='대기 중'
 			if(listTweet.length==0||this.userData.favourites_count==this.listTweet.length){//끝
 				this.info='불러오기 완료'
 				return;
@@ -182,7 +200,7 @@ export default {
 			}
 		},
 		ErrFavoriteList(err){
-			this.info='불러오기 제한! 대기중...'
+			this.info='불러오기 제한! 최대 15분 대기 필요...'
 			setTimeout(() => {
 				this.ReqFaoviteList();
 			}, 60000);
@@ -274,7 +292,7 @@ export default {
 	.save-list{
 		width: 100%;
 		height: 150px;
-		background-color: yellowgreen;
+		background-color: black;
     .panel{
       overflow-x: scroll;
 			overflow-y: none;
