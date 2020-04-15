@@ -87,6 +87,11 @@
     <div class="custom-control custom-switch">
       <b-button variant="primary" @click="ClickHotkeyOption">새창으로 여는 것이야</b-button>
     </div>
+    <br/>
+    <h4>관심글 저장 도구</h4>
+    <div class="custom-control custom-switch">
+      <b-button variant="primary" @click="ClickFavoritePopup">새창으로 여는 것이야</b-button>
+    </div>
   </div>
 </template>
 
@@ -135,6 +140,10 @@ export default {
     ClickHotkeyOption(e){
       var ipcRenderer = require('electron').ipcRenderer;
       ipcRenderer.send('OpenHotkeyOptionPopup', this.$store.state.DalsaeOptions.hotKey);
+    },
+    ClickFavoritePopup(e){
+      var ipcRenderer = require('electron').ipcRenderer;
+      ipcRenderer.send('FavoritePopup', this.$store.state.Account.selectAccount, this.$store.state.following);
     },
   },
   created: function(){

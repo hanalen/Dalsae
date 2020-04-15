@@ -103,10 +103,10 @@ export default {
     });
 
     var ipcRenderer = require('electron').ipcRenderer;
-		ipcRenderer.on('UserData', (event, tokenData, userData, listFollowing) => {
+		ipcRenderer.on('UserData', (event, tokenData, listFollowing) => {
       this.listFollowing=listFollowing;
 			this.tokenData=tokenData;
-			this.userData=userData,
+			this.userData=tokenData.userData;
 		});
 		this.EventBus.$on('FocusedTweet', (index)=>{
 			this.tweet=this.listMediaTweet[index];
