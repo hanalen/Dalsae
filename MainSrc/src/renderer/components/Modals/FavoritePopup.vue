@@ -2,11 +2,13 @@
   <div class="favorite-popup">
 		<div class="title" :class="{'info':isStarted}">
 			<div v-if="isStarted==false">
-				<span>설명설명설명</span>
+				<span>자신의 관심글을 가져와 이미지 트윗만 표시 하며 저장 합니다.</span><span>관심글의 관심글 해제, 및 추가, 사용자 팔로잉, 언팔로잉이 가능합니다.</span><span>이 창은 최소 높이 900px에 맞춰져 있습니다.</span><br/>
 				<button type="button" @click="Start">시작하기</button>
 			</div>
 			<div v-if="isStarted">
-				<span>상태 표시 바~</span>
+				<span>상태: {{info}}} | </span>
+				<span>관심글 수: {{this.listTweet.length}} / {{userData.favourites_count}}} | </span><br/>
+				<span>1~4: 이미지 순서 선택 / ctrl+s: 현재 이미지 저장 / ctrl+a: 전체 이미지 저장 / ↑,↓: 트윗 선택</span>
 			</div>
 		</div>
 		<div class="body" v-if="listMediaTweet.length>0">
@@ -53,11 +55,13 @@
 				<DownloadItem v-for="(media, index) in listDownloadMedia" :media="media" :key="index"/>
 			</div>
 		</div>
+		<UserCall/>
   </div>
 </template>
 
 <script>
 const app = require('electron').remote.app
+import UserCall from '../APICalls/UserCall.vue'
 import UserItem from './Profile/UserItem.vue'
 import UserCall from '../APICalls/UserCall.js'
 import TweetDataAgent from '../Agents/TweetDataAgent.js'
@@ -71,11 +75,14 @@ export default {
     ProgressBar,
     DownloadItem,
 		UserItem,
+		UserCall,
   },
   data: function() {
     return {
 			path:'',
+			info:'',
 			isStarted:false,
+			userData:undefined,
       tokenData:undefined,
 			index:0,
 			listFollowing:[],
@@ -91,22 +98,7 @@ export default {
 
   },
   created: function() {
-		const { deflate, unzip } = require('zlib');
-		const buffer = Buffer.from(this.zip, 'base64');
-		unzip(buffer, (err, buffer) => {
-			if (err) {
-			}
-			var json = buffer.toString();
-			this.listTweet=JSON.parse(json);
-			this.listTweet.forEach((tweet)=>{
-				var newTweet = TweetDataAgent.TweetInit(tweet);
-				newTweet.isMuted=false;
-				this.listMediaTweet.push(newTweet);
-			})
-			this.tweet=this.listMediaTweet[3];
-		});
 	  this.$nextTick(()=>{
-			console.log('next tick')
       document.addEventListener('keydown', this.KeyDown);
     });
 
@@ -118,6 +110,10 @@ export default {
 		this.EventBus.$on('FocusedTweet', (index)=>{
 			this.tweet=this.listMediaTweet[index];
 			this.index=0;
+		})
+
+		this.EventBus.$on('ResFavoriteList', (listTweet)=>{
+			this.ResFavoriteList(listTweet);
 		})
 		
   },
@@ -136,14 +132,11 @@ export default {
 		},
 		Save(index){
 			this.listDownloadMedia.push(this.tweet.extended_entities.media[index])
-      // this.listDownloadMedia.splice(0,0,this.tweet.extended_entities.media[index])
-      // console.log('save index: '+index);
 		},
 		SaveAll(){
       console.log('save all')
       this.tweet.extended_entities.media.forEach((media)=>{
         this.listDownloadMedia.push(media)
-        // this.listDownloadMedia.splice(0,0,media)
       })
 		},
 		ImgPath(org){
@@ -154,7 +147,35 @@ export default {
       return str.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
 		Start(e){
-
+			this.isStarted=true;
+			
+		},
+		ReqFaoviteList(){
+			this.info='불러오는 중...'
+			var maxid=-1;
+			if(this.listTweet.length>0){
+				maxid = this.listTweet[this.listTweet.length-1].id_str
+			}
+			this.EventBus.$emit('ReqFavorite', {'maxid': maxid, 'sinceid': -1})
+		},
+		ResFavoriteList(listTweet){
+			listTweet.forEach((tweet)=>{
+				var newTweet = TweetDataAgent.TweetInit(tweet);
+				newTweet.isMuted=false;
+				if(newTweet.orgTweet.extended_entities.media.length>0){
+					newTweet.orgTweet.extended_entities.media
+				}
+				this.listMediaTweet.push(newTweet);
+			})
+			if(listTweet.length==0){//끝
+				return;
+			}
+			else{
+				this.ReqFaoviteList();
+			}
+		},
+		ErrFavoriteList(err){
+			this.info='불러오기 제한! 대기중...'
 		},
 		Prev(e){
 
@@ -172,9 +193,9 @@ export default {
 	font-size: 14px;
 	width: 100vw;
 	height: 100vh;
-	background-color: black;
 	.title{//설명 및 상태 표시줄
 		height: 100px;
+		overflow: none;
 		.info{//시작 전 설명
 			// height: 100vh !important;
 		}
