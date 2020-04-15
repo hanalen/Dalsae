@@ -75,8 +75,6 @@ export default {
 		},
 		ResUnRetweet(tweet){
 			this.$store.dispatch('UnRetweet', tweet);
-			// console.log('un retweet ok')
-			console.log(tweet);
 		},
 		ResFavorite(tweet){
 			if(this.tokenData){
@@ -131,13 +129,10 @@ export default {
 			this.ConfirmRetweet(tweet);
 		});
 		this.EventBus.$on('Favorite', (tweet) => {
-			console.log('favorite eventbus')
 			if(tweet.orgTweet.favorited){
-				console.log('un fav')
         this.UnFavorite(tweet.orgTweet.id_str);
       }
       else{
-				console.log('fav')
 				this.Favorite(tweet.orgTweet.id_str);
       }
 		});
