@@ -12,6 +12,7 @@ import axios from 'axios'
 export default {
   name: "usercall",
   props: {
+		userToken:undefined,
   },
   created() {
   },
@@ -21,7 +22,10 @@ export default {
   },
   computed:{
     selectAccount(){
-      return this.$store.state.Account.selectAccount;
+			if(userToken)
+				return userToken;
+			else
+      	return this.$store.state.Account.selectAccount;
     }
   },
   methods: {
@@ -75,19 +79,20 @@ export default {
 			console.log(tweet);
 		},
 		ResFavoriet(tweet){
-			this.$store.dispatch('Favorite', tweet);
-			// console.log('favo ok')
-			console.log(tweet);
+			if(userToken){
+				this.EventBus.$emit('Favorite', tweet);
+			}
+			else{
+				this.$store.dispatch('Favorite', tweet);
+			}
 		},
 		ResUnFavorite(tweet){
-			this.$store.dispatch('UnFavorite', tweet);
-			// console.log('un favo ok')
-			console.log(tweet);
-		},
-		ResUnFavoriet(tweet){
-			this.$store.dispatch('UnFavorite', tweet);
-			// console.log('un favo ok')
-			console.log(tweet);
+			if(userToken){
+				this.EventBus.$emit('UnFavorite', tweet);
+			}
+			else{
+				this.$store.dispatch('UnFavorite', tweet);
+			}
 		},
 		ResDelete(tweet){
 			this.$store.dispatch('Delete', tweet);
