@@ -8,8 +8,8 @@
 			</div>
 			<div v-if="isStarted">
 				<span>상태: {{info}} | </span>
-				<span>관심글 수: {{this.listTweet.length}} / {{userData.favourites_count}} | </span><br/>
-				<span>1~4: 이미지 순서 선택 / ctrl+s: 현재 이미지 저장 / ctrl+a: 전체 이미지 저장 / ↑,↓: 트윗 선택</span><br/>
+				<span>관심글 수: {{this.listTweet.length}} / {{userData.favourites_count}} | 이미지 관심글 수: {{listMediaTweet.length}}</span><br/>
+				<span>1~4: 이미지 순서 선택 / ctrl+s: 현재 이미지 저장 / ctrl+a: 전체 이미지 저장 / F: 관심글 저장, 삭제 / Q: 팔로잉, 언팔로잉 / ↑,↓: 트윗 선택</span><br/>
 				<button type="button" @click="Start">더 불러오기</button>
 			</div>
 		</div>
@@ -92,10 +92,10 @@ export default {
 			userData:undefined,
       tokenData:undefined,
 			index:0,
-			listMediaTweet:[],
+			listMediaTweet:[],//미디어(사진)이 포함된 관심글 목록
 			tweet:undefined,
-			listTweet:[],
-      listDownloadMedia:[],
+			listTweet:[],//관심글 원본 트윗, 메모리 절약을 위해 id_str만 저장 한다. List<string>
+      listDownloadMedia:[],//다운로드 큐 데이터
     };
   },
   computed:{
@@ -138,12 +138,6 @@ export default {
 			media.isComplete=true;
 		})
 		this.EventBus.$on('ResFavorite', (tweet)=>{
-			for(var i=0;i<this.listTweet.length;i++){
-				if(tweet.id_str==this.listTweet[i].id_str){
-					this.listTweet[i].orgTweet.favorited=true;
-					break;
-				}
-			}
 			for(var i=0;i<this.listMediaTweet.length;i++){
 				if(tweet.id_str==this.listMediaTweet[i].id_str){
 					this.listMediaTweet[i].orgTweet.favorited=true;
@@ -152,12 +146,6 @@ export default {
 			}
 		});
 		this.EventBus.$on('ResUnFavorite', (tweet)=>{
-			for(var i=0;i<this.listTweet.length;i++){
-				if(tweet.id_str==this.listTweet[i].id_str){
-					this.listTweet[i].orgTweet.favorited=false;
-					break;
-				}
-			}
 			for(var i=0;i<this.listMediaTweet.length;i++){
 				if(tweet.id_str==this.listMediaTweet[i].id_str){
 					this.listMediaTweet[i].orgTweet.favorited=false;
@@ -171,7 +159,9 @@ export default {
 		KeyDown(e){
 			if(e.key=='1' || e.key=='2' || e.key=='3'|| e.key=='4'){
 				var index=Number(e.key);
+				index--;
 				if(index>=this.tweet.orgTweet.extended_entities.media.length) return;
+				this.index=index;
 			}
 			else if(e.key.toUpperCase()=='S' && e.ctrlKey){
 				this.Save(this.index)
@@ -180,8 +170,10 @@ export default {
 				this.SaveAll()
 			}
 			else if(e.key.toUpperCase()=='F' && !e.ctrlKey && !e.altKey && !e.shiftKey){
-				console.log('key f')
 				this.EventBus.$emit('Favorite', this.tweet);
+			}
+			else if(e.key.toUpperCase()=='Q' && !e.ctrlKey && !e.altKey && !e.shiftKey){
+				this.EventBus.$emit('ReqFollow', this.tweet.orgUser);
 			}
 		},
 		CheckComplete(){
@@ -220,7 +212,7 @@ export default {
 			this.info='불러오는 중...'
 			var maxid='0';
 			if(this.listTweet.length>0){
-				maxid = this.listTweet[this.listTweet.length-1].id_str
+				maxid = this.listTweet[this.listTweet.length-1];
 			}
 			this.EventBus.$emit('ReqFavorite', {'maxid': maxid, 'sinceid': '0'})
 		},
@@ -233,7 +225,7 @@ export default {
 						if(newTweet.orgTweet.extended_entities.media[0].type=='photo')
 							this.listMediaTweet.push(newTweet);
 				}
-				this.listTweet.push(newTweet);
+				this.listTweet.push(newTweet.orgTweet.id_str);
 			})
 			this.info='대기 중'
 			if(listTweet.length==0||this.userData.favourites_count==this.listTweet.length){//끝
@@ -245,7 +237,7 @@ export default {
 			}
 		},
 		ErrFavoriteList(err){
-			this.info='불러오기 제한! 최대 15분 대기 필요...'
+			this.info='불러오기 제한! 자동으로 불러옵니다. 최대 대기 시간: 15분'
 			setTimeout(() => {
 				this.ReqFaoviteList();
 			}, 60000);
@@ -339,7 +331,7 @@ export default {
 		height: 150px;
 		background-color: black;
     .panel{
-      overflow-x: scroll;
+      overflow-x: none;
 			overflow-y: none;
       display: flex;
       flex-direction: row-reverse;
