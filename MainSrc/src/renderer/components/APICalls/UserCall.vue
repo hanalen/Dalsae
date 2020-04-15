@@ -139,11 +139,11 @@ export default {
       this.isLoadingFav=false;
       if(this.tokenData==undefined){
         this.$store.dispatch('AddFavorite', listTweet);
-        this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'favorite'});
       }
       else{
         this.EventBus.$emit('ResFavoriteList', listTweet);
       }
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'favorite'});
     },
 		ResDaehwa(tweet){
       this.isLoadingDaehwa=false;
