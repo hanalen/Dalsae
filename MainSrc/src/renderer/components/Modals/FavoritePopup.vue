@@ -53,7 +53,7 @@
 		</div>
 		<div class="save-list">
 			<div class="panel">
-				<DownloadItem v-for="(media, index) in listDownloadMedia" :media="media" :key="index" :path="path"/>
+				<DownloadItem ref="downloadItem" v-for="(media, index) in listDownloadMedia" :media="media" :key="index" :path="path"/>
 			</div>
 		</div>
 		<ProfileCall :selectAccount="tokenData"/>
@@ -183,11 +183,14 @@ export default {
 			}
 		},
 		CheckComplete(){
-			for(var i=0;i<this.listDownloadMedia.length;i++){
-				if(this.listDownloadMedia[i].isComplete){
-					this.listDownloadMedia.splice(i,1);
-					i--;
-				}
+			if(this.$refs.downloadItem){
+				this.$refs.downloadItem.forEach((item)=>{
+					if(item.isComplete){
+						var index = this.listDownloadMedia.findIndex(x=>x.id_str==item.media.id_str)
+						if(index>-1)
+							this.listDownloadMedia.splice(index,1);
+					}
+				})
 			}
 			setTimeout(() => {
 				this.CheckComplete();

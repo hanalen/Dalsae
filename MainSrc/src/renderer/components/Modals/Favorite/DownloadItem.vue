@@ -48,7 +48,6 @@ export default {
   methods: {
     Complete(){
       this.isComplete=true;
-      this.EventBus.$emit('DownloadComplete', this.media);
     },
     Error(){
       this.isError=true;
