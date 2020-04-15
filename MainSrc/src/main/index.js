@@ -1,5 +1,5 @@
 // #region 프로그램 구동에 필요한 코드 및 로그
-const {app, BrowserWindow, Menu, MenuItem, protocol, ipcMain, ipcRenderer} = require('electron');
+const {app, BrowserWindow, Menu, MenuItem, protocol, ipcMain, ipcRenderer, dialog} = require('electron');
 const log = require('electron-log');
 const {autoUpdater} = require("electron-updater");
 const windowStateKeeper = require('electron-window-state');//윈도우 창 크기,위치 저장하는 애
@@ -103,16 +103,26 @@ const template = [
       {
         label: '설정 저장 폴더 열기',
         click: function() {
-          const {shell} = require('electron') // deconstructing assignment
-          shell.openItem(app.getPath('userData')+'/Dalsae')
+          const {shell} = require('electron')
+          if(config){
+            shell.openItem(config.path+'/Dalsae')
+          }
+          else{
+            shell.openItem(app.getPath('userData')+'/Dalsae')
+          }
         },
         // accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I'//단축키
       },
       {
         label: '이미지 폴더 열기',
         click: function() {
-          const {shell} = require('electron') // deconstructing assignment
-          shell.openItem(app.getPath('userData')+'/Dalsae/Image')
+          const {shell} = require('electron')
+          if(config){
+            shell.openItem(config.path+'/Dalsae/Image')
+          }
+          else{
+            shell.openItem(app.getPath('userData')+'/Dalsae/Image')
+          }
         },
         // accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I'//단축키
       },
@@ -128,7 +138,38 @@ const template = [
         // accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I'//단축키
       },
     ]
-  }
+  },
+  {
+    label: '정보',
+    submenu: [
+     {
+       label: '달새 정보 보기',
+       click: function() {
+        const appVersion = require('../../package.json').version;
+        const options = {
+          type: 'info',
+          title: '정보',
+          message: '달새 버전: '+appVersion+'\r\n'+'공식 계정: @Dalsae_info\r\n제작자: 하날엔(@hanalen_)',
+        };
+        dialog.showMessageBox(null, options)
+       },
+      },
+      {
+        label: '공식 계정으로 가기',
+        click: function() {
+          const { shell } = require('electron')
+          shell.openExternal('https://twitter.com/Dalsae_info')
+        },
+      },
+      {
+        label: '공식 배포 페이지로 가기',
+        click: function() {
+          const { shell } = require('electron')
+          shell.openExternal('https://github.com/hanalen-/Dalsae/releases')
+        },
+      },
+    ]
+ }
 ]
 
 
