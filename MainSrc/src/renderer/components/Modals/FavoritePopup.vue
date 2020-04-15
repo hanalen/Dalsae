@@ -56,6 +56,7 @@
 				<DownloadItem v-for="(media, index) in listDownloadMedia" :media="media" :key="index"/>
 			</div>
 		</div>
+		<ProfileCall :selectAccount="tokenData"/>
 		<UserCall :tokenData="tokenData"/>
 		<TweetCall :tokenData="tokenData"/>
   </div>
@@ -63,6 +64,7 @@
 
 <script>
 const app = require('electron').remote.app
+import ProfileCall from '../APICalls/ProfileCall.vue'
 import TweetCall from '../APICalls/TweetCall.vue'
 import UserCall from '../APICalls/UserCall.vue'
 import UserItem from './Profile/UserItem.vue'
@@ -75,7 +77,8 @@ export default {
   name: "favoritepopup",
   components: {
 		TweetList,
-    ProgressBar,
+		ProgressBar,
+		ProfileCall,
     DownloadItem,
 		UserItem,
 		TweetCall,
@@ -120,6 +123,16 @@ export default {
 		this.EventBus.$on('ErrFavoriteList', (err)=>{
 			this.ErrFavoriteList(err);
 		});
+
+		this.EventBus.$on('ResFollow', (vals)=>{
+			var user=vals['user']
+			var follow=vals['follow']
+			this.listMediaTweet.forEach((item)=>{
+				if(item.orgUser.id_str==user.id_str){
+					item.orgUser.following=follow;
+				}
+			})
+		})
 
 		this.EventBus.$on('DownloadComplete', (media)=>{
 			media.isComplete=true;
