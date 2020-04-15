@@ -63,7 +63,7 @@
 const app = require('electron').remote.app
 import UserCall from '../APICalls/UserCall.vue'
 import UserItem from './Profile/UserItem.vue'
-import UserCall from '../APICalls/UserCall.js'
+// import UserCall from '../APICalls/UserCall.js'
 import TweetDataAgent from '../Agents/TweetDataAgent.js'
 import TweetList from '../Tweet/Tweetlist.vue'
 import ProgressBar from '../Common/ProgressBar.vue'
@@ -103,9 +103,10 @@ export default {
     });
 
     var ipcRenderer = require('electron').ipcRenderer;
-		ipcRenderer.on('UserData', (event, tokenData, listFollowing) => {
+		ipcRenderer.on('UserData', (event, tokenData, userData, listFollowing) => {
       this.listFollowing=listFollowing;
-      this.tokenData=tokenData;
+			this.tokenData=tokenData;
+			this.userData=userData,
 		});
 		this.EventBus.$on('FocusedTweet', (index)=>{
 			this.tweet=this.listMediaTweet[index];
@@ -162,12 +163,15 @@ export default {
 			listTweet.forEach((tweet)=>{
 				var newTweet = TweetDataAgent.TweetInit(tweet);
 				newTweet.isMuted=false;
-				if(newTweet.orgTweet.extended_entities.media.length>0){
-					newTweet.orgTweet.extended_entities.media
+				if(newTweet.orgTweet.extended_entities)
+					if(newTweet.orgTweet.extended_entities.media.length>0){
+						if(newTweet.orgTweet.extended_entities.media[0].type=='photo')
+							this.listMediaTweet.push(newTweet);
 				}
-				this.listMediaTweet.push(newTweet);
+				this.listTweet.push(newTweet);
 			})
-			if(listTweet.length==0){//끝
+			if(listTweet.length==0||this.userData.favourites_count==this.listTweet.length){//끝
+				this.info='불러오기 완료'
 				return;
 			}
 			else{
@@ -176,6 +180,9 @@ export default {
 		},
 		ErrFavoriteList(err){
 			this.info='불러오기 제한! 대기중...'
+			setTimeout(() => {
+				this.ReqFaoviteList();
+			}, 60000);
 		},
 		Prev(e){
 
