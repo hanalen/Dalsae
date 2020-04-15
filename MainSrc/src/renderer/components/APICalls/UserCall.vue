@@ -12,6 +12,7 @@ import axios from 'axios'
 export default {
   name: "usercall",
   props: {
+    tokenData:undefined,
   },
   created() {
   },
@@ -27,7 +28,12 @@ export default {
   },
   computed:{
     selectAccount(){
-      return this.$store.state.Account.selectAccount;
+      if(this.tokenData!=undefined){//해당 컴포넌트를 다른 윈도우에서 쓸 경우 props를 사용
+        return this.tokenData;
+      }
+      else{
+        return this.$store.state.Account.selectAccount;
+      }
     }
   },
   methods: {
@@ -65,7 +71,9 @@ export default {
     ReqFavorite(maxId, sinceId){
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'favorite'})
       this.isLoadingFav=true;
-      ApiUser.ReqFavorite(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResFavorite);
+      console.log('maxid: '+maxId)
+      console.log('sinceid: '+sinceId)
+      ApiUser.ReqFavorite(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResFavorite, this.ErrResFavorite);
     },
     ReqUserTweet(screenName, maxid, sinceId){
       console.log('ReqUserTweet screenname: '+screenName)
@@ -129,9 +137,13 @@ export default {
     },
     ResFavorite(listTweet){
       this.isLoadingFav=false;
-      this.$store.dispatch('AddFavorite', listTweet);
-      this.EventBus.$emit('ResFavoriteList', listTweet);
-      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'favorite'});
+      if(this.tokenData==undefined){
+        this.$store.dispatch('AddFavorite', listTweet);
+        this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'favorite'});
+      }
+      else{
+        this.EventBus.$emit('ResFavoriteList', listTweet);
+      }
     },
 		ResDaehwa(tweet){
       this.isLoadingDaehwa=false;
@@ -159,6 +171,7 @@ export default {
       // console.log(resUsers)
     },
     ErrResFavorite(err){
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'favorite'});
       this.EventBus.$emit('ErrFavoriteList', err);
       console.log(err)
     },

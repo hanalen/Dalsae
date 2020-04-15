@@ -3,11 +3,12 @@
 		<div class="title" :class="{'info':isStarted}">
 			<div v-if="isStarted==false">
 				<span>자신의 관심글을 가져와 이미지 트윗만 표시 하며 저장 합니다.</span><span>관심글의 관심글 해제, 및 추가, 사용자 팔로잉, 언팔로잉이 가능합니다.</span><span>이 창은 최소 높이 900px에 맞춰져 있습니다.</span><br/>
+				<span>메모리 사용량이 높을 수 있으니 주의 바랍니다.</span>
 				<button type="button" @click="Start">시작하기</button>
 			</div>
 			<div v-if="isStarted">
-				<span>상태: {{info}}} | </span>
-				<span>관심글 수: {{this.listTweet.length}} / {{userData.favourites_count}}} | </span><br/>
+				<span>상태: {{info}} | </span>
+				<span>관심글 수: {{this.listTweet.length}} / {{userData.favourites_count}} | </span><br/>
 				<span>1~4: 이미지 순서 선택 / ctrl+s: 현재 이미지 저장 / ctrl+a: 전체 이미지 저장 / ↑,↓: 트윗 선택</span>
 			</div>
 		</div>
@@ -55,7 +56,7 @@
 				<DownloadItem v-for="(media, index) in listDownloadMedia" :media="media" :key="index"/>
 			</div>
 		</div>
-		<UserCall/>
+		<UserCall :tokenData="tokenData"/>
   </div>
 </template>
 
@@ -116,6 +117,10 @@ export default {
 		this.EventBus.$on('ResFavoriteList', (listTweet)=>{
 			this.ResFavoriteList(listTweet);
 		})
+
+		this.EventBus.$on('ErrFavoriteList', (err)=>{
+			this.ErrFavoriteList(err);
+		});
 		
   },
   methods: {
@@ -149,15 +154,15 @@ export default {
 		},
 		Start(e){
 			this.isStarted=true;
-			
+			this.ReqFaoviteList();
 		},
 		ReqFaoviteList(){
 			this.info='불러오는 중...'
-			var maxid=-1;
+			var maxid='0';
 			if(this.listTweet.length>0){
 				maxid = this.listTweet[this.listTweet.length-1].id_str
 			}
-			this.EventBus.$emit('ReqFavorite', {'maxid': maxid, 'sinceid': -1})
+			this.EventBus.$emit('ReqFavorite', {'maxid': maxid, 'sinceid': '0'})
 		},
 		ResFavoriteList(listTweet){
 			listTweet.forEach((tweet)=>{
@@ -175,7 +180,7 @@ export default {
 				return;
 			}
 			else{
-				this.ReqFaoviteList();
+				// this.ReqFaoviteList();
 			}
 		},
 		ErrFavoriteList(err){
@@ -201,7 +206,8 @@ export default {
 	width: 100vw;
 	height: 100vh;
 	.title{//설명 및 상태 표시줄
-		height: 100px;
+		min-height: 100px;
+		height: auto;
 		overflow: none;
 		.info{//시작 전 설명
 			// height: 100vh !important;

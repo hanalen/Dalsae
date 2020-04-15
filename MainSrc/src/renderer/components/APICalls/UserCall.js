@@ -75,13 +75,15 @@ export default{
 			console.log(err);
 		});
 	},
-	ReqFavorite(maxId, sinceId, publickey, secretkey, callback){
+	ReqFavorite(maxId, sinceId, publickey, secretkey, callback, errCallback){
 		var method='GET';
 		var arr=[];
-		arr['count']= '10';
+		arr['count']= '200';
 		arr['tweet_mode']='extended';
-		arr['max_id']=maxId;
-		arr['since_id']=sinceId;
+		if(maxId>0)
+			arr['max_id']=maxId;
+		if(sinceId>0)
+			arr['since_id']=sinceId;
 		var url = 'https://api.twitter.com/1.1/favorites/list.json'
 		var callUrl=OAuth.GetURL(url, method ,arr);
 		axios({
@@ -93,10 +95,10 @@ export default{
 				'Authorization': OAuth.GetHeader(arr, method, url, publickey, secretkey)
 			},
 		}).then((res)=>{
-			console.log(JSON.stringify(res.data));
+			console.log(res)
 			callback(res.data);
 		}).catch((err)=>{
-			// console.log('get home error!');
+			errCallback(err);
 			console.log(err);
 		});
   },
