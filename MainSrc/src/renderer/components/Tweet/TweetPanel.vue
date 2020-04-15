@@ -111,10 +111,12 @@ export default {
       }
       else if(this.selectPanelName=='daehwa' && selectPanelName!='daehwa'){//대화패널에서 나갈 경우 클리어
         this.$store.dispatch('ClearDaehwa');
+        this.selectPanelName=selectPanelName
       }
-      else if(selectPanelName!='' &&selectPanelName != undefined){
+      else if(selectPanelName!='' && selectPanelName != undefined){
         this.selectPanelName=selectPanelName;
       }
+      this.EventBus.$emit('HideContext')
       this.selectPanel.Focus();
     });
   },
