@@ -200,6 +200,7 @@ export default {
 		},
 		SaveAll(){
       this.tweet.extended_entities.media.forEach((media)=>{
+				media.isComplete=false;
         this.listDownloadMedia.push(media)
       })
 		},
