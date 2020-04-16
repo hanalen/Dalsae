@@ -355,6 +355,8 @@ export default {
 <style lang="scss" scoped>
 textarea {
   font-family: "Malgun Gothic" !important;
+  font-size: 13px;
+  padding: 2px;
 }
 .text-area-top{
   padding: 4px 4px 0px 4px;

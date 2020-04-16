@@ -170,7 +170,7 @@ export default {
 .tweet {
   height: auto;
   color: black;
-  
+  font-size: 14px;
   // align-items: stretch;
   border-bottom: dashed 1px rgba(0, 0, 0, 0.12);
 }
