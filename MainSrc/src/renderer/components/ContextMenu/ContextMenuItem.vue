@@ -1,6 +1,6 @@
 <template>
   <div :class="{'context-menu-item':true, 'selected':selected}" @click="Click" tabindex="-1"
-				@focus="Focused" v-on:focusout="FocusOut" @mouseenter="Hover">
+				@focus="Focused" v-on:focusout="FocusOut" @mouseenter="Hover" @keydown.enter="Enter">
 		<div class="inner-box">
 			<div class="context-item-left">
 		 		<span>{{menuText}}</span>
@@ -36,6 +36,15 @@ export default {
 		}
 	},
 	methods:{
+		Enter(e){
+			e.preventDefault();
+			if(this.callback!=undefined){
+				if(this.url)
+					this.callback(this.url);
+				else
+					this.callback(this.menuText);
+			}
+		},
 		Click(e){
 			e.preventDefault();
 			if(this.callback!=undefined){
