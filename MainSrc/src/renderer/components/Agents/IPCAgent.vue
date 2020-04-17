@@ -26,6 +26,7 @@ export default {
 			this.EventBus.$emit('SaveHotkey');
     });
     ipcRenderer.on('LoadUserTweet', (event, screen_name)=>{
+      this.$store.dispatch('ClearUser');
       this.EventBus.$emit('LoadUserTweet', screen_name);
     });
 

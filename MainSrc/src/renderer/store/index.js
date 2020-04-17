@@ -469,6 +469,9 @@ export default new Vuex.Store({
     ClearDaehwa(state){
       state.tweets.daehwa=[];
     },
+    ClearUser(state){
+      state.tweets.user=[];
+    },
     UIOption(state, uiOption){
       state.DalsaeOptions.uiOptions.isSmallTweet=uiOption.isSmallTweet;
       state.DalsaeOptions.uiOptions.isShowPropic=uiOption.isShowPropic;
@@ -671,6 +674,9 @@ export default new Vuex.Store({
     },
     ClearDaehwa(context){
       context.commit('ClearDaehwa');
+    },
+    ClearUser(context){
+      context.commit('ClearUser')
     },
     Daehwa(context, tweet){
       context.commit('Daehwa', tweet);
