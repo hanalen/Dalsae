@@ -257,7 +257,7 @@ export default {
         var v = this.$refs.find.GetSelectScreenName();
         this.ReplaceMentionID(v);
       }
-      else if(this.$store.state.DalsaeOptions.uiOptions.isSendEnter){
+      else if(this.$store.state.DalsaeOptions.uiOptions.isSendEnter && !e.shiftKey){
         this.SendTweet();
       }
       else if(e.ctrlKey){
