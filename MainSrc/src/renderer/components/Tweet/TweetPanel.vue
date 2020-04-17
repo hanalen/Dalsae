@@ -222,6 +222,10 @@ export default {
         var tweet=this.selectPanel.GetSelectTweet();
         this.EventBus.$emit('DeleteTweet', tweet);
       }
+      else if(hotkeyType=='sendQt'){
+        var tweet=this.selectPanel.GetSelectTweet();
+        this.EventBus.$emit('QtTweet', tweet)
+      }
     },
     ReqTweets(panelName){
       var panel=this.selectPanelName;

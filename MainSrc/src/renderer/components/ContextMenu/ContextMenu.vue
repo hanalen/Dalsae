@@ -91,6 +91,7 @@ export default {
       this.Hide();
     },
     QT(){
+      this.EventBus.$emit('QtTweet', this.tweet)
       this.Hide();
     },
     ViewWeb(){

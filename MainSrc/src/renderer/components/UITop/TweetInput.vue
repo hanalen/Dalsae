@@ -124,6 +124,12 @@ export default {
       })
       this.FocusInput();
     });
+    this.EventBus.$on('QtTweet', (tweet)=>{
+      var str = 'https://twitter.com/'+tweet.orgUser.screen_name+'/status/'+tweet.orgTweet.id_str
+      var index = this.$refs.inputTweet.selectionStart;//커서 위치
+      this.tweetTextBinding = [this.tweetTextBinding.slice(0, index), str].join('');
+      this.FocusInput();
+    })
   },
   methods: {
     Paste(e){
