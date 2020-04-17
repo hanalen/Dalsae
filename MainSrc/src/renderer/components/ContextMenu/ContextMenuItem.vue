@@ -25,7 +25,7 @@ export default {
 		hotkeyText(){
 			if(this.hotkey=='') return '';
 
-			var hotkey = this.$store.state.DalsaeOptions.hotKey[this.hotkey];
+			var hotkey = this.$store.state.hotKey[this.hotkey];
 			if(hotkey==undefined) return '';
 
 			var str = hotkey.isCtrl ? 'Ctrl+' : ''

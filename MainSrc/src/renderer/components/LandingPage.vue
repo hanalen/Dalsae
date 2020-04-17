@@ -56,7 +56,7 @@ export default {
       isShowUIOption:false,
       isShowImage:false,
       isShowAccount:false,
-      hotKey:this.$store.state.DalsaeOptions.hotKey,
+      hotKey:this.$store.state.hotKey,
     }
   },
   methods: {

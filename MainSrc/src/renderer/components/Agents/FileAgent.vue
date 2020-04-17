@@ -126,7 +126,7 @@ export default {
 		},
 		SaveHotkey(){
 			const fs = require('fs-extra');
-			var hotkey = this.$store.state.DalsaeOptions.hotKey;
+			var hotkey = this.$store.state.hotKey;
 			fs.writeJson(this.hotkeyFilePath, hotkey, 'utf-8')
 			.then(() => {
 				// console.log('success!')

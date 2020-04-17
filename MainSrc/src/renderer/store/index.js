@@ -109,36 +109,36 @@ export default new Vuex.Store({
         tweet:[],
         highlight:[],
       },
-      skin:[],
-      hotKey:{//기본 단축키
-        showTL:{isCtrl:false, isShift:false, isAlt:false, key:'1'},
-        showMention:{isCtrl:false, isShift:false, isAlt:false, key:'2'},
-        showDM:{isCtrl:false, isShift:false, isAlt:false, key:'3'},
-        showFavorite:{isCtrl:false, isShift:false, isAlt:false, key:'4'},
-        showUrl:{isCtrl:false, isShift:false, isAlt:false, key:'5'},
-        
-        reply:{isCtrl:false, isShift:false, isAlt:false, key:'r'},
-        replyAll:{isCtrl:false, isShift:false, isAlt:false, key:'a'},
-        sendDM:{isCtrl:false, isShift:false, isAlt:false, key:'d'},
-        
-        loading:{isCtrl:false, isShift:false, isAlt:false, key:' '},
-        copy:{isCtrl:true, isShift:false, isAlt:false, key:'c'},
-        cancle:{isCtrl:false, isShift:false, isAlt:false, key:'escape'},
-        
-        loadConv:{isCtrl:false, isShift:false, isAlt:false, key:'c'},
-        showQt:{isCtrl:false, isShift:false, isAlt:false, key:'x'},
-        retweet:{isCtrl:false, isShift:false, isAlt:false, key:'t'},
-        sendQt:{isCtrl:false, isShift:false, isAlt:false, key:'w'},
-        sendFavorite:{isCtrl:false, isShift:false, isAlt:false, key:'f'},
-        hash:{isCtrl:false, isShift:false, isAlt:false, key:'h'},
-        delete:{isCtrl:false, isShift:false, isAlt:false, key:'delete'},
-        
-        input:{isCtrl:false, isShift:false, isAlt:false, key:'u'},
-        showContext:{isCtrl:false, isShift:false, isAlt:false, key:'v'},
-        home:{isCtrl:false, isShift:false, isAlt:false, key:'home'},
-        end:{isCtrl:false, isShift:false, isAlt:false, key:'end'},
-        showImage:{isCtrl:false, isShift:false, isAlt:false, key:'g'},
-      },
+    },
+    skin:[],
+    hotKey:{//기본 단축키
+      showTL:{isCtrl:false, isShift:false, isAlt:false, key:'1'},
+      showMention:{isCtrl:false, isShift:false, isAlt:false, key:'2'},
+      showDM:{isCtrl:false, isShift:false, isAlt:false, key:'3'},
+      showFavorite:{isCtrl:false, isShift:false, isAlt:false, key:'4'},
+      showUrl:{isCtrl:false, isShift:false, isAlt:false, key:'5'},
+      
+      reply:{isCtrl:false, isShift:false, isAlt:false, key:'r'},
+      replyAll:{isCtrl:false, isShift:false, isAlt:false, key:'a'},
+      sendDM:{isCtrl:false, isShift:false, isAlt:false, key:'d'},
+      
+      loading:{isCtrl:false, isShift:false, isAlt:false, key:' '},
+      copy:{isCtrl:true, isShift:false, isAlt:false, key:'c'},
+      cancle:{isCtrl:false, isShift:false, isAlt:false, key:'escape'},
+      
+      loadConv:{isCtrl:false, isShift:false, isAlt:false, key:'c'},
+      showQt:{isCtrl:false, isShift:false, isAlt:false, key:'x'},
+      retweet:{isCtrl:false, isShift:false, isAlt:false, key:'t'},
+      sendQt:{isCtrl:false, isShift:false, isAlt:false, key:'w'},
+      sendFavorite:{isCtrl:false, isShift:false, isAlt:false, key:'f'},
+      hash:{isCtrl:false, isShift:false, isAlt:false, key:'h'},
+      delete:{isCtrl:false, isShift:false, isAlt:false, key:'delete'},
+      
+      input:{isCtrl:false, isShift:false, isAlt:false, key:'u'},
+      showContext:{isCtrl:false, isShift:false, isAlt:false, key:'v'},
+      home:{isCtrl:false, isShift:false, isAlt:false, key:'home'},
+      end:{isCtrl:false, isShift:false, isAlt:false, key:'end'},
+      showImage:{isCtrl:false, isShift:false, isAlt:false, key:'g'},
     },
     Blocks:[
 
@@ -154,7 +154,7 @@ export default new Vuex.Store({
       state.DalsaeOptions=option;
     },
     Hotkey(state, hotkey){
-      state.DalsaeOptions.hotKey=hotkey;
+      state.hotKey=hotkey;
     },
     FollowerList(state, listUser){
       listUser.forEach(function(user){
