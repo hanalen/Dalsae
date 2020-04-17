@@ -22,8 +22,8 @@
       </div>
       <div class="tweet-timestamp">{{TweetDate}}</div>
       <div class="tweet-rts">
-        <span v-if="tweet.orgTweet.retweeted">RT!</span>
-        <span v-if="tweet.orgTweet.favorited">FAV!</span>
+        <span v-if="tweet.retweeted">RT!</span>
+        <span v-if="tweet.favorited">FAV!</span>
       </div>
     </div>
     <div
@@ -68,7 +68,7 @@ export default {
       var locale=window.navigator.language;
       var moment = require('moment');
       moment.locale(locale);
-      var date = new Date(this.tweet.orgTweet.created_at);
+      var date = new Date(this.tweet.created_at);
       return moment(date).format('LLLL') +':'+ moment(date).format('ss');
     },
     Protected(){
@@ -80,10 +80,10 @@ export default {
       }
     },
     TweetName(){
-      return this.tweet.orgUser.screen_name+' / '+this.tweet.orgUser.name+'/';
+      return this.tweet.user.screen_name+' / '+this.tweet.user.name;
     },
     TweetText(){
-      var text=this.tweet.orgTweet.full_text;
+      var text=this.tweet.full_text;
       var tweet=this.tweet;
       if(tweet.entities.media!==undefined){
          text = text.replace(tweet.entities.media[0].url, tweet.entities.media[0].display_url);

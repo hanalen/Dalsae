@@ -34,7 +34,7 @@
         <i v-if="tweet.orgTweet.favorited" class="fas fa-heart"></i>
       </div>
       <div class="tweet-timestamp">{{TweetDate}}</div>
-      <QTTweet ref="qtTweet" v-if="qtTweet!=undefined" :tweet="qtTweet" :isFocus="tweet.isFocus" :option="option"/>
+      <QTTweet ref="qtTweet" v-if="tweet.orgTweet.quoted_status!=undefined" :tweet="tweet.orgTweet.quoted_status" :isFocus="tweet.isFocus" :option="option"/>
     </div>
     <div
       class="tweet-images"
