@@ -95,9 +95,23 @@ export default {
       if(this.selectIndex>=this.tweets.length){
         this.selectIndex=this.tweets.length - 1;
       }
+      this.ScrollLock();
     }
   },
   methods:{
+    ScrollLock(){
+      var scroller = this.$refs.scroll.$refs.scroller
+      var scroll =scroller.getScroll();
+      if(scroll.start==0) return;
+      var id = this.tweets[0].id_str;
+      var size = this.$refs.scroll.vscrollData.sizes[id];
+      if(size!=undefined){
+        scroller.scrollToPosition(scroll.start+size);
+      }
+      else{
+        scroller.scrollToPosition(scroller.minItemSize+scroll.start)
+      }
+    },
     ShowContextMenu(){
       this.$refs.context.Show(undefined,this.tweets[this.selectIndex]);
       // this.$refs.list[this.selectIndex].ShowContextMenu();
