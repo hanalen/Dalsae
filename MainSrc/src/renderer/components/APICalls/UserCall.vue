@@ -48,6 +48,7 @@ export default {
       else{
         this.ReqFollowingList();
         this.ReqFollowerList();
+        this.EventBus.$emit('GetDMList');
       }
     },
     ReqHome(maxId, sinceId){
@@ -71,12 +72,9 @@ export default {
     ReqFavorite(maxId, sinceId){
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'favorite'})
       this.isLoadingFav=true;
-      console.log('maxid: '+maxId)
-      console.log('sinceid: '+sinceId)
       ApiUser.ReqFavorite(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResFavorite, this.ErrResFavorite);
     },
     ReqUserTweet(screenName, maxid, sinceId){
-      console.log('ReqUserTweet screenname: '+screenName)
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'user'})
       this.isLoadingUser=true;
       this.EventBus.$emit('FocusPanel', 'user');
@@ -128,7 +126,6 @@ export default {
       this.isLoadingHome=false;
       this.$store.dispatch('AddHome', listTweet);
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'home'});
-      console.log(listTweet);
     },
     ResMention(listTweet){
       this.isLoadingMention=false;

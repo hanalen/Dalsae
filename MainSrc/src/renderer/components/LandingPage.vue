@@ -7,10 +7,12 @@
       <div id="main-page">
         <UITop v-bind:following="this.$store.state.following" :uiOption="this.$store.state.DalsaeOptions.uiOptions" />
         <TweetPanel/>
+        <DMPanel/>
         <UIBottom/>
         <InputPin/>
         <UserCall/>
         <TweetCall/>
+        <DMCall/>
         <FileAgent/>
         <IPCAgent/>
         <StreamingAgent/>
@@ -21,10 +23,12 @@
 
 <script>
 import TweetPanel from "./Tweet/TweetPanel.vue"
+import DMPanel from "./DirectMessage/DirectMessagePanel.vue"
 import UITop from "./UITop/UITop.vue";
 import UIBottom from "./UIBottom.vue"
 import InputPin from "./Modals/InputPin.vue"
 import ApiUser from "./APICalls/UserCall.js"
+import DMCall from "./APICalls/DMCall.vue"
 import UserCall from "./APICalls/UserCall.vue"
 import TweetCall from "./APICalls/TweetCall.vue"
 import FileAgent from "./Agents/FileAgent.vue"
@@ -44,6 +48,8 @@ export default {
     InputPin,
     UserCall,
     TweetCall,
+    DMCall,
+    DMPanel,
     FileAgent,
     IPCAgent,
     StreamingAgent,
