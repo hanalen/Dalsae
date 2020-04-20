@@ -144,6 +144,19 @@ export default {
 				this.DeleteTweet(tweet.orgTweet.id_str);
 			}
 		});
+		this.EventBus.$on('LoadDaehwa', (tweet)=>{
+			if(!tweet.orgTweet.in_reply_to_status_id_str) return;//대화 없는건 스킵 
+			this.$store.dispatch('DaehwaAutoAdd', tweet);//캐시데이터가 있는지부터 체크 
+
+			if(this.$store.state.tweets.daehwa[0].orgTweet.in_reply_to_status_id_str){//캐시 정리가 끝난 후 대화가 있을 경우에 api 콜
+				this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'daehwa'})
+				this.EventBus.$emit('ReqDaehwa', tweet);
+			}
+			else{
+				this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName':'daehwa'})//로딩 뱅글이 끄기위해 호출
+				this.EventBus.$emit('FocusPanel', 'daehwa');//패널 변경
+			}
+		})
 	},
 };
 </script>

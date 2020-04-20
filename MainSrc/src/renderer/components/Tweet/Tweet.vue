@@ -5,7 +5,7 @@
     <span>뮤트 된 트윗입니다. 클릭 시 표시 합니다.</span>
   </div>
   <div class="tweet-area" v-if="tweet.isMuted==false">
-    <div class="daehwa">
+    <div class="daehwa" @click="ClickDaehwa">
       <i class="far fa-plus-square" v-if="tweet.orgTweet.in_reply_to_status_id_str!=undefined"
       :style="{'margin-left':-4, 'margin-top':option.isBigPropic?24+'px' : 18+'px'}"></i>
     </div>
@@ -127,6 +127,9 @@ export default {
     }
   },
   methods: {
+    ClickDaehwa(e){
+      this.EventBus.$emit('LoadDaehwa', this.tweet);
+    },
     Click(e){
       if(e.button==2 || e.button==3){
         e.preventDefault();
@@ -186,6 +189,9 @@ export default {
   padding: 6px 6px 6px 0px;
   // flex-shrink: 1;
   overflow: visible;
+  .daehwa{
+    cursor: pointer;
+  }
 }
 .mute-area{
   height: 50px;
