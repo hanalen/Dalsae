@@ -1,5 +1,5 @@
 <template>
-  <div ref="panel" tabindex="-1" class="tweet-list" @keydown.up="ArrowUp" @keydown.down="ArrowDown">
+  <div ref="panel" tabindex="-1" class="tweet-list" @keydown.up="ArrowUp" @keydown.down="ArrowDown" @keydown.enter="Enter">
     <loading v-if="isLoading" name="loadingTop"/>
     <DynamicScroller ref="scroll"
     :items="tweets"
@@ -111,6 +111,10 @@ export default {
       else{
         scroller.scrollToPosition(scroller.minItemSize+scroll.start)
       }
+    },
+    Enter(e){
+      e.preventDefault();
+      this.EventBus.$emit('FocusInput')
     },
     ShowContextMenu(){
       this.$refs.context.Show(undefined,this.tweets[this.selectIndex]);
