@@ -58,7 +58,7 @@ export default {
       }
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'home'})
       this.isLoadingHome=true;
-      ApiUser.ReqHome(maxId, sinceId, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResHome);
+      ApiUser.ReqHome(maxId, sinceId, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResHome, this.ErrHome);
     },
     ReqMention(maxId, sinceId, publickey, secretkey, callback){
       if(this.isLoadingMention){//이미 로딩 중이면 넘기기
@@ -67,18 +67,18 @@ export default {
       }
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'mention'})
       this.isLoadingMention=true;
-      ApiUser.ReqMention(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResMention);
+      ApiUser.ReqMention(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResMention, this.ErrMention);
     },
     ReqFavorite(maxId, sinceId){
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'favorite'})
       this.isLoadingFav=true;
-      ApiUser.ReqFavorite(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResFavorite, this.ErrResFavorite);
+      ApiUser.ReqFavorite(maxId, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResFavorite, this.ErrResFavorite, this.ErrFavorite);
     },
     ReqUserTweet(screenName, maxid, sinceId){
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': true, 'panelName':'user'})
       this.isLoadingUser=true;
       this.EventBus.$emit('FocusPanel', 'user');
-      ApiUser.ReqUser(screenName, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResUser);
+      ApiUser.ReqUser(screenName, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResUser, this.ErrUser);
     },
     ReqDaehwa(tweet){
       if(this.isLoadingDaehwa){
@@ -166,6 +166,22 @@ export default {
         this.ReqFollowerList(resUsers.next_cursor);
       }
       // console.log(resUsers)
+    },
+    ErrHome(err){
+      this.isLoadingHome=false;
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'home'});
+    },
+    ErrMention(err){
+      this.isLoadingMention=false;
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'mention'});
+    },
+    ErrFavorite(err){
+      this.isLoadingFav=false;
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'favorite'});
+    },
+    ErrUser(err){
+      this.isLoadingUser=false;
+      this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'user'});
     },
     ErrResFavorite(err){
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'favorite'});
