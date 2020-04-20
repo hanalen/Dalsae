@@ -142,8 +142,7 @@ export default {
         this.$refs.qtTweet.HoverOut();
     },
     ImageClick(e){
-      var ipcRenderer = require('electron').ipcRenderer;
-      ipcRenderer.send('child', this.tweet, this.option);
+      this.EventBus.$emit('ShowImagePopup', this.tweet)
     },
     ClickMute(e){
       this.$store.dispatch('ShowMuteTweet', this.tweet);

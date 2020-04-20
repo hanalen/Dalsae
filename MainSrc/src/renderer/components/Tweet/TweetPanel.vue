@@ -204,8 +204,7 @@ export default {
       else if(hotkeyType=='showImage'){//g, 이미지열기
         var tweet=this.selectPanel.GetSelectTweet();
         if(tweet.orgTweet.extended_entities==undefined) return;
-        var ipcRenderer = require('electron').ipcRenderer;
-        ipcRenderer.send('child', tweet, this.$store.state.DalsaeOptions.uiOptions);
+        this.EventBus.$emit('ShowImagePopup', tweet)
       }
       else if(hotkeyType=='showContext'){//v, 컨텍스트 메뉴
         this.selectPanel.ShowContextMenu();

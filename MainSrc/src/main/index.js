@@ -212,6 +212,7 @@ function ImageWindowSetEvent(win){
   win.on('close', (e)=>{
     if(mainWindow!=null){
       e.preventDefault();
+      mainWindow.webContents.send('ClosedImagePopup')
       win.webContents.send('hide');
       win.hide();
       mainWindow.focus();
@@ -239,7 +240,7 @@ function ImageWindowSetEvent(win){
 }
 var imageIndex=0;
 
-ipcMain.on('child', (event, tweet, option)=>{
+ipcMain.on('ShowImagePopup', (event, tweet, option)=>{
   imageWindowState.manage(imageWin[imageIndex]);
   imageWin[imageIndex].webContents.send('tweet', tweet, option, config)
 

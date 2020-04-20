@@ -71,8 +71,7 @@ export default {
       }
     },
     Media(){
-      var ipcRenderer = require('electron').ipcRenderer;
-      ipcRenderer.send('child', this.tweet, this.$store.state.DalsaeOptions.uiOptions);
+      this.EventBus.$emit('ShowImagePopup', this.tweet)
     },
     Favorite(){
       this.EventBus.$emit('Favorite', this.tweet);

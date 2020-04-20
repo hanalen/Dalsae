@@ -18,8 +18,17 @@ export default {
 			this.$store.dispatch('SaveMuteOption', muteOption);
 			this.EventBus.$emit('SaveOption');
     });
+    ipcRenderer.on('ClosedImagePopup', (event)=>{
+      this.isShowImagePopup=true;
+    })
     ipcRenderer.on('WindowFocused', (event)=>{
-      this.EventBus.$emit('FocusInput');
+      if(this.isShowImagePopup){
+        this.isShowImagePopup=false;
+        this.EventBus.$emit('FocusPanel','')
+      }
+      else{
+        this.EventBus.$emit('FocusInput');
+      }
     });
     ipcRenderer.on('SaveHotkey', (event, hotkey)=>{
       this.$store.dispatch('Hotkey', hotkey)
@@ -30,12 +39,19 @@ export default {
       this.EventBus.$emit('LoadUserTweet', screen_name);
     });
 
+    this.EventBus.$on('ShowImagePopup', (tweet)=>{
+      var option=this.$store.state.DalsaeOptions.uiOptions;
+      var ipcRenderer = require('electron').ipcRenderer;
+      ipcRenderer.send('ShowImagePopup', this.tweet, this.$store.state.DalsaeOptions.uiOptions);
+    })
+
     this.EventBus.$on('ShowProfile', (screenName)=>{
       ipcRenderer.send('ShowProfile', screenName, this.$store.state.Account.selectAccount, this.$store.state.follower);
     });
   },
   data() {
     return {
+      isShowImagePopup:false,//이미지 팝업을 열었다 닫을 경우 포커스가 textarea가 아닌 tweetPanel이어야 해서 관리하는 flag
     };
   },
   computed:{
