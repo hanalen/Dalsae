@@ -218,6 +218,7 @@ export default {
       this.tweetLength = 0;
       this.$refs.inputTweet.focus();
       this.arrImage=[];
+      this.EventBus.$emit('FocusPanel','')
     },
     ReplaceMentionID(screen_name) {
       this.tweetTextBinding = this.tweetText.replace(
