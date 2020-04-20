@@ -1,5 +1,5 @@
 <template>
-  <div class="ipc-agent">
+  <div class="ipc-agent" v-if="tweets!=undefined">
   </div>
 </template>
 
@@ -11,6 +11,7 @@ import FileStream from 'fs-extra'
 export default {
   name: "ipcagent",
   props: {
+    tweets:undefined,
   },
   created() {
 		var ipcRenderer = require('electron').ipcRenderer;
@@ -55,10 +56,21 @@ export default {
     };
   },
   computed:{
-  
+    tweetLength(){//index 설정을 위한 값
+      return this.tweets.length;
+    }
+  },
+  watch: { 
+    tweetLength: function(newVal, oldVal){//스트리밍으로 인해 트윗이 추가 되면 index를 올려줘야함
+      this.Alarm();
+    }
   },
   methods: {
-	
+    Alarm(){
+      console.log('alarm!!!')
+	  	var ipcRenderer = require('electron').ipcRenderer;
+      ipcRenderer.send('Alarm');
+    }
 	},
 	mounted: function() {//EventBus등록용 함수들
   

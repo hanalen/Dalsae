@@ -78,6 +78,7 @@ function createWindow () {
   mainWindow.loadURL(winURL)
   mainWindow.on('focus', (e)=>{
     mainWindow.webContents.send('WindowFocused', e)
+    mainWindow.flashFrame(false)
   });
   mainWindow.on('closed', () => {
     mainWindowState.saveState(mainWindow)
@@ -92,6 +93,11 @@ function createWindow () {
     }
   })
 }
+ipcMain.on('Alarm', (event)=>{
+  if(!mainWindow.isFocused()){
+    mainWindow.flashFrame(true);
+  }
+});
 
 //#endregion
 

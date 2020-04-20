@@ -14,7 +14,7 @@
         <TweetCall/>
         <DMCall/>
         <FileAgent/>
-        <IPCAgent/>
+        <IPCAgent :tweets="this.$store.state.tweets.mention"/>
         <StreamingAgent/>
       </div>
     </div>
