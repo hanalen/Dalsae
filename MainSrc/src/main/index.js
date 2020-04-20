@@ -363,10 +363,6 @@ ipcMain.on('FavoritePopup', (event, tokenData)=>{
   });
 })
 
-ipcMain.on('CloseMuteOptionPopup',()=>{
-  favoriteWindow.close();
-});
-
 //#endregion
 
 //#region 자동업데이트
