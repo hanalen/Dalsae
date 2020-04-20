@@ -150,6 +150,10 @@ export default {
       else if(index>=this.tweets.length) index--;
       for(var i=0;i<child.length;i++){
         if(child[i].id==this.tweets[index].id){
+          var tempPos = child[i].$el.getBoundingClientRect();
+          if(tempPos.y<-1000){//가상스크롤 pool에 같은 key가 2개 있는 경우가 있어서 화면 밖의 dom일 경우 스킵
+            continue;
+          }
           nowItem=child[i];
           break;
         }
@@ -162,7 +166,6 @@ export default {
       var panelPos = this.$refs.panel.getBoundingClientRect();
       var tweetBottom = tweetPos.y + tweetPos.height;
       var panelBottom = panelPos.y + panelPos.height;
-
       if( tweetBottom > panelBottom){
         var scroll = scroller.getScroll();
         var scrollTo =scroll.start + tweetBottom - panelBottom;//스크롤이 이동 값은 맨위가 0기준, top으로 계산 해야 맞음
