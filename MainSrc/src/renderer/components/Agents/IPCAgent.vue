@@ -43,7 +43,7 @@ export default {
     this.EventBus.$on('ShowImagePopup', (tweet)=>{
       var option=this.$store.state.DalsaeOptions.uiOptions;
       var ipcRenderer = require('electron').ipcRenderer;
-      ipcRenderer.send('ShowImagePopup', this.tweet, this.$store.state.DalsaeOptions.uiOptions);
+      ipcRenderer.send('ShowImagePopup', tweet, this.$store.state.DalsaeOptions.uiOptions);
     })
 
     this.EventBus.$on('ShowProfile', (screenName)=>{
