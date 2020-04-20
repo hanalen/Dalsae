@@ -29,7 +29,7 @@ export default{
 	ReqHome(maxId, sinceId, publickey, secretkey, callback){
 		var method='GET';
 		var arr=[];
-		arr['count']= '40';
+		arr['count']= '200';
 		arr['tweet_mode']='extended';
 		arr['max_id']=maxId;
 		arr['since_id']=sinceId;
