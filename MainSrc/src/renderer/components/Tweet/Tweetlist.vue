@@ -120,7 +120,7 @@ export default {
       return this.tweets[this.selectIndex];
     },
     GetQTTweet(){
-      return this.$refs.list[this.selectIndex].GetQtTweet();
+      return this.tweets[this.selectIndex].orgTweet.quoted_status;
     },
     ResTweets(vals){
       var loading = vals['isLoading'];
