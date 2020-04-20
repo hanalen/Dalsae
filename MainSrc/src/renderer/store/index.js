@@ -191,7 +191,7 @@ export default new Vuex.Store({
                 if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
                   return;
                 }
-                if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+                if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.user_id)){
                   if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
                     return;
                   }
@@ -217,8 +217,8 @@ export default new Vuex.Store({
             func();
           }
           else{
-            if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
-              if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
+            if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.user_id)){
+              if(state.DalsaeOptions.uiOptions.isShowMute==false){//뮤트 보여줄지 여부 체크
                 return;
               }
             }
@@ -252,7 +252,7 @@ export default new Vuex.Store({
             // console.log('block tweet')
             return;
           }
-          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.user_id)){
             if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
               return;
             }
@@ -286,7 +286,7 @@ export default new Vuex.Store({
             // console.log('block tweet')
             return;
           }
-          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.user_id)){
             if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
               return;
             }
@@ -320,7 +320,7 @@ export default new Vuex.Store({
             // console.log('block tweet')
             return;
           }
-          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.user_id)){
             if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
               return;
             }
@@ -439,7 +439,7 @@ export default new Vuex.Store({
       if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
         return;
       }
-      if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+      if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.user_id)){
         if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
           return;
         }
@@ -563,7 +563,7 @@ export default new Vuex.Store({
               if(TweetDataAgent.CheckBlock(tweet, state.Blocks)){
                 return;
               }
-              if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
+              if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.user_id)){
                 if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
                   return;
                 }
@@ -588,8 +588,8 @@ export default new Vuex.Store({
           func();
         }
         else{
-          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions)){
-            if(state.DalsaeOptions.uiOptions.isShowMute==false && state.DalsaeOptions.uiOptions.isMuteMention){//뮤트 보여줄지 여부 체크
+          if(TweetDataAgent.CheckMute(tweet, state.DalsaeOptions.muteOptions, state.Account.selectAccount.user_id)){
+            if(state.DalsaeOptions.uiOptions.isShowMute==false){//뮤트 보여줄지 여부 체크
               return;
             }
           }

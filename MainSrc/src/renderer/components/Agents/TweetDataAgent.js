@@ -65,8 +65,11 @@ export default{
 		else
 			return false;
 	},
-	CheckMute(tweet, muteOption){
+	CheckMute(tweet, muteOption, id_str){//자신의 트윗이면 뮤트하지 않음
 		tweet.isMuted=false;
+		if(tweet.orgUser.id_str==id_str){
+			return false;
+		}
 		for(var i =0;i<muteOption.keyword.length;i++){//키워드 뮤트
 			if(tweet.orgTweet.full_text.toLowerCase().indexOf(muteOption.keyword[i].toLowerCase())>-1){
 				tweet.isMuted=true;
@@ -75,17 +78,20 @@ export default{
 		}
 		for(var i=0;i<muteOption.user.length;i++){//유저 뮤트
 			if(tweet.orgUser.screen_name==muteOption.user[i]){
+				tweet.isMuted=true;
 				return true;
 			}
 			var listMention=tweet.orgTweet.entities.user_mentions;
 			for(var j=0;j<listMention;j++){
 				if(listMention[j].screen_name==muteOption.user[i]){
-				return true;
+					tweet.isMuted=true;
+					return true;
 				}
 			}
 		}
 		for(var i=0;i<muteOption.tweet.length;i++){//트윗 뮤트
 			if(tweet.orgTweet.id_str==muteOption.tweet.id_str){
+				tweet.isMuted=true;
 				return true;
 			}
 		}
