@@ -112,6 +112,9 @@ export default {
       ApiUser.FollowerList(userid, cursor, undefined, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret,
                              this.ResFollower, this.ErrResFollower);
     },
+    ReqUserData(id_str){
+      ApiUser.UserData(id_str, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResUserData, this.ErrResUserData);
+    },
 	  ResUserInfo(userinfo){
       this.$store.dispatch('UpdateUser', userinfo);
       this.EventBus.$emit('ResUserInfo', userinfo);
@@ -120,6 +123,7 @@ export default {
         this.isAddNewAccount=false;
         this.ReqFollowingList();
         this.ReqFollowerList();
+        this.EventBus.$emit('ReqDMList')
       }
     },
     ResHome(listTweet){
@@ -167,6 +171,9 @@ export default {
       }
       // console.log(resUsers)
     },
+    ResUserData(user){
+      this.EventBus.$emit('ResUserData', user)
+    },
     ErrHome(err){
       this.isLoadingHome=false;
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'home'});
@@ -200,7 +207,10 @@ export default {
       this.isLoadingDaehwa = false;
       // console.log('err load daehwa');
       console.log(err);
-    }
+    },
+    ErrResUserData(err){
+      this.EventBus.$emit('ErrResUserData', err);
+    },
   },
   mounted: function() {//EventBus등록용 함수들
     this.EventBus.$on('StartDalsae', () => {
@@ -242,6 +252,10 @@ export default {
     });
     this.EventBus.$on('LoadUserTweet', (screenName)=>{
       this.ReqUserTweet(screenName)
+    })
+    this.EventBus.$on('GetUserData', (id_str)=>{
+      console.log('GetUserData! id_str: '+id_str);
+      this.ReqUserData(id_str);
     })
 	},
 };

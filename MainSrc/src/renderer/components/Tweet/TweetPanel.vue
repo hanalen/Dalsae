@@ -106,8 +106,12 @@ export default {
       this.selectPanelName='daehwa';
       this.selectPanel.Focus(undefined);
     });
+    this.EventBus.$on('FocusDM', ()=>{
+      this.selectPanelName='';
+    })
     this.EventBus.$on('FocusPanel', (selectPanelName)=>{
       if(selectPanelName==''){
+        this.selectPanelName=this.prevPanelName;
       }
       else if(this.selectPanelName=='daehwa' && selectPanelName!='daehwa'){//대화패널에서 나갈 경우 클리어
         this.$store.dispatch('ClearDaehwa');

@@ -6,8 +6,8 @@
       <UIOptionModal v-if="isShowUIOption"/>
       <div id="main-page">
         <UITop v-bind:following="this.$store.state.following" :uiOption="this.$store.state.DalsaeOptions.uiOptions" />
-        <TweetPanel/>
-        <DMPanel/>
+        <TweetPanel v-show="!isShowDM"/>
+        <DMPanel v-if="isShowDM"/>
         <UIBottom/>
         <InputPin/>
         <UserCall/>
@@ -59,6 +59,7 @@ export default {
   },
   data () {
     return {
+      isShowDM:false,
       isShowUIOption:false,
       isShowImage:false,
       isShowAccount:false,
@@ -127,6 +128,12 @@ export default {
     });
   },
   mounted:function(){
+    this.EventBus.$on('FocusDM',()=>{
+      this.isShowDM=true;
+    })
+    this.EventBus.$on('FocusPanel', (panel)=>{
+      this.isShowDM=false;
+    })
     this.EventBus.$on('ShowAccountModal', (isShow)=>{
       this.isShowAccount=isShow;
     });

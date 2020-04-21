@@ -3,7 +3,7 @@
       <i class="fas fa-bars fa-2x" @click="ClickMenu"></i>
       <i class="fas fa-home fa-2x" @click="ClickHome"></i>
       <i class="far fa-bell fa-2x" @click="ClickMention"></i>
-      <!-- <i class="far fa-envelope fa-2x" @click="ClickDM"></i> -->
+      <i class="far fa-envelope fa-2x" @click="ClickDM"></i>
       <i class="far fa-heart fa-2x" @click="ClickFavorite"></i>
       <i class="fas fa-link fa-2x" @click="ClickLink"></i>
   </div>
@@ -27,7 +27,7 @@ export default {
       this.EventBus.$emit('FocusPanel', 'mention');
     },
     ClickDM(e){
-      this.EventBus.$emit('FocusPanel', 'dm');
+      this.EventBus.$emit('FocusDM');
     },
     ClickFavorite(e){
       this.EventBus.$emit('FocusPanel', 'favorite');

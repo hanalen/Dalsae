@@ -206,4 +206,26 @@ export default{
 			errCallback(err, cursor);//리밋일 경우에 대비 해서 cursor도 같이 에러 콜백
 		});
 	},
+	UserData(id_str, publickey, secretkey, callback, errCallback){
+		var method='GET';
+		var arr=[];
+		arr['user_id']=id_str;
+		var url = 'https://api.twitter.com/1.1/users/show.json';
+		var callurl= OAuth.GetURL(url, method, arr);
+		// console.log('url: '+url)
+		axios({
+			method:method,
+			url:callurl,
+			headers:{
+				'Content-Type':'application/x-www-form-urlencoded;encoding=utf-8',
+				'Authorization': OAuth.GetHeader(arr, method, url, publickey, secretkey)
+			},
+		}).then((res)=>{
+			callback(res.data);
+		}).catch((err)=>{
+			// console.log('get follower list error!');
+			console.log(err);
+			errCallback(err, cursor);//리밋일 경우에 대비 해서 cursor도 같이 에러 콜백
+		});
+	}
 }
