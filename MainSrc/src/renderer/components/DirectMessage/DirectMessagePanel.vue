@@ -5,7 +5,7 @@
 				쪽지
 			</span>
 		</div>
-		<UserItem v-for="(user, index) in listUser" :key="index" :user="user" :dm="GetLastDM(user)"/>
+		<UserItem v-for="(dm, index) in listUserDM" :key="index" :user="dm.user" :dm="GetLastDM(dm)"/>
 		<ChatBox v-if="isShowChat" :user="selectAccount.userData" :listDM="showListDM"/>
   </div>
 </template>
@@ -37,15 +37,13 @@ export default {
 		})
 		this.EventBus.$emit('ReqDMList')
 		this.EventBus.$on('ResDMList', (listDM)=>{
-			console.log(listDM)
 			this.ResDMList(listDM)
 		});
   },
   data() {
     return {
 			isShowChat:false,
-			listUser:[],
-			dicDM:[],//dictionary<id(key), List<DM>> 형태
+			listUserDM:[],
 			showUser:undefined,
 			showListDM:[]
     };
@@ -57,8 +55,10 @@ export default {
 	},
   methods: {
 		GetLastDM(user){
-			var list = this.dicDM[user.id_str];
-			return list[list.length-1];
+			console.log('-----last-------')
+			console.log(user)
+			var listDM = this.listUserDM.find(x=>x.id_str==user.id_str).listDM;
+			return listDM[listDM.length-1] //나중에 시간순 정렬 해야 함
 		},
 		ResDMList(listDM){
 			if(listDM.events){//dm 있는지 체크
@@ -75,24 +75,27 @@ export default {
 					dm.isMe=false;
 					id=dm.message_create.sender_id;
 				}
-				if(id in this.dicDM == false){//새 유저 등록일 경우 dicDM에 키, list 추가 후 추가
-					this.dicDM[id]=[];
-					this.dicDM[id].push(dm);
+				var user=this.listUserDM.find(x=>x.id_str==id);
+				if(user==undefined){//새 유저 등록일 경우 dicDM에 키, list 추가 후 추가
+					var obj=new Object();//새 유저 객체 생성해줌
+					obj.id_str=id;
+					obj.listDM=[];
+					obj.listDM.push(dm);
+					this.listUserDM.push(obj);
 				}
 				else{
-					if(this.dicDM[id].find(x=>x.id==dm.id)==undefined){//중복 체크
-						this.dicDM[id].push(dm);
+					if(user.listDM.find(x=>x.id==dm.id)==undefined){//중복체크
+						user.listDM.push(dm);
 					}
 				}
 			});
 			this.AddUserData();
 		},
 		AddUserData(){
-			var keys=Object.keys(this.dicDM);
-			console.log('dic dm keys')
-			console.log(keys)
-			var start = new Date();
-			keys.forEach((id_str)=>{
+			this.listUserDM.forEach((userDM)=>{
+				console.log('--adduserdata--')
+				console.log(userDM)
+				var id_str = userDM.id_str;
 				var user=undefined;
 				for(var i=0;i<this.$store.state.following.length;i++){
 					if(this.$store.state.following[i].id_str==id_str){
@@ -109,18 +112,15 @@ export default {
 					}
 				}
 				if(user){
-					if(this.listUser.find(x=>x.id_str==user.id_str)==undefined)//중복 회피
-						this.listUser.push(user);
+					if(userDM.user==undefined){
+						userDM.user=user;
+					}
 				}
 				else{
 					console.log('get user data!!!')
 					this.EventBus.$emit('GetUserData', id_str);
 				}
-			})
-			var end=new Date();
-			console.log('---start, end----')
-			console.log(start)
-			console.log(end)
+			});
 		},
 	},
 };
