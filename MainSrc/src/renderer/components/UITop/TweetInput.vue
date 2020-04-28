@@ -349,8 +349,8 @@ export default {
 
       this.listMention = this.following.filter(item => {
         if (
-          item.name.indexOf(word) > -1 ||
-          item.screen_name.indexOf(word) > -1
+          item.name.toLowerCase().indexOf(word.toLowerCase()) > -1 ||
+          item.screen_name.toLowerCase().indexOf(word.toLowerCase()) > -1
         ) {
           return item;
         }
