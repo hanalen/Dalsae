@@ -300,12 +300,16 @@ export default {
 		Prev(){
 			this.isZoom=false;
 			this.index--;
+			this.maxWidth=0;
+			this.maxHeight=0;
 			if(this.index<0)
 				this.index=0;
 		},
 		Next(){
 			this.isZoom=false;
 			this.index++;
+			this.maxWidth=0;
+			this.maxHeight=0;
 			if(this.index >= this.tweet.orgTweet.extended_entities.media.length)
 				this.index--;
 		},
@@ -374,23 +378,35 @@ export default {
 		KeyDown(e){
 			if(e.keyCode==49){
 				this.isZoom=false;
-				if(this.tweet.orgTweet.extended_entities.media.length>0)
+				if(this.tweet.orgTweet.extended_entities.media.length>0){
+					this.maxWidth=0;
+					this.maxHeight=0;
 					this.index=0;
+				}
 			}
 			else if(e.keyCode==50){
 				this.isZoom=false;
-				if(this.tweet.orgTweet.extended_entities.media.length>1)
+				if(this.tweet.orgTweet.extended_entities.media.length>1){
+					this.maxWidth=0;
+					this.maxHeight=0;
 					this.index=1;
+				}
 			}
 			else if(e.keyCode==51){
 				this.isZoom=false;
-				if(this.tweet.orgTweet.extended_entities.media.length>2)
+				if(this.tweet.orgTweet.extended_entities.media.length>2){
+					this.maxWidth=0;
+					this.maxHeight=0;
 					this.index=2;
+				}
 			}
 			else if(e.keyCode==52){
 				this.isZoom=false;
-				if(this.tweet.orgTweet.extended_entities.media.length>3)
+				if(this.tweet.orgTweet.extended_entities.media.length>3){
+					this.maxWidth=0;
+					this.maxHeight=0;
 					this.index=3;
+				}
 			}
 			else if(e.key.toUpperCase()=='E'){
 				this.Zoom();
