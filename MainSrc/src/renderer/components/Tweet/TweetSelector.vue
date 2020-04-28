@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet-selector" tabindex="-1" @mouseenter="Hover" @mouseleave="HoverOut" 
+  <div class="tweet-selector" tabindex="-1" @mouseenter="Hover" @mouseleave="HoverOut"  @mousedown="MouseDown"
 	@focus="Focused" v-on:focusout="FocusOut">
     <Tweet ref="tweet"
 			v-if="(!option.isSmallTweet) || ( option.isSmallTweet &&( isFocus || isSelected))"
@@ -61,6 +61,9 @@ export default {
     
   },
   methods: {
+    MouseDown(e){
+      this.EventBus.$emit('WindowFocused')
+    },
     Hover(e){
       if(this.qtTweet && !this.option.isSmallTweet)
         this.$refs.tweet.Hover();

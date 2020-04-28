@@ -39,7 +39,9 @@ export default {
       this.$store.dispatch('ClearUser');
       this.EventBus.$emit('LoadUserTweet', screen_name);
     });
-
+    this.EventBus.$on('WindowFocused', ()=>{
+      this.isShowImagePopup=true;
+    })
     this.EventBus.$on('ShowImagePopup', (tweet)=>{
       var option=this.$store.state.DalsaeOptions.uiOptions;
       var ipcRenderer = require('electron').ipcRenderer;
