@@ -25,8 +25,10 @@
 					</div>
 			</div>
       <div class="video" v-if="Video.type!='photo'">
-        <video ref="video" controls autoplay muted loop>
-          <source :src="Video.video_info.variants[0].url"
+        <video ref="video" controls autoplay muted loop v-if="Video.video_info.variants[0].content_type=='application/x-mpegURL'">
+        </video>
+				<video ref="video2" controls autoplay muted loop v-if="Video.video_info.variants[0].content_type!='application/x-mpegURL'">
+					<source :src="Video.video_info.variants[0].url"
           :type="Video.video_info.variants[0].content_type">
         </video>
       </div>
@@ -43,7 +45,7 @@ import {EventBus} from '../../main.js';
 import ImagePopupVue from './ImagePopup.vue'
 import ProgressBar from '../Common/ProgressBar.vue'
 import ContextMenu from '../ContextMenu/ImageContextMenu.vue'
-
+import Hls from 'hls.js'
 
 export default {
 	name: 'imagemodal',
@@ -103,6 +105,11 @@ export default {
 			else{
 				this.path=app.getPath('userData')
 			}
+			if(this.Video.type!='photo'){
+				this.$nextTick(()=>{
+					this.PlayVideo();
+				})
+			}
 		});
 		ipcRenderer.on('SaveAll', () => {
 			this.SaveAll();
@@ -126,12 +133,40 @@ export default {
 			if(id!=this.tweet.orgTweet.id_str) return;
 			this.SaveAll();
 		});
+		
 	},
   mounted:function(){
 	},
 	mounted(){
 	},
 	methods:{
+		PlayVideo(){
+			console.log('play video')
+			if(this.Video.video_info.variants[0].content_type!='application/x-mpegURL'){
+				console.log('not application/x-mpegURL')
+				return;
+			}
+			var video = this.$refs.video;
+			if(Hls.isSupported()){
+				console.log('suported')
+				var hls = new Hls();
+				hls.loadSource(this.Video.video_info.variants[0].url);
+				hls.attachMedia(video);
+				hls.on(Hls.Events.MANIFEST_PARSED, function() {
+					console.log('MANIFEST_PARSED')
+					video.play();
+				});
+			}
+			else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+				console.log('not suported')
+				video.src = this.Video.video_info.variants[0].url;
+				video.addEventListener('loadedmetadata', function() {
+					console.log('loadedmetadata')
+					video.play();
+				});
+			}
+			// this.Video.video_info.variants[0].content_type
+		},
 		Clear(){
 			for(var i=0;i<this.listProgressPercent.length;i++){
 				this.listProgressPercent[i]=0;
