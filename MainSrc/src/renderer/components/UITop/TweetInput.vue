@@ -260,7 +260,10 @@ export default {
     },
     EnterDown(e) {
       e.preventDefault();
-      if (this.isMention) {
+      if(this.tweetTextBinding.length==0 && this.arrImage.length==0){//입력 중인 트윗이 없을 경우 패널 포커스
+        this.EventBus.$emit('FocusPanel','');
+      }
+      else if (this.isMention) {
         var v = this.$refs.find.GetSelectScreenName();
         this.ReplaceMentionID(v);
       }
@@ -274,9 +277,7 @@ export default {
         var index = e.target.selectionStart;//커서 위치
         this.tweetTextBinding = [this.tweetTextBinding.slice(0, index), '\r\n', this.tweetTextBinding.slice(index)].join('');
       }
-      else if(this.tweetTextBinding.length==0 && this.arrImage.length==0){//입력 중인 트윗이 없을 경우 패널 포커스
-        this.EventBus.$emit('FocusPanel','');
-      }
+      
     },
     GetTweetLength(str) {
       var ret = 0;
