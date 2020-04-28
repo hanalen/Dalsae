@@ -161,6 +161,7 @@ export default {
 			}
 		},
 		Zoom(){
+			if(!this.ZoomAble) return;
 			var div = this.$refs.imgDiv[this.index];
 			var img = this.$refs.img[this.index];
 			var percent=1.0;
@@ -177,6 +178,7 @@ export default {
 			this.SetImageSize(percent);
 		},
 		ZoomOut(){
+			if(!this.ZoomAble) return;
 			var div = this.$refs.imgDiv[this.index];
 			var img = this.$refs.img[this.index];
 			var percent=1.0;
@@ -389,6 +391,12 @@ export default {
 				this.isZoom=false;
 				if(this.tweet.orgTweet.extended_entities.media.length>3)
 					this.index=3;
+			}
+			else if(e.key.toUpperCase()=='E'){
+				this.Zoom();
+			}
+			else if(e.key.toUpperCase()=='Q'){
+				this.ZoomOut();
 			}
 		},
 		CloseClick(e){
