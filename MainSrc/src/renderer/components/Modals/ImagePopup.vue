@@ -13,7 +13,8 @@
 				</div>
 				<div ref="imgDiv" v-show="i==index" v-for="(image,i) in tweet.orgTweet.extended_entities.media" :key="i" class="img-div">
 					<img ref="img" :src="ImgPath(image.media_url_https)" class="img-content" :class="{'zoom':isZoom}"
-					:style="{'margin-left':isZoom ? marginLeft+'px' : 'auto', 'margin-top': isZoom ? marginTop+'px' : 'auto'}"
+					:style="{'margin-left':isZoom ? marginLeft+'px' : 'auto', 'margin-top': isZoom ? marginTop+'px' : 'auto',
+										'max-width': maxWidth==0? '100%' : maxWidth+'px', 'max-height': maxHeight == 0 ? '100%' : maxHeight+'px'}"
 					@mousedown="MouseDown" @mouseleave="MouseLeave" @mouseup="MouseUp" @mousemove="MouseMove"/>
 				</div>
 			</div>
@@ -94,6 +95,8 @@ export default {
 			startY:0,
 			marginLeft:0,
 			marginTop:0,
+			maxWidth:0,
+			maxHeight:0,
     }
 	},
 	props:{
@@ -149,13 +152,50 @@ export default {
 	},
 	methods:{
 		MouseWheel(e){
-			console.log(e)
-			if(e.deltaY<0){//up
-
+			if(!this.ZoomAble) return;
+			if(e.deltaY<0){//up, zoom
+				this.Zoom();
 			}
-			else{//down
-
+			else{//down, zoom out
+				this.ZoomOut();
 			}
+		},
+		Zoom(){
+			var div = this.$refs.imgDiv[this.index];
+			var img = this.$refs.img[this.index];
+			var percent=1.0;
+			if(img.clientHeight<=img.naturalHeight){//확대 비율을 구하기
+				percent=img.clientHeight/img.naturalHeight;
+			}
+			else if(img.clientWidth <= img.naturalWidth){
+				percent=img.clientWidth/img.naturalWidth;
+			}
+			percent=(percent+0.1).toFixed(1);
+			if(percent<0.1) percent=0.1;
+			else if(percent>1.0) percent=1.0;
+
+			this.SetImageSize(percent);
+		},
+		ZoomOut(){
+			var div = this.$refs.imgDiv[this.index];
+			var img = this.$refs.img[this.index];
+			var percent=1.0;
+			if(img.clientHeight<=img.naturalHeight){//확대 비율을 구하기
+				percent=img.clientHeight/img.naturalHeight;
+			}
+			else if(img.clientWidth <= img.naturalWidth){
+				percent=img.clientWidth/img.naturalWidth;
+			}
+			percent=(percent-0.1).toFixed(1);
+			if(percent<0.1) percent=0.1;
+			else if(percent>1.0) percent=1.0;
+
+			this.SetImageSize(percent);
+		},
+		SetImageSize(percent){//percent: 0.0~1.0 단위!
+			var img = this.$refs.img[this.index];
+			this.maxWidth=img.naturalWidth * percent;
+			this.maxHeight=img.naturalHeight * percent;
 		},
 		PlayVideo(){
 			console.log('play video')
@@ -397,8 +437,8 @@ export default {
 			// vertical-align: middle;
 			.zoom{
 				object-fit: cover;
-				max-width: none !important;
-				max-height: none !important;
+				// max-width: none !important;
+				// max-height: none !important;
 			}
 		}
 	}
@@ -414,8 +454,8 @@ video{
 }
 .img-content.zoom{
 	object-fit: cover;
-	max-width: none !important;
-	max-height: none !important;
+	// max-width: none !important;
+	// max-height: none !important;
 }
 .d-block{
 	vertical-align: middle;
