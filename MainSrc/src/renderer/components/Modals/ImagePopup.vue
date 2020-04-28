@@ -197,6 +197,15 @@ export default {
 			this.maxWidth=img.naturalWidth * percent;
 			this.maxHeight=img.naturalHeight * percent;
 		},
+		ZoomChange(){
+			if(this.isZoom){
+				this.SetImageSize(1.0)
+			}
+			else{
+				this.maxWidth=0;
+				this.maxHeight=0;
+			}
+		},
 		PlayVideo(){
 			console.log('play video')
 			if(this.Video.video_info.variants[0].content_type!='application/x-mpegURL'){
@@ -328,6 +337,7 @@ export default {
 			if(e.pageX == this.startX && e.pageY == this.startY){//클릭일 경우 확대 변경
 				if(this.ZoomAble){
 					this.isZoom=!this.isZoom;
+					this.ZoomChange();
 					this.marginLeft=0;//margin도 초기화 
 					this.marginTop=0;
 				}
@@ -354,6 +364,7 @@ export default {
 		KeyDownSpace(e){
 			if(this.ZoomAble){
 				this.isZoom=!this.isZoom;
+				this.ZoomChange();
 				this.marginLeft=0;//margin도 초기화 
 				this.marginTop=0;
 			}
