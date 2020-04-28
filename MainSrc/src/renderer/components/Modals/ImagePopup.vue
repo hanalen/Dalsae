@@ -1,8 +1,8 @@
 <template>
-	<div ref="imgModal" class="image-modal" tabindex="-1" @keydown="KeyDown" @keydown.left="Prev" @keydown.right="Next">
+	<div ref="imgModal" class="image-modal" tabindex="-1" @keydown="KeyDown" @keydown.space="KeyDownSpace" @keydown.left="Prev" @keydown.right="Next">
 		<div class="img-bg" ref="imgBg" v-if="tweet!=undefined">
 			<Tweet ref="tweet" v-show="uiOption.isShowTweet" :tweet="tweet" :option="uiOption" class="tweet-odd"/>
-      <div class="image-content" v-if="Video.type=='photo'">
+      <div class="image-content" v-if="Video.type=='photo'" @mousewheel="MouseWheel">
 				<div class="arrow" v-if="tweet.orgTweet.extended_entities.media.length > 1 && !isZoom">
 					<div class="left-button">
 						<i class="fas fa-chevron-left fa-2x" @click="Prev"></i>
@@ -57,6 +57,14 @@ export default {
 		ContextMenu
   },
   computed:{
+		ZoomAble(){
+			var div = this.$refs.imgDiv[this.index];
+			var img = this.$refs.img[this.index];
+			if(div.clientHeight<=img.clientHeight || div.clientWidth <= img.clientWidth)///img가 그림 배경보다 클 경우에만 zoom동작
+				return true; 
+			else
+			  return false;
+		},
     Video(){
       if(this.tweet.orgTweet.extended_entities.media.length > 0)
         return this.tweet.orgTweet.extended_entities.media[0];
@@ -140,6 +148,15 @@ export default {
 	mounted(){
 	},
 	methods:{
+		MouseWheel(e){
+			console.log(e)
+			if(e.deltaY<0){//up
+
+			}
+			else{//down
+
+			}
+		},
 		PlayVideo(){
 			console.log('play video')
 			if(this.Video.video_info.variants[0].content_type!='application/x-mpegURL'){
@@ -269,9 +286,7 @@ export default {
 		},
 		MouseUp(e){
 			if(e.pageX == this.startX && e.pageY == this.startY){//클릭일 경우 확대 변경
-				var div = this.$refs.imgDiv[this.index];
-				var img = this.$refs.img[this.index];
-				if(div.clientHeight<=img.clientHeight || div.clientWidth <= img.clientWidth){//img가 그림 배경보다 클 경우에만 zoom동작
+				if(this.ZoomAble){
 					this.isZoom=!this.isZoom;
 					this.marginLeft=0;//margin도 초기화 
 					this.marginTop=0;
@@ -295,6 +310,13 @@ export default {
 		},
 		KeyDownEsc(e){
 			// close();
+		},
+		KeyDownSpace(e){
+			if(this.ZoomAble){
+				this.isZoom=!this.isZoom;
+				this.marginLeft=0;//margin도 초기화 
+				this.marginTop=0;
+			}
 		},
 		KeyDown(e){
 			if(e.keyCode==49){
