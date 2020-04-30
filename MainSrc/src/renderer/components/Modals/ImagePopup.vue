@@ -406,6 +406,18 @@ export default {
 			else if(e.key.toUpperCase()=='Q'){
 				this.ZoomOut();
 			}
+			else if(e.key.toUpperCase()=='W'){
+				this.marginTop+=20;
+			}
+			else if(e.key.toUpperCase()=='A'){
+				this.marginLeft+=20;
+			}
+			else if(e.key.toUpperCase()=='S'){
+				this.marginTop-=20;
+			}
+			else if(e.key.toUpperCase()=='D'){
+				this.marginLeft-=20;
+			}
 		},
 		ChangeImage(index){
 			this.isZoom=false;
