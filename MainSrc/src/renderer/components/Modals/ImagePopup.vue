@@ -13,13 +13,13 @@
 				</div>
 				<div ref="imgDiv" v-show="i==index" v-for="(image,i) in tweet.orgTweet.extended_entities.media" :key="i" class="img-div">
 					<img ref="img" :src="ImgPath(image.media_url_https)" class="img-content" :class="{'zoom':isZoom}"
-					:style="{'margin-left':isZoom ? marginLeft+'px' : 'auto', 'margin-top': isZoom ? marginTop+'px' : 'auto',
+					:style="{'transform': 'translate('+marginLeft+'px'+','+marginTop+'px)',
 										'max-width': maxWidth==0? '100%' : maxWidth+'px', 'max-height': maxHeight == 0 ? '100%' : maxHeight+'px'}"
 					@mousedown="MouseDown" @mouseleave="MouseLeave" @mouseup="MouseUp" @mousemove="MouseMove"/>
 				</div>
 			</div>
       <div class="bottom" v-if="Video.type=='photo'">
-				<div v-for="(image,i) in tweet.orgTweet.extended_entities.media" @click="index=i"
+				<div v-for="(image,i) in tweet.orgTweet.extended_entities.media" @click="ChangeImage(i)"
 					:key="i" class="img-preview">
 						<img :src="image.media_url_https" class="bottom-preview"/>
 						<ProgressBar ref="progress" :percent="listProgressPercent[i]"/>
@@ -379,33 +379,25 @@ export default {
 			if(e.keyCode==49){
 				this.isZoom=false;
 				if(this.tweet.orgTweet.extended_entities.media.length>0){
-					this.maxWidth=0;
-					this.maxHeight=0;
-					this.index=0;
+					this.ChangeImage(0);
 				}
 			}
 			else if(e.keyCode==50){
 				this.isZoom=false;
 				if(this.tweet.orgTweet.extended_entities.media.length>1){
-					this.maxWidth=0;
-					this.maxHeight=0;
-					this.index=1;
+					this.ChangeImage(1);
 				}
 			}
 			else if(e.keyCode==51){
 				this.isZoom=false;
 				if(this.tweet.orgTweet.extended_entities.media.length>2){
-					this.maxWidth=0;
-					this.maxHeight=0;
-					this.index=2;
+					this.ChangeImage(2);
 				}
 			}
 			else if(e.keyCode==52){
 				this.isZoom=false;
 				if(this.tweet.orgTweet.extended_entities.media.length>3){
-					this.maxWidth=0;
-					this.maxHeight=0;
-					this.index=3;
+					this.ChangeImage(3);
 				}
 			}
 			else if(e.key.toUpperCase()=='E'){
@@ -414,6 +406,14 @@ export default {
 			else if(e.key.toUpperCase()=='Q'){
 				this.ZoomOut();
 			}
+		},
+		ChangeImage(index){
+			this.isZoom=false;
+			this.index=index;
+			this.marginLeft=0;
+			this.marginTop=0;
+			this.maxWidth=0;
+			this.maxHeight=0;
 		},
 		CloseClick(e){
 			this.EventBus.$emit('HideTweetImage');
