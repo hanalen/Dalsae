@@ -255,6 +255,8 @@ export default {
 			this.startY=0;
 			this.marginLeft=0;
 			this.marginTop=0;
+			this.maxWidth=0;
+			this.maxHeight=0;
 			if(videoElement){
 				videoElement.pause();
 	      videoElement.removeAttribute('src');
