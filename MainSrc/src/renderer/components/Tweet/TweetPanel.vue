@@ -109,16 +109,16 @@ export default {
     this.EventBus.$on('FocusDM', ()=>{
       this.selectPanelName='';
     })
-    this.EventBus.$on('FocusPanel', (selectPanelName)=>{
-      if(selectPanelName==''){
-        this.selectPanelName=this.prevPanelName;
+    this.EventBus.$on('FocusPanel', (changePanel)=>{
+      if(changePanel=='' || changePanel==undefined){//패널 선택 유지
+        // this.selectPanelName=this.prevPanelName;
       }
-      else if(this.selectPanelName=='daehwa' && selectPanelName!='daehwa'){//대화패널에서 나갈 경우 클리어
+      else if(this.selectPanelName=='daehwa' && changePanel!='daehwa'){//대화패널에서 나갈 경우 클리어
         this.$store.dispatch('ClearDaehwa');
-        this.selectPanelName=selectPanelName
+        this.selectPanelName=changePanel
       }
-      else if(selectPanelName!='' && selectPanelName != undefined){
-        this.selectPanelName=selectPanelName;
+      else{
+        this.selectPanelName=changePanel;
       }
       this.EventBus.$emit('HideContext')
       this.selectPanel.Focus();
