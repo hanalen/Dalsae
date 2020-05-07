@@ -162,6 +162,7 @@ export default {
 		},
 		Zoom(){
 			if(!this.ZoomAble) return;
+			this.isZoom=true;
 			var div = this.$refs.imgDiv[this.index];
 			var img = this.$refs.img[this.index];
 			var percent=1.0;
@@ -179,6 +180,7 @@ export default {
 		},
 		ZoomOut(){
 			if(!this.ZoomAble) return;
+			this.isZoom=true;
 			var div = this.$refs.imgDiv[this.index];
 			var img = this.$refs.img[this.index];
 			var percent=1.0;
