@@ -59,7 +59,7 @@ export default{
 		return tweet;
 	},
   CheckBlock(tweet, hashBlock){//블락일 경우 return true
-    if(tweet.orgTweet.quoted_status==undefined) return true;
+    if(tweet.orgTweet.is_quote_status && tweet.orgTweet.quoted_status==undefined) return true;//인용트윗이 있지만 object가 null일 경우 차단
 		var id = hashBlock[tweet.orgUser.id_str];
 		if(id)
 			return true;
