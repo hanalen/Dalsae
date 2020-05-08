@@ -448,7 +448,7 @@ export default new Vuex.Store({
     },
     DaehwaAutoAdd(state, tweet){
       var list=state.tweets.daehwa;
-      if(list.find(x=>x.id_str==tweet.id_str) == undefined){//중복 넘기기
+      if(list.find(x=>x.id_str==tweet.orgTweet.id_str) == undefined){//중복 넘기기
         list.splice(list.length,0,tweet);//대화는 오래된 트윗이 위에 위치
       }
       var nextTweet=tweet;
