@@ -22,6 +22,9 @@ export default {
     ipcRenderer.on('ClosedImagePopup', (event)=>{
       this.isShowImagePopup=true;
     })
+    ipcRenderer.on('WindowFocusOut', (event)=>{
+      this.isShowImagePopup=false;
+    })
     ipcRenderer.on('WindowFocused', (event)=>{
       if(this.isShowImagePopup){
         this.isShowImagePopup=false;

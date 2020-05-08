@@ -80,6 +80,9 @@ function createWindow () {
     mainWindow.webContents.send('WindowFocused', e)
     mainWindow.flashFrame(false)
   });
+  mainWindow.on('blur', (e)=>{
+    mainWindow.webContents.send('WindowFocusOut', e)
+  });
   mainWindow.on('closed', () => {
     mainWindowState.saveState(mainWindow)
     mainWindow = null
