@@ -58,7 +58,8 @@ export default{
 		tweet.qtTweet=undefined;
 		return tweet;
 	},
-	CheckBlock(tweet, hashBlock){//블락일 경우 return true
+  CheckBlock(tweet, hashBlock){//블락일 경우 return true
+    if(this.tweet.orgTweet.quoted_status==undefined) return true;
 		var id = hashBlock[tweet.orgUser.id_str];
 		if(id)
 			return true;
