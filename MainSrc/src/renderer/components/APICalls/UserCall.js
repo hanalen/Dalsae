@@ -227,5 +227,29 @@ export default{
 			console.log(err);
 			errCallback(err, cursor);//리밋일 경우에 대비 해서 cursor도 같이 에러 콜백
 		});
-	}
+  },
+  BlockIds(cursor, publickey, secretkey, callback, errCallback){
+		var method='GET';
+		var arr=[];
+		if(cursor>0){
+			arr['cursor']=cursor;
+		}
+		var url = 'https://api.twitter.com/1.1/blocks/ids.json';
+		var callurl= OAuth.GetURL(url, method, arr);
+		console.log('url: '+url)
+		axios({
+			method:method,
+			url:callurl,
+			headers:{
+				'Content-Type':'application/x-www-form-urlencoded;encoding=utf-8',
+				'Authorization': OAuth.GetHeader(arr, method, url, publickey, secretkey)
+			},
+		}).then((res)=>{
+			callback(res.data);
+		}).catch((err)=>{
+			// console.log('get following list error!');
+			console.log(err);
+			errCallback(err, cursor);//리밋일 경우에 대비 해서 cursor도 같이 에러 콜백
+		});
+	},
 }

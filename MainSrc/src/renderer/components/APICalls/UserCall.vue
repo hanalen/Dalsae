@@ -48,6 +48,7 @@ export default {
       else{
         this.ReqFollowingList();
         this.ReqFollowerList();
+        this.ReqBlockIds(-1);
         this.EventBus.$emit('GetDMList');
       }
     },
@@ -115,6 +116,9 @@ export default {
     ReqUserData(id_str){
       ApiUser.UserData(id_str, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResUserData, this.ErrResUserData);
     },
+    ReqBlockIds(cursor){
+      ApiUser.BlockIds(cursor, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResBlockIds, this.ErrBlockIds);
+    },
 	  ResUserInfo(userinfo){
       this.$store.dispatch('UpdateUser', userinfo);
       this.EventBus.$emit('ResUserInfo', userinfo);
@@ -174,6 +178,14 @@ export default {
     ResUserData(user){
       this.EventBus.$emit('ResUserData', user)
     },
+    ResBlockIds(data){
+      this.$store.dispatch('BlockIds', data.ids);
+      if(data.next_cursor_str!='0'){
+        this.ReqBlockIds(data.next_cursor_str);
+      }
+      console.log('block ids')
+      console.log(data)
+    },
     ErrHome(err){
       this.isLoadingHome=false;
       this.EventBus.$emit('LoadingTweetPanel', {'isLoading': false, 'panelName': 'home'});
@@ -211,6 +223,10 @@ export default {
     ErrResUserData(err){
       this.EventBus.$emit('ErrResUserData', err);
     },
+    ErrBlockIds(err, cursor){
+      console.log(err);
+      setTimeout(() => this.ReqBlockIds(cursor), 60000);//리밋일 경우 1분 뒤 재요청
+    }
   },
   mounted: function() {//EventBus등록용 함수들
     this.EventBus.$on('StartDalsae', () => {

@@ -616,7 +616,17 @@ export default new Vuex.Store({
       var qtTweet=vals['qtTweet'];
       TweetDataAgent.TweetInit(qtTweet);
       tweet.qtTweet=qtTweet;
-    }
+    },
+    BlockIds(state, vals){
+      if(state.Blocks.length==0){
+        state.Blocks=new Set();
+      }
+      vals.forEach((item)=>{
+        if(!state.Blocks.has(item)){
+          state.Blocks.add(item);
+        }
+      })
+    },
   },
   methods:{
   },
@@ -710,6 +720,9 @@ export default new Vuex.Store({
     },
     AddQtTweet(context, vals){
       context.commit('AddQtTweet', vals)
+    },
+    BlockIds(context, vals){
+      context.commit('BlockIds', vals);
     },
   }
 });
