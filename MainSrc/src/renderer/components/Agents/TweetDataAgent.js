@@ -32,8 +32,8 @@ export default{
 		for(var i=0;i<listTweet.length;i++){
 			var nTweet = listTweet[i];  
 			index=i;
-			var nowTweetTime = new Date(nTweet.created_at);
-			var newTweetTime = new Date(tweet.created_at)
+			var nowTweetTime = new Date(nTweet.created_at).getTime();
+      var newTweetTime = new Date(tweet.created_at).getTime();
 			if(nowTweetTime < newTweetTime){
 				index--;//splice때문에--해야 index가 맞음
 				if(index<0)
@@ -59,7 +59,7 @@ export default{
 		return tweet;
 	},
   CheckBlock(tweet, hashBlock){//블락일 경우 return true
-    if(this.tweet.orgTweet.quoted_status==undefined) return true;
+    if(tweet.orgTweet.quoted_status==undefined) return true;
 		var id = hashBlock[tweet.orgUser.id_str];
 		if(id)
 			return true;
