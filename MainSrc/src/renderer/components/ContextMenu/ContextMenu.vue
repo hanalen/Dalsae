@@ -144,6 +144,7 @@ export default {
       this.$children[this.selectIndex].$el.focus();
     },
     Show(e, tweet) {
+      this.selectIndex=0;
       if(e==undefined){
         e=new Object();
         var pos = document.activeElement.getBoundingClientRect();
@@ -173,6 +174,7 @@ export default {
     },
     Hide() {
       this.isVisible = false;
+      this.selectIndex=0;
     },
     FocusChild(e) {
       if(e.preventDefault)
