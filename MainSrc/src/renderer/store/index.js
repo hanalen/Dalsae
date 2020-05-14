@@ -140,9 +140,7 @@ export default new Vuex.Store({
       end:{isCtrl:false, isShift:false, isAlt:false, key:'end'},
       showImage:{isCtrl:false, isShift:false, isAlt:false, key:'g'},
     },
-    Blocks:[
-
-    ],
+    Blocks:undefined,
     following:[],
     follower:[],
   },
@@ -618,7 +616,7 @@ export default new Vuex.Store({
       tweet.qtTweet=qtTweet;
     },
     BlockIds(state, vals){
-      if(state.Blocks.length==0){
+      if(state.Blocks==undefined){
         state.Blocks=new Set();
       }
       vals.forEach((item)=>{

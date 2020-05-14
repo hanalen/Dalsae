@@ -60,11 +60,18 @@ export default{
 	},
   CheckBlock(tweet, hashBlock){//블락일 경우 return true
     if(tweet.orgTweet.is_quote_status && tweet.orgTweet.quoted_status==undefined) return true;//인용트윗이 있지만 object가 null일 경우 차단
-		var id = hashBlock[tweet.orgUser.id_str];
-		if(id)
-			return true;
-		else
-			return false;
+
+    if(hashBlock==undefined) return;
+    var ret=false;
+    if(hashBlock.has(tweet.orgUser.id_str)){
+      ret=true;
+    }
+    tweet.orgTweet.entities.user_mentions.forEach((id)=>{
+      if(hashBlock.has(id)){
+        ret=true;
+      }
+    })
+    return ret;
 	},
 	CheckMute(tweet, muteOption, id_str){//자신의 트윗이면 뮤트하지 않음
 		tweet.isMuted=false;
