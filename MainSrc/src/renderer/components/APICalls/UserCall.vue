@@ -117,7 +117,8 @@ export default {
       ApiUser.UserData(id_str, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResUserData, this.ErrResUserData);
     },
     ReqBlockIds(cursor){
-      ApiUser.BlockIds(cursor, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResBlockIds, this.ErrBlockIds);
+      if(process.env.NODE_ENV === 'development') return;//개발환경에서는 차단 목록 안 땡기자...
+        ApiUser.BlockIds(cursor, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResBlockIds, this.ErrBlockIds);
     },
 	  ResUserInfo(userinfo){
       this.$store.dispatch('UpdateUser', userinfo);
