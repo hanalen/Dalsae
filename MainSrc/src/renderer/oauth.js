@@ -13,7 +13,6 @@ var OAuth=
 	UserSecretKey:'',
 }
 
-var encoding = require("encoding");
 import APIKeys from './APIKey.js'
 
 
@@ -33,9 +32,19 @@ function StringToBase64(str){//string to base64
 	return btoa(String.fromCharCode.apply(null, new Uint8Array(new Buffer(str, "ascii"))));
 }
 
-function ReqHome(){
-	// console.log('req home');
-	// OAuthRefresh();
+//웹으로 보낼 때 oauth, url 퍼센트 인코딩으로 바꿔야 한다. 
+//encodeURIComponent 이 함수를 쓰긴 쓰는데 !, (, ), * 이 인코딩이 되지 않는다. 그래서 해당 문자 4개를 인코딩 해준다.
+//get, post 치환 문자가 다르긴 하지만 어차피 문자 있는 건 post만 보내게 된다
+//https://stackoverflow.com/questions/13060034/what-is-correct-oauth-percent-encoding
+function UrlEncode(value, isOAuth){
+	if(value==undefined || value=='') return value;
+	if(typeof value!='string') return value;
+	let ret=value;
+	ret = ret.replace(/!/gi, '%21');
+	ret = ret.replace(/\(/gi, '%28');
+	ret = ret.replace(/\)/gi, '%29');
+	ret = ret.replace(/\*/gi, '%2A');
+	return ret;
 }
 
 function CalcSignature(arr, param, method, url, secretKey){
@@ -44,14 +53,6 @@ function CalcSignature(arr, param, method, url, secretKey){
 	arr['oauth_timestamp']= timestamp;
 	arr['oauth_nonce']= nonce;
 
-	// var arr=[];
-	// arr['oauth_version']= '1.0';
-	// arr['oauth_consumer_key']= Keys.ConsumerKey;
-	// arr['oauth_signature_method']= 'HMAC-SHA1';
-	// arr['oauth_token']= publicKey;
-	// console.log('calc signature arr')
-	// console.log(arr)
-	// console.log('----')
 	Object.keys(param).forEach(function(key){
 		arr[key]=param[key];
 	});
@@ -67,22 +68,17 @@ function CalcSignature(arr, param, method, url, secretKey){
 	});
 
 	str = str.substring(0, str.length - 1 );//마지막& 지우기
-	// console.log('str: '+str);
 	var baseStr=CalcBaseString(method, url, str);
 
-	//Keys.ConsumerSecretKey
 	var singKey = APIKeys.ConsumerSecretKey+'&';
 	if(secretKey!=undefined){
 		singKey += secretKey;//맨 뒤에건 유저 priv key
 	}
-	// console.log('snkey: '+singKey)
 	var hmacsha1 = require('hmacsha1');
 	var hash = hmacsha1(singKey, baseStr);
 
 	arr['oauth_signature']=hash;
-	// console.log(arr);
 	return arr;
-	// return hash;
 }
 
 function CalcBaseString(method, url, paramStr){
@@ -114,7 +110,7 @@ function CalcParamUri(text){
 	{
 		str+=encodeURIComponent(text);
 	}
-	str = str.replace(/!/g, '%21');//!가 인코딩 안 되는 문제가 있다람쥐썬더!!!!!
+	str = UrlEncode(str)
 	return str;
 }
 
@@ -145,11 +141,10 @@ export default{
 		keys.forEach(function(item){
 			if(params[item]==undefined || params[item]=='') return true;
 			str += item+'=';
-			str +=encodeURIComponent(params[item]);
+			str += CalcParamUri(params[item]);
 			str+='&';
 		});
 		str+='&';
-		str = str.replace(/!/g, '%21');
 		return str.substring(0, str.length - 1 );//마지막& 지우기
 	},
 	UpdateToken(publicKey, secretKey){
@@ -166,9 +161,7 @@ export default{
 	GetHeader(param, method, url, publicKey, secretKey){
 		var arr=[];
 		arr['oauth_version']= '1.0';
-		arr['oauth_consumer_key']= APIKeys.ConsumerKey;//APIKeys.ConsumerKey;
-		// arr['oauth_timestamp']= timestamp;
-		// arr['oauth_nonce']= nonce;
+		arr['oauth_consumer_key']= APIKeys.ConsumerKey;
 		arr['oauth_signature_method']= 'HMAC-SHA1';
 		arr['oauth_token']= publicKey;
 
@@ -188,11 +181,7 @@ export default{
 			str+=',';
 		});
 		
-		// var keys2=Object.keys(arr2);//파라메터 키!!!
-		// str+=' oauth_callback="oob"';
-
 		str = str.substring(0, str.length - 1 );//마지막, 지우기
-		// console.log('header: '+str);
 		return str;
 	},
 }
