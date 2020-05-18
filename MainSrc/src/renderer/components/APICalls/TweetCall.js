@@ -30,7 +30,7 @@ async function Media(media, publickey, secretkey){
 }
 
 export default{
-	async Tweet(tweetText, replyId, media, publickey, secretkey, callback){
+	async Tweet(tweetText, replyId, media, publickey, secretkey, callback, errCallback){
 		var method='POST';
 		var arr=[];
 		arr['status']=tweetText;
@@ -63,6 +63,7 @@ export default{
 		}).catch((err)=>{
 			// console.log('send tweet error!');
 			console.log(err);
+			errCallback(err);
 		});
 	},
 	QTTweet(tweet, publickey, secretkey, callback, errCallback){

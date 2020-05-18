@@ -23,9 +23,9 @@ export default {
 			this.CreateMessage(msg, 'normal');
 		});
 		this.EventBus.$on('ApiError', (err)=>{
-			if(err.errors==undefined) return;
+			if(err.response.data.errors==undefined) return;
 			let message='';
-			switch(error.errors[0].code){
+			switch(err.response.data.errors[0].code){
 				case 34:
 					message = "해당 유저는 없습니다.";
 					break;

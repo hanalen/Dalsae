@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     SendTweet(tweetText, media, replyId){
-			ApiTweet.Tweet(tweetText, replyId, media, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResTweet);
+			ApiTweet.Tweet(tweetText, replyId, media, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResTweet, this.ErrTweet);
     },
     Retweet(tweetId){
       ApiTweet.Retweet(tweetId, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, this.ResRetweet, this.ErrRetweet);
@@ -69,8 +69,13 @@ export default {
 		ResQT(qtTweet, tweet){
 			this.$store.dispatch('AddQtTweet', {'tweet': tweet, 'qtTweet': qtTweet});
 		},
+		ErrTweet(err){
+			console.log('err tweet')
+			this.EventBus.$emit('ApiError', err)
+		},
 		ErrQT(err){
 			// console.log('qt laod error')
+			this.EventBus.$emit('ApiError', err)
 
 		},
 		ResUnRetweet(tweet){
@@ -96,10 +101,12 @@ export default {
 			this.$store.dispatch('Delete', tweet);
 		},
     ErrRetweet(err, tweetID){
+			this.EventBus.$emit('ApiError', err)
       console.log(err);
       this.RetryRetweet(tweetID);
     },
     ErrFavorite(err, tweetID){
+			this.EventBus.$emit('ApiError', err)
       console.log(err);
       this.RetryFavorite(tweetID);
 		},
