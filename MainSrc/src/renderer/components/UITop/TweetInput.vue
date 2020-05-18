@@ -3,8 +3,7 @@
     <div class="text-area-top" v-on:drop="Drop" v-on:dragover="DragOver" v-on:dragenter="DragEnter" >
       <textarea
         ref="inputTweet"
-        @input="$emit('update:tweetText', tweetTextBinding);"
-        v-model="tweetTextBinding"
+        v-model="tweetText"
         spellcheck="false"
         class="text"
         v-on:input="Input"
@@ -77,11 +76,11 @@ export default {
   name: "tweetinput",
   data: function() {
     return {
+      replyTweet:undefined,
       regex: undefined,
       tweetLength: 10,
       txtCounting: "(0 / 280)",
       tweetText: "",
-      tweetTextBinding: "",
       isMention: false,
       listMention: Array,
       mentionID: "",
@@ -103,11 +102,18 @@ export default {
   },
   props: {
     following: undefined,
-    sendCallBack: undefined,
     option:undefined,
+    userData:undefined,
+    selectAccount:undefined,
   },
   mounted: function() {
     //EventBus등록용 함수들
+    this.EventBus.$on('Reply', (tweet) => {//트윗 답변 누를 경우 표시 
+      this.Reply(tweet);
+    });
+    this.EventBus.$on('ReplyAll', (tweet) => {//트윗 답변 누를 경우 표시 
+      this.ReplyAll(tweet);
+    });
     this.EventBus.$on("mentionSelect", screen_name => {
       this.ReplaceMentionID(screen_name);
     });
@@ -120,18 +126,49 @@ export default {
     this.EventBus.$on('AddHashTag', (tweet)=>{
       tweet.orgTweet.entities.hashtags.forEach((hash)=>{
         var index = this.$refs.inputTweet.selectionStart;//커서 위치
-        this.tweetTextBinding = [this.tweetTextBinding.slice(0, index), '#'+hash.text+' ', this.tweetTextBinding.slice(index)].join('');
+        this.tweetText = [this.tweetText.slice(0, index), '#'+hash.text+' ', this.tweetText.slice(index)].join('');
       })
       this.FocusInput();
     });
     this.EventBus.$on('QtTweet', (tweet)=>{
       var str = 'https://twitter.com/'+tweet.orgUser.screen_name+'/status/'+tweet.orgTweet.id_str
       var index = this.$refs.inputTweet.selectionStart;//커서 위치
-      this.tweetTextBinding = [this.tweetTextBinding.slice(0, index), str].join('');
+      this.tweetText = [this.tweetText.slice(0, index), str].join('');
       this.FocusInput();
     })
   },
   methods: {
+    Reply(tweet){
+      this.replyTweet=tweet;
+      var str='';
+      if(this.selectAccount.userData.screen_name!=tweet.user.screen_name){
+        str='@'+tweet.user.screen_name+' ';
+      }
+      this.SetReply(str);
+      this.EventBus.$emit('FocusInput');
+    },
+    ReplyAll(tweet){
+      this.replyTweet=tweet;
+      var arr=[];
+      arr.push(tweet.user.screen_name);
+      if(arr.find(x=>x==tweet.orgTweet.user.screen_name)==undefined){
+        arr.push(tweet.orgTweet.user.screen_name);
+      }
+      if(tweet.entities.user_mentions!=undefined){
+        tweet.entities.user_mentions.forEach(user => {
+          if(this.selectAccount.userData.screen_name==user.screen_name) return true;//난 제외
+          if(arr.find(x=>x==user.screen_name)==undefined){//중복 안되게
+            arr.push(user.screen_name);
+          }
+        });
+      }
+      var str='';
+      arr.forEach(user=>{
+        str+='@'+user+' '
+      });
+      this.SetReply(str);
+      this.EventBus.$emit('FocusInput');
+    },
     Paste(e){
       var items =e.clipboardData.items;
       for(var i=0;i<items.length;i++){
@@ -173,7 +210,12 @@ export default {
       if(this.tweetText.length==0 && this.arrImage.length==0) {
         return;
       }
-      this.sendCallBack();
+      var id=0;
+      if(this.replyTweet!=undefined){
+        id= this.replyTweet.orgTweet.id_str;
+      }
+      this.EventBus.$emit('SendTweet', {'text': this.tweetText, 'media': this.arrImage, 'replyId':id});
+      this.replyTweet=undefined;
       this.ClearInput();
       this.EventBus.$emit('FocusPanel','');
     },
@@ -202,7 +244,7 @@ export default {
     SetReply(str) {
       this.EventBus.$emit("update:tweetText", str);
       this.TextChange(str);
-      this.tweetTextBinding = str;
+      this.tweetText = str;
     },
     FocusInput() {
       this.$nextTick(() => {
@@ -211,21 +253,20 @@ export default {
       });
     },
     ClearInput() {
-      this.txtCounting = "(0 / 280)";
+      this.txtCounting = '(0 / 280)';
       this.HideMention();
-      this.tweetTextBinding = "";//양방향 바인딩용 값, 이 값을 바꿔야 ui 밑 전송 데이터가 적용 된다.
-      this.tweetText = "";
+      this.tweetText = '';
       this.tweetLength = 0;
       this.$refs.inputTweet.focus();
       this.arrImage=[];
       this.EventBus.$emit('FocusPanel','')
     },
     ReplaceMentionID(screen_name) {
-      this.tweetTextBinding = this.tweetText.replace(
+      this.tweetText = this.tweetText.replace(
         this.word,
         "@" + screen_name + " "
       );
-      this.tweetText = this.tweetTextBinding;
+      this.tweetText = this.tweetText;
       this.$refs.inputTweet.focus();
       this.HideMention();
     },
@@ -260,7 +301,7 @@ export default {
     },
     EnterDown(e) {
       e.preventDefault();
-      if(this.tweetTextBinding.length==0 && this.arrImage.length==0){//입력 중인 트윗이 없을 경우 패널 포커스
+      if(this.tweetText.length==0 && this.arrImage.length==0){//입력 중인 트윗이 없을 경우 패널 포커스
         this.EventBus.$emit('FocusPanel','');
       }
       else if (this.isMention) {
@@ -275,7 +316,7 @@ export default {
       }
       else if(e.shiftKey || !e.ctrlKey){//new line
         var index = e.target.selectionStart;//커서 위치
-        this.tweetTextBinding = [this.tweetTextBinding.slice(0, index), '\r\n', this.tweetTextBinding.slice(index)].join('');
+        this.tweetText = [this.tweetText.slice(0, index), '\r\n', this.tweetText.slice(index)].join('');
       }
       
     },

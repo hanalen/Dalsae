@@ -3,7 +3,7 @@
     <div class="ui-propic" v-if="userData!=undefined &&uiOption.isShowPropic && !uiOption.isSmallInput" @click="ClickPropic">
         <img class="propic" :src="Propic" :class="{'profile':!uiOption.isBigPropic,'profile-big':uiOption.isBigPropic}"/>
     </div>
-    <InputTweet ref="inputTweet" :option="uiOption" v-bind:following="this.following" :tweetText.sync="tweetText" :sendCallBack="this.SendTweet"/>
+    <InputTweet ref="inputTweet" :selectAccount="selectAccount" :userData="userData" :option="uiOption" v-bind:following="this.following"/>
   </div>
 </template>
 
@@ -20,7 +20,6 @@ export default {
       tweetText:'',
       accountList:undefined,
       selectAccount:undefined,
-      replyTweet:undefined,
       userData:undefined
     }
   },
@@ -35,18 +34,15 @@ export default {
     },
   },
   mounted: function() {//EventBus등록용 함수들
-    this.EventBus.$on('Reply', (tweet) => {//트윗 답변 누를 경우 표시 
-      this.Reply(tweet);
-    });
-    this.EventBus.$on('ReplyAll', (tweet) => {//트윗 답변 누를 경우 표시 
-      this.ReplyAll(tweet);
-    });
     this.EventBus.$on('StartDalsae', ()=>{
       this.UpdateUserData();
     });
     this.EventBus.$on('ResUserInfo', (userInfo)=>{//api콜로 계정 정보를 받아왔을 경우 
       this.userData=userInfo;
     });
+    this.EventBus.$on('SendTweet', (text)=>{
+
+    })
   },
   created:function(){
     
@@ -59,46 +55,6 @@ export default {
       this.selectAccount=this.$store.state.Account.selectAccount;
       this.accountList=this.$store.state.Account.accountList;
       this.userData=this.$store.state.Account.selectAccount.userData;
-    },
-    Reply(tweet){
-      this.replyTweet=tweet;
-      var str='';
-      if(this.selectAccount.userData.screen_name!=tweet.user.screen_name){
-        str='@'+tweet.user.screen_name+' ';
-      }
-      this.$refs.inputTweet.SetReply(str);
-      this.EventBus.$emit('FocusInput');
-    },
-    ReplyAll(tweet){
-      this.replyTweet=tweet;
-      var arr=[];
-      arr.push(tweet.user.screen_name);
-      if(arr.find(x=>x==tweet.orgTweet.user.screen_name)==undefined){
-        arr.push(tweet.orgTweet.user.screen_name);
-      }
-      if(tweet.entities.user_mentions!=undefined){
-        tweet.entities.user_mentions.forEach(user => {
-          if(this.selectAccount.userData.screen_name==user.screen_name) return true;//난 제외
-          if(arr.find(x=>x==user.screen_name)==undefined){//중복 안되게
-            arr.push(user.screen_name);
-          }
-        });
-      }
-      var str='';
-      arr.forEach(user=>{
-        str+='@'+user+' '
-      });
-      this.$refs.inputTweet.SetReply(str);
-      this.EventBus.$emit('FocusInput');
-    },
-    SendTweet(){
-      var id=0;
-      if(this.replyTweet!=undefined){
-        id= this.replyTweet.orgTweet.id_str;
-      }
-      var media = this.$refs.inputTweet.arrImage;
-      this.EventBus.$emit('SendTweet', {'text': this.tweetText, 'media': media, 'replyId':id});
-      this.replyTweet=undefined;
     },
     ResTweet(tweet){
 
