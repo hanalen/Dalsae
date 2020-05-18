@@ -12,7 +12,9 @@ export default{
 		obj.created_at=tweet.created_at;
 		obj.isHighlight=tweet.isHighlight;
 		obj.isOdd=false;//odd, even 색상
-
+		obj.orgTweet=new Object();
+		obj.orgTweet.retweeted=tweet.orgTweet.retweeted;
+		obj.orgTweet.favorited=tweet.orgTweet.favorited;
 		return obj;
 	},
 	CreateNonResponsiveTweet(resTweet, tweet){//resTweet: 동적 변수 할당 된 트윗, tweet: 원본 트윗
