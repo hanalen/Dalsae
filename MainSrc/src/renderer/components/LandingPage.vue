@@ -16,6 +16,7 @@
         <FileAgent/>
         <IPCAgent :tweets="this.$store.state.tweets.mention"/>
         <StreamingAgent/>
+        <AlertAgent/>
       </div>
     </div>
   </div>
@@ -38,7 +39,7 @@ import OAuth from "../oauth.js"
 import UIOptionModal from './Modals/UIOptionModal.vue'
 import ImageModal from './Modals/ImageModal.vue'
 import AccountSelectModal from './Modals/AccountSelectModal.vue'
-
+import AlertAgent from './Common/Alert/AlertAgent.vue'
 export default {
   name: 'landing-page',
   components: { 
@@ -56,6 +57,7 @@ export default {
     UIOptionModal,
     ImageModal,
     AccountSelectModal,
+    AlertAgent,
   },
   data () {
     return {
