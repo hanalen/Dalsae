@@ -54,10 +54,10 @@ export default {
 		},
 		ReqBlock(user){
 			if(user.blocking)
-				ApiProfile.ReqUnBlock(user.screen_name, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, 
+				ApiProfile.ReqUnBlock(user.id_str, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, 
 					this.ResUnBlock, this.ErrBlock);
 			else
-				ApiProfile.ReqBlock(user.screen_name, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, 
+				ApiProfile.ReqBlock(user.id_str, this.selectAccount.oauth_token, this.selectAccount.oauth_token_secret, 
 					this.ResBlock, this.ErrBlock);
 		},
 		ReqFollowingList(screenName){

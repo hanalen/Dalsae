@@ -87,11 +87,11 @@ export default{
 			errCallback(err);
 		});
 	},
-	ReqBlock(screenName, publickey, secretkey, callback, errCallback){
+	ReqBlock(id, publickey, secretkey, callback, errCallback){
 		var url='https://api.twitter.com/1.1/blocks/create.json';
 		var method='POST';
 		var arr=[];
-		arr['screen_name']= screenName;
+		arr['user_id']= id;
 		var callUrl=OAuth.GetURL(url, method ,arr);
 		var sendData=OAuth.CreateData(arr);
 		axios({
