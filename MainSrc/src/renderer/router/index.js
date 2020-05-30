@@ -37,6 +37,11 @@ export default new Router({
       component: require('@/components/Modals/FavoritePopup').default, 
     },
     {
+      path: '/ChainBlock',
+      name:'ChainBlock',
+      component: require('@/components/Modals/ChainBlockPopup').default, 
+    },
+    {
       path: '*',
       redirect: '/Profile'
     }
