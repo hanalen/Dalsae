@@ -1,0 +1,121 @@
+<template>
+  <div class="chain-block-item">
+		<span>{{status}}</span><br/>
+		<span>{{blockCount}} / {{maxBlockCount}}<br/>
+		<ProgressBar />
+		<select size='6'>
+			<option v-for="(item, index) in listSkip" :key="index">{{item}}</option>
+		</select>
+  </div>
+</template>
+
+<script>
+import ProfileCall from '../../APICalls/ProfileCall.js'
+import ProgressBar from '../../Common/ProgressBar.vue'
+export default {
+	name: "chainblockitem",
+	data:function(){
+		return{
+			hashUser:undefined,
+			status:'대기 중',
+			listSkip:[],
+			blockCount:0,
+		}
+	},
+	props:{
+		isFollowingList:{
+			type:Boolean,
+			default:true,
+		},
+		userInfo:undefined,
+		user:undefined,
+		listFollowing:undefined,
+		listFollower:undefined,
+	},
+  computed:{
+		maxBlockCount(){
+			return hashUser.length-listSkip.length;
+		}
+	},
+	methods:{
+		Start(){
+			this.ReqList(-1);
+		},
+		ReqList(cursor){
+			this.status='좌표를 불러오는 중...'
+			if(this.isFollowingList)
+				ProfileCall.ReqFollowingIds(cursor, this.user.screen_name, this.userInfo.oauth_token, this.userInfo.oauth_token_secret,
+						this.ResList, this.ResErr);
+			else
+				ProfileCall.ReqFollowerIds(cursor, this.user.screen_name, this.userInfo.oauth_token, this.userInfo.oauth_token_secret,
+						this.ResList, this.ResErr);
+		},
+		ResList(res){
+			if(this.hashUser==undefined){
+        state.Blocks=new Set();
+      }
+      res.ids.forEach((item)=>{
+        if(!this.hashUser.has(item)){
+          this.hashUser.add(item);
+        }
+			})
+			if(res.next_cursor==0){
+				this.CheckFriends();
+			}
+			else{
+				this.ReqList(res.next_cursor);
+			}
+		},
+		ResErr(err){
+			console.log('err req list')
+			console.log(err)
+			this.status='좌표 불러오기 실패';
+		},
+		CheckFriends(){
+			this.listFollowing.forEach((user)=>{
+				if(this.hashUser.has(user.id)){
+					this.listSkip.push(user);
+					this.hashUser.delete(user.id)
+				}
+			});
+			this.listFollower.forEach((user)=>{
+				if(this.hashUser.has(user.id)){
+					this.listSkip.push(user);
+					this.hashUser.delete(user.id)
+				}
+			})
+			this.ChainBlock();
+		},
+		ChainBlock(){
+			this.status='차단 중...'
+			this.hashUser.forEach((id)=>{
+				ProfileCall.ReqBlock(id, this.userInfo.oauth_token, this.userInfo.oauth_token_secret, this.ResBlock, this.ErrBlock)
+			})
+		},
+		ResBlock(){
+			this.blockCount++;
+		},
+		ErrBlock(err){
+			console.log('err block!')
+			console.log(err)
+		}
+	},
+	created:function(){
+		if(this.isFollowingList){
+			this.status=user.screen_name+'의 팔로잉 전체를 차단 합니다. 대기 중';
+		}
+		else{
+			this.status=user.screen_name+'의 팔로워 전체를 차단 합니다. 대기 중';
+		}
+	},
+  mounted: function() {//EventBus등록용 함수들
+
+	},
+  components:{
+		ProgressBar,
+  },
+};
+</script>
+<style lang="scss" scoped>
+
+</style>
