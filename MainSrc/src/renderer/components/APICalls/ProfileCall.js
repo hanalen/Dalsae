@@ -185,4 +185,56 @@ export default{
 			errCallback(err);
 		});
 	},
+	ReqFollowingIds(cursor, screenName, publickey, secretkey, callback, errCallback){
+		var url='https://api.twitter.com/1.1/friends/ids.json';
+		var method='GET';
+		var arr=[];
+		arr['count']='5000';
+		arr['screen_name']= screenName;
+		arr['cursor']=cursor;
+		var callUrl=OAuth.GetURL(url, method ,arr);
+		var sendData=OAuth.CreateData(arr);
+		axios({
+			method:method,
+			url:callUrl,
+			headers:{
+				'Content-Type':'application/x-www-form-urlencoded;encoding=utf-8',
+				'Authorization': OAuth.GetHeader(arr, method, url, publickey, secretkey)
+			},
+			data:sendData
+		}).then((res)=>{
+			// console.log('get userinfo ok');
+			callback(res.data);
+		}).catch((err)=>{
+			// console.log('get userinfo error!');
+			console.log(err);
+			errCallback(err);
+		});
+	},
+	ReqFollowerIds(cursor, screenName, publickey, secretkey, callback, errCallback){
+		var url='https://api.twitter.com/1.1/followers/ids.json';
+		var method='GET';
+		var arr=[];
+		arr['count']='5000';
+		arr['screen_name']= screenName;
+		arr['cursor']=cursor;
+		var callUrl=OAuth.GetURL(url, method ,arr);
+		var sendData=OAuth.CreateData(arr);
+		axios({
+			method:method,
+			url:callUrl,
+			headers:{
+				'Content-Type':'application/x-www-form-urlencoded;encoding=utf-8',
+				'Authorization': OAuth.GetHeader(arr, method, url, publickey, secretkey)
+			},
+			data:sendData
+		}).then((res)=>{
+			// console.log('get userinfo ok');
+			callback(res.data);
+		}).catch((err)=>{
+			// console.log('get userinfo error!');
+			console.log(err);
+			errCallback(err);
+		});
+	},
 }
