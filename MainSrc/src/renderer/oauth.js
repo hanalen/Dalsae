@@ -44,6 +44,7 @@ function UrlEncode(value, isOAuth){
 	ret = ret.replace(/\(/gi, '%28');
 	ret = ret.replace(/\)/gi, '%29');
 	ret = ret.replace(/\*/gi, '%2A');
+	ret = ret.replace(/\'/gi, '%27');
 	return ret;
 }
 
