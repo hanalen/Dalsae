@@ -192,6 +192,7 @@ export default{
 		arr['count']='5000';
 		arr['screen_name']= screenName;
 		arr['cursor']=cursor;
+		arr['stringify_ids']=true;
 		var callUrl=OAuth.GetURL(url, method ,arr);
 		var sendData=OAuth.CreateData(arr);
 		axios({
@@ -217,6 +218,7 @@ export default{
 		var arr=[];
 		arr['count']='5000';
 		arr['screen_name']= screenName;
+		arr['stringify_ids']=true;
 		arr['cursor']=cursor;
 		var callUrl=OAuth.GetURL(url, method ,arr);
 		var sendData=OAuth.CreateData(arr);
@@ -230,6 +232,7 @@ export default{
 			data:sendData
 		}).then((res)=>{
 			// console.log('get userinfo ok');
+			console.log(res)
 			callback(res.data);
 		}).catch((err)=>{
 			// console.log('get userinfo error!');

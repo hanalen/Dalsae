@@ -27,7 +27,7 @@ export default {
 	props:{
 		isFollowingList:{
 			type:Boolean,
-			default:true,
+			default:false,
 		},
 		userInfo:undefined,
 		user:undefined,
@@ -59,7 +59,10 @@ export default {
       res.ids.forEach((item)=>{
         if(!this.hashUser.has(item)){
           this.hashUser.add(item);
-        }
+				}
+				else{
+					console.log(item)
+				}
 			})
 			if(res.next_cursor==0){
 				this.CheckFriends();
@@ -75,15 +78,15 @@ export default {
 		},
 		CheckFriends(){
 			this.listFollowing.forEach((user)=>{
-				if(this.hashUser.has(user.id)){
+				if(this.hashUser.has(user.id_str)){
 					this.listSkip.push(user);
-					this.hashUser.delete(user.id)
+					this.hashUser.delete(user.id_str)
 				}
 			});
 			this.listFollower.forEach((user)=>{
-				if(this.hashUser.has(user.id)){
+				if(this.hashUser.has(user.id_str)){
 					this.listSkip.push(user);
-					this.hashUser.delete(user.id)
+					this.hashUser.delete(user.id_str)
 				}
 			})
 			this.ChainBlock();
@@ -91,8 +94,8 @@ export default {
 		ChainBlock(){
 			this.status='차단 중...'
 			return;
-			this.hashUser.forEach((id)=>{
-				ProfileCall.ReqBlock(id, this.userInfo.oauth_token, this.userInfo.oauth_token_secret, this.ResBlock, this.ErrBlock)
+			this.hashUser.forEach((id_str)=>{
+				ProfileCall.ReqBlock(id_str, this.userInfo.oauth_token, this.userInfo.oauth_token_secret, this.ResBlock, this.ErrBlock)
 			})
 			this.EventBus.$emit('UpdateHashBlock', this.hashUser);
 		},
