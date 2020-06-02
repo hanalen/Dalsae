@@ -1,8 +1,9 @@
 <template>
   <div class="chain-block-item">
+		<span>{{user.screen_name}}의 {{strFollow}}를 전부 차단 합니다.</span>
 		<span>{{status}}</span><br/>
 		<span>{{blockCount}} / {{maxBlockCount}}<br/>
-		<ProgressBar />
+		<ProgressBar ref="progress" />
 		<select size='6'>
 			<option v-for="(item, index) in listSkip" :key="index">{{item}}</option>
 		</select>
@@ -35,6 +36,9 @@ export default {
   computed:{
 		maxBlockCount(){
 			return hashUser.length-listSkip.length;
+		},
+		strFollow(){
+			return this.isFollowingList ? '팔로잉' : '팔로워';
 		}
 	},
 	methods:{
@@ -91,9 +95,11 @@ export default {
 			this.hashUser.forEach((id)=>{
 				ProfileCall.ReqBlock(id, this.userInfo.oauth_token, this.userInfo.oauth_token_secret, this.ResBlock, this.ErrBlock)
 			})
+			this.EventBus.$emit('UpdateHashBlock', this.hashUser);
 		},
 		ResBlock(){
 			this.blockCount++;
+			this.$refs.progress.SetValue((this.blockCount / this.hashUser.size) * 100);
 		},
 		ErrBlock(err){
 			console.log('err block!')
