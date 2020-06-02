@@ -108,10 +108,10 @@ export default {
 	},
 	created:function(){
 		if(this.isFollowingList){
-			this.status=user.screen_name+'의 팔로잉 전체를 차단 합니다. 대기 중';
+			this.status=this.user.screen_name+'의 팔로잉 전체를 차단 합니다. 대기 중';
 		}
 		else{
-			this.status=user.screen_name+'의 팔로워 전체를 차단 합니다. 대기 중';
+			this.status=this.user.screen_name+'의 팔로워 전체를 차단 합니다. 대기 중';
 		}
 	},
   mounted: function() {//EventBus등록용 함수들

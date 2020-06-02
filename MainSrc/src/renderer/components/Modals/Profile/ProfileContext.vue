@@ -63,8 +63,7 @@ export default {
 		},
 		ClickChainBlock(e){
 			var ipcRenderer = require('electron').ipcRenderer;
-			ipcRenderer.send('OpenChainBlockPopup');
-			console.log('click chainblock')
+			ipcRenderer.send('OpenChainBlockPopup', this.user);
 			if(process.env.NODE_ENV === 'development') {//개발 환경에서 프로필 팝업이 떠있으면 체블 창이 안 뜨는 버그 있음 ㅡㅡ
 				this.EventBus.$emit('CloseProfilePopup')
 			}

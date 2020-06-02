@@ -294,7 +294,7 @@ ipcMain.on('CloseMuteOptionPopup',()=>{
 //#region 뮤트 윈도우
 var chaninBlockWindow=null;
 
-ipcMain.on('OpenChainBlockPopup', (event, userInfo, user, listFollowing, listFollower, hashBlock)=>{
+ipcMain.on('OpenChainBlockPopup', (event, user, userInfo, listFollowing, listFollower, hashBlock)=>{
   if(chaninBlockWindow){//이미 떠있을 경우 새 유저 정보 불러오기
     chaninBlockWindow.webContents.send('ShowUser', user);
     return;
@@ -311,14 +311,14 @@ ipcMain.on('GetChainBlockInfo', (event, userInfo, user, listFollowing, listFollo
   CreateChainBlockWindow(userInfo, user, listFollowing, listFollower, hashBlock);
 })
 
-function CreateChainBlockWindow(userInfo, user, listFollowing, listFollower, hashBlock){
+function CreateChainBlockWindow(user, userInfo, listFollowing, listFollower, hashBlock){
   chaninBlockWindow = new BrowserWindow({show:false,width:540, height:400, devTools :false});
   const path = process.env.NODE_ENV === 'development'
         ? 'http://localhost:9080/#/ChainBlock'
         : `file://${__dirname}/index.html#ChainBlock`
         chaninBlockWindow.loadURL(path);
   chaninBlockWindow.on('ready-to-show', ()=>{
-    chaninBlockWindow.webContents.send('ChainBlock', userInfo, user, listFollowing, listFollower, hashBlock);
+    chaninBlockWindow.webContents.send('ChainBlock', user, userInfo, listFollowing, listFollower, hashBlock);
     chaninBlockWindow.show();
   })
   chaninBlockWindow.on('closed', (e)=>{
