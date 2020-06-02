@@ -7,6 +7,7 @@
 		<select size='6'>
 			<option v-for="(item, index) in listSkip" :key="index">{{item}}</option>
 		</select>
+		<input type="button" value="시작하기" @click="Start"/>
   </div>
 </template>
 
@@ -17,7 +18,7 @@ export default {
 	name: "chainblockitem",
 	data:function(){
 		return{
-			hashUser:undefined,
+			hashUser:new Set(),
 			status:'대기 중',
 			listSkip:[],
 			blockCount:0,
@@ -35,7 +36,7 @@ export default {
 	},
   computed:{
 		maxBlockCount(){
-			return hashUser.length-listSkip.length;
+			return this.hashUser.size - this.listSkip.length;
 		},
 		strFollow(){
 			return this.isFollowingList ? '팔로잉' : '팔로워';
@@ -55,9 +56,6 @@ export default {
 						this.ResList, this.ResErr);
 		},
 		ResList(res){
-			if(this.hashUser==undefined){
-        state.Blocks=new Set();
-      }
       res.ids.forEach((item)=>{
         if(!this.hashUser.has(item)){
           this.hashUser.add(item);
@@ -92,6 +90,7 @@ export default {
 		},
 		ChainBlock(){
 			this.status='차단 중...'
+			return;
 			this.hashUser.forEach((id)=>{
 				ProfileCall.ReqBlock(id, this.userInfo.oauth_token, this.userInfo.oauth_token_secret, this.ResBlock, this.ErrBlock)
 			})

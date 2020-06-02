@@ -1,7 +1,8 @@
 <template>
 	<div class="chain-block-popup">
 		<div class="chain-block-item">
-			<ChainBlockItem v-for="(user, index) in listUser" :key="index"/>
+			<ChainBlockItem v-for="(user, index) in listUser" :key="index" :user="user" :userInfo="userInfo"
+			:listFollowing="listFollowing" :listFollower="listFollower" :hashUser="hashBlock"/>
 		</div>
 	</div>
 </template>
@@ -17,7 +18,7 @@ export default {
 			userInfo:undefined,
 			listFollowing:[],
 			listFollower:[],
-			hashBlock:undefined,
+			hashBlock:new Set(),
 		}
 	},
 	props:{
@@ -31,7 +32,8 @@ export default {
 			this.listUser.push(user);
 			this.listFollowing=listFollowing;
 			this.listFollower=listFollower;
-			this.hashBlock=hashBlock;
+			if(hashBlock)
+				this.hashBlock=hashBlock;
 		});
 		ipcRenderer.on('ShowUser', (event, user)=>{
 			this.listUser.push(user);
