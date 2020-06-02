@@ -312,7 +312,7 @@ ipcMain.on('GetChainBlockInfo', (event, userInfo, user, listFollowing, listFollo
 })
 
 function CreateChainBlockWindow(user, userInfo, listFollowing, listFollower, hashBlock){
-  chaninBlockWindow = new BrowserWindow({show:false,width:540, height:400, devTools :false});
+  chaninBlockWindow = new BrowserWindow({show:false,width:540, height:400, devTools :false, webPreferences: {webSecurity: false}});
   const path = process.env.NODE_ENV === 'development'
         ? 'http://localhost:9080/#/ChainBlock'
         : `file://${__dirname}/index.html#ChainBlock`
