@@ -42,6 +42,11 @@ export default {
       this.$store.dispatch('ClearUser');
       this.EventBus.$emit('LoadUserTweet', screen_name);
     });
+    ipcRenderer.on('GetChainBlockInfo', (event, user)=>{
+      var ipcRenderer = require('electron').ipcRenderer;
+      ipcRenderer.send('GetChainBlockInfo', this.$store.state.Account.selectAccount, user, this.$store.state.following, 
+          this.$store.state.follower, this.$store.state.Blocks);
+    })
     this.EventBus.$on('WindowFocused', ()=>{
       this.isShowImagePopup=true;
     })

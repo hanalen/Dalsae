@@ -299,6 +299,19 @@ ipcMain.on('OpenChainBlockPopup', (event, userInfo, user, listFollowing, listFol
     chaninBlockWindow.webContents.send('ShowUser', user);
     return;
   } 
+  if(userInfo==undefined || listFollower==undefined || listFollowing==undefined){
+    mainWindow.webContents.send('GetChainBlockInfo', user);
+  }
+  else{
+    CreateChainBlockWindow(userInfo, user, listFollowing, listFollower, hashBlock);
+  }
+})
+
+ipcMain.on('GetChainBlockInfo', (event, userInfo, user, listFollowing, listFollower, hashBlock)=>{//메인윈도우에 체블 요청 받은 후
+  CreateChainBlockWindow(userInfo, user, listFollowing, listFollower, hashBlock);
+})
+
+function CreateChainBlockWindow(userInfo, user, listFollowing, listFollower, hashBlock){
   chaninBlockWindow = new BrowserWindow({show:false,width:540, height:400, devTools :false});
   const path = process.env.NODE_ENV === 'development'
         ? 'http://localhost:9080/#/ChainBlock'
@@ -311,7 +324,7 @@ ipcMain.on('OpenChainBlockPopup', (event, userInfo, user, listFollowing, listFol
   chaninBlockWindow.on('closed', (e)=>{
     chaninBlockWindow=null;
   });
-})
+}
 
 ipcMain.on('MuteOptionSave', (event,muteOption)=>{
   mainWindow.webContents.send('MuteOptionSave', muteOption)

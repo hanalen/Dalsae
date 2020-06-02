@@ -2,7 +2,7 @@
   <div class="chain-block-item">
 		<span>{{user.screen_name}}의 {{strFollow}}를 전부 차단 합니다.</span>
 		<span>{{status}}</span><br/>
-		<span>{{blockCount}} / {{maxBlockCount}}<br/>
+		<span>{{blockCount}} / {{maxBlockCount}}</span><br/>
 		<ProgressBar ref="progress" />
 		<select size='6'>
 			<option v-for="(item, index) in listSkip" :key="index">{{item}}</option>
