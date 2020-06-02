@@ -140,6 +140,9 @@ export default {
     this.EventBus.$on('Mute', (user)=>{
 
     });
+    this.EventBus.$on('CloseProfilePopup', ()=>{
+      close();
+    })
   },
   methods: {
     Comma(num){
