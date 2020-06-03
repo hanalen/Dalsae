@@ -234,6 +234,7 @@ export default{
 		if(cursor>0){
 			arr['cursor']=cursor;
 		}
+		arr['stringify_ids']=true;
 		var url = 'https://api.twitter.com/1.1/blocks/ids.json';
 		var callurl= OAuth.GetURL(url, method, arr);
 		console.log('url: '+url)
