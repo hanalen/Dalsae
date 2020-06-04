@@ -209,7 +209,7 @@ export default{
 		}).catch((err)=>{
 			// console.log('get userinfo error!');
 			console.log(err);
-			errCallback(err);
+			errCallback(err, cursor);
 		});
 	},
 	ReqFollowerIds(cursor, screenName, publickey, secretkey, callback, errCallback){
@@ -237,7 +237,7 @@ export default{
 		}).catch((err)=>{
 			// console.log('get userinfo error!');
 			console.log(err);
-			errCallback(err);
+			errCallback(err, cursor);
 		});
 	},
 }
