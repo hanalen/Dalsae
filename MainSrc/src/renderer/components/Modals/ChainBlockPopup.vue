@@ -1,5 +1,10 @@
 <template>
 	<div class="chain-block-popup">
+		<div class="user-search-area">
+			<span>아이디를 입력 하여 검색 합니다.</span>
+			<input type="text" v-model="strSearch" @keydown.enter="KeyDownEnter"/>
+			<input type="button" @click="ClickSearch" value="검색"/>
+		</div>
 		<div class="chain-block-item">
 			<ChainBlockItem v-for="(user, index) in listUser" :key="index" :user="user" :userInfo="userInfo"
 			:listFollowing="listFollowing" :listFollower="listFollower" :hashUser="hashBlock"/>
@@ -14,6 +19,7 @@ export default {
 	name: "chainblockitem",
 	data:function(){
 		return{
+			strSearch:'',
 			listUser:[],
 			userInfo:undefined,
 			listFollowing:[],
@@ -24,7 +30,15 @@ export default {
 	props:{
 	},
 	methods:{
-
+		KeyDownEnter(){
+			this.Search();
+		},
+		ClickSearch(){
+			this.Search();
+		},
+		Search(){
+			ipcRenderer.send('ShowProfile', this.strSearch, this.userInfo, this.listFollower);
+		}
 	},
 	created:function(){
 		ipcRenderer.on('ChainBlock', (event, userInfo, user, listFollowing, listFollower, hashBlock)=>{
