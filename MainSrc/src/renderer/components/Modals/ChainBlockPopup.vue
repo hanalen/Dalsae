@@ -7,7 +7,7 @@
 		</div>
 		<div class="chain-block-item">
 			<ChainBlockItem v-for="(user, index) in listUser" :key="index" :user="user" :userInfo="userInfo"
-			:listFollowing="listFollowing" :listFollower="listFollower" :hashUser="hashBlock"/>
+			:listFollowing="listFollowing" :listFollower="listFollower" :alreadyHashUser="hashBlock"/>
 		</div>
 	</div>
 </template>
@@ -54,7 +54,7 @@ export default {
 		});
 		this.EventBus.$on('UpdateHashBlock', (hashBlock)=>{
 			hashBlock.forEach((user)=>{
-				if(!this.hashUser.has(user)){
+				if(!this.hashBlock.has(user)){
 					this.hashBlock.add(user);
 				}
 			});
