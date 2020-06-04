@@ -71,7 +71,7 @@ export default {
 				}
 			})
 			if(res.next_cursor==0){
-				this.CheckFriends();
+				this.CheckFriends(res.next_cursor);
 			}
 			else{
 				this.ReqList(res.next_cursor);
@@ -101,7 +101,7 @@ export default {
 					this.status='알 수 없는 오류 개발자에게 문의 해주세요.'+JSON.stringify(error);
 			}
 		},
-		CheckFriends(){
+		CheckFriends(cursor){
 			this.listFollowing.forEach((user)=>{
 				if(this.hashUser.has(user.id_str)){
 					if(this.listSkip.indexOf(user.screen_name+'/'+user.name)>-1)//중복 체크
@@ -116,20 +116,24 @@ export default {
 					this.hashUser.delete(user.id_str)
 				}
 			})
-			this.ChainBlock();
+			this.ChainBlock(cursor);
 		},
 		ChainBlock(cursor=-1){
+			console.log('ChainBlock cursor: '+cursor);
 			this.status='차단 중...'
+			console.log('before start')
 			this.hashUser.forEach((id_str)=>{
 				ProfileCall.ReqBlock(id_str, this.userInfo.oauth_token, this.userInfo.oauth_token_secret, this.ResBlock, this.ErrBlock)
+				console.log('await....')
 			})
 			if(cursor > 0){
 				console.log(cursor)
 				this.status='현재까지 불러 온 목록 차단 완료.\r\n잠시 뒤 좌표를 더 불러옵니다.'
 				setTimeout(() => this.ReqList(cursor), 60000);//리밋 후 진행 한 경우라 1분 뒤 ids 재요청
 			}else{
-				this.status='차단 완료'
+				// this.status='차단 완료'
 			}
+			console.log('before clear')//request가 async라 생기는 문제...
 			this.hashUser.clear();
 			this.EventBus.$emit('UpdateHashBlock', this.hashUser);
 		},
@@ -138,8 +142,11 @@ export default {
 			this.$refs.progress.SetValue((this.blockCount / (this.maxBlockCount - this.listSkip.length - this.alreadyHashUser.size)) * 100);
 		},
 		ErrBlock(err){
-			console.log('err block!')
-			console.log(err)
+			this.blockCount++;
+			// console.log('err block!')
+			// console.log(err)
+			// const error = err.response;
+			// console.log(error)
 		}
 	},
 	created:function(){

@@ -87,14 +87,14 @@ export default{
 			errCallback(err);
 		});
 	},
-	ReqBlock(id, publickey, secretkey, callback, errCallback){
+	async ReqBlock(id, publickey, secretkey, callback, errCallback){
 		var url='https://api.twitter.com/1.1/blocks/create.json';
 		var method='POST';
 		var arr=[];
 		arr['user_id']= id;
 		var callUrl=OAuth.GetURL(url, method ,arr);
 		var sendData=OAuth.CreateData(arr);
-		axios({
+		await axios({
 			method:method,
 			url:callUrl,
 			headers:{
@@ -107,7 +107,7 @@ export default{
 			callback(res.data);
 		}).catch((err)=>{
 			// console.log('get userinfo error!');
-			console.log(err);
+			// console.log(err);
 			errCallback(err);
 		});
 	},
