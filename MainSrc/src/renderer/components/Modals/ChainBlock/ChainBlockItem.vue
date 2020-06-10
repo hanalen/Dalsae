@@ -118,12 +118,12 @@ export default {
 			})
 			this.ChainBlock(cursor);
 		},
-		ChainBlock(cursor=-1){
+		async ChainBlock(cursor=-1){
 			console.log('ChainBlock cursor: '+cursor);
 			this.status='차단 중...'
 			console.log('before start')
-			this.hashUser.forEach((id_str)=>{
-				ProfileCall.ReqBlock(id_str, this.userInfo.oauth_token, this.userInfo.oauth_token_secret, this.ResBlock, this.ErrBlock)
+			this.hashUser.forEach(async (id_str)=>{
+				await ProfileCall.ReqBlock(id_str, this.userInfo.oauth_token, this.userInfo.oauth_token_secret, this.ResBlock, this.ErrBlock)
 				console.log('await....')
 			})
 			if(cursor > 0){
@@ -138,6 +138,7 @@ export default {
 			this.EventBus.$emit('UpdateHashBlock', this.hashUser);
 		},
 		ResBlock(){
+			console.log('blocked')
 			this.blockCount++;
 			this.$refs.progress.SetValue((this.blockCount / (this.maxBlockCount - this.listSkip.length - this.alreadyHashUser.size)) * 100);
 		},
