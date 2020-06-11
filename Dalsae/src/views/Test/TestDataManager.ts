@@ -5,6 +5,7 @@ interface Tweet {
   id: number;
   fullText: string;
   name: string;
+  isFav: boolean;
 }
 export class DataMng {
   private static _instence: DataMng;
@@ -28,12 +29,14 @@ export class DataMng {
   };
   listTweet: Tweet[] = [
     {
+      isFav: false,
       id: 1,
       fullText: `'호사유피(虎死留皮)'라는 말이 있겠다.범이 죽어 가죽이 남았다면 그의 호문을 감정하여 '수남(壽男)'이라고 하랴? '복동(福童)'이라고 하랴? 범이란 범이 모조리 이름이 없었던 것이다.
       내가 시인 윤동주를 몰랐기로서니 윤동주의 시(詩)가 바로 '시'고 보면 그만 아니냐?`,
       name: '사람1'
     },
     {
+      isFav: false,
       id: 2,
       fullText: `나도 모를 아픔을 오래 참다 처음으로 이곳에 찾아왔다.그러나 나의 늙은 의사는 젊은이의 병을 모른다.
       나한테는 병이 없다고 한다. 이 지나친 시련,이 지나친 피로,나는 성내서는 안 된다.
@@ -41,6 +44,7 @@ export class DataMng {
       name: '사람1'
     },
     {
+      isFav: false,
       id: 3,
       fullText: `"형님이 살았으면 몇 살인고?"
       "서른한 살입니다."
@@ -55,6 +59,7 @@ export class DataMng {
       name: '사람1'
     },
     {
+      isFav: false,
       id: 4,
       fullText: `스물여섯 적입니다."
     "무슨 연애 같은 것이나 있었나?"
@@ -68,6 +73,7 @@ export class DataMng {
       name: '사람1'
     },
     {
+      isFav: false,
       id: 5,
       fullText: `"공부는?"
     "책을 보다가도 집에서나 남이 원하면 시간까지도 아까지 않습데다."

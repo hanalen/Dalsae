@@ -1,11 +1,14 @@
 <template>
-  <div class="item-inner">
+  <div class="item-inner" @click="Click">
     <div class="head">
       <span># {{ source.id }}</span
       ><br />
       <span>{{ source.name }}</span>
     </div>
     <div class="desc">{{ source.fullText }}</div>
+    <div v-if="source.isFav">
+      <span>관심글</span>
+    </div>
   </div>
 </template>
 
@@ -18,6 +21,12 @@ export default {
       default() {
         return {};
       }
+    }
+  },
+  methods: {
+    Click(e) {
+      console.log(e);
+      this.source.isFav = true;
     }
   }
 };

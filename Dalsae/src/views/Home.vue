@@ -1,8 +1,8 @@
 <template>
-  <div class="home">
+  <div class="home" v-if="option != undefined">
     <input type="button" value="눌러라!" @click="ClickAdd" /><br />
-    <input v-if="option != undefined" type="checkbox" v-model="option.bShow" />
-    <Scroll />
+    <input type="checkbox" v-model="option.bShow" />
+    <Scroll v-show="option.bShow" />
   </div>
 </template>
 
@@ -35,6 +35,7 @@ export default {
     ClickAdd(e) {
       console.log(e);
       DataMng.Instence().TweetAdd({
+        isFav: false,
         id: 6,
         fullText: `서(序)ㅡ랄 것이 아니라
 내가 무엇이고 정성껏 몇 마디 써야만 할 의무를 가졌건만 붓을 잡기가 죽기보담 싫은 날, 나는 천의를 뒤집어쓰고 차라리 병 아닌 신음을 하고 있다.
@@ -43,7 +44,7 @@ export default {
 누가 있어서 "너는 일편(一片)의 정성까지도 잃었느냐?" 질타한다면 소허(少許) 항론(抗論)이 없이 앉음을 고쳐 무릎을 꿇으리라.
 아직 무릎을 꿇을 만한 기력이 남았기에 나는 이 붓을 들어 시인 윤동주의 유고(遺稿)에 분향하노라.
 겨우 30여 편 되는 유시(遺詩) 이외에 윤동주의 그의 시인 됨에 관한 아무 목증(目證)한 바 재료를 나는 갖지 않았다.`,
-        name: 'ariake'
+        name: 'hanalen'
       });
     }
   }
