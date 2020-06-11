@@ -2,18 +2,21 @@
   <div class="home" v-if="option != undefined">
     <input type="button" value="눌러라!" @click="ClickAdd" /><br />
     <input type="checkbox" v-model="option.bShow" />
-    <Scroll v-show="option.bShow" />
+    <Scroll v-show="!option.bShow" />
+    <TestWindow v-if="false" />
   </div>
 </template>
 
 <script>
 import { DataMng } from '@/views/Test/TestDataManager';
 import Scroll from './Test/Scroll.vue';
+import TestWindow from '@/views/Test/TestWindow.vue';
 
 export default {
   name: 'Home',
   components: {
-    Scroll
+    Scroll,
+    TestWindow
   },
   data: function() {
     return {
