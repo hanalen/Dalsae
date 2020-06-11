@@ -1,11 +1,11 @@
 <template>
   <div class="item-inner">
     <div class="head">
-      <span># {{ source.index }}</span
+      <span># {{ source.id }}</span
       ><br />
       <span>{{ source.name }}</span>
     </div>
-    <div class="desc">{{ source.text }}</div>
+    <div class="desc">{{ source.fullText }}</div>
   </div>
 </template>
 
