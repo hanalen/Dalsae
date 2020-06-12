@@ -12,12 +12,18 @@ function register() {
 register();
 
 Vue.use(VueRouter);
-
+import { Tweet } from '@/views/Test/TestDataManager';
 export const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: () => import('../views/Test/TestWindow.vue'),
+    props: true
   },
   {
     path: '/about',

@@ -1,22 +1,24 @@
 <template>
   <div class="home" v-if="option != undefined">
     <input type="button" value="눌러라!" @click="ClickAdd" /><br />
-    <input type="checkbox" v-model="option.bShow" />
-    <Scroll v-show="!option.bShow" />
-    <TestWindow v-if="false" />
+    <input type="button" value="눌러라! 그럼 이동하리라!" @click="ClickLink" /><br />
+    <!-- <input type="checkbox" v-model="option.bShow" /> -->
+    <!-- <Scroll v-show="!option.bShow" /> -->
+    <!-- <TestWindow v-if="false" /> -->
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { DataManager } from '@/views/Test/TestDataManager';
+import { DataManager, Option } from '@/views/Test/TestDataManager';
 import TestWindow from '@/views/Test/TestWindow.vue';
 import Scroll from './Test/Scroll.vue';
+import router from '../router';
 
 @Component
 export default class Home extends Vue {
   bCheck = false;
-  option?: boolean;
+  option?: Option;
 
   get bShow() {
     return DataManager.option;
@@ -24,7 +26,13 @@ export default class Home extends Vue {
 
   created() {
     this.$nextTick();
-    window.preload.asdf();
+    this.option = DataManager.option;
+    // window.preload.asdf();
+  }
+
+  ClickLink(e: Event) {
+    console.log(e);
+    router.push({ name: 'test', params: { userid: '123', test: this.option } });
   }
 
   ClickAdd(e: unknown) {

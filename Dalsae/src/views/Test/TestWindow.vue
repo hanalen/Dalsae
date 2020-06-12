@@ -36,6 +36,13 @@ export default {
   data: function() {
     return {};
   },
+  props: {
+    userid: {
+      type: String,
+      default: '000'
+    },
+    test: undefined
+  },
   // created: function() {},
   methods: {
     ClickBrowserWindow(e) {
@@ -51,6 +58,11 @@ export default {
       //   hotkeyWindow.show();
       // });
     }
+  },
+  created: function() {
+    this.$nextTick(() => {
+      console.log(this.userid);
+    });
   }
 };
 </script>
