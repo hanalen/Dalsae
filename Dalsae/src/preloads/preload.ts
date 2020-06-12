@@ -1,6 +1,6 @@
 import { remote } from 'electron';
 export interface Preload {
-  asdf: () => void;
+  // asdf: () => void;
   asdf2: () => void;
   asdf3: () => void;
   asdf4: () => void;
@@ -16,10 +16,25 @@ class PreloadImpl implements Preload {
   //   if (!this._instence) {
   //   }
   // }
-  asdf() {
+  ClickLink() {
     console.log('asdfasdf');
-    const v = new remote.BrowserWindow();
-    v.show();
+    const v = new remote.BrowserWindow({
+      show: false,
+      webPreferences: {
+        // Use pluginOptions.nodeIntegration, leave this alone
+        // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
+        nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION
+        // preload: path.join(__dirname, 'preload')
+      }
+    });
+    // router.push()
+    // v.loadURL(URL.format());
+    v.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL as string}/test`);
+    v.webContents.openDevTools();
+    v.on('ready-to-show', () => {
+      console.log('show!');
+      v.show();
+    });
   }
   asdf2() {
     console.log('asdfasdf');

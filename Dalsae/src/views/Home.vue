@@ -27,10 +27,13 @@ export default class Home extends Vue {
   created() {
     this.$nextTick();
     this.option = DataManager.option;
+    // window.preload.OpenDevTools();
     // window.preload.asdf();
   }
 
   ClickLink(e: Event) {
+    window.preload.ClickLink();
+    return;
     console.log(e);
     const json = JSON.stringify(this.option);
     router.push({ name: 'test', params: { userid: '123', test: json } });
