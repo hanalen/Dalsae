@@ -32,7 +32,8 @@ export default class Home extends Vue {
 
   ClickLink(e: Event) {
     console.log(e);
-    router.push({ name: 'test', params: { userid: '123', test: this.option } });
+    const json = JSON.stringify(this.option);
+    router.push({ name: 'test', params: { userid: '123', test: json } });
   }
 
   ClickAdd(e: unknown) {
