@@ -8,6 +8,7 @@ import {
   /* installVueDevtools */
 } from 'vue-cli-plugin-electron-builder/lib';
 const isDevelopment = process.env.NODE_ENV !== 'production';
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -17,8 +18,14 @@ let win: BrowserWindow | null;
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ]);
-const dataManagerImpl = DataManager;
 
+const dataManagerImpl = DataManager;
+app.whenReady().then(() => {
+  //vue 개발자도구 열기
+  installExtension(VUEJS_DEVTOOLS)
+    .then((name: string) => console.log(`Added Extension:  ${name}`))
+    .catch((err: Error) => console.log('An error occurred: ', err));
+});
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
@@ -35,7 +42,10 @@ function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
+
+    if (!process.env.IS_TEST) {
+      win.webContents.openDevTools();
+    }
   } else {
     createProtocol('app');
     // Load the index.html when not in development
