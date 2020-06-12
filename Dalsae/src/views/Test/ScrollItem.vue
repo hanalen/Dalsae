@@ -12,25 +12,25 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'VirtualScrollItem',
-  props: {
-    source: {
-      type: Object,
-      default() {
-        return {};
-      }
-    }
-  },
-  methods: {
-    Click(e) {
-      console.log(e);
-      this.source.isFav = true;
-    }
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator';
+
+class Source {
+  isFav = false;
+}
+
+@Component
+export default class VirtualScrollItem extends Vue {
+  @Prop({ type: Object, default: () => {} })
+  source!: Source;
+
+  Click(e: Event) {
+    console.log(e);
+    this.source.isFav = true;
   }
-};
+}
 </script>
+
 <style lang="scss" scoped>
 .item-inner {
   border: 1px solid black;

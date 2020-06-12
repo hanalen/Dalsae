@@ -1,6 +1,8 @@
 'use strict';
 
 import { app, protocol, BrowserWindow } from 'electron';
+import path from 'path';
+import { DataManager } from '@/views/Test/TestDataManager';
 import {
   createProtocol
   /* installVueDevtools */
@@ -15,6 +17,7 @@ let win: BrowserWindow | null;
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ]);
+const dataManagerImpl = DataManager;
 
 function createWindow() {
   // Create the browser window.
@@ -24,8 +27,8 @@ function createWindow() {
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION
-      // preload: path.join(__dirname, 'preload.js')
+      nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
+      preload: path.join(__dirname, 'preload')
     }
   });
 

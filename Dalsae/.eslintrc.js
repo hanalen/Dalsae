@@ -13,6 +13,7 @@ module.exports = {
     parser: '@typescript-eslint/parser'
   },
   rules: {
+    '@typescript-eslint/interface-name-prefix': 0,
     'prettier/prettier': [
       'warn',
       {

@@ -3,6 +3,7 @@ module.exports = {
     builderOptions: {},
     electronBuilder: {
       outputDir: 'electron-builder-output-dir',
+      preload: 'src/preload.ts',
       chainWebpackMainProcess: config => {
         // Chain webpack config for electron main process only
       },
@@ -14,6 +15,9 @@ module.exports = {
           return args;
         });
       },
+      disableMainProcessTypescript: false,
+      mainProcessTypeChecking: false,
+
       // Use this to change the entrypoint of your app's main process
       mainProcessFile: 'src/background.ts'
       // Provide an array of files that, when changed, will recompile the main process and restart Electron

@@ -18,3 +18,4 @@ StreamingBridge/StreamingBridge/bin
 StreamingBridge/StreamingBridge/obj
 MainSrc/StreamingBridge/*
 public/
+*/electron-builder-output-dir

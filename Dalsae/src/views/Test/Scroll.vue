@@ -11,28 +11,19 @@
   </div>
 </template>
 
-<script>
-import { DataMng } from './TestDataManager';
-import VirtualList from 'vue-virtual-scroll-list';
-import ScrollItem from './ScrollItem.vue';
-export default {
-  name: 'VirtualScroll',
-  components: {
-    // ScrollItem
-    VirtualList
-  },
-  data: function() {
-    return {
-      listData: [],
-      ScrollItemComponent: ScrollItem
-    };
-  },
-  created: function() {
-    this.$nextTick(() => {
-      console.log(this.listData);
-      this.listData = DataMng.Instence().listTweet;
-      console.log(this.listData);
-    });
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import { DataManager, Tweet } from './TestDataManager';
+
+@Component
+export default class VirtualScroll extends Vue {
+  listData: Tweet[] = [];
+
+  async created() {
+    await this.$nextTick();
+    console.log(this.listData);
+    this.listData = DataManager.listTweet;
+    console.log(this.listData);
   }
-};
+}
 </script>

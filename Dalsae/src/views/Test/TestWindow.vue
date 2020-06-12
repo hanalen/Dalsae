@@ -30,7 +30,6 @@
 
 <script>
 // import { ipcRenderer } from 'electron';
-import preload from '@/preload';
 export default {
   name: 'TestWindow',
   components: {},
@@ -41,7 +40,6 @@ export default {
   methods: {
     ClickBrowserWindow(e) {
       console.log(e);
-      preload.CreateWindow();
       // hotkeyWindow = new BrowserWindow({ show: false, width: 720, height: 590, devTools: false });
       // const path =
       //   process.env.NODE_ENV === 'development'

@@ -3,6 +3,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "files.exclude": {
     "node_modules": true,
+    "electron-builder-output-dir": true,
     "dist": true
   },
   "eslint.validate": ["javascript", "javascriptreact", "vue", "vue-html"],
