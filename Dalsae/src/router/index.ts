@@ -23,7 +23,8 @@ export const routes: Array<RouteConfig> = [
     path: '/test',
     name: 'test',
     component: () => import('../views/Test/TestWindow.vue'),
-    props: true
+    props: route => ({ userid: route.params })
+    // props: true
   },
   {
     path: '/about',
