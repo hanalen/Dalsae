@@ -1,12 +1,12 @@
 import { remote } from 'electron';
-export interface Preload {
-  // asdf: () => void;
-  asdf2: () => void;
-  asdf3: () => void;
-  asdf4: () => void;
-}
+// export interface Preload {
+//   // asdf: () => void;
+//   asdf2: () => void;
+//   asdf3: () => void;
+//   asdf4: () => void;
+// }
 
-class PreloadImpl implements Preload {
+export default class PreloadImpl {
   //  constructor() {
   //   type PreloadWindow = typeof window & { preload: PreloadImpl };
   //   (window as PreloadWindow).preload = new PreloadImpl();

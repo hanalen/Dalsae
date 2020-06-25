@@ -1,4 +1,4 @@
-import PreloadImpl from './preload';
+import PreloadImpl from './preloads/preload';
 
 declare global {
   interface Window {
