@@ -83,7 +83,7 @@
     "fs-extra": "^8.1.0",
     "hls.js": "^0.13.3-canary.5533",
     "hmacsha1": "^1.0.0",
-    "http-proxy": "^1.18.0",
+    "http-proxy": "^1.18.1",
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "uuid": "^3.3.3",
