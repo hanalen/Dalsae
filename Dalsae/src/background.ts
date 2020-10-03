@@ -2,6 +2,7 @@
 
 import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
+import Log from 'electron-log';
 import { DataManager } from '@/views/Test/TestDataManager';
 import {
   createProtocol
@@ -63,10 +64,35 @@ function createWindow() {
   });
 }
 
-ipcMain.on('Image', (event, arg) => {
-  console.log(event);
-  console.log(arg);
-  event.sender.send('Image', arg);
+interface IpcParam {
+  name: string;
+  value: string;
+}
+
+const listIpcParam: IpcParam[] = [];
+
+ipcMain.on('AddChannel', (event, arg: IpcParam) => {
+  Log.info('--------------');
+  Log.info('Add Channel, preload에서 호출');
+  // Log.info(event);
+  Log.info(arg);
+  Log.info(arg.name);
+  Log.info(arg.value);
+
+  listIpcParam.push(arg);
+  ipcMain.once(arg.name, (event, arg2) => {
+    //once는 한번 쏘고 삭제됨
+    Log.info('--------------');
+    Log.info('ipc dynamic on');
+    Log.info(arg.name);
+    Log.info(arg2);
+    const ipc = listIpcParam.find(x => x.name === arg.name);
+    Log.info(ipc);
+    if (ipc) {
+      event.returnValue = ipc.value; //sync일 경우 이렇게 해야 함
+      // event.sender.send(name, ipc.value);
+    }
+  });
 });
 
 // Quit when all windows are closed.

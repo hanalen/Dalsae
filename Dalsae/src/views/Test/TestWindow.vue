@@ -58,6 +58,7 @@ export default {
     }
   },
   created: function() {
+    window.preload.GetData(this.$route.query.userid);
     this.$nextTick(() => {
       console.log(this.userid);
       console.log(window.title);
