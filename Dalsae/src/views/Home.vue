@@ -32,6 +32,7 @@ export default class Home extends Vue {
   }
 
   ClickLink(e: Event) {
+    console.log(window);
     window.preload.ClickLink();
     return;
     console.log(e);

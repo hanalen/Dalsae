@@ -6,8 +6,8 @@ import { remote } from 'electron';
 //   asdf4: () => void;
 // }
 
-export default class PreloadImpl {
-  //  constructor() {
+export default class Preload {
+  // constructor() {
   //   type PreloadWindow = typeof window & { preload: PreloadImpl };
   //   (window as PreloadWindow).preload = new PreloadImpl();
   // }
@@ -19,12 +19,12 @@ export default class PreloadImpl {
   ClickLink() {
     console.log('asdfasdf');
     const v = new remote.BrowserWindow({
-      show: false,
+      show: true,
+      title: 'image-test',
       webPreferences: {
         // Use pluginOptions.nodeIntegration, leave this alone
         // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
         nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION
-        // preload: path.join(__dirname, 'preload')
       }
     });
     // router.push()
@@ -33,7 +33,10 @@ export default class PreloadImpl {
     v.webContents.openDevTools();
     v.on('ready-to-show', () => {
       console.log('show!');
-      v.show();
+      remote.ipcRenderer.send('Image', 'test');
+      // console.log(ipcRenderer);
+      // ipcRenderer.send('Image', 'test');
+      // v.show();
     });
   }
   asdf2() {
@@ -47,8 +50,8 @@ export default class PreloadImpl {
   }
 }
 
-type PreloadWindow = typeof window & { preload: PreloadImpl };
-(window as PreloadWindow).preload = new PreloadImpl();
+type PreloadWindow = typeof window & { preload: Preload };
+(window as PreloadWindow).preload = new Preload();
 
 // export default new PreloadImpl();
 

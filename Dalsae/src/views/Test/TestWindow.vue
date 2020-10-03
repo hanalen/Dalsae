@@ -29,7 +29,6 @@
 </template>
 
 <script>
-// import { ipcRenderer } from 'electron';
 export default {
   name: 'TestWindow',
   components: {},
@@ -43,7 +42,6 @@ export default {
     },
     test: undefined
   },
-  // created: function() {},
   methods: {
     ClickBrowserWindow(e) {
       console.log(e);
@@ -62,6 +60,8 @@ export default {
   created: function() {
     this.$nextTick(() => {
       console.log(this.userid);
+      console.log(window.title);
+      console.log(window);
     });
   }
 };

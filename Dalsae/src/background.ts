@@ -1,6 +1,6 @@
 'use strict';
 
-import { app, protocol, BrowserWindow } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import { DataManager } from '@/views/Test/TestDataManager';
 import {
@@ -26,16 +26,22 @@ app.whenReady().then(() => {
     .then((name: string) => console.log(`Added Extension:  ${name}`))
     .catch((err: Error) => console.log('An error occurred: ', err));
 });
+console.log('----------------');
+console.log('----------------');
+console.log('----------------');
+console.log('----------------');
+console.log(path.join(__dirname, 'preload'));
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 800,
     height: 600,
+    title: 'dalsae',
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
-      preload: path.join(__dirname, 'preloads/preload')
+      preload: path.join(__dirname, 'preload')
     }
   });
 
@@ -56,6 +62,12 @@ function createWindow() {
     win = null;
   });
 }
+
+ipcMain.on('Image', (event, arg) => {
+  console.log(event);
+  console.log(arg);
+  event.sender.send('Image', arg);
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

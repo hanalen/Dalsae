@@ -3,7 +3,7 @@ module.exports = {
     builderOptions: {},
     electronBuilder: {
       outputDir: 'electron-builder-output-dir',
-      preload: 'src/preloads/preload.ts',
+      preload: 'src/preloads/preload.ts', //기능에 영향이 없음
       chainWebpackMainProcess: config => {
         // Chain webpack config for electron main process only
       },
