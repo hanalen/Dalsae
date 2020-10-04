@@ -3,13 +3,14 @@
 import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import Log from 'electron-log';
-import { DataManager } from '@/views/Test/TestDataManager';
+// import { DataManager } from '@/views/Test/TestDataManager';
 import {
   createProtocol
   /* installVueDevtools */
 } from 'vue-cli-plugin-electron-builder/lib';
 const isDevelopment = process.env.NODE_ENV !== 'production';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import { TweetDataManager } from './Managers/TweetDataMng';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -20,7 +21,7 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ]);
 
-const dataManagerImpl = DataManager;
+const dataManagerImpl = TweetDataManager;
 app.whenReady().then(() => {
   //vue 개발자도구 열기
   installExtension(VUEJS_DEVTOOLS)

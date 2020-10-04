@@ -1,30 +1,6 @@
 <template>
   <div class="window-area">
-    <input
-      type="button"
-      value="너는 새 창을 잘 여는 프렌즈구나?"
-      @click="ClickBrowserWindow"
-    /><br /><br />
-    <input
-      type="button"
-      value="너는 새 창을 잘 여는 프렌즈구나?"
-      @click="ClickBrowserWindow"
-    /><br /><br />
-    <input
-      type="button"
-      value="너는 새 창을 잘 여는 프렌즈구나?"
-      @click="ClickBrowserWindow"
-    /><br /><br />
-    <input
-      type="button"
-      value="너는 새 창을 잘 여는 프렌즈구나?"
-      @click="ClickBrowserWindow"
-    /><br /><br />
-    <input
-      type="button"
-      value="너는 새 창을 잘 여는 프렌즈구나?"
-      @click="ClickBrowserWindow"
-    /><br /><br />
+    <span>{{ dataValue }}</span>
   </div>
 </template>
 
@@ -33,7 +9,12 @@ export default {
   name: 'TestWindow',
   components: {},
   data: function() {
-    return {};
+    return {
+      dataValue: {
+        type: String,
+        default: ''
+      }
+    };
   },
   props: {
     userid: {
@@ -58,7 +39,8 @@ export default {
     }
   },
   created: function() {
-    window.preload.GetData(this.$route.query.userid);
+    const value = window.preload.GetData(this.$route.query.userid);
+    this.dataValue = value;
     this.$nextTick(() => {
       console.log(this.userid);
       console.log(window.title);

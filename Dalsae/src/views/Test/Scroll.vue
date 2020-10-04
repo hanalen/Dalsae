@@ -13,17 +13,15 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { DataManager, Tweet } from './TestDataManager';
 
 @Component
 export default class VirtualScroll extends Vue {
-  listData: Tweet[] = [];
-
-  async created() {
-    await this.$nextTick();
-    console.log(this.listData);
-    this.listData = DataManager.listTweet;
-    console.log(this.listData);
-  }
+  // listData: Tweet[] = [];
+  // async created() {
+  //   await this.$nextTick();
+  //   console.log(this.listData);
+  //   this.listData = DataManager.listTweet;
+  //   console.log(this.listData);
+  // }
 }
 </script>
