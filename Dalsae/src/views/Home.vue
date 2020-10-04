@@ -32,12 +32,10 @@ export default class Home extends Vue {
   }
 
   ClickLink(e: Event) {
-    console.log(window);
-    window.preload.ClickLink();
-    return;
-    console.log(e);
-    const json = JSON.stringify(this.option);
-    router.push({ name: 'test', params: { userid: '123', test: json } });
+    window.preload.image.OpenImageWindow(
+      DataManager.listTweet[0].id.toString(),
+      DataManager.listTweet[0]
+    );
   }
 
   ClickAdd(e: unknown) {

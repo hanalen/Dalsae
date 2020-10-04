@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Home from '../views/Home.vue';
+import Image from '@/views/Dialogs/Image/ImageWindow.vue';
 
 function register() {
   const files = require.context('../', true, /\.vue$/i);
@@ -25,6 +26,12 @@ export const routes: Array<RouteConfig> = [
     component: () => import('../views/Test/TestWindow.vue'),
     props: route => ({ userid: route.params })
     // props: true
+  },
+  {
+    path: '/Image',
+    name: 'Image',
+    component: Image,
+    props: route => ({ tweetId: route.params })
   },
   {
     path: '/about',
