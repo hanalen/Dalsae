@@ -19,3 +19,6 @@ StreamingBridge/StreamingBridge/obj
 MainSrc/StreamingBridge/*
 public/
 */electron-builder-output-dir
+Dalsae/src/views/Test/favorite_tweet.json
+Dalsae/src/Managers/favorite_tweet.json
+Dalsae/src/Interfaces/DalsaeDatas/AppKeys.ts
