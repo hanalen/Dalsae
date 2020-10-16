@@ -16,6 +16,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@types/crypto-js": "^4.0.1",
     "axios": "^0.19.2",
     "electron-builder": "^22.7.0",
     "electron-devtools-installer": "^3.0.0",

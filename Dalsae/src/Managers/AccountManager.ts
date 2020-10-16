@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 
@@ -10,13 +11,13 @@ export class AccountManager {
     // this.tweetMng = new M.TweetDataManager();
   }
 
-  //이게 최선인가?
-  GetHeader() {
-    if (!this.switter) return;
+  get publicKey() {
+    return this.switter ? this.switter?.selectUser.oauth_token : '';
+  }
 
-    return this.oauth.GetHeader(
-      this.switter.selectUser.oauth_token,
-      this.switter.selectUser.oauth_token_secret
-    );
+  get secretKey() {
+    return this.switter ? this.switter?.selectUser.oauth_token_secret : '';
   }
 }
+const AccountMng = new AccountManager();
+export { AccountMng };
