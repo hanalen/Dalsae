@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/camelcase */
 <template>
   <div class="home">
     <input type="button" value="눌러라!" @click="ClickAdd" /><br />
     <input type="button" value="눌러라! 그럼 이동하리라!" @click="ClickLink" /><br />
+    <input type="button" value="토큰테스트!" @click="ClickReqToken" /><br />
+
     <!-- <input type="checkbox" v-model="option.bShow" /> -->
     <!-- <Scroll v-show="!option.bShow" /> -->
     <!-- <TestWindow v-if="false" /> -->
@@ -12,10 +15,11 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { TweetDataManager } from '@/Managers/TweetDataMng';
 import * as I from '@/Interfaces';
+import TwitterAPI from '@/API/APICall';
 @Component
 export default class Home extends Vue {
   bCheck = false;
-
+  API: TwitterAPI = new TwitterAPI();
   created() {
     this.$nextTick();
     // window.preload.OpenDevTools();
@@ -23,13 +27,18 @@ export default class Home extends Vue {
   }
   index = 0;
   ClickLink(e: Event) {
-    const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
-    console.log(listTweet[this.index]);
-    window.preload.image.OpenImageWindow(
-      listTweet[this.index].id_str.toString(),
-      listTweet[this.index]
-    );
-    this.index++;
+    // const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
+    // console.log(listTweet[this.index]);
+    // window.preload.image.OpenImageWindow(
+    //   listTweet[this.index].id_str.toString(),
+    //   listTweet[this.index]
+    // );
+    // this.index++;
+  }
+  async ClickReqToken() {
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    const result = this.API.call.oauth.ReqToken({ oauth_callback: 'oob' });
+    console.log(result);
   }
 
   ClickAdd(e: unknown) {

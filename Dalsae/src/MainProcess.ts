@@ -20,7 +20,7 @@ let win: BrowserWindow | null;
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ]);
-
+app.commandLine.appendSwitch('disable-web-security'); //cors회피 코드
 const dataManagerImpl = TweetDataManager;
 app.whenReady().then(() => {
   //vue 개발자도구 열기
@@ -36,13 +36,13 @@ console.log(path.join(__dirname, 'preload'));
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     title: 'dalsae',
     webPreferences: {
-      // Use pluginOptions.nodeIntegration, leave this alone
+      // Use pluginOptions.`nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
+      webSecurity: false,
       preload: path.join(__dirname, 'preload')
     }
   });

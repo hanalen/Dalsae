@@ -10,8 +10,7 @@ function CreateOptions(method: P.Method, body: string, authorization: string) {
       'Content-Type': 'application/x-www-form-urlencoded;encoding=utf-8',
       Authorization: authorization
     },
-    method,
-    body: body
+    method
   };
   return options;
 }
@@ -28,7 +27,8 @@ export default class TwitterAPI {
 
       const body = params && params.data ? oauth.CreateBody(params) : '';
       const reqUrl = oauth.GetUrl(params, method, url);
-      const options = CreateOptions(method, body, oauth.CreateBody(params));
+      const options = CreateOptions(method, body, oauth.GetHeader(params, method, url));
+      console.log(options);
       const resp = await fetch(reqUrl, options);
       if (!resp.ok) {
         throw new Error(resp.statusText);
@@ -54,8 +54,13 @@ export default class TwitterAPI {
       statuses: {
         TimeLine: (data: P.ReqTimeLine) =>
           this.get<P.ReqTimeLine, I.Tweet[]>(baseUrl + '/statuses/home_timeline.json', {
-            data,
-            method: 'GET'
+            data
+          })
+      },
+      oauth: {
+        ReqToken: (data: P.ReqToken) =>
+          this.post<P.ReqToken, string>('https://api.twitter.com/oauth/request_token', {
+            data
           })
       }
     };

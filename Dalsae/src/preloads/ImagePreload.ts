@@ -9,6 +9,7 @@ export default class ImagePreload {
       show: true,
       title: 'dalsae-image',
       webPreferences: {
+        webSecurity: false,
         nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
         preload: path.join(__dirname, 'preload')
       }

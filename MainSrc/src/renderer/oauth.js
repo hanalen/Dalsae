@@ -49,16 +49,16 @@ function UrlEncode(value, isOAuth){
 }
 
 function CalcSignature(arr, param, method, url, secretKey){
-	var timestamp = GetTimestamp();
+	var timestamp = GetTimestamp();//계산
 	var nonce = GetOAuthNonce();
 	arr['oauth_timestamp']= timestamp;
 	arr['oauth_nonce']= nonce;
-
-	Object.keys(param).forEach(function(key){
+	//계산 다 하고
+	Object.keys(param).forEach(function(key){//oauth+params
 		arr[key]=param[key];
 	});
 
-	var keys=Object.keys(arr).sort();
+	var keys=Object.keys(arr).sort();//합친거 key sort
 
 	var str='';
 	keys.forEach(function(item){
@@ -77,7 +77,12 @@ function CalcSignature(arr, param, method, url, secretKey){
 	}
 	var hmacsha1 = require('hmacsha1');
 	var hash = hmacsha1(singKey, baseStr);
-
+	console.log('base str')
+	console.log(baseStr)
+	console.log('sign key')
+	console.log(singKey)
+	console.log('hash')
+	console.log(hash)
 	arr['oauth_signature']=hash;
 	return arr;
 }
@@ -167,7 +172,7 @@ export default{
 		arr['oauth_token']= publicKey;
 
 		var arr2 = CalcSignature(arr, param, method, url, secretKey);
-
+		//oauth+params 합침
 		Object.keys(param).forEach(function(key){
 			arr[key]=param[key];
 		});
