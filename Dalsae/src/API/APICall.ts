@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import * as P from '@/Interfaces';
 import * as I from '@/Interfaces';
 import * as M from '@/Managers';
@@ -37,6 +38,59 @@ export default class TwitterAPI {
         return json;
       }
     } catch (e) {
+      console.log('catch');
+      console.log(e);
+      return e;
+    }
+  }
+
+  async requestOAuth<TReq>(url: string, params?: P.APIReq<TReq>): Promise<P.APIResp<P.OAuthRes>> {
+    try {
+      const oauth: I.OAuth = new I.OAuth();
+      oauth.SetKey(M.AccountMng.publicKey, M.AccountMng.secretKey);
+
+      const body = params && params.data ? oauth.CreateBody(params) : '';
+      const reqUrl = oauth.GetUrl(params, 'POST', url);
+      const options = CreateOptions('POST', body, oauth.GetHeader(params, 'POST', url));
+      console.log(options);
+      const resp = await fetch(reqUrl, options);
+      if (!resp.ok) {
+        throw new Error(resp.statusText);
+      } else {
+        const body = await resp.text();
+        console.log(body);
+
+        const pro = new Promise<P.APIResp<P.OAuthRes>>(resolve => {
+          const arr = body.split('&').map(x => x.split('='));
+          const oauth: I.OAuthRes = {
+            oauth_callback_confirmed: false,
+            oauth_token: '',
+            oauth_token_secret: ''
+          };
+          const resp: P.APIResp<P.OAuthRes> = { data: oauth };
+          arr.forEach(item => {
+            console.log(item);
+            if (item[0] === 'oauth_callback_confirmed') {
+              oauth.oauth_callback_confirmed = item[1] === 'true';
+            } else if (item[0] === 'oauth_token') {
+              oauth.oauth_token = item[1];
+            } else if (item[0] === 'oauth_token_secret') {
+              oauth.oauth_token_secret = item[1];
+            }
+          });
+          resp.data = oauth;
+          console.log(resp);
+          console.log('pro return');
+          resolve(resp);
+          // return resp;
+        });
+        console.log('pro out retuen');
+        console.log(pro);
+        return pro;
+      }
+    } catch (e) {
+      console.log('catch');
+      console.log(e);
       return e;
     }
   }
@@ -59,7 +113,7 @@ export default class TwitterAPI {
       },
       oauth: {
         ReqToken: (data: P.ReqToken) =>
-          this.post<P.ReqToken, string>('https://api.twitter.com/oauth/request_token', {
+          this.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {
             data
           })
       }

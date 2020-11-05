@@ -5,3 +5,4 @@ export * from './ExtendedEntitie';
 export * from './User';
 export * from './DalsaeDatas';
 export * from './Packets';
+export * from './OAuthRes';

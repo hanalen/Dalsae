@@ -37,8 +37,8 @@ export default class Home extends Vue {
   }
   async ClickReqToken() {
     // eslint-disable-next-line @typescript-eslint/camelcase
-    const result = this.API.call.oauth.ReqToken({ oauth_callback: 'oob' });
-    console.log(result);
+    const result = await this.API.call.oauth.ReqToken({ oauth_callback: 'oob' });
+    console.log(result.data);
   }
 
   ClickAdd(e: unknown) {
