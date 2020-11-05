@@ -1,4 +1,4 @@
-import { remote, ipcRenderer } from 'electron';
+import { remote, ipcRenderer, shell } from 'electron';
 import Log from 'electron-log';
 import path from 'path';
 let ipcName = Math.random() * (99999 - 0) + 0;
@@ -41,6 +41,10 @@ export default class Preload {
     Log.info('synced ipc renderer');
     Log.info(v);
     return v;
+  }
+
+  OpenBrowser(url: string) {
+    shell.openExternal(url);
   }
 }
 
