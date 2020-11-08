@@ -39,6 +39,13 @@ import TwitterAPI from '@/API/APICall';
 
 @Component
 export class DalsaePage extends Vue implements I.DalsaePageBase {
+  async created() {
+    type WithPrepare = { prepare: Function };
+    if (((this as unknown) as WithPrepare).prepare) {
+      await ((this as unknown) as WithPrepare).prepare();
+    }
+  }
+
   @Inject()
   api!: TwitterAPI;
 
