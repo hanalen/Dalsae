@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 <template>
   <div class="home">
-    <input type="button" value="눌러라!" @click="ClickAdd" /><br />
+    <input type="button" value="모달테스트!" @click="ClickModal" /><br />
     <input type="button" value="눌러라! 그럼 이동하리라!" @click="ClickLink" /><br />
     <input type="button" value="토큰테스트!" @click="ClickReqToken" /><br />
-
     <!-- <input type="checkbox" v-model="option.bShow" /> -->
     <!-- <Scroll v-show="!option.bShow" /> -->
     <!-- <TestWindow v-if="false" /> -->
@@ -12,19 +11,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Mixins } from 'vue-property-decorator';
 import { TweetDataManager } from '@/Managers/TweetDataMng';
 import * as I from '@/Interfaces';
 import TwitterAPI from '@/API/APICall';
+import { DalsaePage } from '@/mixins';
+
 @Component
-export default class Home extends Vue {
+export default class Home extends Mixins(DalsaePage) {
   bCheck = false;
   API: TwitterAPI = new TwitterAPI();
-  created() {
-    this.$nextTick();
-    // window.preload.OpenDevTools();
-    // window.preload.asdf();
-  }
+
   index = 0;
   ClickLink(e: Event) {
     // const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
@@ -42,6 +39,10 @@ export default class Home extends Vue {
     window.preload.OpenBrowser(
       `https://api.twitter.com/oauth/authorize?oauth_token=${result.data.oauth_token}`
     );
+  }
+
+  async ClickModal() {
+    await this.ShowMessage('modal test');
   }
 
   ClickAdd(e: unknown) {
