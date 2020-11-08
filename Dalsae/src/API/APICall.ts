@@ -115,6 +115,10 @@ export default class TwitterAPI {
         ReqToken: (data: P.ReqToken) =>
           this.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {
             data
+          }),
+        ReqAccessToken: (data: P.ReqAccessToken) =>
+          this.requestOAuth<P.ReqAccessToken>('https://api.twitter.com/oauth/access_token', {
+            data
           })
       }
     };
