@@ -79,5 +79,5 @@ export class AccountManager {
     };
   }
 }
-const AccountMng = new AccountManager();
-export { AccountMng };
+// const AccountMng = new AccountManager();
+// export { AccountMng };

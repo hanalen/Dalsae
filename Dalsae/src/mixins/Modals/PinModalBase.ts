@@ -17,7 +17,7 @@ export class PinModalBase extends mixins(Vue, DalsaePage) {
   state = new State();
 
   async ShowModal() {
-    M.AccountMng.Reset();
+    this.mngAccount.Reset();
     this.state.isShow = true;
     this.state.pin = '';
     // eslint-disable-next-line @typescript-eslint/camelcase
@@ -28,21 +28,20 @@ export class PinModalBase extends mixins(Vue, DalsaePage) {
     window.preload.OpenBrowser(
       `https://api.twitter.com/oauth/authorize?oauth_token=${result.data.oauth_token}`
     );
-    M.AccountMng.SetKey(result.data.oauth_token, result.data.oauth_token_secret);
-    console.log(M.AccountMng);
+    this.mngAccount.SetKey(result.data.oauth_token, result.data.oauth_token_secret);
   }
 
   async GetAccessToken(pin: string) {
     // eslint-disable-next-line @typescript-eslint/camelcase
     const result = await this.api.call.oauth.ReqAccessToken({ oauth_verifier: pin });
     if (!result.data) return;
-    M.AccountMng.AddUser(
+    this.mngAccount.AddUser(
       result.data.oauth_token,
       result.data.oauth_token_secret,
       result.data.user_id,
       result.data.name,
       result.data.screen_name
     );
-    window.preload.SaveSwitter(M.AccountMng.switter);
+    window.preload.SaveSwitter(this.mngAccount.switter);
   }
 }

@@ -17,6 +17,7 @@ function CreateOptions(method: P.Method, body: string, authorization: string) {
 }
 
 export default class TwitterAPI {
+  mngAccount!: M.AccountManager;
   async request<TReq, TResp>(
     url: string,
     method: P.Method,
@@ -24,7 +25,7 @@ export default class TwitterAPI {
   ): Promise<TResp> {
     try {
       const oauth: I.OAuth = new I.OAuth();
-      oauth.SetKey(M.AccountMng.publicKey, M.AccountMng.secretKey);
+      oauth.SetKey(this.mngAccount.publicKey, this.mngAccount.secretKey);
 
       const body = params && params.data ? oauth.CreateBody(params) : '';
       const reqUrl = oauth.GetUrl(params, method, url);
@@ -47,7 +48,10 @@ export default class TwitterAPI {
   async requestOAuth<TReq>(url: string, params?: P.APIReq<TReq>): Promise<P.APIResp<P.OAuthRes>> {
     try {
       const oauth: I.OAuth = new I.OAuth();
-      oauth.SetKey(M.AccountMng.tempUser.oauth_token, M.AccountMng.tempUser.oauth_token_secret);
+      oauth.SetKey(
+        this.mngAccount.tempUser.oauth_token,
+        this.mngAccount.tempUser.oauth_token_secret
+      );
 
       const body = params && params.data ? oauth.CreateBody(params) : '';
       const reqUrl = oauth.GetUrl(params, 'POST', url);

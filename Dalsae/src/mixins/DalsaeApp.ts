@@ -9,6 +9,9 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
   api = new TwitterAPI();
 
+  @Provide()
+  mngAccount = new M.AccountManager();
+
   @Ref()
   messageModal!: MIX.MessageModalBase;
 
@@ -29,12 +32,13 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   }
 
   LoadConfig() {
+    this.api.mngAccount = this.mngAccount; //나중에 이 구조는 바꾸는 게 좋을 거 같다
     window.preload.LoadConfig();
-    M.AccountMng.switter = window.preload.LoadSwitter();
+    this.mngAccount.switter = window.preload.LoadSwitter();
   }
 
   async StardDalsae() {
-    if (M.AccountMng.selectUser) {
+    if (this.mngAccount.selectUser) {
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
