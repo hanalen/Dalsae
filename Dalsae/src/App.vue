@@ -2,15 +2,23 @@
   <v-app>
     <message-modal ref="messageModal"> </message-modal>
     <pin-modal ref="pinModal"></pin-modal>
-    <v-app-bar app> </v-app-bar>
+    <v-app-bar app max-height="90">
+      <top-selector> </top-selector>
+    </v-app-bar>
     <v-main>
       <v-container fluid>
         <router-view></router-view>
       </v-container>
     </v-main>
-    <v-bottom-navigation> </v-bottom-navigation>
+    <v-bottom-navigation height="44"> </v-bottom-navigation>
   </v-app>
 </template>
+
+<style lang="scss" scoped>
+.v-app-bar {
+  box-shadow: none !important;
+}
+</style>
 
 <script lang="ts">
 import { DalsaeApp } from '@/mixins';
