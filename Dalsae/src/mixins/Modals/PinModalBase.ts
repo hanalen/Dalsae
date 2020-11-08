@@ -1,4 +1,7 @@
+import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
+import { DalsaePage } from '@/mixins';
+import * as M from '@/Managers';
 
 class State {
   isShow: boolean;
@@ -10,11 +13,29 @@ class State {
 }
 
 @Component
-export class PinModalBase extends Vue {
+export class PinModalBase extends mixins(Vue, DalsaePage) {
   state = new State();
 
   async ShowModal() {
+    M.AccountMng.Reset();
     this.state.isShow = true;
     this.state.pin = '';
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    const result = await this.api.call.oauth.ReqToken({ oauth_callback: 'oob' });
+    if (!result.data) return;
+    result.data.oauth_token_secret;
+    console.log(result.data);
+    window.preload.OpenBrowser(
+      `https://api.twitter.com/oauth/authorize?oauth_token=${result.data.oauth_token}`
+    );
+    M.AccountMng.SetKey(result.data.oauth_token, result.data.oauth_token_secret);
+    console.log(M.AccountMng);
+  }
+
+  async GetAccessToken(pin: string) {
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    const result = await this.api.call.oauth.ReqAccessToken({ oauth_verifier: pin });
+    if (!result.data) return;
+    M.AccountMng.SetKey(result.data.oauth_token, result.data.oauth_token_secret);
   }
 }

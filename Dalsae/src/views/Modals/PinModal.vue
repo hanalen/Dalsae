@@ -18,10 +18,10 @@
         ></v-text-field>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="ModalClose(true)">
+          <v-btn color="primary" @click="ClickOk">
             확인
           </v-btn>
-          <v-btn color="primary" @click="ModalClose(false)">
+          <v-btn color="primary" @click="ClickClose">
             닫기
           </v-btn>
           <v-spacer></v-spacer>
@@ -46,8 +46,21 @@ export default class PinModal extends Mixins(DalsaePage, PinModalBase) {
     console.log('msg modal crated');
   }
 
-  async ModalClose(isConfirm: boolean) {
-    this.state.isShow = isConfirm;
+  async prepare() {
+    console.log('pin modal prepare');
+  }
+
+  async ClickOk() {
+    await this.GetAccessToken(this.pin);
+    this.ModalClose();
+  }
+
+  async ClickClose() {
+    this.ModalClose();
+  }
+
+  async ModalClose() {
+    this.state.isShow = false;
     this.state.pin = '';
   }
 }

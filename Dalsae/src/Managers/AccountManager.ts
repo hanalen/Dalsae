@@ -10,6 +10,7 @@ export class AccountManager {
   oauth = new I.OAuth();
   constructor() {
     // this.tweetMng = new M.TweetDataManager();
+    this.tempUser = { name: '', oauth_token: '', oauth_token_secret: '' };
   }
 
   get publicKey() {
