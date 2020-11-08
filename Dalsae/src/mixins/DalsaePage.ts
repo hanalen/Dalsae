@@ -35,9 +35,13 @@
 
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
 import * as I from '@/mixins';
+import TwitterAPI from '@/API/APICall';
 
 @Component
 export class DalsaePage extends Vue implements I.DalsaePageBase {
+  @Inject()
+  api!: TwitterAPI;
+
   @Inject()
   ShowConfirm!: (msg: string) => Promise<boolean>;
 

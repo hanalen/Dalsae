@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { DalsaeApp } from '@/mixins';
-import { Vue, Mixins, Component, Ref } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
 export default class App extends Mixins(DalsaeApp) {
