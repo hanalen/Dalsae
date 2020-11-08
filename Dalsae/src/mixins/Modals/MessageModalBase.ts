@@ -22,7 +22,4 @@ export class MessageModalBase extends Vue {
     console.log(msg);
     console.log(title);
   }
-  test() {
-    this.ShowMessage('');
-  }
 }

@@ -9,10 +9,8 @@ export class DalsaeApp extends Vue implements M.DalsaePageBase {
 
   @Provide()
   async ShowMessage(msg: string) {
-    console.log('provide msg', msg);
     if (!this.messageModal) return;
-    this.messageModal.state.isShow = true;
-    this.messageModal.state.msg = msg;
+    this.messageModal.ShowMessage(msg);
   }
 
   @Provide()

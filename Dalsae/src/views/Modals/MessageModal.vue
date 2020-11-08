@@ -1,6 +1,6 @@
 <template>
   <div class="message-modal">
-    <v-dialog class="modals" ref="modal" v-model="state.isShow">
+    <v-dialog class="modals" ref="modal" v-model="state.isShow" max-width="300">
       <v-card>
         <v-card-title class="headline">
           {{ state.title }}
@@ -10,12 +10,10 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="state.isShow = false">
-            Disagree
+          <v-btn color="primary" @click="state.isShow = false">
+            확인
           </v-btn>
-          <v-btn color="green darken-1" text @click="state.isShow = false">
-            Agree
-          </v-btn>
+          <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -31,21 +29,8 @@ import { DalsaePage, MessageModalBase } from '@/mixins';
 
 @Component
 export default class MessageModal extends Mixins(DalsaePage, MessageModalBase) {
-  // @Ref()
-  // modal!: HTMLDialogElement;
-
-  async created() {
-    this.$nextTick(() => {
-      this.$on('show-message', (msg: string) => {
-        console.log('aejkraeq12312232');
-      });
-    });
-    setTimeout(() => {
-      // this.modal.addEventListener('cancel', e => {
-      //   e.preventDefault();
-      //   this.state.event(-1);
-      // });
-    }, 0);
+  async crated() {
+    console.log('msg modal crated');
   }
 }
 </script>
