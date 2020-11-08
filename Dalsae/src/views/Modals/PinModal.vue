@@ -29,17 +29,19 @@
 
 <script lang="ts">
 import { Mixins, Component, Ref } from 'vue-property-decorator';
-import { DalsaePage, MessageModalBase } from '@/mixins';
+import { DalsaePage, PinModalBase } from '@/mixins';
 // interface BaseInterface extends DalsaePage {}
 
 @Component
-export default class MessageModal extends Mixins(DalsaePage, MessageModalBase) {
+export default class PinModal extends Mixins(DalsaePage, PinModalBase) {
   pin = '';
 
   async crated() {
     console.log('msg modal crated');
   }
 
-  async ModalClose(isConfirm: boolean) {}
+  async ModalClose(isConfirm: boolean) {
+    this.state.isShow = isConfirm;
+  }
 }
 </script>
