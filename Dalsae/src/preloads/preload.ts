@@ -57,11 +57,6 @@ export default class Preload {
   LoadConfig() {
     console.log('load config');
     this.CheckFolder();
-    const switter = this.ReadFile<I.Switter>(pathSwitter);
-    if (switter) {
-      M.AccountMng.switter = switter;
-    }
-    console.log(switter);
   }
 
   CheckFolder() {
@@ -70,9 +65,22 @@ export default class Preload {
     }
   }
 
+  LoadSwitter(): I.Switter {
+    const switter = this.ReadFile<I.Switter>(pathSwitter);
+    return switter;
+  }
+
   ReadFile<T>(path: string): T {
     const ret = fs.readJsonSync(path, { throws: false }) as T;
     return ret;
+  }
+
+  SaveSwitter(switter: I.Switter) {
+    this.SaveFile(pathSwitter, switter);
+  }
+
+  SaveFile(path: string, data: object) {
+    fs.writeJSONSync(path, data);
   }
 }
 

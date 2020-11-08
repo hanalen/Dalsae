@@ -10,7 +10,30 @@ export class AccountManager {
   oauth = new I.OAuth();
   constructor() {
     // this.tweetMng = new M.TweetDataManager();
-    this.tempUser = { name: '', oauth_token: '', oauth_token_secret: '' };
+    this.switter = {
+      selectUser: {
+        user_id: '',
+        name: '',
+        oauth_token: '',
+        screen_name: '',
+        oauth_token_secret: ''
+      }
+    };
+    this.tempUser = {
+      name: '',
+      oauth_token: '',
+      oauth_token_secret: '',
+      screen_name: '',
+      user_id: ''
+    };
+  }
+
+  get selectUser() {
+    if (this.switter?.selectUser.user_id !== '') {
+      return this.switter.selectUser;
+    } else {
+      return null;
+    }
   }
 
   get publicKey() {
@@ -21,12 +44,39 @@ export class AccountManager {
     return this.switter ? this.switter?.selectUser?.oauth_token_secret : '';
   }
 
+  AddUser(publicKey: string, secretKey: string, userId: string, name: string, screenName: string) {
+    const user = this.switter.listUser?.find(x => x.user_id === userId);
+    if (user) {
+      this.switter.selectUser = user;
+    } else {
+      this.switter.selectUser = {
+        oauth_token: publicKey,
+        oauth_token_secret: secretKey,
+        user_id: userId,
+        name: name,
+        screen_name: screenName
+      };
+    }
+  }
+
   SetKey(publicKey: string, secretKey: string) {
-    this.tempUser = { name: '', oauth_token: publicKey, oauth_token_secret: secretKey };
+    this.tempUser = {
+      name: '',
+      oauth_token: publicKey,
+      oauth_token_secret: secretKey,
+      user_id: '',
+      screen_name: ''
+    };
   }
 
   Reset() {
-    this.tempUser = { name: '', oauth_token: '', oauth_token_secret: '' };
+    this.tempUser = {
+      name: '',
+      oauth_token: '',
+      oauth_token_secret: '',
+      user_id: '',
+      screen_name: ''
+    };
   }
 }
 const AccountMng = new AccountManager();

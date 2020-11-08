@@ -65,7 +65,10 @@ export default class TwitterAPI {
           const oauth: I.OAuthRes = {
             oauth_callback_confirmed: false,
             oauth_token: '',
-            oauth_token_secret: ''
+            oauth_token_secret: '',
+            name: '',
+            user_id: '',
+            screen_name: ''
           };
           const resp: P.APIResp<P.OAuthRes> = { data: oauth };
           arr.forEach(item => {
@@ -76,16 +79,17 @@ export default class TwitterAPI {
               oauth.oauth_token = item[1];
             } else if (item[0] === 'oauth_token_secret') {
               oauth.oauth_token_secret = item[1];
+            } else if (item[0] === 'screen_name') {
+              oauth.screen_name = item[1];
+            } else if (item[0] === 'name') {
+              oauth.name = item[1];
+            } else if (item[0] === 'user_id') {
+              oauth.user_id = item[1];
             }
           });
           resp.data = oauth;
-          console.log(resp);
-          console.log('pro return');
           resolve(resp);
-          // return resp;
         });
-        console.log('pro out retuen');
-        console.log(pro);
         return pro;
       }
     } catch (e) {

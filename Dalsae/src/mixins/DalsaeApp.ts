@@ -1,18 +1,19 @@
 import TwitterAPI from '@/API/APICall';
 import * as I from '@/Interfaces';
-import * as M from '@/mixins';
+import * as MIX from '@/mixins';
+import * as M from '@/Managers';
 import { Vue, Component, Provide, Ref } from 'vue-property-decorator';
 
 @Component
-export class DalsaeApp extends Vue implements M.DalsaePageBase {
+export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
   api = new TwitterAPI();
 
   @Ref()
-  messageModal!: M.MessageModalBase;
+  messageModal!: MIX.MessageModalBase;
 
   @Ref()
-  pinModal!: M.PinModalBase;
+  pinModal!: MIX.PinModalBase;
 
   @Provide()
   async ShowMessage(msg: string) {
@@ -21,7 +22,25 @@ export class DalsaeApp extends Vue implements M.DalsaePageBase {
   }
 
   async created() {
+    this.LoadConfig();
+    this.$nextTick(() => {
+      this.StardDalsae();
+    });
+  }
+
+  LoadConfig() {
     window.preload.LoadConfig();
+    M.AccountMng.switter = window.preload.LoadSwitter();
+  }
+
+  async StardDalsae() {
+    if (M.AccountMng.selectUser) {
+      //api 콜 등등
+      //홈, 멘션, 관글, 차단 비동기로 호출
+      //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
+    } else {
+      this.ShowPin();
+    }
   }
 
   @Provide()

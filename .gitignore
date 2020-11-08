@@ -6,6 +6,7 @@ MainSrc/Data/*
 MainSrc/Image/*
 MainSrc/Skin/*
 MainSrc/Sound/*
+Dalsae/Data/*
 !build/icons
 MainSrc/node_modules/
 npm-debug.log
