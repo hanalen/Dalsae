@@ -17,6 +17,7 @@
   "main": "background.js",
   "dependencies": {
     "@types/crypto-js": "^4.0.1",
+    "@types/fs-extra": "^9.0.3",
     "axios": "^0.19.2",
     "crypto-js": "^4.0.0",
     "electron-builder": "^22.7.0",
