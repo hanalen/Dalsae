@@ -3,6 +3,13 @@ import Log from 'electron-log';
 import path from 'path';
 let ipcName = Math.random() * (99999 - 0) + 0;
 import ImagePreload from './ImagePreload';
+import fs from 'fs-extra';
+import * as M from '@/Managers';
+import * as I from '@/Interfaces';
+
+const pathData = 'Data/';
+const pathSwitter = 'Data/Switter.json';
+
 export default class Preload {
   image: ImagePreload = new ImagePreload();
   ClickLink() {
@@ -45,6 +52,27 @@ export default class Preload {
 
   OpenBrowser(url: string) {
     shell.openExternal(url);
+  }
+
+  LoadConfig() {
+    console.log('load config');
+    this.CheckFolder();
+    const switter = this.ReadFile<I.Switter>(pathSwitter);
+    if (switter) {
+      M.AccountMng.switter = switter;
+    }
+    console.log(switter);
+  }
+
+  CheckFolder() {
+    if (fs.existsSync(pathData) === false) {
+      fs.mkdirsSync(pathData);
+    }
+  }
+
+  ReadFile<T>(path: string): T {
+    const ret = fs.readJsonSync(path, { throws: false }) as T;
+    return ret;
   }
 }
 

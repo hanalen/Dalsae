@@ -20,6 +20,10 @@ export class DalsaeApp extends Vue implements M.DalsaePageBase {
     this.messageModal.ShowModal(msg);
   }
 
+  async created() {
+    window.preload.LoadConfig();
+  }
+
   @Provide()
   async ShowConfirm(msg: string): Promise<boolean> {
     return new Promise(resolve => {
