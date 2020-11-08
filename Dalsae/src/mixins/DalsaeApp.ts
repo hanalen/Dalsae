@@ -8,12 +8,12 @@ export class DalsaeApp extends Vue implements M.DalsaePageBase {
   messageModal!: M.MessageModalBase;
 
   @Ref()
-  pinModal!: M.MessageModalBase;
+  pinModal!: M.PinModalBase;
 
   @Provide()
   async ShowMessage(msg: string) {
     if (!this.messageModal) return;
-    this.messageModal.ShowMessage(msg);
+    this.messageModal.ShowModal(msg);
   }
 
   @Provide()
@@ -27,6 +27,6 @@ export class DalsaeApp extends Vue implements M.DalsaePageBase {
   async ShowPin() {
     console.log('showpin');
     if (!this.pinModal) return;
-    this.pinModal.ShowMessage();
+    this.pinModal.ShowModal();
   }
 }

@@ -1,15 +1,21 @@
 <template>
   <div class="message-modal">
-    <v-dialog class="modals" ref="modal" v-model="state.isShow" max-width="300">
+    <v-dialog persistent class="modals" ref="modal" v-model="state.isShow" max-width="300">
       <v-card>
         <v-card-title class="headline">
           인증을 진행 해주세요
         </v-card-title>
         <v-card-text>
-          인터넷 브라우저에서 로그인 후 앱 인증을 누르신 다음 <br />
+          인터넷 브라우저에서 로그인 후<br />
+          앱 인증을 누르신 다음<br />
           나온 PIN을 입력 해주세요.
         </v-card-text>
-        <v-input v-model="pin"></v-input>
+        <v-text-field
+          style="width: 250px; margin-left: 25px"
+          v-model="pin"
+          width
+          label="7자리 숫자를 입력 해주세요"
+        ></v-text-field>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="ModalClose(true)">
@@ -42,6 +48,7 @@ export default class PinModal extends Mixins(DalsaePage, PinModalBase) {
 
   async ModalClose(isConfirm: boolean) {
     this.state.isShow = isConfirm;
+    this.state.pin = '';
   }
 }
 </script>

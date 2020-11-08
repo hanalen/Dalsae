@@ -15,7 +15,7 @@ class State {
 @Component
 export class MessageModalBase extends Vue {
   state: State = new State();
-  ShowMessage(msg: string, title = '알림') {
+  ShowModal(msg: string, title = '알림') {
     this.state.isShow = true;
     this.state.msg = msg;
     this.state.title = title;

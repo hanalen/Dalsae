@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <message-modal ref="messageModal"> </message-modal>
+    <pin-modal ref="pinModal"></pin-modal>
     <v-app-bar app> </v-app-bar>
     <v-main>
       <v-container fluid>

@@ -12,4 +12,9 @@ class State {
 @Component
 export class PinModalBase extends Vue {
   state = new State();
+
+  async ShowModal() {
+    this.state.isShow = true;
+    this.state.pin = '';
+  }
 }
