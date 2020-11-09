@@ -9,6 +9,7 @@ import * as I from '@/Interfaces';
 
 const pathData = 'Data/';
 const pathSwitter = 'Data/Switter.json';
+const pathOption = 'Data/Option.json';
 
 export default class Preload {
   image: ImagePreload = new ImagePreload();
@@ -66,8 +67,11 @@ export default class Preload {
   }
 
   LoadSwitter(): I.Switter {
-    const switter = this.ReadFile<I.Switter>(pathSwitter);
-    return switter;
+    return this.ReadFile<I.Switter>(pathSwitter);
+  }
+
+  LoadOption(): M.OptionManager {
+    return this.ReadFile<M.OptionManager>(pathOption);
   }
 
   ReadFile<T>(path: string): T {
@@ -77,6 +81,10 @@ export default class Preload {
 
   SaveSwitter(switter: I.Switter) {
     this.SaveFile(pathSwitter, switter);
+  }
+
+  SaveOption(option: M.OptionManager) {
+    this.SaveFile(pathOption, option);
   }
 
   SaveFile(path: string, data: object) {

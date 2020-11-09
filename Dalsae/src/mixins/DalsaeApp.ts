@@ -12,6 +12,9 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
   mngAccount = new M.AccountManager();
 
+  @Provide()
+  mngOption = new M.OptionManager();
+
   @Ref()
   messageModal!: MIX.MessageModalBase;
 
@@ -35,6 +38,8 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     this.api.mngAccount = this.mngAccount; //나중에 이 구조는 바꾸는 게 좋을 거 같다
     window.preload.LoadConfig();
     this.mngAccount.switter = window.preload.LoadSwitter();
+    const option = window.preload.LoadOption();
+    this.mngOption = option ? option : new M.OptionManager();
   }
 
   async StardDalsae() {

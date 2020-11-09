@@ -54,6 +54,9 @@ export class DalsaePage extends Vue implements I.DalsaePageBase {
   mngAccount!: M.AccountManager;
 
   @Inject()
+  mngOption!: M.OptionManager;
+
+  @Inject()
   ShowConfirm!: (msg: string) => Promise<boolean>;
 
   @Inject()
