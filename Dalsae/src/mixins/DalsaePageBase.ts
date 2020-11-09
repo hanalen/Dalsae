@@ -4,8 +4,10 @@ export interface DalsaePageBase {
   ShowConfirm: (msg: string) => Promise<boolean>;
   ShowMessage: (msg: string) => void;
   ShowPin: () => void;
+  MenuChange: (menu: number) => void;
 
   api: TwitterAPI;
   mngAccount: M.AccountManager;
   mngOption: M.OptionManager;
+  selectMenu: number;
 }

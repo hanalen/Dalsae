@@ -3,9 +3,13 @@ import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import * as M from '@/Managers';
 import { Vue, Component, Provide, Ref } from 'vue-property-decorator';
+import { TouchBarScrubber } from 'electron';
 
 @Component
 export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
+  @Provide()
+  selectMenu = 0;
+
   @Provide()
   api = new TwitterAPI();
 
@@ -25,6 +29,11 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   async ShowMessage(msg: string) {
     if (!this.messageModal) return;
     this.messageModal.ShowModal(msg);
+  }
+
+  @Provide()
+  async MenuChange(menu: number) {
+    this.selectMenu = menu;
   }
 
   async created() {
