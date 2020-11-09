@@ -10,13 +10,19 @@
         <router-view></router-view>
       </v-container>
     </v-main>
-    <v-bottom-navigation height="44"> </v-bottom-navigation>
+    <v-bottom-navigation height="44">
+      <bottom></bottom>
+    </v-bottom-navigation>
   </v-app>
 </template>
 
 <style lang="scss" scoped>
 .v-app-bar {
   box-shadow: none !important;
+}
+.v-bottom-navigation {
+  justify-content: left !important;
+  padding: 4px !important;
 }
 </style>
 
