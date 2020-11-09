@@ -10,9 +10,9 @@
         <router-view></router-view>
       </v-container>
     </v-main>
-    <v-bottom-navigation height="44">
+    <v-footer app fixed height="44" color="gray">
       <bottom></bottom>
-    </v-bottom-navigation>
+    </v-footer>
   </v-app>
 </template>
 

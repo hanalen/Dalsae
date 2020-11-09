@@ -1,26 +1,12 @@
 <template>
   <div class="ui-bottom">
-    <!-- <v-footer> -->
-    <v-btn>
-      <v-icon>mdi-format-list-checkbox</v-icon>
+    <v-btn icon rounded @click="ClickOption">
+      <v-icon color="primary">mdi-menu</v-icon>
     </v-btn>
-    <v-btn icon rounded>
-      <v-icon>mdi-home</v-icon>
-    </v-btn>
-    <v-btn icon rounded>
-      <v-icon>mdi-bell-outline</v-icon>
-    </v-btn>
-    <v-btn icon rounded>
-      <v-icon>mdi-email-outline</v-icon>
-    </v-btn>
-    <v-btn icon rounded>
-      <v-icon>mdi-heart-outline</v-icon>
-    </v-btn>
-    <v-btn icon rounded>
-      <v-icon>mdi-link</v-icon>
+    <v-btn icon rounded v-for="(item, i) in listIcons" :key="i" @click="ClickMenu(item.value)">
+      <v-icon :color="item.value === selectMenu ? 'primary' : 'secondary'">{{ item.name }}</v-icon>
     </v-btn>
   </div>
-  <!-- </v-footer> -->
 </template>
 
 <style lang="scss" scoped>
@@ -36,8 +22,40 @@ import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
 export default class Bottom extends Mixins(DalsaePage) {
+  selectMenu = 0;
+  listIcons = [
+    {
+      name: 'mdi-home',
+      value: 0
+    },
+    {
+      name: 'mdi-bell-outline',
+      value: 1
+    },
+    {
+      name: 'mdi-email-outline',
+      value: 2
+    },
+    {
+      name: 'mdi-heart-outline',
+      value: 3
+    },
+    {
+      name: 'mdi-link',
+      value: 4
+    }
+  ];
   async created() {
     console.log('aaaaa');
+  }
+
+  async ClickOption() {
+    console.log('click option');
+  }
+
+  async ClickMenu(menu: number) {
+    this.selectMenu = menu;
+    console.log(menu);
   }
 }
 </script>
