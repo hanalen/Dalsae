@@ -1,6 +1,9 @@
 <template>
   <div class="ui-top-selector">
-    <slot>werer</slot>
+    <slot>
+      <top-big v-if="!mngOption.uiOption.isSmallInput"> </top-big>
+      <top-small v-if="mngOption.uiOption.isSmallInput"> </top-small>
+    </slot>
   </div>
 </template>
 
