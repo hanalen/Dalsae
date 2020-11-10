@@ -2,7 +2,7 @@
   <v-app>
     <message-modal ref="messageModal"> </message-modal>
     <pin-modal ref="pinModal"></pin-modal>
-    <v-app-bar app max-height="90">
+    <v-app-bar app max-height="90" height="90">
       <top-selector> </top-selector>
     </v-app-bar>
     <v-main>
@@ -16,12 +16,16 @@
   </v-app>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .v-app-bar {
   box-shadow: none !important;
 }
 .v-bottom-navigation {
   justify-content: left !important;
+  padding: 4px !important;
+}
+.v-toolbar__content,
+.v-toolbar__extension {
   padding: 4px !important;
 }
 </style>

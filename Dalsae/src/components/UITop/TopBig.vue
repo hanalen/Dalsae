@@ -1,17 +1,59 @@
+/* eslint-disable @typescript-eslint/camelcase */
 <template>
   <div class="ui-top-big">
-    big-pie
+    <div class="ui-top-left">
+      <img class="propic" :src="propic" :class="propicClass" v-if="isShowPropic" />
+    </div>
+    <div class="ui-top-right">
+      <v-text-area v-model="state.tweet" full-width outlined hide-details> </v-text-area>
+      <div class="ui-top-right-bottom">
+        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
+        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
+        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
+        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
+        <div></div>
+      </div>
+    </div>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.ui-top-big {
+  width: calc(100vw - 20px);
+  height: 90px;
+  padding: 4px !important;
+  display: flex;
+}
+.ui-top-right {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.propic {
+  object-fit: contain;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.normal {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+}
+.big {
+  width: 73px;
+  height: 73px;
+  border-radius: 12px;
+}
+</style>
 
 <script lang="ts">
-import { DalsaeApp, DalsaePage } from '@/mixins';
+import { DalsaeApp, DalsaePage, UITopBase } from '@/mixins';
+import { mixins } from 'vue-class-component';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
-export default class TopBig extends Mixins(DalsaePage) {
+export default class TopBig extends mixins(UITopBase) {
   async created() {
     console.log('aaaaa');
   }
