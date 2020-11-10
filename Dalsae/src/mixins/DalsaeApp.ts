@@ -63,6 +63,8 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   LoadTestTweet() {
     const tweet = window.preload.LoadTestTweet();
     this.mngTweet.homes = tweet;
+    this.mngTweet.mentions = tweet;
+    this.mngTweet.favorites = tweet;
     console.log('---loaded tweet---');
     console.log(tweet);
   }
