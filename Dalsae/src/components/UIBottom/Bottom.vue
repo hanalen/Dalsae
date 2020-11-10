@@ -4,7 +4,7 @@
       <v-icon color="primary">mdi-menu</v-icon>
     </v-btn>
     <v-btn icon rounded v-for="(item, i) in listIcons" :key="i" @click="ClickMenu(item.value)">
-      <v-icon :color="item.value === selectMenu ? 'primary' : 'secondary'">{{ item.name }}</v-icon>
+      <v-icon :color="item.value === nowMenu ? 'primary' : 'secondary'">{{ item.name }}</v-icon>
     </v-btn>
   </div>
 </template>
@@ -22,7 +22,7 @@ import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
 export default class Bottom extends Mixins(DalsaePage) {
-  selectMenu = 0;
+  nowMenu = 0;
   listIcons = [
     {
       name: 'mdi-home',
@@ -54,8 +54,8 @@ export default class Bottom extends Mixins(DalsaePage) {
   }
 
   async ClickMenu(menu: number) {
-    this.selectMenu = menu;
-    console.log(menu);
+    this.nowMenu = menu;
+    this.MenuChange(menu);
   }
 }
 </script>

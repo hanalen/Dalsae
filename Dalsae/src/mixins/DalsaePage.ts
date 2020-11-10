@@ -69,5 +69,5 @@ export class DalsaePage extends Vue implements I.DalsaePageBase {
   ShowPin!: () => void;
 
   @Inject()
-  MenuChange!: () => void;
+  MenuChange!: (menu: number) => void;
 }
