@@ -25,6 +25,7 @@
       no-resize
       :spellcheck="false"
       height="44"
+      v-on:paste="Paste"
     >
     </v-textarea>
     <div class="ui-top-right-bottom">
@@ -56,12 +57,12 @@ textarea {
 </style>
 
 <script lang="ts">
-import { DalsaeApp, DalsaePage, UITopBase } from '@/mixins';
+import { DalsaeApp, DalsaePage, UITopBase, TweetInputBase } from '@/mixins';
 import { mixins } from 'vue-class-component';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
-export default class TweetInput extends mixins(UITopBase) {
+export default class TweetInput extends mixins(TweetInputBase) {
   async created() {
     console.log('aaaaa');
   }

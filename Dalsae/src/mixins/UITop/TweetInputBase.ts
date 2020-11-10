@@ -13,7 +13,7 @@ class State {
 }
 
 @Component
-export class TweetInput extends mixins(Vue, DalsaePage) {
+export class TweetInputBase extends mixins(Vue, DalsaePage) {
   state = new State();
 
   selectionChange(e: Event) {
@@ -34,5 +34,9 @@ export class TweetInput extends mixins(Vue, DalsaePage) {
 
   ClearInput(e: Event) {
     console.log(e);
+  }
+
+  Paste(e: Event) {
+    console.log('paste');
   }
 }
