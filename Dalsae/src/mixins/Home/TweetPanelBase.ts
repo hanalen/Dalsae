@@ -6,8 +6,8 @@ class State {
     this.selectMenu = 0;
   }
 }
-@Component
-export class TweetPanelBase extends Vue {
+
+export class TweetPanelBase {
   state: State = new State();
 
   async MenuChange(menu: number) {

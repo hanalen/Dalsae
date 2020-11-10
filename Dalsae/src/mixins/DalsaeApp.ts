@@ -23,14 +23,12 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   pinModal!: MIX.PinModalBase;
 
   @Provide()
+  tweetPanel = new MIX.TweetPanelBase();
+
+  @Provide()
   async ShowMessage(msg: string) {
     if (!this.messageModal) return;
     this.messageModal.ShowModal(msg);
-  }
-
-  @Provide()
-  async MenuChange(menu: number) {
-    this.selectMenu = menu;
   }
 
   async created() {

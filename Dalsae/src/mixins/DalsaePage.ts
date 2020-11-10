@@ -57,6 +57,9 @@ export class DalsaePage extends Vue implements I.DalsaePageBase {
   mngOption!: M.OptionManager;
 
   @Inject()
+  tweetPanel!: I.TweetPanelBase;
+
+  @Inject()
   ShowConfirm!: (msg: string) => Promise<boolean>;
 
   @Inject()
@@ -64,7 +67,4 @@ export class DalsaePage extends Vue implements I.DalsaePageBase {
 
   @Inject()
   ShowPin!: () => void;
-
-  @Inject()
-  MenuChange!: (menu: number) => void;
 }
