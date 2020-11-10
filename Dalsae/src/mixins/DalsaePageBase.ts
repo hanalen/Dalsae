@@ -8,6 +8,7 @@ export interface DalsaePageBase {
 
   api: TwitterAPI;
   mngAccount: M.AccountManager;
+  mngTweet: M.TweetDataManager;
   mngOption: M.OptionManager;
   tweetPanel: MIX.TweetPanelBase;
 }

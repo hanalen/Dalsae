@@ -90,6 +90,11 @@ export default class Preload {
   SaveFile(path: string, data: object) {
     fs.writeJSONSync(path, data);
   }
+
+  LoadTestTweet() {
+    const ret = fs.readJsonSync('src/Managers/favorite_tweet.json');
+    return ret;
+  }
 }
 
 type PreloadWindow = typeof window & { preload: Preload };

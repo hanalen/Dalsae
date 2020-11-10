@@ -57,6 +57,9 @@ export class DalsaePage extends Vue implements I.DalsaePageBase {
   mngOption!: M.OptionManager;
 
   @Inject()
+  mngTweet!: M.TweetDataManager;
+
+  @Inject()
   tweetPanel!: I.TweetPanelBase;
 
   @Inject()

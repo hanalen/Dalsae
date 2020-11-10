@@ -15,6 +15,9 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
   mngOption = new M.OptionManager();
 
+  @Provide()
+  mngTweet = new M.TweetDataManager();
+
   @Ref()
   messageModal!: MIX.MessageModalBase;
 
@@ -39,6 +42,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
 
   LoadConfig() {
     this.api.mngAccount = this.mngAccount; //나중에 이 구조는 바꾸는 게 좋을 거 같다
+    this.tweetPanel.mngTweet = this.mngTweet;
     window.preload.LoadConfig();
     this.mngAccount.switter = window.preload.LoadSwitter();
     const option = window.preload.LoadOption();
@@ -46,6 +50,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   }
 
   async StardDalsae() {
+    this.LoadTestTweet();
     if (this.mngAccount.selectUser) {
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
@@ -53,6 +58,13 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     } else {
       this.ShowPin();
     }
+  }
+
+  LoadTestTweet() {
+    const tweet = window.preload.LoadTestTweet();
+    this.mngTweet.homes = tweet;
+    console.log('---loaded tweet---');
+    console.log(tweet);
   }
 
   @Provide()
