@@ -1,13 +1,29 @@
 /* eslint-disable @typescript-eslint/camelcase */
 <template>
   <div class="tweet-input">
-    <v-textarea
+    <!-- <textarea
       v-model="state.tweet"
+      spellcheck="false"
+      class="text"
+      v-on:input="Input"
+      v-on:select="selectionChange"
+      v-on:paste="Paste"
+      @keyup="selectionChange"
+      @click="selectionChange"
+      @focus="selectionChange"
+      @keydown.down="ArrowDown"
+      @keydown.up="ArrowUp"
+      @keydown.enter="EnterDown"
+      @keydown.esc="ClearInput"
+    >
+    </textarea> -->
+    <v-textarea
       outlined
       hide-details
       :auto-grow="false"
       background-color="white"
       no-resize
+      :spellcheck="false"
       height="44"
     >
     </v-textarea>
@@ -28,6 +44,14 @@
   padding: 4px !important;
   display: flex;
   flex-direction: column;
+}
+textarea {
+  font-family: 'Malgun Gothic' !important;
+  height: 44px;
+  font-size: 13px !important;
+  background-color: white;
+  padding: 2px 4px 2px 4px;
+  resize: none;
 }
 </style>
 
