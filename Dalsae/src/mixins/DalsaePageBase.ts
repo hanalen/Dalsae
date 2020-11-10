@@ -9,5 +9,4 @@ export interface DalsaePageBase {
   api: TwitterAPI;
   mngAccount: M.AccountManager;
   mngOption: M.OptionManager;
-  selectMenu: number;
 }

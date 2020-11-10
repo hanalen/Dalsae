@@ -48,9 +48,6 @@ export class DalsaePage extends Vue implements I.DalsaePageBase {
   }
 
   @Inject()
-  selectMenu!: number;
-
-  @Inject()
   api!: TwitterAPI;
 
   @Inject()

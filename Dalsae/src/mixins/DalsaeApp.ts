@@ -8,9 +8,6 @@ import { TouchBarScrubber } from 'electron';
 @Component
 export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
-  selectMenu = 0;
-
-  @Provide()
   api = new TwitterAPI();
 
   @Provide()
