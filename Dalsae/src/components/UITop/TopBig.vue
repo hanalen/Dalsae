@@ -5,14 +5,7 @@
       <img class="propic" :src="propic" :class="propicClass" v-if="isShowPropic" />
     </div>
     <div class="ui-top-right">
-      <v-text-area v-model="state.tweet" full-width outlined hide-details> </v-text-area>
-      <div class="ui-top-right-bottom">
-        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-        <div></div>
-      </div>
+      <tweet-input></tweet-input>
     </div>
   </div>
 </template>
