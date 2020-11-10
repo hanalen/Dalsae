@@ -16,19 +16,7 @@
   </v-app>
 </template>
 
-<style lang="scss">
-.v-app-bar {
-  box-shadow: none !important;
-}
-.v-bottom-navigation {
-  justify-content: left !important;
-  padding: 4px !important;
-}
-.v-toolbar__content,
-.v-toolbar__extension {
-  padding: 4px !important;
-}
-</style>
+<style lang="scss" src="@/Styles/vuetify.scss"></style>
 
 <script lang="ts">
 import { DalsaeApp } from '@/mixins';
