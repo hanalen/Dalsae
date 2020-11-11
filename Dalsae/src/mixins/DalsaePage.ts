@@ -33,6 +33,8 @@
 // 공용 기능은 DalsaePageBase에 기본 틀 => emit은 DalsaePage => 수신은 DalsaeApp, 기능은 메시지&팝업만
 // api 콜 같은 기능은 추후 생각...
 
+// 공식 계정 표시, 알림 표시는 뱃지 사용 https://vuetifyjs.com/en/components/badges/#usage
+
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
 import * as I from '@/mixins';
 import TwitterAPI from '@/API/APICall';

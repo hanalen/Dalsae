@@ -1,6 +1,7 @@
 <template>
   <div class="tweet-selector">
-    big-pie
+    <tweet-small :tweet="tweet" v-if="isSmall"> </tweet-small>
+    <tweet-normal :tweet="tweet" v-if="isNormal"> </tweet-normal>
   </div>
 </template>
 

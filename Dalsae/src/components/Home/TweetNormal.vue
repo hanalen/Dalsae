@@ -1,7 +1,5 @@
 <template>
-  <div class="tweet-panel">
-    big-pie
-  </div>
+  <div ref="tweet" class="tweet" @mousedown="Click"></div>
 </template>
 
 <style lang="scss" scoped></style>
