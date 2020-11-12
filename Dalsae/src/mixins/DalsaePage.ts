@@ -35,6 +35,14 @@
 
 // 공식 계정 표시, 알림 표시는 뱃지 사용 https://vuetifyjs.com/en/components/badges/#usage
 
+// 트윗 패널기능은 최후에 진행 하기로 하며
+// 메인화면 디자인 다듬기
+// api콜 후 데이터 관리 등 백그라운드 작업 더 진행하기
+// 옵션 기능 넣기
+// 이미지 팝업 기능 구현하기
+// 프로필 팝업 기능 구현하기
+// 등등 최대한 많은 작업을 다 끝낸 후 트윗 패널 작업을 진행 한다
+
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
 import * as I from '@/mixins';
 import TwitterAPI from '@/API/APICall';
@@ -48,9 +56,8 @@ export class DalsaePage extends Vue implements I.DalsaePageBase {
       await ((this as unknown) as WithPrepare).prepare();
     }
   }
-
   @Inject()
-  api!: TwitterAPI;
+  api!: M.APIManager;
 
   @Inject()
   mngAccount!: M.AccountManager;

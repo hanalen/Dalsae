@@ -7,8 +7,7 @@ import { Vue, Component, Provide, Ref } from 'vue-property-decorator';
 @Component
 export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
-  api = new TwitterAPI();
-
+  api = new M.APIManager();
   @Provide()
   mngAccount = new M.AccountManager();
 
@@ -41,7 +40,8 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   }
 
   LoadConfig() {
-    this.api.mngAccount = this.mngAccount; //나중에 이 구조는 바꾸는 게 좋을 거 같다
+    this.api.api.mngAccount = this.mngAccount; //나중에 이 구조는 바꾸는 게 좋을 거 같다
+    this.api.mngTweet = this.mngTweet;
     this.tweetPanel.mngTweet = this.mngTweet;
     window.preload.LoadConfig();
     this.mngAccount.switter = window.preload.LoadSwitter();

@@ -6,9 +6,9 @@ export interface DalsaePageBase {
   ShowMessage: (msg: string) => void;
   ShowPin: () => void;
 
-  api: TwitterAPI;
   mngAccount: M.AccountManager;
   mngTweet: M.TweetDataManager;
   mngOption: M.OptionManager;
   tweetPanel: MIX.TweetPanelBase;
+  api: M.APIManager;
 }
