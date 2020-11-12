@@ -34,14 +34,13 @@ export class PinModalBase extends mixins(Vue, DalsaePage) {
   async GetAccessToken(pin: string) {
     // eslint-disable-next-line @typescript-eslint/camelcase
     const result = await this.api.call.oauth.ReqAccessToken({ oauth_verifier: pin });
-    if (!result.data) return;
-    this.mngAccount.AddUser(
-      result.data.oauth_token,
-      result.data.oauth_token_secret,
-      result.data.user_id,
-      result.data.name,
-      result.data.screen_name
-    );
-    window.preload.SaveSwitter(this.mngAccount.switter);
+    if (result.data) {
+      window.preload.SaveSwitter(this.mngAccount.switter);
+      this.CloseModal();
+    }
+  }
+
+  CloseModal() {
+    this.state.isShow = false;
   }
 }
