@@ -14,9 +14,5 @@ import { DalsaeApp, DalsaePage } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
-export default class TopSelector extends Mixins(DalsaePage) {
-  async created() {
-    console.log('aaaaa');
-  }
-}
+export default class TopSelector extends Mixins(DalsaePage) {}
 </script>

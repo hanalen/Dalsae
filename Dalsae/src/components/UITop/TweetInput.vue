@@ -62,9 +62,5 @@ import { mixins } from 'vue-class-component';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
-export default class TweetInput extends mixins(TweetInputBase) {
-  async created() {
-    console.log('aaaaa');
-  }
-}
+export default class TweetInput extends mixins(TweetInputBase) {}
 </script>

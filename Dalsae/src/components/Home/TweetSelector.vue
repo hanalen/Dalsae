@@ -12,9 +12,5 @@ import { DalsaeApp, TweetSelectorBase } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
-export default class TweetSelector extends Mixins(TweetSelectorBase) {
-  async created() {
-    console.log('aaaaa');
-  }
-}
+export default class TweetSelector extends Mixins(TweetSelectorBase) {}
 </script>

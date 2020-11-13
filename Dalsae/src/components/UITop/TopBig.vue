@@ -46,9 +46,5 @@ import { mixins } from 'vue-class-component';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
-export default class TopBig extends mixins(UITopBase) {
-  async created() {
-    console.log('aaaaa');
-  }
-}
+export default class TopBig extends mixins(UITopBase) {}
 </script>

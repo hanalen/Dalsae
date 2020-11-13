@@ -46,9 +46,6 @@ export default class Bottom extends Mixins(DalsaePage) {
       value: 4
     }
   ];
-  async created() {
-    console.log('aaaaa');
-  }
 
   async ClickOption() {
     console.log('click option');

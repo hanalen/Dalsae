@@ -23,9 +23,5 @@ import { DalsaeApp } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
-export default class App extends Mixins(DalsaeApp) {
-  async created() {
-    console.log('aaaaa');
-  }
-}
+export default class App extends Mixins(DalsaeApp) {}
 </script>
