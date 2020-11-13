@@ -6,8 +6,8 @@ import * as I from '@/Interfaces';
 
 export class APIManager {
   api = new TwitterAPI();
-  mngTweet = new M.TweetDataManager();
-  mngAccount = new M.AccountManager();
+  mngTweet!: M.TweetDataManager;
+  mngAccount!: M.AccountManager;
 
   ShowMessage!: (msg: string) => void;
   ShowConfirm!: (msg: string) => Promise<boolean>;

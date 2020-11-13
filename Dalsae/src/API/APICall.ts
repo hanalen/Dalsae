@@ -22,7 +22,7 @@ export default class TwitterAPI {
     url: string,
     method: P.Method,
     params?: P.APIReq<TReq>
-  ): Promise<TResp> {
+  ): Promise<P.APIResp<TResp>> {
     try {
       const oauth: I.OAuth = new I.OAuth();
       oauth.SetKey(this.mngAccount.publicKey, this.mngAccount.secretKey);
@@ -40,7 +40,7 @@ export default class TwitterAPI {
       } else {
         const json = await resp.json();
         console.log(json);
-        return json;
+        return { data: json };
       }
     } catch (e) {
       console.log('catch');
@@ -108,7 +108,7 @@ export default class TwitterAPI {
   }
 
   async get<TReq, TResp>(url: string, params: P.APIReq<TReq>) {
-    return this.request<TReq, P.APIResp<TResp>>(url, 'GET', params);
+    return this.request<TReq, TResp>(url, 'GET', params);
   }
 
   async post<TReq, TResp>(url: string, params: P.APIReq<TReq>) {
