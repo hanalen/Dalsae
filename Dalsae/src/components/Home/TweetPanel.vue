@@ -7,19 +7,19 @@
     </v-tabs>
     <v-tabs-items v-model="tweetPanel.state.selectMenu">
       <v-tab-item :key="0">
-        <tweet-selector v-for="(item, i) in tweetHome" :key="i"></tweet-selector>
+        <tweet-selector v-for="(item, i) in tweetHome" :key="i" :tweet="item"></tweet-selector>
       </v-tab-item>
       <v-tab-item :key="1">
-        <tweet-selector v-for="(item, i) in tweetMention" :key="i"></tweet-selector>
+        <tweet-selector v-for="(item, i) in tweetMention" :key="i" :tweet="item"></tweet-selector>
       </v-tab-item>
       <v-tab-item :key="2">
-        <tweet-selector v-for="(item, i) in dm" :key="i"></tweet-selector>
+        <tweet-selector v-for="(item, i) in dm" :key="i" :tweet="item"></tweet-selector>
       </v-tab-item>
       <v-tab-item :key="3">
-        <tweet-selector v-for="(item, i) in tweetFavorite" :key="i"></tweet-selector>
+        <tweet-selector v-for="(item, i) in tweetFavorite" :key="i" :tweet="item"></tweet-selector>
       </v-tab-item>
       <v-tab-item :key="4">
-        <tweet-selector v-for="(item, i) in tweetOpens" :key="i"></tweet-selector>
+        <tweet-selector v-for="(item, i) in tweetOpens" :key="i" :tweet="item"></tweet-selector>
       </v-tab-item>
     </v-tabs-items>
   </div>

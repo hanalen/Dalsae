@@ -1,4 +1,4 @@
-import { Vue, Mixins, Component, Inject, Emit } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Inject, Emit, Provide, Prop } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
 class State {
@@ -13,6 +13,8 @@ class State {
 @Component
 export class TweetSelectorBase extends Mixins(Vue, MIX.DalsaePage) {
   state: State = new State();
+
+  @Prop()
   tweet!: I.Tweet;
 
   get isSmall() {
