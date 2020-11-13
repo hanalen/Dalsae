@@ -7,6 +7,7 @@ export class Tweet {
   full_text: string;
   entities: I.Entitie;
   extended_entities: I.ExtendedEntitie;
+  retweeted_status!: Tweet;
   in_reply_to_status_id_str!: string;
   in_reply_to_user_id_str!: string;
   in_reply_to_screen_name!: string;
