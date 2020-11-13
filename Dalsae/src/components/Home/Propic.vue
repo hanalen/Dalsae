@@ -1,12 +1,19 @@
 <template>
-  <div class="propic">
-    <img :src="img" class="propic" :class="imgClass" />
+  <div :class="imgClass">
+    <v-badge :value="user.verified" avatar bottom overlap color="white" offset-x="20" offset-y="20">
+      <template v-slot:badge>
+        <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
+      </template>
+      <v-avatar rounded :size="maxWidth">
+        <img :src="img" :class="imgClass" />
+      </v-avatar>
+    </v-badge>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .propic {
-  margin-left: 4px;
+  // margin-left: 4px;
   object-fit: contain;
   border-radius: 12px;
   margin-bottom: auto;
@@ -21,6 +28,9 @@
 .normal {
   width: 48px;
 }
+.v-badge__badge:after {
+  transform: none !important;
+}
 </style>
 
 <script lang="ts">
@@ -32,9 +42,11 @@ export default class Propic extends Mixins(DalsaePage) {
   @Prop()
   user!: I.User;
 
+  get maxWidth() {
+    return this.mngOption.uiOption.isBigPropic ? 73 : 48;
+  }
+
   get img() {
-    if (!this.user) return '';
-    else return this.user.profile_image_url_https;
     return this.mngOption.uiOption.isBigPropic
       ? this.user.profile_image_url_https.replace('_normal', '_bigger')
       : this.user.profile_image_url_https;
