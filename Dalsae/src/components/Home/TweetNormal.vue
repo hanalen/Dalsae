@@ -6,7 +6,7 @@
     <div class="tweet-left">
       <propic :user="orgUser"></propic>
     </div>
-    <div class="tweet-right" style="margin-left:4px;">
+    <div class="tweet-text" style="margin-left:4px;">
       <span class="user-name">{{ name }}</span>
       <div v-html="tweetText"></div>
       <span class="tweet-date">{{ date }}{{ via }}</span>
