@@ -78,12 +78,13 @@ export class OAuth {
     if (method == 'POST') {
       return url;
     } else if (method == 'GET') {
-      if (params) {
+      if (params?.data) {
         let str = url + '?';
-        Object.entries(params) //params 오브젝트의 파라메터 이름, 값을 얻는 코드
+        Object.entries(params.data) //params 오브젝트의 파라메터 이름, 값을 얻는 코드
           .sort()
           .forEach(([key, value]) => {
-            if (!value) str += `${key}=${encodeURIComponent(value)}&`;
+            console.log('key: ' + key + 'value: ' + value);
+            if (value) str += `${key}=${encodeURIComponent(value)}&`;
           });
         return str.substring(0, str.length - 1); //마지막& 지우기
       } else {
