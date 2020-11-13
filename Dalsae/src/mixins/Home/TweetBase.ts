@@ -20,6 +20,11 @@ export class TweetBase extends Mixins(Vue, MIX.DalsaePage) {
     return this.tweet.retweeted_status ? this.tweet.retweeted_status : this.tweet; //원본 트윗 저장
   }
 
+  get orgUser() {
+    console.log('orgUser');
+    return this.orgTweet.user;
+  }
+
   get tweetText() {
     console.log('tweet text');
     let text = this.orgTweet.full_text;

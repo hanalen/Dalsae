@@ -1,6 +1,12 @@
 <template>
-  <div class="tweet" v-if="tweet != undefined">
-    {{ tweetText }}
+  <div class="tweet">
+    <div class="tweet-conv"></div>
+    <div class="tweet-left">
+      <propic :user="orgUser"></propic>
+    </div>
+    <div class="tweet-right">
+      {{ tweetText }}
+    </div>
   </div>
 </template>
 
