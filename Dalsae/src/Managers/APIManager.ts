@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import * as M from '@/Managers';
 import TwitterAPI from '@/API/APICall';
 import * as P from '@/Interfaces';
+import * as I from '@/Interfaces';
 
 export class APIManager {
   api = new TwitterAPI();
@@ -12,9 +14,27 @@ export class APIManager {
 
   get call() {
     return {
+      account: {
+        VerifyCredentials: async (): Promise<P.APIResp<I.User>> => {
+          const result = await this.api.call.account.VerifyCredentials();
+          if (result.data && this.mngAccount.selectUser) {
+            this.mngAccount.selectUser.user = result.data;
+          }
+          return result;
+        }
+      },
       statuses: {
-        TimeLine: async (data: P.ReqTimeLine) => {
-          this.api.call.statuses.TimeLine(data);
+        TimeLine: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
+          const result = await this.api.call.statuses.TimeLine({
+            count: '200',
+            tweet_mode: 'extended',
+            max_id: maxId,
+            since_id: sinceId
+          });
+          if (result.data) {
+            this.mngTweet.AddHome(result.data);
+          }
+          return result;
         }
       },
       oauth: {

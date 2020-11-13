@@ -15,4 +15,10 @@ export class TweetDataManager {
     this.favorites = [];
     this.opens = [];
   }
+
+  AddHome(list: I.Tweet[]) {
+    list.forEach(tweet => {
+      this.homes.push(tweet);
+    });
+  }
 }

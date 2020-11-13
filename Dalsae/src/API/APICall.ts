@@ -30,12 +30,16 @@ export default class TwitterAPI {
       const body = params && params.data ? oauth.CreateBody(params) : '';
       const reqUrl = oauth.GetUrl(params, method, url);
       const options = CreateOptions(method, body, oauth.GetHeader(params, method, url));
+      console.log('-------');
+      console.log(params);
       console.log(options);
       const resp = await fetch(reqUrl, options);
+      console.log(resp);
       if (!resp.ok) {
         throw new Error(resp.statusText);
       } else {
         const json = await resp.json();
+        console.log(json);
         return json;
       }
     } catch (e) {
@@ -104,7 +108,7 @@ export default class TwitterAPI {
   }
 
   async get<TReq, TResp>(url: string, params: P.APIReq<TReq>) {
-    return this.request<TReq, TResp>(url, 'GET', params);
+    return this.request<TReq, P.APIResp<TResp>>(url, 'GET', params);
   }
 
   async post<TReq, TResp>(url: string, params: P.APIReq<TReq>) {
@@ -113,6 +117,10 @@ export default class TwitterAPI {
 
   get call() {
     return {
+      account: {
+        VerifyCredentials: () =>
+          this.get<P.ReqUserInfo, I.User>(baseUrl + '/account/verify_credentials.json', {})
+      },
       statuses: {
         TimeLine: (data: P.ReqTimeLine) =>
           this.get<P.ReqTimeLine, I.Tweet[]>(baseUrl + '/statuses/home_timeline.json', {

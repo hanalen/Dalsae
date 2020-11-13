@@ -61,6 +61,8 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
+      this.api.call.account.VerifyCredentials();
+      this.api.call.statuses.TimeLine();
     } else {
       this.ShowPin();
     }
