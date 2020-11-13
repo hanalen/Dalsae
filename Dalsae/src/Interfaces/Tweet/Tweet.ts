@@ -18,6 +18,7 @@ export class Tweet {
   favorite_count!: number;
   favorited: boolean;
   retweeted: boolean;
+  source: string;
 
   constructor() {
     this.created_at = '';
@@ -26,18 +27,21 @@ export class Tweet {
     this.is_quote_status = false;
     this.favorited = false;
     this.retweeted = false;
+    this.source = '';
     this.entities = {
       hashtags: [],
       urls: [],
       user_mentions: [],
-      media: {
-        id_str: '',
-        media_url_https: '',
-        url: '',
-        display_url: '',
-        expanded_url: '',
-        type: ''
-      }
+      media: [
+        {
+          id_str: '',
+          media_url_https: '',
+          url: '',
+          display_url: '',
+          expanded_url: '',
+          type: ''
+        }
+      ]
     };
     this.extended_entities = { media: [] };
   }
