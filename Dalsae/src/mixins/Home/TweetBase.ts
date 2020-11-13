@@ -1,6 +1,8 @@
 import { Vue, Mixins, Component, Inject, Emit, Prop } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
+import moment from 'moment';
+
 class State {
   isSelected: boolean;
   isFocus: boolean;
@@ -23,6 +25,26 @@ export class TweetBase extends Mixins(Vue, MIX.DalsaePage) {
   get orgUser() {
     console.log('orgUser');
     return this.orgTweet.user;
+  }
+
+  get name() {
+    return this.orgUser.screen_name + ' / ' + this.orgUser.name;
+  }
+
+  get date() {
+    const locale = window.navigator.language;
+    moment.locale(locale);
+    const date = new Date(this.orgTweet.created_at);
+    return moment(date).format('LLLL') + ':' + moment(date).format('ss');
+  }
+
+  get via() {
+    let str = this.orgTweet.source;
+    str = str.substring(str.indexOf('>') + 1, 999);
+    str = str.substring(0, str.indexOf('<'));
+    return ` / ${str}`;
+    // source:"<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>"
+    // return 'aaa';
   }
 
   get tweetText() {

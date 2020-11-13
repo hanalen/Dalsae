@@ -6,8 +6,10 @@
     <div class="tweet-left">
       <propic :user="orgUser"></propic>
     </div>
-    <div class="tweet-right">
+    <div class="tweet-right" style="margin-left:4px;">
+      <span class="user-name">{{ name }}</span>
       <div v-html="tweetText"></div>
+      <span class="tweet-date">{{ date }}{{ via }}</span>
     </div>
   </div>
 </template>
@@ -23,6 +25,13 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+.user-name {
+  font-weight: bold;
+  white-space: nowrap;
+}
+.tweet-date {
+  color: hsla(0, 0, 20, 1);
 }
 </style>
 
