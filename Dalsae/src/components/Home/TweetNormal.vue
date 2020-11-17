@@ -11,6 +11,9 @@
       <div v-html="tweetText"></div>
       <span class="tweet-date">{{ date }}{{ via }}</span>
     </div>
+    <div class="img-preview">
+      <image-preview :media="media"></image-preview>
+    </div>
   </div>
 </template>
 

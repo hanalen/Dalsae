@@ -23,8 +23,11 @@ export class TweetBase extends Mixins(Vue, MIX.DalsaePage) {
   }
 
   get orgUser() {
-    console.log('orgUser');
     return this.orgTweet.user;
+  }
+
+  get media() {
+    return this.orgTweet.extended_entities?.media;
   }
 
   get name() {
@@ -43,22 +46,18 @@ export class TweetBase extends Mixins(Vue, MIX.DalsaePage) {
     str = str.substring(str.indexOf('>') + 1, 999);
     str = str.substring(0, str.indexOf('<'));
     return ` / ${str}`;
-    // source:"<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>"
-    // return 'aaa';
   }
 
   get tweetText() {
-    console.log('tweet text');
     let text = this.orgTweet.full_text;
     const entities = this.orgTweet.entities;
-    entities.media.forEach(item => {
+    entities.media?.forEach(item => {
       text = text.replace(item.url, item.display_url);
     });
     entities.urls?.forEach(url => {
       text = text.replace(url.url, url.display_url);
     });
     text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    console.log(text);
     return text;
   }
 }
