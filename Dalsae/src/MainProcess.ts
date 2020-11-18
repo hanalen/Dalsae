@@ -43,12 +43,14 @@ function createWindow() {
       // Use pluginOptions.`nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       webSecurity: false,
+      enableRemoteModule: true,
       preload: path.join(__dirname, 'preload')
     }
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
+    // win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL as string}Image`);
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
 
     if (!process.env.IS_TEST) {
