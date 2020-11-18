@@ -1,8 +1,20 @@
 /* eslint-disable @typescript-eslint/camelcase */
 <template>
-  <div class="home">
-    <tweet-panel></tweet-panel>
-  </div>
+  <v-app>
+    <message-modal ref="messageModal"> </message-modal>
+    <pin-modal ref="pinModal"></pin-modal>
+    <v-app-bar app max-height="90" height="90">
+      <top-selector> </top-selector>
+    </v-app-bar>
+    <v-main>
+      <v-container fluid>
+        <tweet-panel></tweet-panel>
+      </v-container>
+    </v-main>
+    <v-footer app fixed height="44" color="gray">
+      <bottom></bottom>
+    </v-footer>
+  </v-app>
 </template>
 
 <script lang="ts">
@@ -10,10 +22,10 @@ import { Vue, Component, Mixins } from 'vue-property-decorator';
 import { TweetDataManager } from '@/Managers/TweetDataMng';
 import * as I from '@/Interfaces';
 import TwitterAPI from '@/API/APICall';
-import { DalsaePage } from '@/mixins';
+import { DalsaePage, DalsaeApp } from '@/mixins';
 
 @Component
-export default class Home extends Mixins(DalsaePage) {
+export default class Home extends Mixins(DalsaeApp) {
   ClickLink(e: Event) {
     // const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
     // console.log(listTweet[this.index]);
