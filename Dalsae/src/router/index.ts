@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Home from '../views/Home.vue';
-import Image from '@/views/Dialogs/Image/ImageWindow.vue';
+import Image from '@/views/Image.vue';
 
 function register() {
   const files = require.context('../', true, /\.vue$/i);
