@@ -75,20 +75,20 @@ interface IpcParam {
 const listIpcParam: IpcParam[] = [];
 
 ipcMain.on('AddChannel', (event, arg: IpcParam) => {
-  Log.info('--------------');
-  Log.info('Add Channel, preload에서 호출');
+  // Log.info('--------------');
+  // Log.info('Add Channel, preload에서 호출');
   // Log.info(event);
-  Log.info(arg);
-  Log.info(arg.name);
-  Log.info(arg.value);
+  // Log.info(arg);
+  // Log.info(arg.name);
+  // Log.info(arg.value);
 
   listIpcParam.push(arg);
   ipcMain.once(arg.name, (event, arg2) => {
     //once는 한번 쏘고 삭제됨
-    Log.info('--------------');
-    Log.info('ipc dynamic on');
-    Log.info(arg.name);
-    Log.info(arg2);
+    // Log.info('--------------');
+    // Log.info('ipc dynamic on');
+    // Log.info(arg.name);
+    // Log.info(arg2);
     const ipc = listIpcParam.find(x => x.name === arg.name);
     Log.info(ipc);
     if (ipc) {
