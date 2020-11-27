@@ -33,9 +33,12 @@ export default class Image extends Mixins(MIX.ImagePage) {
     const id = this.$route.query.tweetId;
     console.log('id: ' + id);
     if (id) {
+      const option = window.preload.image.GetOption(id.toString());
+      this.option = option;
       const json = window.preload.image.GetTweet(id.toString());
       this.tweet = JSON.parse(json);
-      console.log(this.tweet)
+      console.log(this.tweet);
+      console.log(this.option);
     }
   }
 }

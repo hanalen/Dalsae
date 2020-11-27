@@ -23,7 +23,7 @@ export class ImagePreviewBase extends Mixins(Vue, MIX.DalsaePage) {
   Click(e: Event) {
     // console.log('click');
     this.state.isHover = this.state.isHover;
-    window.preload.image.OpenImageWindow(this.mngTweet.homes[0]);
+    window.preload.image.OpenImageWindow(this.mngTweet.homes[0], this.mngOption.uiOption);
     // window.preload.image.OpenImageWindow(this.mngTweet.homes[0]);
   }
   MouseOver(e: Event) {
