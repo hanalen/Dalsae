@@ -1,6 +1,26 @@
 <template>
-  <div class="image-view">
-    <tweet-image v-if="option.isShowTweet" :tweet="tweet" :option="option"></tweet-image>
+  <div class="video" v-if="Video.type != 'photo'">
+    <video
+      ref="video"
+      controls
+      autoplay
+      muted
+      loop
+      v-if="Video.video_info.variants[0].content_type == 'application/x-mpegURL'"
+    ></video>
+    <video
+      ref="video2"
+      controls
+      autoplay
+      muted
+      loop
+      v-if="Video.video_info.variants[0].content_type != 'application/x-mpegURL'"
+    >
+      <source
+        :src="Video.video_info.variants[0].url"
+        :type="Video.video_info.variants[0].content_type"
+      />
+    </video>
   </div>
 </template>
 
@@ -12,7 +32,7 @@ import TwitterAPI from '@/API/APICall';
 import * as MIX from '@/mixins';
 
 @Component
-export default class Image extends Mixins(MIX.ImagePage) {
+export default class VideoContent extends Mixins(MIX.VideoContentBase) {
   ClickLink(e: Event) {
     // const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
     // console.log(listTweet[this.index]);
@@ -27,18 +47,6 @@ export default class Image extends Mixins(MIX.ImagePage) {
     // await this.ShowMessage('modal test');
   }
 
-  async created() {
-    console.log('img window created');
-    const id = this.$route.query.tweetId;
-    console.log('id: ' + id);
-    if (id) {
-      const option = window.preload.image.GetOption(id.toString());
-      this.option = JSON.parse(option);
-      const json = window.preload.image.GetTweet(id.toString());
-      this.tweet = JSON.parse(json);
-      console.log(this.tweet);
-      console.log(this.option);
-    }
-  }
+  async created() {}
 }
 </script>
