@@ -1,4 +1,4 @@
-import { Vue, Mixins, Component, Inject, Emit, Prop } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Inject, Emit, Prop, Provide } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
 import moment from 'moment';
@@ -17,6 +17,11 @@ export class TweetBase extends Mixins(Vue, MIX.DalsaePage) {
   state: State = new State();
   @Prop()
   tweet!: I.Tweet;
+
+  @Provide()
+  OpenImage() {
+    window.preload.image.OpenImageWindow(this.tweet, this.mngOption.uiOption);
+  }
 
   get orgTweet() {
     return this.tweet.retweeted_status ? this.tweet.retweeted_status : this.tweet; //원본 트윗 저장
