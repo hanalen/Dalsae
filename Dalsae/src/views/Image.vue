@@ -34,7 +34,7 @@ export default class Image extends Mixins(MIX.ImagePage) {
     console.log('id: ' + id);
     if (id) {
       const option = window.preload.image.GetOption(id.toString());
-      this.option = option;
+      this.option = JSON.parse(option);
       const json = window.preload.image.GetTweet(id.toString());
       this.tweet = JSON.parse(json);
       console.log(this.tweet);
