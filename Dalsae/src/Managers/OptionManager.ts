@@ -6,7 +6,7 @@ export class OptionManager {
   hotKey!: I.Hotkey;
   constructor() {
     this.uiOption = {
-      isBigPropic: false,
+      isBigPropic: true,
       isLoadOrgImg: false,
       isMuteMention: true,
       isSendCheck: false,

@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/camelcase */
 <template>
   <div class="image-view">
     <span>이미지 뷰어</span>
+    <tweet-image v-if="tweet" :tweet="tweet" :option="option"></tweet-image>
   </div>
 </template>
 
@@ -10,19 +10,10 @@ import { Vue, Component, Mixins } from 'vue-property-decorator';
 import { TweetDataManager } from '@/Managers/TweetDataMng';
 import * as I from '@/Interfaces';
 import TwitterAPI from '@/API/APICall';
-import { DalsaePage } from '@/mixins';
-
-class State {
-  tweet!: I.Tweet;
-  download: number;
-  constructor() {
-    this.download = 0;
-  }
-}
+import * as MIX from '@/mixins';
 
 @Component
-export default class Image extends Vue {
-  state = new State();
+export default class Image extends Mixins(MIX.ImagePage) {
   ClickLink(e: Event) {
     // const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
     // console.log(listTweet[this.index]);
@@ -38,16 +29,14 @@ export default class Image extends Vue {
   }
 
   async created() {
-    // const value = window.preload.GetData(this.$route.query.userid);
-    this.$nextTick(() => {
-      console.log('img window created');
-      const id = this.$route.query.tweetId;
-      if (id) {
-        const json = window.preload.image.GetTweet(id.toString());
-        this.state.tweet = JSON.parse(json);
-      }
-      this.state.tweet = this.mngTweet.homes[0];
-    });
+    console.log('img window created');
+    const id = this.$route.query.tweetId;
+    console.log('id: ' + id);
+    if (id) {
+      const json = window.preload.image.GetTweet(id.toString());
+      this.tweet = JSON.parse(json);
+      console.log(this.tweet)
+    }
   }
 }
 </script>
