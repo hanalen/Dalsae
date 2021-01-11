@@ -1,24 +1,18 @@
 <template>
-  <div class="image-content">
-    <div v-if="Video.type == 'photo'" @mousewheel="MouseWheel">
-      <div class="arrow" v-if="tweet.orgTweet.extended_entities.media.length > 1 && !isZoom">
+  <div class="image-content" @mousewheel="MouseWheel">
+    <div>
+      <div class="arrow" v-if="media.length > 1 && !isZoom">
         <div class="left-button">
-          <i class="fas fa-chevron-left fa-2x" @click="Prev"></i>
+          <v-icon>mdi-chevron-left</v-icon>
         </div>
         <div class="right-button">
-          <i class="fas fa-chevron-right fa-2x" @click="Next"></i>
+          <v-icon>mdi-chevron-right</v-icon>
         </div>
       </div>
-      <div
-        ref="imgDiv"
-        v-show="i == index"
-        v-for="(image, i) in tweet.orgTweet.extended_entities.media"
-        :key="i"
-        class="img-div"
-      >
+      <div ref="imgDiv" v-show="i == index" v-for="(image, i) in media" :key="i" class="img-div">
         <img
           ref="img"
-          :src="ImgPath(image.media_url_https)"
+          :src="image.media_url_https"
           class="img-content"
           :class="{ zoom: isZoom }"
           :style="{
@@ -33,15 +27,9 @@
         />
       </div>
     </div>
-    <div class="bottom" v-if="Video.type == 'photo'">
-      <div
-        v-for="(image, i) in tweet.orgTweet.extended_entities.media"
-        @click="ChangeImage(i)"
-        :key="i"
-        class="img-preview"
-      >
+    <div class="bottom">
+      <div v-for="(image, i) in media" @click="ChangeImage(i)" :key="i" class="img-preview">
         <img :src="image.media_url_https" class="bottom-preview" />
-        <ProgressBar ref="progress" :percent="listProgressPercent[i]" />
       </div>
     </div>
   </div>
@@ -55,21 +43,5 @@ import TwitterAPI from '@/API/APICall';
 import * as MIX from '@/mixins';
 
 @Component
-export default class ImageContent extends Mixins(MIX.ImageContentBase) {
-  ClickLink(e: Event) {
-    // const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
-    // console.log(listTweet[this.index]);
-    // window.preload.image.OpenImageWindow(
-    //   listTweet[this.index].id_str.toString(),
-    //   listTweet[this.index]
-    // );
-    // this.index++;
-  }
-
-  async ClickModal() {
-    // await this.ShowMessage('modal test');
-  }
-
-  async created() {}
-}
+export default class ImageContent extends Mixins(MIX.ImageContentBase) {}
 </script>

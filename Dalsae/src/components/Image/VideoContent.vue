@@ -46,7 +46,5 @@ export default class VideoContent extends Mixins(MIX.VideoContentBase) {
   async ClickModal() {
     // await this.ShowMessage('modal test');
   }
-
-  async created() {}
 }
 </script>
