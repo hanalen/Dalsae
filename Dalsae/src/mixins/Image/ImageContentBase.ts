@@ -1,7 +1,25 @@
-import { Vue, Mixins, Component, Inject, Ref, Prop } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Inject, Ref, Prop, Provide } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
 import moment from 'moment';
+
+class State {
+  isZoom: boolean;
+  index: number;
+  left: number;
+  top: number;
+  maxHeight: number;
+  maxWidth: number;
+
+  constructor() {
+    this.isZoom = false;
+    this.index = 0;
+    this.left = 0;
+    this.top = 0;
+    this.maxHeight = 0;
+    this.maxWidth = 0;
+  }
+}
 
 @Component
 export class ImageContentBase extends Mixins(Vue) {
@@ -13,16 +31,23 @@ export class ImageContentBase extends Mixins(Vue) {
 
   @Ref()
   img!: HTMLImageElement[];
-  isZoom = false;
-  index = 0;
-  marginLeft = 0;
-  marginTop = 0;
-  maxWidth = 0;
-  maxHeight = 0;
+
+  state = new State();
+
+  @Provide()
+  PreviewClick(media: I.Media) {
+    console.log(media);
+    for (let i = 0; i < this.media.length; i++) {
+      if (media.media_url_https === this.media[i].media_url_https) {
+        this.state.index = i;
+        break;
+      }
+    }
+  }
 
   get isZoomAble() {
-    const div = this.imgDiv[this.index];
-    const img = this.img[this.index];
+    const div = this.imgDiv[this.state.index];
+    const img = this.img[this.state.index];
     if (div.clientHeight <= img.clientHeight || div.clientWidth <= img.clientWidth)
       ///img가 그림 배경보다 클 경우에만 zoom동작
       return true;
@@ -35,6 +60,14 @@ export class ImageContentBase extends Mixins(Vue) {
 
   get media() {
     return this.orgTweet.extended_entities.media;
+  }
+
+  get imgStyle() {
+    const state = this.state;
+    const width = state.maxWidth === 0 ? '100%' : `${state.maxWidth}px`;
+    const height = state.maxHeight === 0 ? '100%' : `${state.maxHeight}px`;
+    const str = `transform: translate(${state.left}px, ${state.top}px), max-width: ${width}, max-height: ${height}`;
+    return str;
   }
 
   MouseWheel(e: Event) {
