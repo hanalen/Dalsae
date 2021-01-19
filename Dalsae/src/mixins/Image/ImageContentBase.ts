@@ -5,7 +5,6 @@ import moment from 'moment';
 
 class State {
   isZoom: boolean;
-  index: number;
   left: number;
   top: number;
   maxHeight: number;
@@ -13,7 +12,6 @@ class State {
 
   constructor() {
     this.isZoom = false;
-    this.index = 0;
     this.left = 0;
     this.top = 0;
     this.maxHeight = 0;
@@ -26,6 +24,9 @@ export class ImageContentBase extends Mixins(Vue) {
   @Prop()
   tweet!: I.Tweet;
 
+  @Prop()
+  index!: number;
+
   @Ref()
   imgDiv!: HTMLElement[];
 
@@ -33,17 +34,6 @@ export class ImageContentBase extends Mixins(Vue) {
   img!: HTMLImageElement[];
 
   state = new State();
-
-  @Provide()
-  PreviewClick(media: I.Media) {
-    console.log(media);
-    for (let i = 0; i < this.media.length; i++) {
-      if (media.media_url_https === this.media[i].media_url_https) {
-        this.state.index = i;
-        break;
-      }
-    }
-  }
 
   get isZoomAble() {
     const div = this.imgDiv[this.state.index];

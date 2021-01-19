@@ -1,12 +1,34 @@
 <template>
   <!-- v-app으로 변경 v-app으로 바꾸면 트윗,이미지,보톰 사이즈 알아서 계산 해줌 -->
   <v-app>
-    <div class="image-view">
-      <tweet-image v-if="option.isShowTweet" :tweet="tweet" :option="option"></tweet-image>
-      <image-content :tweet="tweet"> </image-content>
-    </div>
+    <v-main app>
+      <v-container fluid>
+        <tweet-image v-if="option.isShowTweet" :tweet="tweet" :option="option"></tweet-image>
+      </v-container>
+      <v-container :id="main">
+        <image-content :tweet="tweet" :index="index"> </image-content>
+      </v-container>
+    </v-main>
+    <v-footer fixed height="120">
+      <div class="bottom">
+        <image-popup-preview v-for="(media, i) in media" :media="media" :key="i">
+        </image-popup-preview>
+      </div>
+    </v-footer>
   </v-app>
 </template>
+
+<style lang="scss" scoped>
+#main {
+  height: calc(100% - 120px) !important;
+}
+.bottom {
+  display: flex;
+}
+.v-toolbar__content {
+  align-items: baseline !important;
+}
+</style>
 
 <script lang="ts">
 import { Vue, Component, Mixins } from 'vue-property-decorator';

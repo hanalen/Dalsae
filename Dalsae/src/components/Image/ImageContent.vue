@@ -9,13 +9,7 @@
           <v-icon x-large>mdi-chevron-right</v-icon>
         </div>
       </div>
-      <div
-        ref="imgDiv"
-        v-show="i == state.index"
-        v-for="(image, i) in media"
-        :key="i"
-        class="img-div"
-      >
+      <div ref="imgDiv" v-show="i == index" v-for="(image, i) in media" :key="i" class="img-div">
         <img
           ref="img"
           :src="image.media_url_https"
@@ -29,13 +23,10 @@
         />
       </div>
     </div>
-    <div class="bottom">
+    <!-- <div class="bottom">
       <image-popup-preview v-for="(media, i) in media" :media="media" :key="i">
       </image-popup-preview>
-      <!-- <div v-for="(image, i) in media" @click="ChangeImage(i)" :key="i" class="img-preview">
-        <img :src="image.media_url_https" class="bottom-preview" />
-      </div> -->
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -47,8 +38,8 @@
   margin: auto;
 }
 .img-div {
-  height: calc(85vh - 140px);
   display: flex;
+  max-height: 100%;
   justify-content: center;
   align-items: center;
 }
@@ -75,9 +66,6 @@
 }
 .zoom {
   object-fit: cover;
-}
-.bottom {
-  display: flex;
 }
 </style>
 
