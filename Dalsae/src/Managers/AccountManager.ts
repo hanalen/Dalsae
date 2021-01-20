@@ -29,7 +29,7 @@ export class AccountManager {
   }
 
   get selectUser() {
-    if (this.switter?.selectUser.user_id !== '') {
+    if (this.switter?.selectUser.user_id) {
       return this.switter.selectUser;
     } else {
       return null;
