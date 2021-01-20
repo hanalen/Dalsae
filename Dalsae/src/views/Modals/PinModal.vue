@@ -53,6 +53,7 @@ export default class PinModal extends Mixins(DalsaePage, PinModalBase) {
   async ClickOk() {
     await this.GetAccessToken(this.pin);
     this.ModalClose();
+    this.StartDalsae();
   }
 
   async ClickClose() {

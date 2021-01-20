@@ -16,6 +16,9 @@ class State {
 export class PinModalBase extends mixins(Vue, DalsaePage) {
   state = new State();
 
+  @Inject()
+  StartDalsae!: () => void;
+
   async ShowModal() {
     this.mngAccount.Reset();
     this.state.isShow = true;
