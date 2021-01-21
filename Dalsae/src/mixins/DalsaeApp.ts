@@ -53,7 +53,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     window.preload.LoadConfig();
     const switter = window.preload.LoadSwitter();
     if (switter) {
-      this.mngAccount.switter;
+      this.mngAccount.switter = switter;
     }
     const option = window.preload.LoadOption();
     this.mngOption = option ? option : new M.OptionManager();
