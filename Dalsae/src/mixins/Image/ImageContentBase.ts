@@ -36,8 +36,8 @@ export class ImageContentBase extends Mixins(Vue) {
   state = new State();
 
   get isZoomAble() {
-    const div = this.imgDiv[this.state.index];
-    const img = this.img[this.state.index];
+    const div = this.imgDiv[this.index];
+    const img = this.img[this.index];
     if (div.clientHeight <= img.clientHeight || div.clientWidth <= img.clientWidth)
       ///img가 그림 배경보다 클 경우에만 zoom동작
       return true;
