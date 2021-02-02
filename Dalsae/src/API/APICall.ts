@@ -125,6 +125,10 @@ export default class TwitterAPI {
         TimeLine: (data: P.ReqTimeLine) =>
           this.get<P.ReqTimeLine, I.Tweet[]>(baseUrl + '/statuses/home_timeline.json', {
             data
+          }),
+          Mention: (data: P.ReqTimeLine)=>
+          this.get<P.ReqMention, I.Tweet[]>(baseUrl+'/statuses/mentions_timeline.json',{
+            data
           })
       },
       oauth: {

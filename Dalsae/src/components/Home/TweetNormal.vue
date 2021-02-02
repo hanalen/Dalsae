@@ -4,7 +4,7 @@
       <v-icon>mdi-plus-box-outline</v-icon>
     </div>
     <div class="tweet-left">
-      <propic :user="orgUser" :option="option"></propic>
+      <propic :user="orgUser" :option="mngOption.uiOption"></propic>
     </div>
     <div class="tweet-text" style="margin-left:4px;">
       <span class="user-name">{{ name }}</span>

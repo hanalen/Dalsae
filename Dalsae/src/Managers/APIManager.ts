@@ -35,6 +35,18 @@ export class APIManager {
             this.mngTweet.AddHome(result.data);
           }
           return result;
+        },
+        Mention: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>>=>{
+          const result = await this.api.call.statuses.Mention({
+            count: '200',
+            tweet_mode:'extended',
+            max_id:maxId,
+            since_id:sinceId
+          });
+          if(result.data){
+            this.mngTweet.AddMention(result.data)
+          }
+          return result;
         }
       },
       oauth: {
