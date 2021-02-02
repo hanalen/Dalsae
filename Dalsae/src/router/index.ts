@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Home from '../views/Home.vue';
-import Image from '@/views/Image.vue';
+import ImageView from '@/views/ImageView.vue';
 
 function register() {
   const files = require.context('../', true, /\.vue$/i);
@@ -27,9 +27,9 @@ export const routes: Array<RouteConfig> = [
   //   // props: true
   // },
   {
-    path: '/Image',
-    name: 'Image',
-    component: Image,
+    path: '/ImageView',
+    name: 'ImageView',
+    component: ImageView,
     props: route => ({ tweetId: route.params })
   },
   {

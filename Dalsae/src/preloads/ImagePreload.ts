@@ -16,7 +16,7 @@ export default class ImagePreload {
         preload: path.join(__dirname, 'preload')
       }
     });
-    window.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL as string}Image?tweetId=${ipcName}`);
+    window.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL as string}ImageView?tweetId=${ipcName}`);
     window.webContents.openDevTools();
     ipcRenderer.send('AddChannel', { name: `image_${ipcName}`, value: JSON.stringify(tweet) });
     ipcRenderer.send('AddChannel', { name: `option_${ipcName}`, value: JSON.stringify(option) });
