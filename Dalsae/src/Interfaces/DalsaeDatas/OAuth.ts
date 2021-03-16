@@ -62,13 +62,14 @@ export class OAuth {
 
   //data json의 key를 얻어야 함
   CreateBody<TReq>(params: P.APIReq<TReq> | undefined): string {
-    if (!params) return '';
+    if (!params || !params.data) return '';
 
     let str = '';
-    Object.entries(params) //params 오브젝트의 파라메터 이름, 값을 얻는 코드
+    console.log(Object.entries(params));
+    Object.entries(params.data) //params 오브젝트의 파라메터 이름, 값을 얻는 코드
       .sort()
       .forEach(([key, value]) => {
-        if (!value) str += `${key}=${this.CalcParamUri(value)}&`;
+        if (value) str += `${key}=${this.CalcParamUri(value)}&`;
       });
     str += '&';
     return str.substring(0, str.length - 1); //마지막& 지우기

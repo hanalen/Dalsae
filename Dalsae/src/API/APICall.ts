@@ -11,6 +11,7 @@ function CreateOptions(method: P.Method, body: string, authorization: string) {
       'Content-Type': 'application/x-www-form-urlencoded;encoding=utf-8',
       Authorization: authorization
     },
+    body: body ? body : null,
     method
   };
   return options;
