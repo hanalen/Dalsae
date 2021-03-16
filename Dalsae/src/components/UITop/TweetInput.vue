@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 <template>
-  <div class="tweet-input">
+  <div class="tweet-input" @drop="OnDrop">
     <!-- <textarea
       v-model="state.tweet"
       spellcheck="false"
@@ -26,6 +26,16 @@
       :spellcheck="false"
       height="44"
       v-on:paste="Paste"
+      v-model="state.tweet"
+      @keyup.esc="OnEsc"
+      @dragenter="OnDragEnter"
+      @keyup="selectionChange"
+      @click="selectionChange"
+      @focus="selectionChange"
+      @keydown.down="ArrowDown"
+      @keydown.up="ArrowUp"
+      @keydown.enter="EnterDown"
+      @keydown.esc="ClearInput"
     >
     </v-textarea>
     <div class="ui-top-right-bottom">
@@ -33,6 +43,7 @@
       <v-icon color="primary">mdi-plus-circle-outline</v-icon>
       <v-icon color="primary">mdi-plus-circle-outline</v-icon>
       <v-icon color="primary">mdi-plus-circle-outline</v-icon>
+      <img v-for="(item, i) in state.listImage" :src="item" :key="i" />
       <div></div>
     </div>
   </div>

@@ -16,24 +16,69 @@ class State {
 export class TweetInputBase extends mixins(Vue, DalsaePage) {
   state = new State();
 
-  selectionChange(e: Event) {
+  OnDrop(e: DragEvent) {
+    if (!e.dataTransfer) return;
+    if (this.state.listImage.length >= 4) {
+      //todo error message
+      //이미지 4개 초과 시 에러 메시지 출력
+      return;
+    }
+    const files = e.dataTransfer.items;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].kind == 'file') {
+        this.FileToString(files[i].getAsFile());
+      }
+    }
+  }
+
+  FileToString(file: File | null) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = e.target?.result as string;
+      for (let i = 0; i < this.state.listImage.length; i++) {
+        if (this.state.listImage[i] === img) {
+          //동일한 이미지 등록 시 스킵처리
+          return;
+        }
+      }
+      this.state.listImage.push(img);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  OnDragEnter(e: Event) {
     console.log(e);
+  }
+
+  OnDragEnd(e: Event) {
+    console.log(e);
+  }
+
+  OnEsc(e: Event) {
+    this.state.tweet = '';
+    this.state.listImage = [];
+  }
+
+  selectionChange(e: Event) {
+    // console.log(e);
   }
 
   ArrowDown(e: Event) {
-    console.log(e);
+    // console.log(e);
   }
 
   ArrowUp(e: Event) {
-    console.log(e);
+    // console.log(e);
   }
 
   EnterDown(e: Event) {
-    console.log(e);
+    // console.log(e);
+    this.api.call.statuses.Update(this.state.tweet);
   }
 
   ClearInput(e: Event) {
-    console.log(e);
+    // console.log(e);
   }
 
   Paste(e: Event) {
