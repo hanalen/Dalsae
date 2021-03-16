@@ -122,12 +122,16 @@ export default class TwitterAPI {
           this.get<P.ReqUserInfo, I.User>(baseUrl + '/account/verify_credentials.json', {})
       },
       statuses: {
+        Update: (data: P.ReqUpdate) =>
+          this.post<P.ReqUpdate, I.Tweet>(baseUrl + '/statuses/update.json', {
+            data
+          }),
         TimeLine: (data: P.ReqTimeLine) =>
           this.get<P.ReqTimeLine, I.Tweet[]>(baseUrl + '/statuses/home_timeline.json', {
             data
           }),
-          Mention: (data: P.ReqTimeLine)=>
-          this.get<P.ReqMention, I.Tweet[]>(baseUrl+'/statuses/mentions_timeline.json',{
+        Mention: (data: P.ReqTimeLine) =>
+          this.get<P.ReqMention, I.Tweet[]>(baseUrl + '/statuses/mentions_timeline.json', {
             data
           })
       },

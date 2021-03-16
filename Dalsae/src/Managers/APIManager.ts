@@ -24,6 +24,11 @@ export class APIManager {
         }
       },
       statuses: {
+        Update: async (tweet: string, image?: Blob[]): Promise<P.APIResp<I.Tweet>> => {
+          console.log(image);
+          const result = await this.api.call.statuses.Update({ status: tweet });
+          return result;
+        },
         TimeLine: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
           const result = await this.api.call.statuses.TimeLine({
             count: '200',
@@ -36,15 +41,15 @@ export class APIManager {
           }
           return result;
         },
-        Mention: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>>=>{
+        Mention: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
           const result = await this.api.call.statuses.Mention({
             count: '200',
-            tweet_mode:'extended',
-            max_id:maxId,
-            since_id:sinceId
+            tweet_mode: 'extended',
+            max_id: maxId,
+            since_id: sinceId
           });
-          if(result.data){
-            this.mngTweet.AddMention(result.data)
+          if (result.data) {
+            this.mngTweet.AddMention(result.data);
           }
           return result;
         }
