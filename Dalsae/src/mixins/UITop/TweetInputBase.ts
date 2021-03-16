@@ -18,11 +18,6 @@ export class TweetInputBase extends mixins(Vue, DalsaePage) {
 
   OnDrop(e: DragEvent) {
     if (!e.dataTransfer) return;
-    if (this.state.listImage.length >= 4) {
-      //todo error message
-      //이미지 4개 초과 시 에러 메시지 출력
-      return;
-    }
     const files = e.dataTransfer.items;
     for (let i = 0; i < files.length; i++) {
       if (files[i].kind == 'file') {
@@ -33,6 +28,11 @@ export class TweetInputBase extends mixins(Vue, DalsaePage) {
 
   FileToString(file: File | null) {
     if (!file) return;
+    if (this.state.listImage.length >= 4) {
+      //todo error message
+      //이미지 4개 초과 시 에러 메시지 출력
+      return;
+    }
     const reader = new FileReader();
     reader.onload = e => {
       const img = e.target?.result as string;
@@ -81,7 +81,13 @@ export class TweetInputBase extends mixins(Vue, DalsaePage) {
     // console.log(e);
   }
 
-  Paste(e: Event) {
-    console.log('paste');
+  Paste(e: ClipboardEvent) {
+    if (!e.clipboardData) return;
+    const files = e.clipboardData.items;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type === 'image/png') {
+        this.FileToString(files[i].getAsFile());
+      }
+    }
   }
 }
