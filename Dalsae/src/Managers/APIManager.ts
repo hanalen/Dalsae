@@ -45,7 +45,7 @@ export class APIManager {
             const loopCount = Math.ceil(media.length / 5242880);
             console.log('loop count: ' + loopCount);
             for (let i = 0; i < loopCount; i++) {
-              const chunk = media.substr(0 * 5242880, 5242880);
+              const chunk = media.substr(i * 5242880, 5242880);
               console.log('chun size: ' + chunk.length);
               const resp = await this.api.call.media.UploadAppend({
                 command: 'APPEND',
