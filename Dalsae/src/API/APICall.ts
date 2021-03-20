@@ -2,7 +2,7 @@
 import * as P from '@/Interfaces';
 import * as I from '@/Interfaces';
 import * as M from '@/Managers';
-
+import axios from 'axios';
 const baseUrl = 'https://api.twitter.com/1.1';
 
 function CreateOptions(
@@ -24,6 +24,13 @@ function CreateOptions(
   return options;
 }
 
+function CreateHeader(authorization: string, contentType?: string) {
+  return {
+    'Content-Type': contentType ? contentType : 'application/x-www-form-urlencoded;encoding=utf-8',
+    Authorization: authorization
+  };
+}
+
 export default class TwitterAPI {
   mngAccount!: M.AccountManager;
   async request<TReq, TResp>(
@@ -37,19 +44,14 @@ export default class TwitterAPI {
 
       const body = params && params.data ? oauth.CreateBody(params) : '';
       const reqUrl = oauth.GetUrl(params, method, url);
-      const options = CreateOptions(method, body, oauth.GetHeader(params, method, url));
-      console.log('-------');
-      console.log(params);
-      console.log(options);
-      const resp = await fetch(reqUrl, options);
+      const resp = await axios({
+        method: method,
+        url: reqUrl,
+        headers: CreateHeader(oauth.GetHeader(params, method, url)),
+        data: body
+      });
       console.log(resp);
-      if (!resp.ok) {
-        throw new Error(resp.statusText);
-      } else {
-        const json = await resp.json();
-        console.log(json);
-        return { data: json };
-      }
+      return { data: resp.data };
     } catch (e) {
       console.log('catch');
       console.log(e);
@@ -67,13 +69,16 @@ export default class TwitterAPI {
 
       const body = params && params.data ? oauth.CreateBody(params) : '';
       const reqUrl = oauth.GetUrl(params, 'POST', url);
-      const options = CreateOptions('POST', body, oauth.GetHeader(params, 'POST', url));
-      console.log(options);
-      const resp = await fetch(reqUrl, options);
-      if (!resp.ok) {
+      const resp = await axios({
+        method: 'POST',
+        url: reqUrl,
+        headers: CreateHeader(oauth.GetHeader(params, 'POST', url)),
+        data: body
+      });
+      if (!resp.data) {
         throw new Error(resp.statusText);
       } else {
-        const body = await resp.text();
+        const body = (await resp.data) as string;
         console.log(body);
 
         const pro = new Promise<P.APIResp<P.OAuthRes>>(resolve => {
@@ -131,29 +136,18 @@ export default class TwitterAPI {
         body.append('media_data', media);
       }
       const reqUrl = oauth.GetUrl(undefined, method, url);
-      console.log('header~!');
-      console.log(oauth.GetHeader(undefined, method, url));
-      const options = CreateOptions(
-        method,
-        body,
-        oauth.GetHeader(undefined, method, url),
-        'multipart/form-data'
-      );
-      console.log('-------');
-      console.log(body);
-      console.log(options);
-      const resp = await fetch(reqUrl, options);
+      // console.log('header~!');
+      // console.log(oauth.GetHeader(undefined, method, url));
+      // console.log('-------');
+      // console.log(body);
+      const resp = await axios({
+        method: 'POST',
+        url: reqUrl,
+        headers: CreateHeader(oauth.GetHeader(undefined, 'POST', url), 'multipart/form-data'),
+        data: body
+      });
       console.log(resp);
-      if (!resp.ok) {
-        console.log('media error!');
-        throw new Error(resp.statusText);
-      } else {
-        console.log('media ok!');
-        console.log(resp);
-        const json = await resp.json();
-        console.log(json);
-        return { data: json };
-      }
+      return { data: resp.data };
     } catch (e) {
       console.log('catch');
       console.log(e);
