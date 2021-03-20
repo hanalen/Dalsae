@@ -33,17 +33,10 @@ export class APIManager {
         Update: async (tweet: string, image: string[]): Promise<P.APIResp<I.Tweet>> => {
           let mediaStr = '';
           if (image) {
-            image.forEach(img => {
-              this.call.media
-                .Upload(img)
-                .then(data => {
-                  mediaStr += `${data.media_id_string},`;
-                })
-                .catch(err => {
-                  console.log('media err');
-                  console.log(err);
-                });
-            });
+            for (let i = 0; i < image.length; i++) {
+              const result = await this.call.media.Upload(image[i]);
+              mediaStr += `${result.media_id_string},`;
+            }
           }
           const result = await this.api.call.statuses.Update({
             status: tweet,

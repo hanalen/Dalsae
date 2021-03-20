@@ -74,7 +74,7 @@ export class TweetInputBase extends mixins(Vue, DalsaePage) {
 
   EnterDown(e: Event) {
     // console.log(e);
-    this.api.call.statuses.Update(this.state.tweet);
+    this.api.call.statuses.Update(this.state.tweet, this.state.listImage);
   }
 
   ClearInput(e: Event) {
