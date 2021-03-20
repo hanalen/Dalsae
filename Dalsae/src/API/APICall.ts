@@ -25,10 +25,17 @@ function CreateOptions(
 }
 
 function CreateHeader(authorization: string, contentType?: string) {
-  return {
+  const ret = {
     'Content-Type': contentType ? contentType : 'application/x-www-form-urlencoded;encoding=utf-8',
     Authorization: authorization
   };
+  console.log('header');
+  console.log(ret);
+  return ret;
+  // return {
+  //   'Content-Type': contentType ? contentType : 'application/x-www-form-urlencoded;encoding=utf-8',
+  //   Authorization: authorization
+  // };
 }
 
 export default class TwitterAPI {
@@ -123,27 +130,33 @@ export default class TwitterAPI {
   async media<TResp>(
     url: string,
     method: P.Method,
-    params: P.APIReq<P.ReqMedia>
+    params: P.APIReq<P.ReqMedia>,
+    contentType?: string
   ): Promise<P.APIResp<TResp>> {
     try {
       const oauth: I.OAuth = new I.OAuth();
       oauth.SetKey(this.mngAccount.publicKey, this.mngAccount.secretKey);
 
       const body = new FormData();
-      if (params.data) {
-        const media = params.data?.media.split(',')[1]; //data:image/png;base64, 이거 잘라야함
-        console.log(media);
-        body.append('media_data', media);
+      if (params.data?.media) {
+        body.append('media_data', params.data.media);
       }
-      const reqUrl = oauth.GetUrl(undefined, method, url);
-      // console.log('header~!');
-      // console.log(oauth.GetHeader(undefined, method, url));
-      // console.log('-------');
-      // console.log(body);
+      const reqUrl = oauth.GetUrl(params, 'GET', url);
+      const header = {
+        'Content-Type': contentType
+          ? contentType
+          : 'application/x-www-form-urlencoded;encoding=utf-8',
+        Authorization: oauth.GetHeader(params, 'POST', url)
+        // 'Content-Transfer-Encoding': 'base64'
+      };
+      // const header = CreateHeader(
+      //   oauth.GetHeader(contentType ? params : params, 'POST', url),
+      //   contentType
+      // );
       const resp = await axios({
         method: 'POST',
         url: reqUrl,
-        headers: CreateHeader(oauth.GetHeader(undefined, 'POST', url), 'multipart/form-data'),
+        headers: header,
         data: body
       });
       console.log(resp);
@@ -171,6 +184,39 @@ export default class TwitterAPI {
       },
       media: {
         Upload: (data: P.ReqMedia) => {
+          const ret = this.media<P.MediaResp>(
+            'https://upload.twitter.com/1.1/media/upload.json',
+            'POST',
+            { data: data },
+            'multipart/form-data'
+          );
+          return ret;
+        },
+        UploadInit: (data: P.ReqMedia) => {
+          const ret = this.post<P.ReqMedia, P.MediaResp>(
+            'https://upload.twitter.com/1.1/media/upload.json',
+            { data: data }
+          );
+          return ret;
+        },
+        UploadAppend: (data: P.ReqMedia) => {
+          const ret = this.media<P.MediaResp>(
+            'https://upload.twitter.com/1.1/media/upload.json',
+            'POST',
+            { data: data },
+            'multipart/form-data'
+          );
+          return ret;
+        },
+        UploadFinally: (data: P.ReqMedia) => {
+          const ret = this.media<P.MediaResp>(
+            'https://upload.twitter.com/1.1/media/upload.json',
+            'POST',
+            { data: data }
+          );
+          return ret;
+        },
+        UploadStatus: (data: P.ReqMedia) => {
           const ret = this.media<P.MediaResp>(
             'https://upload.twitter.com/1.1/media/upload.json',
             'POST',

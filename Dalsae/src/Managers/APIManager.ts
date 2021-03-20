@@ -24,9 +24,55 @@ export class APIManager {
         }
       },
       media: {
-        Upload: async (media: string): Promise<P.MediaResp> => {
-          const result = await this.api.call.media.Upload({ media: media });
-          return result.data;
+        Upload: async (media: string): Promise<P.MediaResp | undefined> => {
+          const split = media.split(','); //data:image/png;base64, 이거 잘라야함
+          const str = split[0];
+          const type = str.substring(5, str.indexOf(';'));
+          media = split[1];
+          // console.log(split);
+          // console.log(str);
+          // console.log(type);
+
+          if (media.length >= 5242880) {
+            console.log('------start upload-----');
+            const result = await this.api.call.media.UploadInit({
+              command: 'INIT',
+              total_bytes: media.length,
+              media_type: type,
+              media_category: 'tweet_gif'
+            });
+            console.log(result);
+            const loopCount = Math.ceil(media.length / 5242880);
+            console.log('loop count: ' + loopCount);
+            for (let i = 0; i < loopCount; i++) {
+              const chunk = media.substr(0 * 5242880, 5242880);
+              console.log('chun size: ' + chunk.length);
+              const resp = await this.api.call.media.UploadAppend({
+                command: 'APPEND',
+                media: chunk,
+                media_id: result.data.media_id_string,
+                segment_index: i
+              });
+              console.log(resp);
+            }
+            const resFinal = await this.api.call.media.UploadFinally({
+              command: 'FINALIZE',
+              media_id: result.data.media_id_string
+            });
+            const resStatus = await this.api.call.media.UploadStatus({
+              command: 'STATUS',
+              media_id: result.data.media_id_string
+            });
+            console.log(resFinal);
+            console.log(resStatus);
+            return result.data;
+          } else {
+            const result = await this.api.call.media.Upload({
+              media: media
+              // media_category: 'tweet_image'
+            });
+            return result.data;
+          }
         }
       },
       statuses: {
@@ -35,8 +81,9 @@ export class APIManager {
           if (image) {
             for (let i = 0; i < image.length; i++) {
               const result = await this.call.media.Upload(image[i]);
-              mediaStr += `${result.media_id_string},`;
+              mediaStr += `${result?.media_id_string},`;
             }
+            mediaStr = mediaStr.substring(0, mediaStr.length - 1);
           }
           const result = await this.api.call.statuses.Update({
             status: tweet,

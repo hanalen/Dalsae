@@ -42,6 +42,11 @@ export class OAuth {
     return ret;
   }
 
+  isCalcKey(key: string) {
+    //oauth계산에 써야되는 값인지 체크
+    return key.indexOf('secret') === -1 && key !== 'media' && key !== 'media_data';
+  }
+
   CalcParamUri(text: string): string {
     let str = '';
     const limit = 100;
@@ -65,11 +70,11 @@ export class OAuth {
     if (!params || !params.data) return '';
 
     let str = '';
-    console.log(Object.entries(params));
+    // console.log(Object.entries(params));
     Object.entries(params.data) //params 오브젝트의 파라메터 이름, 값을 얻는 코드
       .sort()
       .forEach(([key, value]) => {
-        if (value) str += `${key}=${this.CalcParamUri(value)}&`;
+        if (value || value === 0) str += `${key}=${this.CalcParamUri(value)}&`;
       });
     str += '&';
     return str.substring(0, str.length - 1); //마지막& 지우기
@@ -84,8 +89,9 @@ export class OAuth {
         Object.entries(params.data) //params 오브젝트의 파라메터 이름, 값을 얻는 코드
           .sort()
           .forEach(([key, value]) => {
-            console.log('key: ' + key + 'value: ' + value);
-            if (value) str += `${key}=${encodeURIComponent(value)}&`;
+            // console.log('key: ' + key + 'value: ' + value);
+            if ((value || value === 0) && this.isCalcKey(key))
+              str += `${key}=${encodeURIComponent(value)}&`;
           });
         return str.substring(0, str.length - 1); //마지막& 지우기
       } else {
@@ -102,7 +108,7 @@ export class OAuth {
     let str = 'OAuth ';
     Object.entries(parseObj) //params 오브젝트의 파라메터 이름, 값을 얻는 코드
       .forEach(([key, value]) => {
-        if (value && key.indexOf('secret') === -1) {
+        if ((value || value === 0) && this.isCalcKey(key)) {
           str += `${key}="${this.CalcParamUri(value)}",`;
         }
       });
@@ -136,7 +142,7 @@ export class OAuth {
     Object.entries(parseObj) //params 오브젝트의 파라메터 이름, 값을 얻는 코드
       .sort()
       .forEach(([key, value]) => {
-        if (value && key.indexOf('secret') === -1) {
+        if ((value || value === 0) && this.isCalcKey(key)) {
           str += `${key}=${this.CalcParamUri(value)}&`;
         }
       });
