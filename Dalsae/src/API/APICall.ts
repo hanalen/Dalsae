@@ -5,10 +5,17 @@ import * as M from '@/Managers';
 
 const baseUrl = 'https://api.twitter.com/1.1';
 
-function CreateOptions(method: P.Method, body: string, authorization: string) {
+function CreateOptions(
+  method: P.Method,
+  body: string | FormData,
+  authorization: string,
+  contentType?: string
+) {
   const options: RequestInit = {
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;encoding=utf-8',
+      'Content-Type': contentType
+        ? contentType
+        : 'application/x-www-form-urlencoded;encoding=utf-8',
       Authorization: authorization
     },
     body: body ? body : null,
@@ -108,6 +115,52 @@ export default class TwitterAPI {
     }
   }
 
+  async media<TResp>(
+    url: string,
+    method: P.Method,
+    params: P.APIReq<P.ReqMedia>
+  ): Promise<P.APIResp<TResp>> {
+    try {
+      const oauth: I.OAuth = new I.OAuth();
+      oauth.SetKey(this.mngAccount.publicKey, this.mngAccount.secretKey);
+
+      const body = new FormData();
+      if (params.data) {
+        const media = params.data?.media.split(',')[1]; //data:image/png;base64, 이거 잘라야함
+        console.log(media);
+        body.append('media_data', media);
+      }
+      const reqUrl = oauth.GetUrl(undefined, method, url);
+      console.log('header~!');
+      console.log(oauth.GetHeader(undefined, method, url));
+      const options = CreateOptions(
+        method,
+        body,
+        oauth.GetHeader(undefined, method, url),
+        'multipart/form-data'
+      );
+      console.log('-------');
+      console.log(body);
+      console.log(options);
+      const resp = await fetch(reqUrl, options);
+      console.log(resp);
+      if (!resp.ok) {
+        console.log('media error!');
+        throw new Error(resp.statusText);
+      } else {
+        console.log('media ok!');
+        console.log(resp);
+        const json = await resp.json();
+        console.log(json);
+        return { data: json };
+      }
+    } catch (e) {
+      console.log('catch');
+      console.log(e);
+      return e;
+    }
+  }
+
   async get<TReq, TResp>(url: string, params: P.APIReq<TReq>) {
     return this.request<TReq, TResp>(url, 'GET', params);
   }
@@ -121,6 +174,16 @@ export default class TwitterAPI {
       account: {
         VerifyCredentials: () =>
           this.get<P.ReqUserInfo, I.User>(baseUrl + '/account/verify_credentials.json', {})
+      },
+      media: {
+        Upload: (data: P.ReqMedia) => {
+          const ret = this.media<P.MediaResp>(
+            'https://upload.twitter.com/1.1/media/upload.json',
+            'POST',
+            { data: data }
+          );
+          return ret;
+        }
       },
       statuses: {
         Update: (data: P.ReqUpdate) =>

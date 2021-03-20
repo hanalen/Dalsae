@@ -23,10 +23,32 @@ export class APIManager {
           return result;
         }
       },
+      media: {
+        Upload: async (media: string): Promise<P.MediaResp> => {
+          const result = await this.api.call.media.Upload({ media: media });
+          return result.data;
+        }
+      },
       statuses: {
-        Update: async (tweet: string, image?: Blob[]): Promise<P.APIResp<I.Tweet>> => {
-          console.log(image);
-          const result = await this.api.call.statuses.Update({ status: tweet });
+        Update: async (tweet: string, image: string[]): Promise<P.APIResp<I.Tweet>> => {
+          let mediaStr = '';
+          if (image) {
+            image.forEach(img => {
+              this.call.media
+                .Upload(img)
+                .then(data => {
+                  mediaStr += `${data.media_id_string},`;
+                })
+                .catch(err => {
+                  console.log('media err');
+                  console.log(err);
+                });
+            });
+          }
+          const result = await this.api.call.statuses.Update({
+            status: tweet,
+            media_ids: mediaStr
+          });
           return result;
         },
         TimeLine: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
