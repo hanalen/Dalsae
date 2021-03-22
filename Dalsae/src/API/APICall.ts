@@ -147,8 +147,8 @@ export default class TwitterAPI {
         'Content-Type': contentType
           ? contentType
           : 'application/x-www-form-urlencoded;encoding=utf-8',
-        Authorization: oauth.GetHeader(params, 'POST', url),
-        'Content-Transfer-Encoding': 'base64'
+        Authorization: oauth.GetHeader(params, 'POST', url)
+        // 'Content-Transfer-Encoding': 'base64'
       };
       // const header = CreateHeader(
       //   oauth.GetHeader(contentType ? params : params, 'POST', url),

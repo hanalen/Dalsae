@@ -27,13 +27,11 @@ export class APIManager {
         Upload: async (media: string): Promise<P.MediaResp | undefined> => {
           const split = media.split(','); //data:image/png;base64, 이거 잘라야함
           const str = split[0];
-          const type = str.substring(5, str.indexOf(';'));
           media = split[1];
-          // console.log(split);
-          // console.log(str);
-          // console.log(type);
-
+          const type = str.substring(5, str.indexOf(';'));
           if (media.length >= 5242880) {
+            //이미지 전송 방식: base64 to binary -> 자르기 -> binary 자른 데이터 to base64 전송
+            media = atob(split[1]);
             console.log('------start upload-----');
             const result = await this.api.call.media.UploadInit({
               command: 'INIT',
@@ -49,7 +47,7 @@ export class APIManager {
               console.log('chun size: ' + chunk.length);
               const resp = await this.api.call.media.UploadAppend({
                 command: 'APPEND',
-                media: chunk,
+                media: btoa(chunk),
                 media_id: result.data.media_id_string,
                 segment_index: i
               });
