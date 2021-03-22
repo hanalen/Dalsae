@@ -43,14 +43,15 @@ export default class TwitterAPI {
   async request<TReq, TResp>(
     url: string,
     method: P.Method,
+    isQueryParam: boolean,
     params?: P.APIReq<TReq>
   ): Promise<P.APIResp<TResp>> {
     try {
       const oauth: I.OAuth = new I.OAuth();
       oauth.SetKey(this.mngAccount.publicKey, this.mngAccount.secretKey);
 
-      const body = params && params.data ? oauth.CreateBody(params) : '';
-      const reqUrl = oauth.GetUrl(params, method, url);
+      const body = params && params.data && !isQueryParam ? oauth.CreateBody(params) : '';
+      const reqUrl = oauth.GetUrl(params, url, isQueryParam);
       const resp = await axios({
         method: method,
         url: reqUrl,
@@ -75,7 +76,7 @@ export default class TwitterAPI {
       );
 
       const body = params && params.data ? oauth.CreateBody(params) : '';
-      const reqUrl = oauth.GetUrl(params, 'POST', url);
+      const reqUrl = oauth.GetUrl(params, url, false);
       const resp = await axios({
         method: 'POST',
         url: reqUrl,
@@ -141,13 +142,13 @@ export default class TwitterAPI {
       if (params.data?.media) {
         body.append('media_data', params.data.media);
       }
-      const reqUrl = oauth.GetUrl(params, 'GET', url);
+      const reqUrl = oauth.GetUrl(params, url, true);
       const header = {
         'Content-Type': contentType
           ? contentType
           : 'application/x-www-form-urlencoded;encoding=utf-8',
-        Authorization: oauth.GetHeader(params, 'POST', url)
-        // 'Content-Transfer-Encoding': 'base64'
+        Authorization: oauth.GetHeader(params, 'POST', url),
+        'Content-Transfer-Encoding': 'base64'
       };
       // const header = CreateHeader(
       //   oauth.GetHeader(contentType ? params : params, 'POST', url),
@@ -168,12 +169,12 @@ export default class TwitterAPI {
     }
   }
 
-  async get<TReq, TResp>(url: string, params: P.APIReq<TReq>) {
-    return this.request<TReq, TResp>(url, 'GET', params);
+  async get<TReq, TResp>(url: string, params: P.APIReq<TReq>, isQueryParam = true) {
+    return this.request<TReq, TResp>(url, 'GET', isQueryParam, params);
   }
 
-  async post<TReq, TResp>(url: string, params: P.APIReq<TReq>) {
-    return this.request<TReq, TResp>(url, 'POST', params);
+  async post<TReq, TResp>(url: string, params: P.APIReq<TReq>, isQueryParam = false) {
+    return this.request<TReq, TResp>(url, 'POST', isQueryParam, params);
   }
 
   get call() {
@@ -195,7 +196,8 @@ export default class TwitterAPI {
         UploadInit: (data: P.ReqMedia) => {
           const ret = this.post<P.ReqMedia, P.MediaResp>(
             'https://upload.twitter.com/1.1/media/upload.json',
-            { data: data }
+            { data: data },
+            true
           );
           return ret;
         },

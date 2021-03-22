@@ -80,10 +80,10 @@ export class OAuth {
     return str.substring(0, str.length - 1); //마지막& 지우기
   }
 
-  GetUrl<TReq>(params: P.APIReq<TReq> | undefined, method: P.Method, url: string): string {
-    if (method == 'POST') {
+  GetUrl<TReq>(params: P.APIReq<TReq> | undefined, url: string, isQueryParam: boolean): string {
+    if (!isQueryParam) {
       return url;
-    } else if (method == 'GET') {
+    } else {
       if (params?.data) {
         let str = url + '?';
         Object.entries(params.data) //params 오브젝트의 파라메터 이름, 값을 얻는 코드
