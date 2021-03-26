@@ -30,7 +30,7 @@ export class ErrorManager {
   APIError(e: I.ResponseTwitterError) {
     console.log(e);
     let message = '';
-    if (!e.errors && e.errors) return;
+    if (!e.errors || e.errors.length < 1) return;
     switch (e.errors[0].code) {
       case 34:
         message = '해당 유저는 없습니다.';

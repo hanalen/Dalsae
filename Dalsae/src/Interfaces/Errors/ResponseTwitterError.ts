@@ -1,4 +1,4 @@
 import * as I from './TwitterError';
-export interface ResponseTwitterError {
-  errors: I.TwitterError[];
+export class ResponseTwitterError {
+  errors?: I.TwitterError[];
 }
