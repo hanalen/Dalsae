@@ -7,3 +7,4 @@ export * from './DalsaeDatas';
 export * from './Packets';
 export * from './OAuthRes';
 export * from './Media';
+export * from './Errors';
