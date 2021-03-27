@@ -78,6 +78,18 @@ export class AccountManager {
       screen_name: ''
     };
   }
+
+  UpdateUserInfo(user: I.User) {
+    if (!user) return;
+    if (this.switter.selectUser.user_id === user.id_str) {
+      this.switter.selectUser.user = user;
+    }
+    this.switter.listUser?.forEach(item => {
+      if (item.user?.id_str === user.id_str) {
+        item.user = user;
+      }
+    });
+  }
 }
 // const AccountMng = new AccountManager();
 // export { AccountMng };

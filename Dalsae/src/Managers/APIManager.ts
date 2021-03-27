@@ -17,8 +17,8 @@ export class APIManager {
       account: {
         VerifyCredentials: async (): Promise<P.APIResp<I.User>> => {
           const result = await this.api.call.account.VerifyCredentials();
-          if (result.data && this.mngAccount.selectUser) {
-            this.mngAccount.selectUser.user = result.data;
+          if (result.data) {
+            this.mngAccount.UpdateUserInfo(result.data);
           }
           return result;
         }
