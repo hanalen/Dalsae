@@ -2,6 +2,7 @@
 import * as P from '@/Interfaces';
 import * as I from '@/Interfaces';
 import * as M from '@/Managers';
+import { ErrorManager } from '@/Managers';
 import axios from 'axios';
 const baseUrl = 'https://api.twitter.com/1.1';
 
@@ -63,6 +64,11 @@ export default class TwitterAPI {
     } catch (e) {
       console.log('catch');
       console.log(e);
+      if (e instanceof I.ResponseTwitterError) {
+        ErrorManager.instence().APIError(e);
+      } else {
+        ErrorManager.instence().Error(e);
+      }
       return e;
     }
   }
@@ -124,6 +130,11 @@ export default class TwitterAPI {
     } catch (e) {
       console.log('catch');
       console.log(e);
+      if (e instanceof I.ResponseTwitterError) {
+        ErrorManager.instence().APIError(e);
+      } else {
+        ErrorManager.instence().Error(e);
+      }
       return e;
     }
   }
@@ -165,6 +176,11 @@ export default class TwitterAPI {
     } catch (e) {
       console.log('catch');
       console.log(e);
+      if (e instanceof I.ResponseTwitterError) {
+        ErrorManager.instence().APIError(e);
+      } else {
+        ErrorManager.instence().Error(e);
+      }
       return e;
     }
   }
