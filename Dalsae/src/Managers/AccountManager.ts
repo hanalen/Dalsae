@@ -9,23 +9,10 @@ export class AccountManager {
   tempUser!: I.DalsaeUser; //사용자 등록 시 사용하는 변수
   oauth = new I.OAuth();
   constructor() {
-    // this.tweetMng = new M.TweetDataManager();
     this.switter = {
-      selectUser: {
-        user_id: '',
-        name: '',
-        oauth_token: '',
-        screen_name: '',
-        oauth_token_secret: ''
-      }
+      selectUser: new I.DalsaeUser()
     };
-    this.tempUser = {
-      name: '',
-      oauth_token: '',
-      oauth_token_secret: '',
-      screen_name: '',
-      user_id: ''
-    };
+    this.tempUser = new I.DalsaeUser();
   }
 
   get selectUser() {
@@ -49,34 +36,23 @@ export class AccountManager {
     if (user) {
       this.switter.selectUser = user;
     } else {
-      this.switter.selectUser = {
-        oauth_token: publicKey,
-        oauth_token_secret: secretKey,
-        user_id: userId,
-        name: name,
-        screen_name: screenName
-      };
+      const selUser = this.switter.selectUser;
+      selUser.oauth_token = publicKey;
+      selUser.oauth_token_secret = secretKey;
+      selUser.name = name;
+      selUser.screen_name = screenName;
+      selUser.user_id = userId;
     }
   }
 
   SetKey(publicKey: string, secretKey: string) {
-    this.tempUser = {
-      name: '',
-      oauth_token: publicKey,
-      oauth_token_secret: secretKey,
-      user_id: '',
-      screen_name: ''
-    };
+    this.tempUser = new I.DalsaeUser();
+    this.tempUser.oauth_token = publicKey;
+    this.tempUser.oauth_token_secret = secretKey;
   }
 
   Reset() {
-    this.tempUser = {
-      name: '',
-      oauth_token: '',
-      oauth_token_secret: '',
-      user_id: '',
-      screen_name: ''
-    };
+    this.tempUser = new I.DalsaeUser();
   }
 
   UpdateUserInfo(user: I.User) {
@@ -91,5 +67,3 @@ export class AccountManager {
     });
   }
 }
-// const AccountMng = new AccountManager();
-// export { AccountMng };

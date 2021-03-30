@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import * as I from '@/Interfaces';
 
-export interface User {
+export class User {
   name: string;
   id_str: string;
   screen_name: string;
   location: string;
   description: string;
-  url: I.Url;
+  url?: I.Url;
   protected: boolean;
   followers_count: number; //팔로워 수
   friends_count: number; //팔로잉 수
@@ -30,4 +31,34 @@ export interface User {
   default_profile_image: boolean;
   following: boolean;
   follow_request_sent: boolean;
+  constructor() {
+    this.created_at = '';
+    this.default_profile = false;
+    this.default_profile_image = false;
+    this.description = '';
+    this.favourites_count = 0;
+    this.follow_request_sent = false;
+    this.followers_count = 0;
+    this.following = false;
+    this.friends_count = 0;
+    this.has_extended_profile = false;
+    this.id_str = '';
+    this.listed_count = 0;
+    this.location = '';
+    this.name = '';
+    this.profile_background_color = '';
+    this.profile_background_image_url = '';
+    this.profile_background_image_url_https = '';
+    this.profile_background_tile = false;
+    this.profile_banner_url = '';
+    this.profile_image_url = '';
+    this.profile_image_url_https = '';
+    this.profile_link_color = '';
+    this.profile_sidebar_border_color = '';
+    this.profile_sidebar_fill_color = '';
+    this.protected = false;
+    this.screen_name = '';
+    this.statuses_count = 0;
+    this.verified = false;
+  }
 }
