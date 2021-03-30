@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 <template>
   <div class="ui-top-big">
-    <div class="ui-top-left">
-      <img class="propic" :src="propic" :class="propicClass" v-if="isShowPropic" />
+    <div class="ui-top-left" v-if="isShowPropic">
+      <img class="propic" :src="propicPath" :class="propicClass" />
     </div>
     <div class="ui-top-right">
       <tweet-input></tweet-input>

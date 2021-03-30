@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { mixins } from 'vue-class-component';
-import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
+import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
 import { DalsaePage } from '@/mixins';
 import * as M from '@/Managers';
+import * as I from '@/Interfaces';
 
 class State {
   tweet: string;
@@ -15,12 +17,17 @@ class State {
 @Component
 export class UITopBase extends mixins(Vue, DalsaePage) {
   state = new State();
-  get propic() {
-    return 'https://pbs.twimg.com/profile_images/782880157786791936/TTJ7Fo5c_400x400.jpg';
-    const option = this.mngOption.uiOption;
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    const url = this.mngAccount.selectUser?.user?.profile_image_url_https;
-    return option.isBigPropic ? url?.replace('_normal', '_bigger') : url;
+  user = this.mngAccount.switter.selectUser;
+  propicPath = '';
+  option = this.mngOption.uiOption;
+
+  @Watch('user', { immediate: true, deep: true })
+  OnUserChanged(user: I.DalsaeUser) {
+    if (!user || !user.user) this.propicPath = '';
+    else
+      this.propicPath = this.option.isBigPropic
+        ? user.user.profile_image_url_https.replace('_normal', '_bigger')
+        : user.user.profile_image_url_https;
   }
 
   get isShowPropic() {
