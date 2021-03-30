@@ -1,7 +1,7 @@
 <template>
   <div class="ui-bottom">
     <v-btn icon rounded @click="ClickOption">
-      <v-icon color="primary">mdi-menu</v-icon>
+      <v-icon>mdi-menu</v-icon>
     </v-btn>
     <v-btn icon rounded v-for="(item, i) in listIcons" :key="i" @click="ClickMenu(item.value)">
       <v-icon :color="item.value === tweetPanel.state.selectMenu ? 'primary' : 'secondary'">{{
