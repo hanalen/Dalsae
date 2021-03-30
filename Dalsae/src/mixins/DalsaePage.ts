@@ -79,4 +79,10 @@ export class DalsaePage extends Vue implements I.DalsaePageBase {
 
   @Inject()
   ShowPin!: () => void;
+
+  @Inject()
+  ShowOptionModal!: () => void;
+
+  @Inject()
+  isShowOptionModal!: boolean;
 }

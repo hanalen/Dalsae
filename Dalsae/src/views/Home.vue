@@ -7,6 +7,9 @@
       <top-selector> </top-selector>
     </v-app-bar>
     <v-main>
+      <v-navigation-drawer v-model="isShowOptionModal" absolute temporary>
+        <option-modal></option-modal>
+      </v-navigation-drawer>
       <v-container fluid>
         <tweet-panel></tweet-panel>
       </v-container>

@@ -49,6 +49,7 @@ export default class Bottom extends Mixins(DalsaePage) {
 
   async ClickOption() {
     console.log('click option');
+    this.ShowOptionModal();
   }
 
   async ClickMenu(menu: number) {

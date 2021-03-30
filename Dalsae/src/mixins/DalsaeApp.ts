@@ -96,4 +96,13 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     if (!this.pinModal) return;
     this.pinModal.ShowModal();
   }
+
+  @Provide()
+  isShowOptionModal = false;
+
+  @Provide()
+  async ShowOptionModal() {
+    this.isShowOptionModal = !this.isShowOptionModal;
+    console.log(this.isShowOptionModal);
+  }
 }

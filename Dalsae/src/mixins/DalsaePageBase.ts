@@ -5,10 +5,12 @@ export interface DalsaePageBase {
   ShowConfirm: (msg: string) => Promise<boolean>;
   ShowMessage: (msg: string) => void;
   ShowPin: () => void;
+  ShowOptionModal: () => void;
 
   mngAccount: M.AccountManager;
   mngTweet: M.TweetDataManager;
   mngOption: M.OptionManager;
   tweetPanel: MIX.TweetPanelBase;
+  isShowOptionModal: boolean;
   api: M.APIManager;
 }
