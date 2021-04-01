@@ -10,7 +10,8 @@ export class AccountManager {
   oauth = new I.OAuth();
   constructor() {
     this.switter = {
-      selectUser: new I.DalsaeUser()
+      selectUser: new I.DalsaeUser(),
+      listUser: []
     };
     this.tempUser = new I.DalsaeUser();
   }
@@ -42,6 +43,7 @@ export class AccountManager {
       selUser.name = name;
       selUser.screen_name = screenName;
       selUser.user_id = userId;
+      this.switter.listUser?.push(selUser);
     }
   }
 
