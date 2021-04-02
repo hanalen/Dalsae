@@ -8,13 +8,11 @@ export class OptionManager {
     this.uiOption = {
       isBigPropic: true,
       isLoadOrgImg: false,
-      isMuteMention: true,
       isSendCheck: false,
       isSendEnter: true,
       isSendRTCheck: true,
       isSendRTProtected: true,
       isShowBottomPreview: true,
-      isShowMute: false,
       isShowPreview: true,
       isShowPropic: true,
       isShowTweet: true,
@@ -26,7 +24,9 @@ export class OptionManager {
       highlight: [],
       keyword: [],
       tweet: [],
-      user: []
+      user: [],
+      isMuteMention: true,
+      isShowMute: true
     };
     this.hotKey = new I.Hotkey();
   }
