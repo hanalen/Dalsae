@@ -15,9 +15,6 @@ export interface UIOption {
   isShowTweet: boolean; //이미지 뷰어 트윗 표시
   isShowBottomPreview: boolean; //이미지 뷰어 하단 미리보기 표시
   isLoadOrgImg: boolean; //이미지 뷰어 원본 불러오기
-
-  isMuteMention: boolean; //멘션함도 뮤트
-  isShowMute: boolean; //뮤트된 트윗 우선 표시 여부
 }
 
 export interface Key {
@@ -88,4 +85,6 @@ export interface MuteOption {
   keyword: string[];
   tweet: string[];
   highlight: string[];
+  isMuteMention: boolean; //멘션함도 뮤트
+  isShowMute: boolean; //뮤트된 트윗 우선 표시 여부
 }
