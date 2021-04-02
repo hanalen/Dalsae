@@ -23,6 +23,9 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Ref()
   pinModal!: MIX.PinModalBase;
 
+  @Ref()
+  optionDetailModal!: MIX.OptionDetailModalBase;
+
   @Provide()
   tweetPanel = new MIX.TweetPanelBase();
 
@@ -61,7 +64,6 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
 
   OnOptionChange() {
     if (this.isShowOptionModal) return; //open할때
-    console.log(this.mngOption);
     window.preload.SaveOption(this.mngOption);
   }
 
@@ -101,6 +103,11 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     console.log('showpin');
     if (!this.pinModal) return;
     this.pinModal.ShowModal();
+  }
+
+  @Provide()
+  async ShowOptionDetailModal() {
+    this.optionDetailModal.ShowModal();
   }
 
   @Provide()

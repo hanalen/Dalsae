@@ -3,6 +3,7 @@
   <v-app>
     <message-modal ref="messageModal"> </message-modal>
     <pin-modal ref="pinModal"></pin-modal>
+    <option-detail-modal ref="optionDetailModal"></option-detail-modal>
     <v-app-bar app max-height="90" height="90">
       <top-selector> </top-selector>
     </v-app-bar>

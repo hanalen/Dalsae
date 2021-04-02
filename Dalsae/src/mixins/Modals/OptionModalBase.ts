@@ -17,14 +17,20 @@ class State {
 @Component
 export class OptionModalBase extends mixins(Vue, DalsaePage) {
   state: State = new State();
-  // isShow = false;
 
   OnClickAddAccount(e: MouseEvent) {
     console.log(e);
+    this.ShowOptionModal();
     this.ShowPin();
   }
 
   OnClickAccount(account: I.DalsaeUser) {
     console.log(account);
+  }
+
+  OnClickOption(e: MouseEvent) {
+    console.log(e);
+    this.ShowOptionModal();
+    this.ShowOptionDetailModal();
   }
 }

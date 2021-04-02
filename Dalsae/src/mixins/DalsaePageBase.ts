@@ -6,6 +6,7 @@ export interface DalsaePageBase {
   ShowMessage: (msg: string) => void;
   ShowPin: () => void;
   ShowOptionModal: () => void;
+  ShowOptionDetailModal: () => void;
 
   mngAccount: M.AccountManager;
   mngTweet: M.TweetDataManager;

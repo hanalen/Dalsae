@@ -9,8 +9,10 @@
           <v-icon class="clickAble" style="font-size:48px; color:#1da1f2" @click="OnClickAddAccount"
             >mdi-dots-horizontal-circle-outline</v-icon
           >
+          <v-icon class="clickAble" style="font-size:48px; color:#1da1f2" @click="OnClickOption"
+            >mdi-cog</v-icon
+          >
         </v-card>
-
         <!-- <v-list-item-content> -->
         <!-- <v-list-item-title>John Leider</v-list-item-title> -->
         <!-- </v-list-item-content> -->
