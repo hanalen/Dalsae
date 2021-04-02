@@ -59,6 +59,12 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     this.mngOption = option ? option : new M.OptionManager();
   }
 
+  OnOptionChange() {
+    if (this.isShowOptionModal) return; //open할때
+    console.log(this.mngOption);
+    window.preload.SaveOption(this.mngOption);
+  }
+
   @Provide()
   async StartDalsae() {
     // this.LoadTestTweet();
@@ -103,6 +109,5 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
   async ShowOptionModal() {
     this.isShowOptionModal = !this.isShowOptionModal;
-    console.log(this.isShowOptionModal);
   }
 }

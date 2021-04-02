@@ -7,7 +7,13 @@
       <top-selector> </top-selector>
     </v-app-bar>
     <v-main>
-      <v-navigation-drawer v-model="isShowOptionModal" absolute temporary app>
+      <v-navigation-drawer
+        @input="OnOptionChange"
+        v-model="isShowOptionModal"
+        absolute
+        temporary
+        app
+      >
         <option-modal></option-modal>
       </v-navigation-drawer>
       <v-container fluid>
