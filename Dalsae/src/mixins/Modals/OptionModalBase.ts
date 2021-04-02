@@ -1,5 +1,7 @@
+import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
-
+import { DalsaePage } from '../DalsaePage';
+import * as I from '@/Interfaces';
 class State {
   isShow: boolean;
   msg: string;
@@ -13,7 +15,16 @@ class State {
   }
 }
 @Component
-export class OptionModalBase extends Vue {
+export class OptionModalBase extends mixins(Vue, DalsaePage) {
   state: State = new State();
   // isShow = false;
+
+  OnClickAddAccount(e: MouseEvent) {
+    console.log(e);
+    this.ShowPin();
+  }
+
+  OnClickAccount(account: I.DalsaeUser) {
+    console.log(account);
+  }
 }
