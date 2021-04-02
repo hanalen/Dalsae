@@ -12,7 +12,7 @@
         </v-card-text>
         <v-text-field
           style="width: 250px; margin-left: 25px"
-          v-model="pin"
+          v-model="state.pin"
           width
           label="7자리 숫자를 입력 해주세요"
         ></v-text-field>
@@ -40,29 +40,12 @@ import { DalsaePage, PinModalBase } from '@/mixins';
 
 @Component
 export default class PinModal extends Mixins(DalsaePage, PinModalBase) {
-  pin = '';
-
   async crated() {
     console.log('msg modal crated');
   }
 
   async prepare() {
     console.log('pin modal prepare');
-  }
-
-  async ClickOk() {
-    await this.GetAccessToken(this.pin);
-    this.ModalClose();
-    this.StartDalsae();
-  }
-
-  async ClickClose() {
-    this.ModalClose();
-  }
-
-  async ModalClose() {
-    this.state.isShow = false;
-    this.state.pin = '';
   }
 }
 </script>

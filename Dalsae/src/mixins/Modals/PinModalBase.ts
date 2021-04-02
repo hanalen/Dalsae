@@ -43,6 +43,21 @@ export class PinModalBase extends mixins(Vue, DalsaePage) {
     }
   }
 
+  async ClickOk() {
+    await this.GetAccessToken(this.state.pin);
+    this.ModalClose();
+    this.StartDalsae();
+  }
+
+  async ClickClose() {
+    this.ModalClose();
+  }
+
+  async ModalClose() {
+    this.state.isShow = false;
+    this.state.pin = '';
+  }
+
   CloseModal() {
     this.state.isShow = false;
   }
