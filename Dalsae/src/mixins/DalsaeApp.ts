@@ -56,7 +56,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
       this.mngAccount.switter = switter;
     }
     const option = window.preload.LoadOption();
-    this.mngOption = option ? option : new M.OptionManager();
+    this.mngOption.ChangeOptions(option);
   }
 
   OnOptionChange() {
@@ -108,6 +108,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
 
   @Provide()
   async ShowOptionModal() {
+    console.log(this.isShowOptionModal);
     this.isShowOptionModal = !this.isShowOptionModal;
   }
 }

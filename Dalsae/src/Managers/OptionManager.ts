@@ -30,4 +30,20 @@ export class OptionManager {
     };
     this.hotKey = new I.Hotkey();
   }
+
+  ChangeOptions(options: OptionManager) {
+    this.uiOption = options.uiOption;
+    this.muteOption = options.muteOption;
+    this.hotKey = options.hotKey;
+  }
+
+  ChangeOption(uiOption: I.UIOption) {
+    this.uiOption = uiOption;
+  }
+  ChangeMuteOption(muteOption: I.MuteOption) {
+    this.muteOption = muteOption;
+  }
+  ChangeHotkey(hotkey: I.Hotkey) {
+    this.hotKey = hotkey;
+  }
 }
