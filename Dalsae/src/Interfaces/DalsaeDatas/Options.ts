@@ -1,3 +1,4 @@
+import * as I from '@/Interfaces';
 export interface UIOption {
   isSmallTweet: boolean; //트윗 한줄 표시
   isShowPropic: boolean; //인장 표시
@@ -84,7 +85,7 @@ export interface MuteOption {
   user: string[];
   keyword: string[];
   client: string[];
-  tweet: string[];
+  tweet: I.Tweet[];
   highlight: string[];
   isMuteMention: boolean; //멘션함도 뮤트
   isShowMute: boolean; //뮤트된 트윗 우선 표시 여부
