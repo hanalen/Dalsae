@@ -25,6 +25,7 @@ export class OptionManager {
       keyword: [],
       tweet: [],
       user: [],
+      client: [],
       isMuteMention: true,
       isShowMute: true
     };

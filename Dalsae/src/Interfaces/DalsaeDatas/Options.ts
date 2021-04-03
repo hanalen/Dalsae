@@ -83,6 +83,7 @@ export class Hotkey {
 export interface MuteOption {
   user: string[];
   keyword: string[];
+  client: string[];
   tweet: string[];
   highlight: string[];
   isMuteMention: boolean; //멘션함도 뮤트
