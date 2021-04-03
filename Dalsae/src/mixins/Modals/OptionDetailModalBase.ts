@@ -1,5 +1,5 @@
 import { mixins } from 'vue-class-component';
-import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
+import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
 import { DalsaePage } from '@/mixins';
 import * as M from '@/Managers';
 
@@ -52,6 +52,11 @@ interface ModalMenuSub {
 export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
   state = new State();
   muteOption = this.mngOption.muteOption;
+
+  @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
+  OnSelectMenuChanged() {
+    this.state.input = '';
+  }
 
   async ShowModal() {
     this.state.isShow = true;

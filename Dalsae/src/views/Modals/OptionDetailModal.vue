@@ -23,7 +23,12 @@
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item link v-for="(sub, j) in menu.menuSub" :key="j">
+            <v-list-item
+              link
+              v-for="(sub, j) in menu.menuSub"
+              :key="j"
+              @click="state.selectMenu = sub.menuNumber"
+            >
               <v-list-item-icon>
                 <v-icon>{{ sub.icon }}</v-icon>
               </v-list-item-icon>
@@ -36,7 +41,7 @@
         <div class="center">
           <!--탭으로 해서 표시하자-->
           <v-tabs v-model="state.selectMenu" hide-slider hidden> </v-tabs>
-          <v-tabs-items v-model="tweetPanel.state.selectMenu">
+          <v-tabs-items v-model="state.selectMenu">
             <v-tab-item :key="0">
               <v-card outlined height="100vh">
                 <v-card-title>
@@ -70,6 +75,34 @@
                     text
                     @click="OnRemove(muteOption.keyword, state.input)"
                   >
+                    삭제
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-tab-item>
+            <v-tab-item :key="1">
+              <v-card outlined height="100vh">
+                <v-card-title>
+                  사용자 뮤트
+                </v-card-title>
+                <v-card-subtitle>
+                  특정 사용자의 트윗을 필터링합니다.
+                </v-card-subtitle>
+                <v-list class="overflow-y-auto" dense max-height="300px">
+                  <v-list-item-group v-model="state.selectWord" color="primary">
+                    <v-list-item v-for="(item, i) in muteOption.user" :key="i">
+                      <v-list-item-content @click="state.input = item">
+                        <v-list-item-title v-text="item"></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+                <v-card-actions>
+                  <v-text-field label="사용자 아이디 입력" v-model="state.input"></v-text-field>
+                  <v-btn outlined color="primary" text @click="OnAdd(muteOption.user, state.input)">
+                    추가
+                  </v-btn>
+                  <v-btn outlined color="red" text @click="OnRemove(muteOption.user, state.input)">
                     삭제
                   </v-btn>
                 </v-card-actions>
