@@ -52,6 +52,7 @@ interface ModalMenuSub {
 export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
   state = new State();
   muteOption = this.mngOption.muteOption;
+  hotKey = this.mngOption.hotKey;
 
   @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
   OnSelectMenuChanged() {
@@ -93,5 +94,44 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
     const index = list.indexOf(tweet);
     if (index === -1) return;
     list.splice(index, 1);
+  }
+  SetHotkey() {
+    for (const [key, value] of Object.entries(this.hotKey)) {
+      console.log(value);
+      let str = value.isCtrl ? 'Ctrl+' : '';
+      str += value.isAlt ? 'Alt+' : '';
+      str += value.isShift ? 'Shift+' : '';
+      str += value.key.charAt(0).toUpperCase() + value.key.substring(1, 999);
+      if (str == ' ') str = 'Space';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (this.$refs[key] as any).lazyValue = str;
+    }
+  }
+
+  OnKeyDown(e: KeyboardEvent, name: string) {
+    if (!e.target) return;
+    console.log(e);
+    e.preventDefault();
+    let str = '';
+    if (e.ctrlKey) {
+      str += 'Ctrl+';
+    }
+    if (e.shiftKey) {
+      str += 'Shift+';
+    }
+    if (e.altKey) {
+      str += 'Alt+';
+    }
+    if (e.code != 'ControlLeft' && e.code != 'ShiftLeft' && e.code != 'AltLeft') {
+      const code = e.code.replace('Key', '').replace('Digit', '');
+      if (code == ' ') {
+        //space의 key는 ' '
+        str += 'Space';
+      } else {
+        str += code.charAt(0).toUpperCase() + code.substring(1, 999); //키는 첫글자만 대문자로. home->Home
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (this.$refs[name] as any).lazyValue = str;
   }
 }
