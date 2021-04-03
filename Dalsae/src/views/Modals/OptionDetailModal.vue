@@ -145,6 +145,45 @@
                 </v-card-actions>
               </v-card>
             </v-tab-item>
+            <v-tab-item :key="3">
+              <v-card outlined height="100vh">
+                <v-card-title>
+                  트윗 뮤트
+                </v-card-title>
+                <v-card-subtitle>
+                  특정 트윗을 필터링하며 해당 트윗에 온 답변, 리트윗, 인용리트윗을 필터링합니다.
+                </v-card-subtitle>
+                <v-list class="overflow-y-auto" dense max-height="300px">
+                  <v-list-item-group color="primary">
+                    <v-list-item v-for="(item, i) in muteOption.tweet" :key="i">
+                      <v-list-item-content
+                        @click="
+                          state.input = item.full_text;
+                          state.selectTweet = item;
+                        "
+                      >
+                        <v-list-item-title v-text="item.full_text"></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+                <v-card-actions>
+                  <v-text-field
+                    disabled
+                    v-model="state.input"
+                    label="추가 등록은 트윗 우클릭에서 등록 할 수 있습니다."
+                  ></v-text-field>
+                  <v-btn
+                    outlined
+                    color="red"
+                    text
+                    @click="OnRemoveTweet(muteOption.tweet, state.selectTweet)"
+                  >
+                    삭제
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-tab-item>
           </v-tabs-items>
         </div>
         <div class="right">wererawer</div>

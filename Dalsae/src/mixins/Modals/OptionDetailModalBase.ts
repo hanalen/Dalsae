@@ -2,7 +2,7 @@ import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
 import { DalsaePage } from '@/mixins';
 import * as M from '@/Managers';
-
+import * as I from '@/Interfaces';
 class State {
   isShow: boolean;
   selectMenu: number;
@@ -83,6 +83,14 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
 
   OnRemove(list: string[], word: string) {
     const index = list.indexOf(word);
+    if (index === -1) return;
+    list.splice(index, 1);
+  }
+
+  OnRemoveTweet(list: I.Tweet[], tweet: I.Tweet) {
+    console.log(list);
+    console.log(tweet);
+    const index = list.indexOf(tweet);
     if (index === -1) return;
     list.splice(index, 1);
   }
