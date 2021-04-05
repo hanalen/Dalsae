@@ -78,6 +78,11 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
     this.state.isShow = false;
   }
 
+  OnClickClose() {
+    this.CloseModal();
+    window.preload.SaveOption(this.mngOption);
+  }
+
   CloseModal() {
     this.state.isShow = false;
   }

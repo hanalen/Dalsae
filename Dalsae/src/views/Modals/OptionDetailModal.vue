@@ -385,7 +385,11 @@
             </v-tab-item>
           </v-tabs-items>
         </div>
-        <div class="right">wererawer</div>
+        <div class="right">
+          <v-icon size="40" class="click-able" @click="OnClickClose"
+            >mdi-close-circle-outline
+          </v-icon>
+        </div>
       </v-card>
       <!--오른쪽은 각 메뉴별로 구성, 하위 메뉴는 탭으로 할까 했지만 디코처럼 아래로 나열하자-->
       <!--트윗 뮤트 같은 경우는 트윗 정보 다 저장해서 해당 트윗을 표시해서 삭제하게-->
@@ -408,6 +412,9 @@
 .right {
   width: 150px;
   background-color: gray;
+}
+.click-able {
+  cursor: pointer;
 }
 </style>
 
