@@ -96,15 +96,12 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
   }
 
   OnRemoveTweet(list: I.Tweet[], tweet: I.Tweet) {
-    console.log(list);
-    console.log(tweet);
     const index = list.indexOf(tweet);
     if (index === -1) return;
     list.splice(index, 1);
   }
   SetHotkey() {
     for (const [key, value] of Object.entries(this.hotKey)) {
-      console.log(value);
       let str = value.isCtrl ? 'Ctrl+' : '';
       str += value.isAlt ? 'Alt+' : '';
       str += value.isShift ? 'Shift+' : '';
@@ -116,7 +113,6 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
 
   OnKeyDown(e: KeyboardEvent, name: string) {
     if (!e.target) return;
-    console.log(e);
     e.preventDefault();
     let str = '';
     if (e.ctrlKey) {
