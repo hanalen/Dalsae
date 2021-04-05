@@ -403,15 +403,12 @@
 }
 .left {
   width: 220px;
-  background-color: aliceblue;
 }
 .center {
   width: calc(100vw - 370px);
-  background-color: antiquewhite;
 }
 .right {
   width: 150px;
-  background-color: gray;
 }
 .click-able {
   cursor: pointer;
