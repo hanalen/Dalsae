@@ -80,11 +80,34 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
 
   OnClickClose() {
     this.CloseModal();
+    this.SaveHotkey();
     window.preload.SaveOption(this.mngOption);
   }
 
   CloseModal() {
     this.state.isShow = false;
+  }
+
+  SaveHotkey() {
+    if (!this.state.isInitHotkey) return;
+    const map = new Map();
+    for (const key of Object.keys(this.hotKey)) {
+      const str = this.GetTextFiledText(key);
+      const isCtrl = str.indexOf('Ctrl') > -1;
+      const isAlt = str.indexOf('Alt') > -1;
+      const isShift = str.indexOf('Shift') > -1;
+      let code = str
+        .replace('Ctrl+', '')
+        .replace('Shift+', '')
+        .replace('Alt+');
+      if (code == 'Space') {
+        code = ' ';
+      }
+      map.set(key, { isCtrl: isCtrl, isShift: isShift, isAlt: isAlt, key: code });
+    }
+    const hotkey = Object.fromEntries(map);
+    this.hotKey = hotkey;
+    this.mngOption.hotKey = hotkey;
   }
 
   OnAdd(list: string[], word: string) {
@@ -139,6 +162,11 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
       }
     }
     this.SetTextFieldText(name, str);
+  }
+
+  GetTextFiledText(refName: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (this.$refs[refName] as any).lazyValue;
   }
 
   SetTextFieldText(refName: string, text: string) {
