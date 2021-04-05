@@ -184,7 +184,8 @@
                 </v-card-actions>
               </v-card>
             </v-tab-item>
-            <v-tab-item :key="4">
+            <v-tab-item :key="4" eager
+              ><!--eager: mounted할때 렌더링하는 옵션-->
               <v-card outlined height="100vh">
                 <v-card-title>
                   단축키 설정

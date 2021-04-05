@@ -9,12 +9,14 @@ class State {
   listMenu: ModalMenu[];
   selectWord: string;
   input: string;
+  isInitHotkey: boolean;
   constructor() {
     this.isShow = false;
     this.selectMenu = 0;
     this.listMenu = [];
     this.selectWord = '';
     this.input = '';
+    this.isInitHotkey = false;
     const menu1: ModalMenu = {
       title: '필터링 설정',
       subTitle: '트윗을 필터링 해줍니다',
@@ -55,8 +57,13 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
   hotKey = this.mngOption.hotKey;
 
   @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
-  OnSelectMenuChanged() {
+  OnSelectMenuChanged(newMenu: number) {
     this.state.input = '';
+    if (newMenu === 4 && !this.state.isInitHotkey) {
+      //created에서 호출 시 ref 생성 전이라 오류 생김
+      this.SetHotkey();
+      this.state.isInitHotkey = true;
+    }
   }
 
   async ShowModal() {
@@ -103,8 +110,7 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
       str += value.isShift ? 'Shift+' : '';
       str += value.key.charAt(0).toUpperCase() + value.key.substring(1, 999);
       if (str == ' ') str = 'Space';
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (this.$refs[key] as any).lazyValue = str;
+      this.SetTextFieldText(key, str);
     }
   }
 
@@ -131,7 +137,11 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
         str += code.charAt(0).toUpperCase() + code.substring(1, 999); //키는 첫글자만 대문자로. home->Home
       }
     }
+    this.SetTextFieldText(name, str);
+  }
+
+  SetTextFieldText(refName: string, text: string) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.$refs[name] as any).lazyValue = str;
+    (this.$refs[refName] as any).lazyValue = text;
   }
 }
