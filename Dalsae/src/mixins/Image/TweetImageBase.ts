@@ -4,7 +4,7 @@ import * as I from '@/Interfaces';
 import moment from 'moment';
 
 @Component
-export class TweetImageBase extends Mixins(Vue){
+export class TweetImageBase extends Mixins(Vue) {
   @Prop()
   tweet!: I.Tweet;
 

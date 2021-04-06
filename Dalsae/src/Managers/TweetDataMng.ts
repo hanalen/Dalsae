@@ -21,9 +21,9 @@ export class TweetDataManager {
       this.homes.push(tweet);
     });
   }
-  AddMention(list:I.Tweet[]){
-    list.forEach(tweet=>{
+  AddMention(list: I.Tweet[]) {
+    list.forEach(tweet => {
       this.mentions.push(tweet);
-    })
+    });
   }
 }
