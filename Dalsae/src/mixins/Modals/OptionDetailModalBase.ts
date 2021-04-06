@@ -7,6 +7,7 @@ class State {
   isShow: boolean;
   selectMenu: number;
   listMenu: ModalMenu[];
+  listHotkeyMenu: HotkeyMenu[];
   selectWord: string;
   input: string;
   isInitHotkey: boolean;
@@ -14,26 +15,82 @@ class State {
     this.isShow = false;
     this.selectMenu = 0;
     this.listMenu = [];
+    this.listHotkeyMenu = [];
     this.selectWord = '';
     this.input = '';
     this.isInitHotkey = false;
-    const menu1: ModalMenu = {
-      title: '필터링 설정',
-      subTitle: '트윗을 필터링 해줍니다',
-      menuSub: []
-    };
-    menu1.menuSub.push({ title: '단어 뮤트', icon: 'mdi-filter', menuNumber: 0 });
-    menu1.menuSub.push({ title: '사용자 뮤트', icon: 'mdi-account-off', menuNumber: 1 });
-    menu1.menuSub.push({ title: '클라이언트 뮤트', icon: 'mdi-filter', menuNumber: 2 });
-    menu1.menuSub.push({ title: '트윗 뮤트', icon: 'mdi-filter', menuNumber: 3 });
-    this.listMenu.push(menu1);
-    const menu2: ModalMenu = {
-      title: '단축키 설정',
-      subTitle: '프로그램을 보다 편하게 ',
-      menuSub: []
-    };
-    menu2.menuSub.push({ title: '단축키 설정', icon: 'mdi-filter', menuNumber: 4 });
-    this.listMenu.push(menu2);
+    this.listMenu.push(
+      {
+        title: '필터링 설정',
+        subTitle: '트윗을 필터링 해줍니다',
+        menuSub: [
+          { title: '단어 뮤트', icon: 'mdi-filter', menuNumber: 0 },
+          { title: '사용자 뮤트', icon: 'mdi-account-off', menuNumber: 1 },
+          { title: '클라이언트 뮤트', icon: 'mdi-filter', menuNumber: 2 },
+          { title: '트윗 뮤트', icon: 'mdi-filter', menuNumber: 3 }
+        ]
+      },
+      {
+        title: '단축키 설정',
+        subTitle: '프로그램을 보다 편하게 ',
+        menuSub: [{ title: '단축키 설정', icon: 'mdi-filter', menuNumber: 4 }]
+      }
+    );
+    this.listHotkeyMenu.push(
+      {
+        title: '화면 전환',
+        subtitle: '',
+        menuSub: [
+          { label: '타임라인 보기', name: 'showTL' },
+          { label: '알림 보기', name: 'showMention' },
+          { label: '쪽지 보기', name: 'showDM' },
+          { label: '관심글 보기', name: 'showFavorite' },
+          { label: '최근 연 링크 보기', name: 'showUrl' }
+        ]
+      },
+      {
+        title: '답변 기능',
+        subtitle: '',
+        menuSub: [
+          { label: '모두에게 답변하기', name: 'replyAll' },
+          { label: '작성자에게 답변하기 ', name: 'reply' },
+          { label: '쪽지 보내기', name: 'sendDM' }
+        ]
+      },
+      {
+        title: '트윗 기능',
+        subtitle: '',
+        menuSub: [
+          { label: '대화 불러오기', name: 'loadConv' },
+          { label: '인용 트윗 보기', name: 'showQt' },
+          { label: '리트윗', name: 'retweet' },
+          { label: '인용 리트윗', name: 'sendQt' },
+          { label: '관심글 등록', name: 'sendFavorite' },
+          { label: '해시태그 추가', name: 'hash' },
+          { label: '트윗 삭제', name: 'delete' }
+        ]
+      },
+      {
+        title: 'UI 기능',
+        subtitle: '',
+        menuSub: [
+          { label: '입력칸으로 이동', name: 'input' },
+          { label: '트윗 메뉴 열기', name: 'showContext' },
+          { label: '가장 위로 이동', name: 'home' },
+          { label: '가장 아래로 이동', name: 'end' },
+          { label: '미디어 열기', name: 'showImage' }
+        ]
+      },
+      {
+        title: '기타 기능',
+        subtitle: '',
+        menuSub: [
+          { label: '불러오기', name: 'loading' },
+          { label: '트윗 복사하기', name: 'copy' },
+          { label: '입력 취소하기', name: 'cancle' }
+        ]
+      }
+    );
   }
 }
 
@@ -48,6 +105,17 @@ interface ModalMenuSub {
   title: string;
   icon: string;
   menuNumber: number;
+}
+
+interface HotkeyMenu {
+  title: string;
+  subtitle: string;
+  menuSub: HotkeySubMenu[];
+}
+
+interface HotkeySubMenu {
+  name: string;
+  label: string;
 }
 
 @Component
@@ -129,6 +197,7 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
     list.splice(index, 1);
   }
   SetHotkey() {
+    console.log(this.$refs);
     for (const [key, value] of Object.entries(this.hotKey)) {
       let str = value.isCtrl ? 'Ctrl+' : '';
       str += value.isAlt ? 'Alt+' : '';
@@ -166,11 +235,11 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
 
   GetTextFiledText(refName: string) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (this.$refs[refName] as any).lazyValue;
+    return ((this.$refs[refName] as Vue[])[0] as any).lazyValue; //이새낀 왜 어레이냐
   }
 
   SetTextFieldText(refName: string, text: string) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.$refs[refName] as any).lazyValue = text;
+    ((this.$refs[refName] as Vue[])[0] as any).lazyValue = text; //이새낀 왜 어레이냐
   }
 }
