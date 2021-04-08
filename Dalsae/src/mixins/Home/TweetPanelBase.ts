@@ -18,8 +18,6 @@ export class TweetPanelBase extends Vue {
   }
 
   get tweetHome() {
-    console.log('tweethome');
-    console.log(this.mngAccount.homes);
     return this.mngAccount.homes;
   }
 
