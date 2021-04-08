@@ -29,7 +29,6 @@
 
 <script lang="ts">
 import { Vue, Component, Mixins } from 'vue-property-decorator';
-import { TweetDataManager } from '@/Managers/TweetDataMng';
 import * as I from '@/Interfaces';
 import TwitterAPI from '@/API/APICall';
 import { DalsaePage, DalsaeApp } from '@/mixins';

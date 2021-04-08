@@ -6,7 +6,6 @@ import * as I from '@/Interfaces';
 
 export class APIManager {
   api = new TwitterAPI();
-  mngTweet!: M.TweetDataManager;
   mngAccount!: M.AccountManager;
 
   ShowMessage!: (msg: string) => void;
@@ -90,6 +89,7 @@ export class APIManager {
           return result;
         },
         TimeLine: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
+          const id = this.mngAccount.selectID;
           const result = await this.api.call.statuses.TimeLine({
             count: '200',
             tweet_mode: 'extended',
@@ -97,11 +97,12 @@ export class APIManager {
             since_id: sinceId
           });
           if (result.data) {
-            this.mngTweet.AddHome(result.data);
+            this.mngAccount.tweetDatas.AddHome(result.data, id);
           }
           return result;
         },
         Mention: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
+          const id = this.mngAccount.selectID;
           const result = await this.api.call.statuses.Mention({
             count: '200',
             tweet_mode: 'extended',
@@ -109,7 +110,7 @@ export class APIManager {
             since_id: sinceId
           });
           if (result.data) {
-            this.mngTweet.AddMention(result.data);
+            this.mngAccount.tweetDatas.AddMention(result.data, id);
           }
           return result;
         }

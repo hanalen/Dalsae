@@ -1,6 +1,7 @@
 import { Vue, Mixins, Component, Inject, Emit } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as M from '@/Managers';
+import { mixins } from 'vue-class-component';
 class State {
   selectMenu: number;
   constructor() {
@@ -11,29 +12,30 @@ class State {
 @Component
 export class TweetPanelBase extends Vue {
   state: State = new State();
-  mngTweet!: M.TweetDataManager;
-
+  mngAccount!: M.AccountManager;
   async MenuChange(menu: number) {
     this.state.selectMenu = menu;
   }
 
   get tweetHome() {
-    return this.mngTweet?.homes;
+    console.log('tweethome');
+    console.log(this.mngAccount.homes);
+    return this.mngAccount.homes;
   }
 
   get tweetMention() {
-    return this.mngTweet?.mentions;
+    return this.mngAccount.mentions;
   }
 
   get dm() {
-    return this.mngTweet?.mentions;
+    return this.mngAccount.mentions;
   }
 
   get tweetFavorite() {
-    return this.mngTweet?.favorites;
+    return this.mngAccount.favorites;
   }
 
   get tweetOpens() {
-    return this.mngTweet?.opens;
+    return this.mngAccount.opens;
   }
 }

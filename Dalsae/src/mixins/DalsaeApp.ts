@@ -14,9 +14,6 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
   mngOption = new M.OptionManager();
 
-  @Provide()
-  mngTweet = new M.TweetDataManager();
-
   @Ref()
   messageModal!: MIX.MessageModalBase;
 
@@ -46,8 +43,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   Init() {
     this.api.api.mngAccount = this.mngAccount; //나중에 이 구조는 바꾸는 게 좋을 거 같다
     this.api.mngAccount = this.mngAccount;
-    this.api.mngTweet = this.mngTweet;
-    this.tweetPanel.mngTweet = this.mngTweet;
+    this.tweetPanel.mngAccount = this.mngAccount;
     this.api.ShowMessage = this.ShowMessage;
     this.api.ShowConfirm = this.ShowConfirm;
   }
@@ -82,13 +78,6 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     } else {
       this.ShowPin();
     }
-  }
-
-  LoadTestTweet() {
-    const tweet = window.preload.LoadTestTweet();
-    this.mngTweet.homes = tweet;
-    this.mngTweet.mentions = tweet;
-    this.mngTweet.favorites = tweet;
   }
 
   @Provide()

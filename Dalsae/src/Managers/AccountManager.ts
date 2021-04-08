@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
+import { TweetDatas } from '@/Interfaces/DalsaeDatas/TweetDatas';
 
 //oauth관리도 여기서 하고 api콜 할 때 데이터도 여기서 받아가자
 export class AccountManager {
@@ -8,12 +9,19 @@ export class AccountManager {
   switter!: I.Switter;
   tempUser!: I.DalsaeUser; //사용자 등록 시 사용하는 변수
   oauth = new I.OAuth();
+  tweetDatas = new TweetDatas();
   constructor() {
     this.switter = {
       selectUser: new I.DalsaeUser(),
       listUser: []
     };
     this.tempUser = new I.DalsaeUser();
+  }
+
+  get selectID() {
+    let id = this.switter?.selectUser.user_id;
+    id = id ? id : '';
+    return id;
   }
 
   get selectUser() {
@@ -30,6 +38,26 @@ export class AccountManager {
 
   get secretKey() {
     return this.switter ? this.switter?.selectUser?.oauth_token_secret : '';
+  }
+
+  get homes() {
+    const tweets = this.tweetDatas.dicTweets.get(this.selectID);
+    return tweets ? tweets.homes : [];
+  }
+
+  get mentions() {
+    const tweets = this.tweetDatas.dicTweets.get(this.selectID);
+    return tweets ? tweets.mentions : [];
+  }
+
+  get favorites() {
+    const tweets = this.tweetDatas.dicTweets.get(this.selectID);
+    return tweets ? tweets.favorites : [];
+  }
+
+  get opens() {
+    const tweets = this.tweetDatas.dicTweets.get(this.selectID);
+    return tweets ? tweets.opens : [];
   }
 
   AddUser(publicKey: string, secretKey: string, userId: string, name: string, screenName: string) {
