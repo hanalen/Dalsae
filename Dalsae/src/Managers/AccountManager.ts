@@ -43,7 +43,7 @@ export class AccountManager {
       selUser.name = name;
       selUser.screen_name = screenName;
       selUser.user_id = userId;
-      this.switter.listUser?.push(selUser);
+      this.switter.listUser?.push(JSON.parse(JSON.stringify(selUser)));
     }
   }
 
@@ -63,7 +63,7 @@ export class AccountManager {
       this.switter.selectUser.user = user;
     }
     this.switter.listUser?.forEach(item => {
-      if (item.user?.id_str === user.id_str) {
+      if (item.user_id === user.id_str) {
         item.user = user;
       }
     });
