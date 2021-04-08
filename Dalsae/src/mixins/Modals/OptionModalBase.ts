@@ -26,6 +26,7 @@ export class OptionModalBase extends mixins(Vue, DalsaePage) {
 
   OnClickAccount(account: I.DalsaeUser) {
     console.log(account);
+    this.AccountChange(account);
   }
 
   OnClickOption(e: MouseEvent) {

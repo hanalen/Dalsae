@@ -118,4 +118,9 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     console.log(this.isShowOptionModal);
     this.isShowOptionModal = !this.isShowOptionModal;
   }
+
+  @Provide()
+  async AccountChange(user: I.DalsaeUser) {
+    console.log(user);
+  }
 }

@@ -44,12 +44,13 @@
 // 등등 최대한 많은 작업을 다 끝낸 후 트윗 패널 작업을 진행 한다
 
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
-import * as I from '@/mixins';
+import * as MIX from '@/mixins';
+import * as I from '@/Interfaces';
 import TwitterAPI from '@/API/APICall';
 import * as M from '@/Managers';
 
 @Component
-export class DalsaePage extends Vue implements I.DalsaePageBase {
+export class DalsaePage extends Vue implements MIX.DalsaePageBase {
   async created() {
     type WithPrepare = { prepare: Function };
     if (((this as unknown) as WithPrepare).prepare) {
@@ -69,7 +70,7 @@ export class DalsaePage extends Vue implements I.DalsaePageBase {
   mngTweet!: M.TweetDataManager;
 
   @Inject()
-  tweetPanel!: I.TweetPanelBase;
+  tweetPanel!: MIX.TweetPanelBase;
 
   @Inject()
   ShowConfirm!: (msg: string) => Promise<boolean>;
@@ -88,4 +89,7 @@ export class DalsaePage extends Vue implements I.DalsaePageBase {
 
   @Inject()
   isShowOptionModal!: boolean;
+
+  @Inject()
+  AccountChange!: (user: I.DalsaeUser) => void;
 }
