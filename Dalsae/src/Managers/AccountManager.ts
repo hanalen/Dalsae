@@ -18,6 +18,13 @@ export class AccountManager {
     this.tempUser = new I.DalsaeUser();
   }
 
+  InitSwitter(switter: I.Switter) {
+    this.switter = switter;
+    switter.listUser?.forEach(user => {
+      this.tweetDatas.dicTweets.set(user.user_id, new I.Tweets());
+    });
+  }
+
   get selectID() {
     let id = this.switter?.selectUser.user_id;
     id = id ? id : '';
