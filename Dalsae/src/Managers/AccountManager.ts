@@ -79,6 +79,8 @@ export class AccountManager {
       selUser.screen_name = screenName;
       selUser.user_id = userId;
       this.switter.listUser?.push(JSON.parse(JSON.stringify(selUser)));
+
+      this.tweetDatas.dicTweets.set(userId, new I.Tweets());
     }
   }
 
