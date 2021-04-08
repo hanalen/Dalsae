@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as I from '@/Interfaces';
 
-class Tweets {
+export class Tweets {
   homes: I.Tweet[];
   mentions: I.Tweet[];
   favorites: I.Tweet[];
