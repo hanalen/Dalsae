@@ -1,47 +1,46 @@
 <template>
-  <div class="item-inner" @click="Click">
-    <div class="head">
-      <span># {{ source.id }}</span
-      ><br />
-      <span>{{ source.name }}</span>
-    </div>
-    <div class="desc">{{ source.fullText }}</div>
-    <div v-if="source.isFav">
-      <span>관심글</span>
-    </div>
+  <div class="scroll-item">
+    <!-- <span>{{ height }}</span> -->
+    <span>{{ data.data.text }}</span>
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-
-class Source {
-  isFav = false;
+<style lang="scss" scoped>
+.scroll-item {
+  border: 1px solid black;
 }
+</style>
 
+<script lang="ts">
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import * as I from '@/Interfaces';
 @Component
-export default class VirtualScrollItem extends Vue {
-  @Prop({ type: Object, default: () => {} })
-  source!: Source;
+export default class ScrollItem extends Vue {
+  @Prop()
+  data!: I.ScrollItem<I.ScrollData>;
 
-  Click(e: Event) {
-    console.log(e);
-    this.source.isFav = true;
+  @Prop()
+  source!: I.ScrollItem<I.ScrollData>;
+
+  @Watch('source', { immediate: true, deep: true })
+  OnChangeData(newVal: I.ScrollItem<I.ScrollData>, oldVal: I.ScrollItem<I.ScrollData>) {
+    // console.log('on change datas');
+    // console.log(newVal);
+    // console.log(oldVal);
+  }
+
+  async created() {
+    this.$nextTick(() => {
+      this.SetHeight();
+    });
+  }
+
+  SetHeight() {
+    if (!this.data) return;
+    const oldVal = this.data.height;
+    const newVal = this.$el.clientHeight;
+    this.data.height = newVal;
+    this.$emit('on-resize', { oldVal: oldVal, newVal: newVal });
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.item-inner {
-  border: 1px solid black;
-  font-weight: 500;
-  padding-top: 0.5em;
-  text-align: justify;
-  display: flex;
-  align-items: center;
-  padding: 1em;
-  border-bottom: 1px solid;
-  border-color: lightgray;
-  flex-direction: column;
-}
-</style>
