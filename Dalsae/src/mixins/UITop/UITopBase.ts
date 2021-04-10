@@ -17,17 +17,18 @@ class State {
 @Component
 export class UITopBase extends mixins(Vue, DalsaePage) {
   state = new State();
-  user = this.mngAccount.switter.selectUser;
+  user = this.mngAccount.switter;
   propicPath = '';
   option = this.mngOption.uiOption;
 
   @Watch('user', { immediate: true, deep: true })
-  OnUserChanged(user: I.DalsaeUser) {
-    if (!user || !user.user) this.propicPath = '';
+  OnUserChanged(switter: I.Switter) {
+    const user = switter.selectUser.user;
+    if (!user) this.propicPath = '';
     else
       this.propicPath = this.option.isBigPropic
-        ? user.user.profile_image_url_https.replace('_normal', '_bigger')
-        : user.user.profile_image_url_https;
+        ? user.profile_image_url_https.replace('_normal', '_bigger')
+        : user.profile_image_url_https;
   }
 
   get isShowPropic() {
