@@ -40,7 +40,7 @@ export default class ScrollItem extends Vue {
     const oldVal = this.data.height;
     const newVal = this.$el.clientHeight;
     this.data.height = newVal;
-    this.$emit('on-resize', { oldVal: oldVal, newVal: newVal });
+    this.$emit('on-resize', { oldVal: oldVal, newVal: newVal, key: this.data.key.toString() });
   }
 }
 </script>
