@@ -105,4 +105,9 @@ export class AccountManager {
       }
     });
   }
+
+  ChangeAccount(user: I.DalsaeUser) {
+    this.switter.selectUser.user = user.user; //할당 순서를 이렇게 해야 top인장 바뀜
+    this.switter.selectUser = user;
+  }
 }

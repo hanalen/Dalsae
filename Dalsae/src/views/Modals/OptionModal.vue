@@ -8,7 +8,7 @@
             v-for="(item, i) in listUser"
             :key="i"
             :size="40"
-            @click="OnClickAccount"
+            @click="OnClickAccount(item)"
           >
             <img :src="item.user.profile_image_url" />
           </v-avatar>

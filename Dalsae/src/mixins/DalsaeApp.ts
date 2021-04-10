@@ -110,6 +110,6 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
 
   @Provide()
   async AccountChange(user: I.DalsaeUser) {
-    console.log(user);
+    this.mngAccount.ChangeAccount(user);
   }
 }
