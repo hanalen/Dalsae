@@ -3,5 +3,5 @@ export interface ScrollItem<T> {
   height: number;
   scrollTop: number;
   isResized: boolean;
-  key: number;
+  key: string;
 }
