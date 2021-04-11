@@ -17,6 +17,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 @Component
 export default class ScrollItem extends Vue {
+  observer!: ResizeObserver;
   @Prop()
   data!: I.ScrollItem<I.ScrollData>;
 
@@ -33,6 +34,10 @@ export default class ScrollItem extends Vue {
   async created() {
     this.$nextTick(() => {
       this.SetHeight();
+      this.observer = new ResizeObserver(() => {
+        this.SetHeight();
+      });
+      this.observer.observe(this.$el);
     });
   }
 
@@ -44,6 +49,10 @@ export default class ScrollItem extends Vue {
     this.data.height = newVal;
     this.data.isResized = false;
     this.$emit('on-resize', { oldVal: oldVal, newVal: newVal, key: this.data.key.toString() });
+  }
+
+  async destroyed() {
+    this.observer?.disconnect();
   }
 }
 </script>

@@ -146,6 +146,15 @@ export default class About extends Vue {
       this.totalHeight += minHeight;
     }
     this.SetVisibleData();
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.OnResizeWindow);
+    });
+  }
+
+  OnResizeWindow() {
+    for (let i = 0, len = this.listData.length; i < len; i++) {
+      this.listData[i].isResized = true;
+    }
   }
 
   OnResize(data: I.ResizeEvent) {
