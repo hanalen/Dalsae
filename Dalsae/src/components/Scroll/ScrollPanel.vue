@@ -1,5 +1,5 @@
 <template>
-  <div class="about" ref="about" @scroll="OnScroll">
+  <div class="scroll-panel" @scroll="OnScroll">
     <div class="view-port" ref="viewPort" :style="viewportStyle">
       <div class="scroll-area" :style="listStyle">
         <scroll-item
@@ -17,7 +17,7 @@
 </template>
 
 <style lang="scss" scoped>
-.about {
+.scroll-panel {
   height: 100vh;
   overflow-y: scroll;
 }
