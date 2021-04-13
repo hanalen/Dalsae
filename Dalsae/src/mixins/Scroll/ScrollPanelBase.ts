@@ -1,5 +1,5 @@
 import { mixins } from 'vue-class-component';
-import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
+import { Vue, Component, Inject, Emit, Watch, Prop } from 'vue-property-decorator';
 import { DalsaePage } from '@/mixins';
 import * as M from '@/mixins';
 import * as I from '@/Interfaces';
@@ -7,20 +7,21 @@ import * as I from '@/Interfaces';
 class State {
   scrollTop = 0;
   totalHeight = 0;
-  listData: M.ScrollItem<I.Tweet>[] = [];
   listVisible: M.ScrollItem<I.Tweet>[] = [];
   startIndex = 0;
   endIndex = 50;
   translateY = 0;
   minHeight = 0;
   constructor() {
-    this.listData = [];
     this.listVisible = [];
   }
 }
 
 export class ScrollPanelBase extends Vue {
   state = new State();
+
+  @Prop()
+  listData: M.ScrollItem<I.Tweet>[] = [];
 
   @Watch('state.scrollTop')
   OnWatchScrollTop(newVal: number, oldVal: number) {
@@ -29,8 +30,8 @@ export class ScrollPanelBase extends Vue {
     this.state.scrollTop = this.$el.scrollTop;
     this.state.endIndex =
       this.state.startIndex + Math.floor(this.$el.clientHeight / this.state.minHeight);
-    this.state.startIndex = this.BinarySearch(this.state.listData, this.state.scrollTop);
-    this.state.translateY = this.state.listData[this.state.startIndex].scrollTop;
+    this.state.startIndex = this.BinarySearch(this.listData, this.state.scrollTop);
+    this.state.translateY = this.listData[this.state.startIndex].scrollTop;
     const startIdx = this.state.startIndex;
     const endIdx = this.state.endIndex;
     if (prevStartIdx !== startIdx || prevEndIdx !== endIdx) this.SetVisibleData();
@@ -92,7 +93,7 @@ export class ScrollPanelBase extends Vue {
   key = 0;
 
   async created() {
-    for (let i = 0, len = this.state.listData.length; i < len; i++) {
+    for (let i = 0, len = this.listData.length; i < len; i++) {
       this.state.totalHeight += this.state.minHeight;
     }
     this.SetVisibleData();
@@ -102,8 +103,8 @@ export class ScrollPanelBase extends Vue {
   }
 
   OnResizeWindow() {
-    for (let i = 0, len = this.state.listData.length; i < len; i++) {
-      this.state.listData[i].isResized = true;
+    for (let i = 0, len = this.listData.length; i < len; i++) {
+      this.listData[i].isResized = true;
     }
   }
 
@@ -111,17 +112,17 @@ export class ScrollPanelBase extends Vue {
     //scrollTop은 랜더링 할 때 계산
     const moveY = data.newVal - data.oldVal;
     this.state.totalHeight += moveY;
-    const idx = this.state.listData.findIndex(x => x.key == data.key) + 1; //key다음 idx부터 작업
+    const idx = this.listData.findIndex(x => x.key == data.key) + 1; //key다음 idx부터 작업
     console.log('on resize idx' + idx);
-    const len = this.state.listData.length;
+    const len = this.listData.length;
     for (let i = idx; i < len; i++) {
-      this.state.listData[i].scrollTop += moveY;
+      this.listData[i].scrollTop += moveY;
     }
   }
 
   get Total() {
     let sum = 0;
-    this.state.listData.forEach(item => {
+    this.listData.forEach(item => {
       sum += item.scrollTop;
     });
     return sum;
@@ -132,6 +133,6 @@ export class ScrollPanelBase extends Vue {
   }
 
   SetVisibleData() {
-    this.state.listVisible = this.state.listData.slice(this.state.startIndex, this.state.endIndex);
+    this.state.listVisible = this.listData.slice(this.state.startIndex, this.state.endIndex);
   }
 }
