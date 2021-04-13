@@ -21,8 +21,8 @@ class State {
 
 export class ScrollPanelBase extends Vue {
   state = new State();
-  name = '';
-  @Watch('scrollTop')
+
+  @Watch('state.scrollTop')
   OnWatchScrollTop(newVal: number, oldVal: number) {
     const prevStartIdx = this.state.startIndex;
     const prevEndIdx = this.state.endIndex;
