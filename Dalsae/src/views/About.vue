@@ -2,7 +2,8 @@
   <div class="about" ref="about" @scroll="OnScroll">
     <div class="view-port" ref="viewPort" :style="viewportStyle">
       <div class="log-area">
-        <!-- <span>total height: {{ totalHeight }}</span> -->
+        <span>total height: {{ totalHeight }}</span>
+        <button @click="Add">add</button>
       </div>
       <div class="scroll-area" :style="listStyle">
         <scroll-item
@@ -34,7 +35,8 @@
 <script lang="ts">
 import { Vue, Mixins, Component, Ref, Provide, Watch } from 'vue-property-decorator';
 import faker from 'faker';
-import * as I from '@/Interfaces';
+// import * as I from '@/Interfaces';
+import * as M from '@/mixins';
 import item from './Test/ScrollItem.vue';
 
 const minHeight = 20;
@@ -44,8 +46,8 @@ const dataLength = 500;
 export default class About extends Vue {
   scrollTop = 0;
   totalHeight = 0;
-  listData: I.ScrollItem<I.ScrollData>[] = [];
-  listVisible: I.ScrollItem<I.ScrollData>[] = [];
+  listData: M.ScrollItem<M.ScrollData>[] = [];
+  listVisible: M.ScrollItem<M.ScrollData>[] = [];
   startIndex = 0;
   endIndex = 50;
   translateY = 0;
@@ -62,6 +64,13 @@ export default class About extends Vue {
   about!: HTMLElement;
   @Ref()
   scrollItem!: Vue[];
+
+  @Watch('listData')
+  OnWatchListData(newVal: M.ScrollItem<M.ScrollData>[], oldVal: M.ScrollItem<M.ScrollData>[]) {
+    console.log('on watch chagned');
+    console.log(oldVal);
+    console.log(newVal);
+  }
 
   @Watch('scrollTop')
   OnWatchScrollTop(newVal: number, oldVal: number) {
@@ -82,7 +91,7 @@ export default class About extends Vue {
     if (prevStartIdx !== startIdx || prevEndIdx !== endIdx) this.SetVisibleData();
   }
 
-  BinarySearch(list: I.ScrollItem<I.ScrollData>[], scrollTop: number) {
+  BinarySearch(list: M.ScrollItem<M.ScrollData>[], scrollTop: number) {
     let low = 0;
     let high = list.length - 1;
     let mid;
@@ -115,6 +124,21 @@ export default class About extends Vue {
     else return false;
   }
 
+  Add() {
+    //add되면 사이즈 계산은 onresize에서 자동으로 함
+    //TODO ScrollTop계산이 필요함.
+    //나중에 트윗은 외부에서 추가 할 텐데 그때 index몇으로 추가되는지 모름
+    this.key++;
+    this.listData.splice(0, 0, {
+      key: this.key.toString(),
+      data: { text: faker.lorem.text() },
+      height: minHeight,
+      scrollTop: 0,
+      isResized: true
+    });
+    this.SetVisibleData();
+  }
+
   get viewportStyle() {
     return {
       'background-color': 'aliceblue',
@@ -133,11 +157,13 @@ export default class About extends Vue {
     };
   }
 
+  key = 0;
+
   async created() {
     faker.locale = 'ko';
-    for (let i = 0; i < dataLength; i++) {
+    for (let i = 0; i < dataLength; i++, this.key++) {
       this.listData.push({
-        key: i.toString(),
+        key: this.key.toString(),
         data: { text: faker.lorem.text() },
         height: minHeight,
         scrollTop: i * minHeight,
@@ -157,11 +183,12 @@ export default class About extends Vue {
     }
   }
 
-  OnResize(data: I.ResizeEvent) {
-    // console.log('on resize');
+  OnResize(data: M.ResizeEvent) {
+    //scrollTop은 랜더링 할 때 계산
     const moveY = data.newVal - data.oldVal;
     this.totalHeight += moveY;
     const idx = this.listData.findIndex(x => x.key == data.key) + 1; //key다음 idx부터 작업
+    console.log('on resize idx' + idx);
     const len = this.listData.length;
     for (let i = idx; i < len; i++) {
       this.listData[i].scrollTop += moveY;

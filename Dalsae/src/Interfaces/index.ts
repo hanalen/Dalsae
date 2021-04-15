@@ -8,4 +8,3 @@ export * from './Packets';
 export * from './OAuthRes';
 export * from './Media';
 export * from './Errors';
-export * from './Scroll';
