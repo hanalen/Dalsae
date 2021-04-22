@@ -3,6 +3,8 @@ import * as M from '@/Managers';
 import TwitterAPI from '@/API/APICall';
 import * as P from '@/Interfaces';
 import * as I from '@/Interfaces';
+import * as S from '@/store/Interface';
+import store from '@/store/index';
 
 export class APIManager {
   api = new TwitterAPI();
@@ -21,7 +23,7 @@ export class APIManager {
         VerifyCredentials: async (): Promise<P.APIResp<I.User>> => {
           const result = await this.api.call.account.VerifyCredentials();
           if (result.data) {
-            this.mngAccount.UpdateUserInfo(result.data);
+            store.dispatch('UpdateUserInfo', result.data);
           }
           return result;
         }
@@ -101,7 +103,11 @@ export class APIManager {
             since_id: sinceId
           });
           if (result.data) {
-            this.mngAccount.tweetDatas.AddHome(result.data, id);
+            store.dispatch('AddTweet', {
+              type: S.ETweetType.E_HOME,
+              user_id_str: id,
+              listTweet: result.data
+            });
           }
           return result;
         },
@@ -114,7 +120,11 @@ export class APIManager {
             since_id: sinceId
           });
           if (result.data) {
-            this.mngAccount.tweetDatas.AddMention(result.data, id);
+            store.dispatch('AddTweet', {
+              type: S.ETweetType.E_MENTION,
+              user_id_str: id,
+              listTweet: result.data
+            });
           }
           return result;
         }
@@ -133,13 +143,15 @@ export class APIManager {
             }
           );
           if (!result.data) return result;
-          this.mngAccount.AddUser(
-            result.data.oauth_token,
-            result.data.oauth_token_secret,
-            result.data.user_id,
-            result.data.name,
-            result.data.screen_name
-          );
+          const user = result.data;
+          store.dispatch('AddUser', {
+            publicKey: user.oauth_token,
+            secretKey: user.oauth_token_secret,
+            userId: user.user_id,
+            name: user.name,
+            screenName: user.screen_name
+          });
+
           return result;
         }
       }

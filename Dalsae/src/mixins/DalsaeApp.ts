@@ -3,6 +3,8 @@ import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import * as M from '@/Managers';
 import { Vue, Component, Provide, Ref } from 'vue-property-decorator';
+import { createApiManager } from '@/Managers';
+import store from '@/store/index';
 
 @Component
 export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
@@ -50,7 +52,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     window.preload.LoadConfig();
     const switter = window.preload.LoadSwitter();
     if (switter) {
-      this.mngAccount.InitSwitter(switter);
+      store.dispatch('InitSwitter', switter);
     }
     const option = window.preload.LoadOption();
     this.mngOption.ChangeOptions(option);
@@ -107,7 +109,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
 
   @Provide()
   async AccountChange(user: I.DalsaeUser) {
-    this.mngAccount.ChangeAccount(user);
+    store.dispatch('ChangeAccount', user);
     this.StartDalsae();
   }
 }
