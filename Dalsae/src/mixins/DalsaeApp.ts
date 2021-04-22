@@ -7,7 +7,7 @@ import { Vue, Component, Provide, Ref } from 'vue-property-decorator';
 @Component
 export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
-  api = new M.APIManager();
+  api = createApiManager(this.ShowMessage, this.ShowConfirm);
   @Provide()
   mngAccount = new M.AccountManager();
 
@@ -44,8 +44,6 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     this.api.api.mngAccount = this.mngAccount; //나중에 이 구조는 바꾸는 게 좋을 거 같다
     this.api.mngAccount = this.mngAccount;
     this.tweetPanel.mngAccount = this.mngAccount;
-    this.api.ShowMessage = this.ShowMessage;
-    this.api.ShowConfirm = this.ShowConfirm;
   }
 
   LoadConfig() {

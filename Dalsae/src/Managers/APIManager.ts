@@ -8,8 +8,12 @@ export class APIManager {
   api = new TwitterAPI();
   mngAccount!: M.AccountManager;
 
-  ShowMessage!: (msg: string) => void;
-  ShowConfirm!: (msg: string) => Promise<boolean>;
+  private _ShowMessage!: (msg: string) => void;
+  private _ShowConfirm!: (msg: string) => Promise<boolean>;
+  constructor(showMesage: (msg: string) => void, showConfirm: (msg: string) => Promise<boolean>) {
+    this._ShowMessage = showMesage;
+    this._ShowConfirm = showConfirm;
+  }
 
   get call() {
     return {
@@ -141,4 +145,11 @@ export class APIManager {
       }
     };
   }
+}
+
+export function createApiManager(
+  showMesage: (msg: string) => void,
+  showConfirm: (msg: string) => Promise<boolean>
+) {
+  return new APIManager(showMesage, showConfirm);
 }
