@@ -8,7 +8,6 @@ export class AccountManager {
   // tweetMng = new M.TweetDataManager();
   switter!: I.Switter;
   tempUser!: I.DalsaeUser; //사용자 등록 시 사용하는 변수
-  oauth = new I.OAuth();
   tweetDatas = new TweetDatas();
   constructor() {
     this.switter = {
