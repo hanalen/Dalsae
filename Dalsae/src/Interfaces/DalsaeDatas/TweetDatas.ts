@@ -23,25 +23,41 @@ export class TweetDatas {
     this.dicTweets = new Map();
   }
 
-  CheckKey(id_str: string) {
-    if (!this.dicTweets.has(id_str)) {
-      this.dicTweets.set(id_str, new Tweets());
+  CheckKey(user_id_str: string) {
+    if (!this.dicTweets.has(user_id_str)) {
+      this.dicTweets.set(user_id_str, new Tweets());
     }
   }
 
-  AddHome(list: I.Tweet[], id_str: string) {
-    this.CheckKey(id_str);
-    const tweets = this.dicTweets.get(id_str)?.homes;
+  AddHome(tweet: I.Tweet, user_id_str: string) {
+    this.CheckKey(user_id_str);
+    const tweets = this.dicTweets.get(user_id_str)?.homes;
+    //TODO 에러 처리 해야함
+    if (!tweets) throw Error('No ListTweets');
+    tweets.push(tweet);
+  }
+
+  AddMention(tweet: I.Tweet, user_id_str: string) {
+    this.CheckKey(user_id_str);
+    const tweets = this.dicTweets.get(user_id_str)?.mentions;
+    //TODO 에러 처리 해야함
+    if (!tweets) throw Error('No ListTweets');
+    tweets.push(tweet);
+  }
+
+  AddHomeList(list: I.Tweet[], user_id_str: string) {
+    this.CheckKey(user_id_str);
+    const tweets = this.dicTweets.get(user_id_str)?.homes;
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
       tweets.push(tweet);
     });
   }
-  AddMention(list: I.Tweet[], id_str: string) {
-    this.CheckKey(id_str);
+  AddMentionList(list: I.Tweet[], user_id_str: string) {
+    this.CheckKey(user_id_str);
 
-    const tweets = this.dicTweets.get(id_str)?.mentions;
+    const tweets = this.dicTweets.get(user_id_str)?.mentions;
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
