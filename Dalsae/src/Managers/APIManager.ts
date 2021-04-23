@@ -5,6 +5,8 @@ import * as P from '@/Interfaces';
 import * as I from '@/Interfaces';
 import * as S from '@/store/Interface';
 import store from '@/store/index';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { mapMutations } from 'vuex';
 
 export class APIManager {
   api = new TwitterAPI();
@@ -95,7 +97,10 @@ export class APIManager {
           return result;
         },
         TimeLine: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
-          const id = this.mngAccount.selectID;
+          store.commit('a', { a: 'a' });
+          store.getters.homes();
+
+          const id = moduleSwitter.selectID;
           const result = await this.api.call.statuses.TimeLine({
             count: '200',
             tweet_mode: 'extended',
@@ -112,7 +117,7 @@ export class APIManager {
           return result;
         },
         Mention: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
-          const id = this.mngAccount.selectID;
+          const id = store.getters.selectID;
           const result = await this.api.call.statuses.Mention({
             count: '200',
             tweet_mode: 'extended',
