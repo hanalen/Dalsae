@@ -3,18 +3,6 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import * as A from '@/store/Interface';
 import store from '@/store';
-// export class StoreState {
-//   uiOption!: I.UIOption;
-//   muteOption!: I.MuteOption;
-//   hotkey!: I.Hotkey;
-//   switter!: I.Switter;
-//   tempUser!: I.DalsaeUser;
-//   tweetDatas!: I.TweetDatas;
-//   constructor() {
-//     this.tweetDatas = new I.TweetDatas();
-//   }
-// }
-
 export interface ISwitterState {
   switter: I.Switter;
 }
@@ -22,7 +10,8 @@ export interface ISwitterState {
 @Module({ dynamic: true, store, name: 'switter' })
 class SwitterStore extends VuexModule {
   // states
-  public switter!: I.Switter;
+  switter!: I.Switter;
+  public tempUser!: I.DalsaeUser;
 
   // getters
   get selectID() {
@@ -33,22 +22,32 @@ class SwitterStore extends VuexModule {
 
   // mutations
   @Mutation
-  public increment(delta: number) {
-    console.log(`increment mutation: ${delta}`);
-    // this.count += delta;
+  private setKey(setkey: A.SetKey) {
+    console.log('mutateion');
+    console.log(setkey);
+    this.tempUser = new I.DalsaeUser();
+    this.tempUser.oauth_token = setkey.publicKey;
+    this.tempUser.oauth_token_secret = setkey.secretKey;
   }
 
-  @Action({ commit: 'SetKey' })
+  @Action
   public SetKey(setKey: A.SetKey) {
-    console.log('set key!!!!!!!!!!!!!!!!!!!!!!!');
+    console.log('setkey action');
     console.log(setKey);
+    this.context.commit('setKey', setKey);
   }
 
-  // actions
-  @Action({ commit: 'increment' })
-  public incr(delta: number) {
-    console.log(`increment action: ${delta}`);
-    return delta;
+  @Mutation
+  private initSwitter(switter: I.Switter) {
+    console.log('init switter mutation');
+    this.switter = switter;
+  }
+
+  @Action({ commit: 'initSwitter' })
+  public InitSwitter(switter: I.Switter) {
+    console.log('init switter');
+    console.log(switter);
+    this.context.commit('initSwitter', switter);
   }
 }
 
