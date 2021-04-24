@@ -10,7 +10,6 @@ export interface DalsaePageBase {
   ShowOptionDetailModal: () => void;
   AccountChange: (user: I.DalsaeUser) => void;
 
-  mngOption: M.OptionManager;
   tweetPanel: MIX.TweetPanelBase;
   isShowOptionModal: boolean;
   api: M.APIManager;

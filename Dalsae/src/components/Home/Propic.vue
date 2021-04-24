@@ -37,24 +37,30 @@
 import { DalsaeApp, DalsaePage, TweetBase } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide, Inject, Prop } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
+import store from '@/store';
+
 @Component
 export default class Propic extends Mixins(DalsaePage) {
   @Prop()
   user!: I.User;
+  uiOption!: I.UIOption;
+  async created() {
+    this.uiOption = store.state.option.uiOption;
+  }
 
   get maxWidth() {
-    return this.mngOption.uiOption.isBigPropic ? 73 : 48;
+    return this.uiOption.isBigPropic ? 73 : 48;
   }
 
   get img() {
-    return this.mngOption.uiOption.isBigPropic
+    return this.uiOption.isBigPropic
       ? this.user.profile_image_url_https.replace('_normal', '_bigger')
       : this.user.profile_image_url_https;
   }
 
   get imgClass() {
-    if (!this.mngOption.uiOption.isShowPropic) return 'empty';
-    else if (this.mngOption.uiOption.isBigPropic) return 'big';
+    if (!this.uiOption.isShowPropic) return 'empty';
+    else if (this.uiOption.isBigPropic) return 'big';
     else return 'normal';
   }
 }

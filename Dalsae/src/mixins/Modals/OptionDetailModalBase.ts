@@ -3,6 +3,7 @@ import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
 import { DalsaePage } from '@/mixins';
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
+import store from '@/store';
 class State {
   isShow: boolean;
   selectMenu: number;
@@ -121,8 +122,8 @@ interface HotkeySubMenu {
 @Component
 export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
   state = new State();
-  muteOption = this.mngOption.muteOption;
-  hotKey = this.mngOption.hotKey;
+  muteOption = store.state.option.muteOption;
+  hotKey = store.state.option.hotKey;
 
   @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
   OnSelectMenuChanged(newMenu: number) {
@@ -149,7 +150,7 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
   OnClickClose() {
     this.CloseModal();
     this.SaveHotkey();
-    window.preload.SaveOption(this.mngOption);
+    window.preload.SaveOption(store.state.option);
   }
 
   CloseModal() {
@@ -175,7 +176,7 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
     }
     const hotkey = Object.fromEntries(map);
     this.hotKey = hotkey;
-    this.mngOption.hotKey = hotkey;
+    store.state.option.hotKey = hotkey;
   }
 
   OnAdd(list: string[], word: string) {

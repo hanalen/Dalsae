@@ -6,6 +6,7 @@ import ImagePreload from './ImagePreload';
 import fs from 'fs-extra';
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
+import { IOptionStore } from '@/store/modules/OptionStore';
 
 const pathData = 'Data/';
 const pathSwitter = 'Data/Switter.json';
@@ -69,8 +70,8 @@ export default class Preload {
     return this.ReadFile<I.Switter>(pathSwitter);
   }
 
-  LoadOption(): M.OptionManager {
-    return this.ReadFile<M.OptionManager>(pathOption);
+  LoadOption(): IOptionStore {
+    return this.ReadFile<IOptionStore>(pathOption);
   }
 
   ReadFile<T>(path: string): T {
@@ -82,7 +83,7 @@ export default class Preload {
     this.SaveFile(pathSwitter, switter);
   }
 
-  SaveOption(option: M.OptionManager) {
+  SaveOption(option: IOptionStore) {
     this.SaveFile(pathOption, option);
   }
 

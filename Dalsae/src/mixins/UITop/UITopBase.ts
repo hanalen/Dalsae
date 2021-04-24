@@ -20,7 +20,7 @@ export class UITopBase extends mixins(Vue, DalsaePage) {
   state = new State();
   user = store.state.switter.switter;
   propicPath = '';
-  option = this.mngOption.uiOption;
+  option = store.state.option.uiOption;
 
   @Watch('user', { immediate: true, deep: true })
   OnUserChanged(switter: I.Switter) {
@@ -33,11 +33,11 @@ export class UITopBase extends mixins(Vue, DalsaePage) {
   }
 
   get isShowPropic() {
-    return this.mngOption.uiOption.isShowPropic;
+    return store.state.option.uiOption.isShowPropic;
   }
 
   get propicClass() {
-    const option = this.mngOption.uiOption;
+    const option = store.state.option.uiOption;
     if (option.isBigPropic) return 'big';
     else return 'normal';
   }

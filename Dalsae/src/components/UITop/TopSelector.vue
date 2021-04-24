@@ -13,8 +13,8 @@
           {{ item.msg }}
         </v-alert>
       </div>
-      <top-big v-if="!mngOption.uiOption.isSmallInput"> </top-big>
-      <top-small v-if="mngOption.uiOption.isSmallInput"> </top-small>
+      <top-big v-if="!uiOption.isSmallInput"> </top-big>
+      <top-small v-if="uiOption.isSmallInput"> </top-small>
     </slot>
   </div>
 </template>

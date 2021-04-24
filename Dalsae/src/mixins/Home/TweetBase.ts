@@ -2,6 +2,8 @@ import { Vue, Mixins, Component, Inject, Emit, Prop, Provide } from 'vue-propert
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
 import moment from 'moment';
+import { moduleOption } from '@/store/modules/OptionStore';
+import store from '@/store';
 
 class State {
   isSelected: boolean;
@@ -20,7 +22,11 @@ export class TweetBase extends Mixins(Vue, MIX.DalsaePage) {
 
   @Provide()
   OpenImage() {
-    window.preload.image.OpenImageWindow(this.tweet, this.mngOption.uiOption);
+    window.preload.image.OpenImageWindow(this.tweet, this.uiOption);
+  }
+
+  get uiOption() {
+    return store.state.option.uiOption;
   }
 
   get orgTweet() {

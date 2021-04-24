@@ -89,6 +89,6 @@ import store from '@/store';
 @Component
 export default class OptionModal extends OptionModalBase {
   listUser = store.state.switter.switter.listUser;
-  option = this.mngOption.uiOption;
+  option = store.state.option.uiOption;
 }
 </script>

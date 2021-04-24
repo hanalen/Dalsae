@@ -1,6 +1,7 @@
 import { Vue, Mixins, Component, Inject, Emit, Provide, Prop } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
+import store from '@/store';
 class State {
   isSelected: boolean;
   isFocus: boolean;
@@ -18,12 +19,12 @@ export class TweetSelectorBase extends Mixins(Vue, MIX.DalsaePage) {
   tweet!: I.Tweet;
 
   get isSmall() {
-    const option = this.mngOption.uiOption;
+    const option = store.state.option.uiOption;
     return option.isSmallTweet && !this.state.isFocus && !this.state.isSelected;
   }
 
   get isNormal() {
-    const option = this.mngOption.uiOption;
+    const option = store.state.option.uiOption;
     return (
       !option.isSmallTweet || (option.isSmallTweet && (this.state.isFocus || this.state.isSelected))
     );

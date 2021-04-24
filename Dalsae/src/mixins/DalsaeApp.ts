@@ -6,14 +6,11 @@ import { Vue, Component, Provide, Ref } from 'vue-property-decorator';
 import { createApiManager } from '@/Managers';
 import store from '@/store/index';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
-
+import { moduleOption } from '@/store/modules/OptionStore';
 @Component
 export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
   api = createApiManager(this.ShowMessage, this.ShowConfirm);
-
-  @Provide()
-  mngOption = new M.OptionManager();
 
   @Ref()
   messageModal!: MIX.MessageModalBase;
@@ -47,12 +44,12 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
       moduleSwitter.InitSwitter(switter);
     }
     const option = window.preload.LoadOption();
-    this.mngOption.ChangeOptions(option);
+    moduleOption.ChangeOptions(option);
   }
 
   OnOptionChange() {
     if (this.isShowOptionModal) return; //open할때
-    window.preload.SaveOption(this.mngOption);
+    window.preload.SaveOption(store.state.option);
   }
 
   @Provide()
