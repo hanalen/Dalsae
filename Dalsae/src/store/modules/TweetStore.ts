@@ -8,7 +8,7 @@ export interface ITweetStore {
   tweetDatas: I.TweetDatas;
 }
 
-@Module({ dynamic: true, store, name: 'switter' })
+@Module({ dynamic: true, store, name: 'tweet' })
 class TweetStore extends VuexModule {
   // states
   tweetDatas: I.TweetDatas = new I.TweetDatas();
@@ -33,6 +33,16 @@ class TweetStore extends VuexModule {
   get opens() {
     const tweets = this.tweetDatas.dicTweets.get(moduleSwitter.selectID);
     return tweets ? tweets.opens : [];
+  }
+
+  @Mutation
+  private init(userId: string) {
+    this.tweetDatas.dicTweets.set(userId, new I.Tweets());
+  }
+
+  @Action
+  Init(userId: string) {
+    this.context.commit('init', userId);
   }
 }
 
