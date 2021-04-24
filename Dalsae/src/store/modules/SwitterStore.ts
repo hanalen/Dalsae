@@ -85,6 +85,11 @@ class SwitterStore extends VuexModule {
   @Action
   public InitSwitter(switter: I.Switter) {
     this.context.commit('initSwitter', switter);
+    if (switter) {
+      switter.listUser?.forEach(user => {
+        moduleTweet.Init(user.user_id);
+      });
+    }
   }
 
   @Mutation
