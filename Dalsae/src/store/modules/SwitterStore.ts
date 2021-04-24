@@ -12,12 +12,12 @@ export interface ISwitterState {
 @Module({ dynamic: true, store, name: 'switter' })
 class SwitterStore extends VuexModule {
   // states
-  switter!: I.Switter;
+  switter: I.Switter = { selectUser: new I.DalsaeUser(), listUser: [] };
   tempUser: I.DalsaeUser = new I.DalsaeUser();
 
   // getters
   get selectID() {
-    let id = this.switter?.selectUser.user_id;
+    let id = this.switter.selectUser.user_id;
     id = id ? id : '';
     return id;
   }
@@ -53,32 +53,27 @@ class SwitterStore extends VuexModule {
 
   @Mutation
   private addUser(addUser: A.AddUser) {
-    const { name, screenName, secretKey, userId } = { ...addUser };
+    const { name, screenName, secretKey, userId, publicKey } = { ...addUser };
     const user = this.switter.listUser?.find(x => x.user_id === userId);
     if (user) {
       this.switter.selectUser = user;
     } else {
       const selUser = this.switter.selectUser;
-      selUser.oauth_token = addUser.publicKey;
+      selUser.oauth_token = publicKey;
       selUser.oauth_token_secret = secretKey;
       selUser.name = name;
       selUser.screen_name = screenName;
       selUser.user_id = userId;
       this.switter.listUser?.push(JSON.parse(JSON.stringify(selUser)));
+      console.log('sel user------');
+      console.log(selUser);
       moduleTweet.Init(userId);
     }
   }
 
   @Action
-  AddUser(publicKey: string, secretKey: string, userId: string, name: string, screenName: string) {
-    const user: A.AddUser = {
-      publicKey: publicKey,
-      secretKey: secretKey,
-      userId: userId,
-      name: name,
-      screenName: screenName
-    };
-    this.context.commit('addUser', user);
+  AddUser(addUser: A.AddUser) {
+    this.context.commit('addUser', addUser);
   }
 
   @Mutation
@@ -100,6 +95,22 @@ class SwitterStore extends VuexModule {
   @Action
   public Reset() {
     this.context.commit('reset');
+  }
+
+  @Mutation
+  private updateUserInfo(user: I.User) {
+    this.switter.listUser?.forEach(item => {
+      item.user = user;
+      item.name = user.name;
+    });
+    if (this.switter.selectUser.user_id === user.id_str) {
+      this.switter.selectUser.user = user;
+    }
+  }
+
+  @Action
+  public UpdateUserInfo(user: I.User) {
+    this.context.commit('updateUserInfo', user);
   }
 }
 

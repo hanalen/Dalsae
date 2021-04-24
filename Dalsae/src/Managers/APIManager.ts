@@ -24,7 +24,7 @@ export class APIManager {
         VerifyCredentials: async (): Promise<P.APIResp<I.User>> => {
           const result = await this.api.call.account.VerifyCredentials();
           if (result.data) {
-            store.dispatch('UpdateUserInfo', result.data);
+            moduleSwitter.UpdateUserInfo(result.data);
           }
           return result;
         }
@@ -96,9 +96,6 @@ export class APIManager {
           return result;
         },
         TimeLine: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
-          store.commit('a', { a: 'a' });
-          store.getters.homes();
-
           const id = moduleSwitter.selectID;
           const result = await this.api.call.statuses.TimeLine({
             count: '200',
@@ -148,13 +145,13 @@ export class APIManager {
           );
           if (!result.data) return result;
           const user = result.data;
-          moduleSwitter.AddUser(
-            user.oauth_token,
-            user.oauth_token_secret,
-            user.user_id,
-            user.name,
-            user.screen_name
-          );
+          moduleSwitter.AddUser({
+            publicKey: user.oauth_token,
+            secretKey: user.oauth_token_secret,
+            screenName: user.screen_name,
+            name: user.name,
+            userId: user.user_id
+          });
 
           return result;
         }
