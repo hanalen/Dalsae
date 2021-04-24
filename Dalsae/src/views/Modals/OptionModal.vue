@@ -83,19 +83,12 @@
 <script lang="ts">
 import { Mixins, Component, Ref } from 'vue-property-decorator';
 import { DalsaePage, OptionModalBase } from '@/mixins';
+import store from '@/store';
 // interface BaseInterface extends DalsaePage {}
 
 @Component
 export default class OptionModal extends OptionModalBase {
-  listUser = this.mngAccount.switter.listUser;
+  listUser = store.state.switter.switter.listUser;
   option = this.mngOption.uiOption;
-  async created() {
-    console.log('msg modal crated');
-
-    this.$nextTick(() => {
-      console.log('list user~');
-      console.log(this.mngAccount);
-    });
-  }
 }
 </script>

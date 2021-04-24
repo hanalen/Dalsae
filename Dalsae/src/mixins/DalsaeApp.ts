@@ -11,8 +11,6 @@ import { moduleSwitter } from '@/store/modules/SwitterStore';
 export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
   api = createApiManager(this.ShowMessage, this.ShowConfirm);
-  @Provide()
-  mngAccount = new M.AccountManager();
 
   @Provide()
   mngOption = new M.OptionManager();
@@ -43,9 +41,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     });
   }
 
-  Init() {
-    this.tweetPanel.mngAccount = this.mngAccount;
-  }
+  Init() {}
 
   LoadConfig() {
     console.log('~~~~~~~~load config~~~~~~~~~');
@@ -66,12 +62,12 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   @Provide()
   async StartDalsae() {
     // this.LoadTestTweet();
-    if (this.mngAccount.selectUser) {
+    if (moduleSwitter.selectUser) {
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
       await this.api.call.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
-      window.preload.SaveSwitter(this.mngAccount.switter);
+      window.preload.SaveSwitter(store.state.switter.switter);
       this.api.call.statuses.TimeLine();
       this.api.call.statuses.Mention();
     } else {

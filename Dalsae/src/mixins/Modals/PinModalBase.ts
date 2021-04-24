@@ -22,7 +22,7 @@ export class PinModalBase extends mixins(Vue, DalsaePage) {
   StartDalsae!: () => void;
 
   async ShowModal() {
-    this.mngAccount.Reset();
+    moduleSwitter.Reset();
     this.state.isShow = true;
     this.state.pin = '';
     // eslint-disable-next-line @typescript-eslint/camelcase

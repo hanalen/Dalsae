@@ -12,7 +12,6 @@ class State {
 @Component
 export class TweetPanelBase extends Vue {
   state: State = new State();
-  mngAccount!: M.AccountManager;
   async MenuChange(menu: number) {
     this.state.selectMenu = menu;
   }

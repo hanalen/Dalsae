@@ -10,7 +10,6 @@ import { mapMutations } from 'vuex';
 
 export class APIManager {
   api = new TwitterAPI();
-  // mngAccount!: M.AccountManager;
 
   private _ShowMessage!: (msg: string) => void;
   private _ShowConfirm!: (msg: string) => Promise<boolean>;

@@ -41,7 +41,6 @@ function CreateHeader(authorization: string, contentType?: string) {
 }
 
 export default class TwitterAPI {
-  mngAccount!: M.AccountManager;
   async request<TReq, TResp>(
     url: string,
     method: P.Method,
@@ -50,7 +49,7 @@ export default class TwitterAPI {
   ): Promise<P.APIResp<TResp>> {
     try {
       const oauth: I.OAuth = new I.OAuth();
-      oauth.SetKey(this.mngAccount.publicKey, this.mngAccount.secretKey);
+      oauth.SetKey(moduleSwitter.publicKey, moduleSwitter.secretKey);
 
       const body = params && params.data && !isQueryParam ? oauth.CreateBody(params) : '';
       const reqUrl = oauth.GetUrl(params, url, isQueryParam);
@@ -145,7 +144,7 @@ export default class TwitterAPI {
   ): Promise<P.APIResp<TResp>> {
     try {
       const oauth: I.OAuth = new I.OAuth();
-      oauth.SetKey(this.mngAccount.publicKey, this.mngAccount.secretKey);
+      oauth.SetKey(moduleSwitter.publicKey, moduleSwitter.secretKey);
 
       const body = new FormData();
       if (params.data?.media) {

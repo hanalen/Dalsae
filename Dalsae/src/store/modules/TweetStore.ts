@@ -3,16 +3,15 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import * as A from '@/store/Interface';
 import store from '@/store';
-export interface ISwitterState {
+export interface ITweetStore {
   switter: I.Switter;
   tempUser: I.DalsaeUser;
 }
 
 @Module({ dynamic: true, store, name: 'switter' })
-class SwitterStore extends VuexModule {
+class TweetStore extends VuexModule {
   // states
-  switter!: I.Switter;
-  tempUser: I.DalsaeUser = new I.DalsaeUser();
+  tweet;
 
   // getters
   get selectID() {
@@ -99,15 +98,6 @@ class SwitterStore extends VuexModule {
     console.log(switter);
     this.context.commit('initSwitter', switter);
   }
-
-  private reset() {
-    this.tempUser = new I.DalsaeUser();
-  }
-
-  @Action
-  public Reset() {
-    this.context.commit('reset');
-  }
 }
 
-export const moduleSwitter = getModule(SwitterStore);
+export const moduleSwitter = getModule(TweetStore);
