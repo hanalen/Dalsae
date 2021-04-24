@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Watch, Prop } from 'vue-property-decorator';
 import { DalsaePage } from '@/mixins';
 import * as M from '@/mixins';
 import * as I from '@/Interfaces';
-
+import faker from 'faker';
 class State {
   scrollTop = 0;
   totalHeight = 0;
@@ -11,7 +12,7 @@ class State {
   startIndex = 0;
   endIndex = 50;
   translateY = 0;
-  minHeight = 0;
+  minHeight = 40;
   constructor() {
     this.listVisible = [];
   }
@@ -20,17 +21,82 @@ class State {
 export class ScrollPanelBase extends Vue {
   state = new State();
 
-  @Prop()
-  listData: M.ScrollItem<I.Tweet>[] = [];
+  @Prop({ default: [] })
+  listTweet!: I.Tweet[];
+
+  @Prop({ default: [] })
+  listData!: M.ScrollItem<I.Tweet>[];
+
+  AddTestData() {
+    for (let i = 0; i < 200; i++) {
+      const data: I.Tweet = {
+        full_text: faker.lorem.text() + faker.lorem.text(),
+        created_at: Date.now.toString(),
+        entities: { hashtags: [], media: [], urls: [], user_mentions: [] },
+        extended_entities: { media: [] },
+        favorite_count: 0,
+        favorited: false,
+        id_str: faker.datatype.number(1000000).toString(),
+        in_reply_to_screen_name: '',
+        in_reply_to_status_id_str: '',
+        in_reply_to_user_id_str: '',
+        is_quote_status: false,
+        place: '',
+        retweet_count: 0,
+        retweeted: false,
+        retweeted_status: undefined,
+        source: '',
+        user: {
+          profile_image_url_https: faker.image.avatar(),
+          name: faker.name.firstName(),
+          screen_name: faker.finance.accountName(),
+          created_at: Date.now.toString(),
+          default_profile: false,
+          default_profile_image: false,
+          description: '',
+          favourites_count: 0,
+          follow_request_sent: false,
+          followers_count: 0,
+          following: false,
+          friends_count: 0,
+          has_extended_profile: false,
+          id_str: faker.datatype.number(1000000).toString(),
+          listed_count: 0,
+          location: '',
+          profile_background_color: '',
+          profile_background_image_url: '',
+          profile_background_image_url_https: '',
+          profile_background_tile: false,
+          profile_banner_url: '',
+          profile_image_url: faker.image.avatar(),
+          profile_link_color: '',
+          profile_sidebar_border_color: '',
+          profile_sidebar_fill_color: '',
+          protected: false,
+          statuses_count: 0,
+          verified: false
+        }
+      };
+      this.listData.push({
+        data: data,
+        height: 40,
+        isResized: true,
+        key: i.toString(),
+        scrollTop: this.state.minHeight * i
+      });
+    }
+  }
 
   @Watch('state.scrollTop')
   OnWatchScrollTop(newVal: number, oldVal: number) {
     const prevStartIdx = this.state.startIndex;
     const prevEndIdx = this.state.endIndex;
     this.state.scrollTop = this.$el.scrollTop;
+    let scrollTop = this.state.scrollTop - 500; // 상단 버퍼 px
+    if (scrollTop < 0) scrollTop = 0;
     this.state.endIndex =
       this.state.startIndex + Math.floor(this.$el.clientHeight / this.state.minHeight);
-    this.state.startIndex = this.BinarySearch(this.listData, this.state.scrollTop);
+    this.state.startIndex = this.BinarySearch(this.listData, scrollTop);
     this.state.translateY = this.listData[this.state.startIndex].scrollTop;
     const startIdx = this.state.startIndex;
     const endIdx = this.state.endIndex;
@@ -92,31 +158,9 @@ export class ScrollPanelBase extends Vue {
 
   key = 0;
 
-  async created() {
-    for (let i = 0, len = this.listData.length; i < len; i++) {
-      this.state.totalHeight += this.state.minHeight;
-    }
-    this.SetVisibleData();
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.OnResizeWindow);
-    });
-  }
-
   OnResizeWindow() {
     for (let i = 0, len = this.listData.length; i < len; i++) {
       this.listData[i].isResized = true;
-    }
-  }
-
-  OnResize(data: M.ResizeEvent) {
-    //scrollTop은 랜더링 할 때 계산
-    const moveY = data.newVal - data.oldVal;
-    this.state.totalHeight += moveY;
-    const idx = this.listData.findIndex(x => x.key == data.key) + 1; //key다음 idx부터 작업
-    console.log('on resize idx' + idx);
-    const len = this.listData.length;
-    for (let i = idx; i < len; i++) {
-      this.listData[i].scrollTop += moveY;
     }
   }
 
@@ -126,10 +170,6 @@ export class ScrollPanelBase extends Vue {
       sum += item.scrollTop;
     });
     return sum;
-  }
-
-  OnScroll() {
-    this.state.scrollTop = this.$el.scrollTop;
   }
 
   SetVisibleData() {

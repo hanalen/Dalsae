@@ -9,6 +9,6 @@ export enum ETweetType {
 export interface AddTweet {
   type: ETweetType;
   user_id_str: string;
-  listTweet: I.Tweet[];
-  tweet: I.Tweet;
+  listTweet: I.Tweet[] | undefined;
+  tweet: I.Tweet | undefined;
 }

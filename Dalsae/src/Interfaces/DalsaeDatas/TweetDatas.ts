@@ -29,7 +29,8 @@ export class TweetDatas {
     }
   }
 
-  AddHome(tweet: I.Tweet, user_id_str: string) {
+  AddHome(tweet: I.Tweet | undefined, user_id_str: string) {
+    if (!tweet) throw Error('No ListTweets');
     this.CheckKey(user_id_str);
     const tweets = this.dicTweets.get(user_id_str)?.homes;
     //TODO 에러 처리 해야함
@@ -37,7 +38,8 @@ export class TweetDatas {
     tweets.push(tweet);
   }
 
-  AddMention(tweet: I.Tweet, user_id_str: string) {
+  AddMention(tweet: I.Tweet | undefined, user_id_str: string) {
+    if (!tweet) throw Error('No ListTweets');
     this.CheckKey(user_id_str);
     const tweets = this.dicTweets.get(user_id_str)?.mentions;
     //TODO 에러 처리 해야함
@@ -45,8 +47,9 @@ export class TweetDatas {
     tweets.push(tweet);
   }
 
-  AddHomeList(list: I.Tweet[], user_id_str: string) {
+  AddHomeList(list: I.Tweet[] | undefined, user_id_str: string) {
     this.CheckKey(user_id_str);
+    if (!list) throw Error('No ListTweets');
     const tweets = this.dicTweets.get(user_id_str)?.homes;
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
@@ -54,7 +57,8 @@ export class TweetDatas {
       tweets.push(tweet);
     });
   }
-  AddMentionList(list: I.Tweet[], user_id_str: string) {
+  AddMentionList(list: I.Tweet[] | undefined, user_id_str: string) {
+    if (!list) throw Error('No ListTweets');
     this.CheckKey(user_id_str);
 
     const tweets = this.dicTweets.get(user_id_str)?.mentions;
