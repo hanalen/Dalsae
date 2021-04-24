@@ -3,6 +3,7 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import * as A from '@/store/Interface';
 import store from '@/store';
+import { moduleTweet } from '@/store/modules/TweetStore';
 export interface ISwitterState {
   switter: I.Switter;
   tempUser: I.DalsaeUser;
@@ -40,8 +41,6 @@ class SwitterStore extends VuexModule {
   // mutations
   @Mutation
   private setKey(setkey: A.SetKey) {
-    console.log('mutateion');
-    console.log(setkey);
     this.tempUser = new I.DalsaeUser();
     this.tempUser.oauth_token = setkey.publicKey;
     this.tempUser.oauth_token_secret = setkey.secretKey;
@@ -49,8 +48,6 @@ class SwitterStore extends VuexModule {
 
   @Action
   public SetKey(setKey: A.SetKey) {
-    console.log('setkey action');
-    console.log(setKey);
     this.context.commit('setKey', setKey);
   }
 
@@ -68,7 +65,7 @@ class SwitterStore extends VuexModule {
       selUser.screen_name = screenName;
       selUser.user_id = userId;
       this.switter.listUser?.push(JSON.parse(JSON.stringify(selUser)));
-      // this.tweetDatas.dicTweets.set(userId, new I.Tweets());
+      moduleTweet.Init(userId);
     }
   }
 
@@ -86,20 +83,16 @@ class SwitterStore extends VuexModule {
 
   @Mutation
   private initSwitter(switter: I.Switter) {
-    console.log('init switter mutation');
-    console.log(switter);
-    console.trace();
     this.switter = switter;
     console.log(this.switter);
   }
 
   @Action
   public InitSwitter(switter: I.Switter) {
-    console.log('init switter');
-    console.log(switter);
     this.context.commit('initSwitter', switter);
   }
 
+  @Mutation
   private reset() {
     this.tempUser = new I.DalsaeUser();
   }
