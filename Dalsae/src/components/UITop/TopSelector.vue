@@ -25,9 +25,12 @@
 import { DalsaeApp, DalsaePage } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 import * as I from '@/Managers/ErrorManager';
-
+import store from '@/store';
 @Component
 export default class TopSelector extends Mixins(DalsaePage) {
   listMsg = I.ErrorManager.instence().listMsg;
+  get uiOption() {
+    return store.state.option.uiOption;
+  }
 }
 </script>

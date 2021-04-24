@@ -24,7 +24,7 @@ export class UITopBase extends mixins(Vue, DalsaePage) {
 
   @Watch('user', { immediate: true, deep: true })
   OnUserChanged(switter: I.Switter) {
-    const user = switter.selectUser.user;
+    const user = switter?.selectUser?.user;
     if (!user) this.propicPath = '';
     else
       this.propicPath = this.option.isBigPropic

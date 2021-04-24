@@ -2,10 +2,10 @@
   <div>
     <v-list>
       <v-list-item>
-        <v-card width="256px">
+        <v-card width="256px" v-if="this.$store.state.switter.switter != undefined">
           <v-avatar
             class="clickAble"
-            v-for="(item, i) in listUser"
+            v-for="(item, i) in this.$store.state.switter.switter.listUser"
             :key="i"
             :size="40"
             @click="OnClickAccount(item)"
@@ -84,11 +84,10 @@
 import { Mixins, Component, Ref } from 'vue-property-decorator';
 import { DalsaePage, OptionModalBase } from '@/mixins';
 import store from '@/store';
-// interface BaseInterface extends DalsaePage {}
+import * as I from '@/Interfaces';
 
 @Component
 export default class OptionModal extends OptionModalBase {
-  listUser = store.state.switter.switter.listUser;
   option = store.state.option.uiOption;
 }
 </script>
