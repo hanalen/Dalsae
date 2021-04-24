@@ -10,37 +10,10 @@ export interface IOptionStore {
 
 @Module({ dynamic: true, store, name: 'option' })
 class OptionStore extends VuexModule {
-  private uiOption: I.UIOption;
-  private muteOption: I.MuteOption;
-  private hotKey: I.Hotkey;
-  constructor() {
-    super(getModule(OptionStore));
-    this.uiOption = {
-      isBigPropic: true,
-      isLoadOrgImg: false,
-      isSendCheck: false,
-      isSendEnter: true,
-      isSendRTCheck: true,
-      isSendRTProtected: true,
-      isShowBottomPreview: true,
-      isShowPreview: true,
-      isShowPropic: true,
-      isShowTweet: true,
-      isSmallInput: false,
-      isSmallTweet: false,
-      isUseRead: false
-    };
-    this.muteOption = {
-      highlight: [],
-      keyword: [],
-      tweet: [],
-      user: [],
-      client: [],
-      isMuteMention: true,
-      isShowMute: true
-    };
-    this.hotKey = new I.Hotkey();
-  }
+  private uiOption!: I.UIOption;
+  private muteOption!: I.MuteOption;
+  private hotKey!: I.Hotkey;
+
   // states
   tweetDatas: I.TweetDatas = new I.TweetDatas();
 
@@ -59,9 +32,37 @@ class OptionStore extends VuexModule {
   }
   @Mutation
   private changeOptions(options: IOptionStore) {
-    this.hotKey = options.hotKey;
-    this.uiOption = options.uiOption;
-    this.muteOption = options.muteOption;
+    if (options) {
+      this.hotKey = options.hotKey;
+      this.uiOption = options.uiOption;
+      this.muteOption = options.muteOption;
+    } else {
+      this.uiOption = {
+        isBigPropic: true,
+        isLoadOrgImg: false,
+        isSendCheck: false,
+        isSendEnter: true,
+        isSendRTCheck: true,
+        isSendRTProtected: true,
+        isShowBottomPreview: true,
+        isShowPreview: true,
+        isShowPropic: true,
+        isShowTweet: true,
+        isSmallInput: false,
+        isSmallTweet: false,
+        isUseRead: false
+      };
+      this.muteOption = {
+        highlight: [],
+        keyword: [],
+        tweet: [],
+        user: [],
+        client: [],
+        isMuteMention: true,
+        isShowMute: true
+      };
+      this.hotKey = new I.Hotkey();
+    }
   }
 
   @Action
