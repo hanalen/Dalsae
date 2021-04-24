@@ -56,7 +56,6 @@ export default class Preload {
   }
 
   LoadConfig() {
-    console.log('load config');
     this.CheckFolder();
   }
 

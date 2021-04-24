@@ -34,17 +34,13 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   }
 
   async created() {
-    this.Init();
     this.LoadConfig();
     this.$nextTick(() => {
       this.StartDalsae();
     });
   }
 
-  Init() {}
-
   LoadConfig() {
-    console.log('~~~~~~~~load config~~~~~~~~~');
     window.preload.LoadConfig();
     const switter = window.preload.LoadSwitter();
     if (switter) {
