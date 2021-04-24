@@ -44,6 +44,30 @@ class TweetStore extends VuexModule {
   Init(userId: string) {
     this.context.commit('init', userId);
   }
+
+  @Mutation
+  private addTweet(addTweet: A.AddTweet) {
+    const { type, tweet, listTweet, user_id_str } = { ...addTweet };
+    switch (type) {
+      case A.ETweetType.E_HOME:
+        if (tweet) this.tweetDatas.AddHome(tweet, user_id_str);
+        else this.tweetDatas.AddHomeList(listTweet, user_id_str);
+        break;
+      case A.ETweetType.E_MENTION:
+        if (tweet) this.tweetDatas.AddMention(tweet, user_id_str);
+        else this.tweetDatas.AddMentionList(listTweet, user_id_str);
+        break;
+      case A.ETweetType.E_FAVORITE:
+        break;
+      case A.ETweetType.E_OPEN:
+        break;
+    }
+  }
+
+  @Action
+  AddTweet(addTweet: A.AddTweet) {
+    this.context.commit('addTweet', addTweet);
+  }
 }
 
 export const moduleTweet = getModule(TweetStore);
