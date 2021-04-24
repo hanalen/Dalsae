@@ -3,6 +3,7 @@ import * as P from '@/Interfaces';
 import * as I from '@/Interfaces';
 import * as M from '@/Managers';
 import { ErrorManager } from '@/Managers';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
 import axios from 'axios';
 const baseUrl = 'https://api.twitter.com/1.1';
 
@@ -76,10 +77,7 @@ export default class TwitterAPI {
   async requestOAuth<TReq>(url: string, params?: P.APIReq<TReq>): Promise<P.APIResp<P.OAuthRes>> {
     try {
       const oauth: I.OAuth = new I.OAuth();
-      oauth.SetKey(
-        this.mngAccount.tempUser.oauth_token,
-        this.mngAccount.tempUser.oauth_token_secret
-      );
+      oauth.SetKey(moduleSwitter.tempUser.oauth_token, moduleSwitter.tempUser.oauth_token_secret);
 
       const body = params && params.data ? oauth.CreateBody(params) : '';
       const reqUrl = oauth.GetUrl(params, url, false);

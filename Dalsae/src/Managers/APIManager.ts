@@ -10,7 +10,7 @@ import { mapMutations } from 'vuex';
 
 export class APIManager {
   api = new TwitterAPI();
-  mngAccount!: M.AccountManager;
+  // mngAccount!: M.AccountManager;
 
   private _ShowMessage!: (msg: string) => void;
   private _ShowConfirm!: (msg: string) => Promise<boolean>;
@@ -149,13 +149,13 @@ export class APIManager {
           );
           if (!result.data) return result;
           const user = result.data;
-          store.dispatch('AddUser', {
-            publicKey: user.oauth_token,
-            secretKey: user.oauth_token_secret,
-            userId: user.user_id,
-            name: user.name,
-            screenName: user.screen_name
-          });
+          moduleSwitter.AddUser(
+            user.oauth_token,
+            user.oauth_token_secret,
+            user.user_id,
+            user.name,
+            user.screen_name
+          );
 
           return result;
         }

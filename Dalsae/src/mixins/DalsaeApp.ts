@@ -5,6 +5,7 @@ import * as M from '@/Managers';
 import { Vue, Component, Provide, Ref } from 'vue-property-decorator';
 import { createApiManager } from '@/Managers';
 import store from '@/store/index';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
 
 @Component
 export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
@@ -43,16 +44,15 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   }
 
   Init() {
-    this.api.api.mngAccount = this.mngAccount; //나중에 이 구조는 바꾸는 게 좋을 거 같다
-    this.api.mngAccount = this.mngAccount;
     this.tweetPanel.mngAccount = this.mngAccount;
   }
 
   LoadConfig() {
+    console.log('~~~~~~~~load config~~~~~~~~~');
     window.preload.LoadConfig();
     const switter = window.preload.LoadSwitter();
     if (switter) {
-      store.dispatch('InitSwitter', switter);
+      moduleSwitter.InitSwitter(switter);
     }
     const option = window.preload.LoadOption();
     this.mngOption.ChangeOptions(option);
