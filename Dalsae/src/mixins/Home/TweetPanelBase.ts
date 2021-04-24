@@ -2,6 +2,7 @@ import { Vue, Mixins, Component, Inject, Emit } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as M from '@/Managers';
 import { mixins } from 'vue-class-component';
+import { moduleTweet } from '@/store/modules/TweetStore';
 class State {
   selectMenu: number;
   constructor() {
@@ -17,22 +18,22 @@ export class TweetPanelBase extends Vue {
   }
 
   get tweetHome() {
-    return this.mngAccount.homes;
+    return moduleTweet.homes;
   }
 
   get tweetMention() {
-    return this.mngAccount.mentions;
+    return moduleTweet.mentions;
   }
 
   get dm() {
-    return this.mngAccount.mentions;
+    return moduleTweet.mentions;
   }
 
   get tweetFavorite() {
-    return this.mngAccount.favorites;
+    return moduleTweet.favorites;
   }
 
   get tweetOpens() {
-    return this.mngAccount.opens;
+    return moduleTweet.opens;
   }
 }
