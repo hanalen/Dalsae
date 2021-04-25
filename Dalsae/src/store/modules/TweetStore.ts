@@ -68,6 +68,26 @@ class TweetStore extends VuexModule {
   AddTweet(addTweet: A.AddTweet) {
     this.context.commit('addTweet', addTweet);
   }
+
+  @Mutation
+  private resized() {
+    this.tweetDatas.OnResized();
+  }
+
+  @Action
+  Resized() {
+    this.context.commit('resized');
+  }
+
+  @Mutation
+  private moveScroll(move: A.MoveScroll) {
+    this.tweetDatas.MoveScroll(move.listTweet, move.idxFrom, move.moveY);
+  }
+
+  @Action
+  MoveScroll(move: A.MoveScroll) {
+    this.context.commit('moveScroll', move);
+  }
 }
 
 export const moduleTweet = getModule(TweetStore);

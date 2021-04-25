@@ -29,11 +29,12 @@ import faker from 'faker';
 import * as I from '@/Interfaces';
 import * as M from '@/mixins';
 import { mixins } from 'vue-class-component';
+import { moduleTweet } from '@/store/modules/TweetStore';
 
 @Component
 export default class ScrollPanel extends M.ScrollPanelBase {
   async created() {
-    this.AddTestData();
+    // this.AddTestData();
     for (let i = 0, len = this.listData.length; i < len; i++) {
       this.state.totalHeight += this.state.minHeight;
     }
@@ -49,10 +50,11 @@ export default class ScrollPanel extends M.ScrollPanelBase {
     const moveY = data.newVal - data.oldVal;
     this.state.totalHeight += moveY;
     const idx = this.listData.findIndex(x => x.key == data.key) + 1; //key다음 idx부터 작업
-    const len = this.listData.length;
-    for (let i = idx; i < len; i++) {
-      this.listData[i].scrollTop += moveY;
-    }
+    // const len = this.listData.length;
+    moduleTweet.MoveScroll({ moveY: moveY, idxFrom: idx, listTweet: this.listData });
+    // for (let i = idx; i < len; i++) {
+    //   this.listData[i].scrollTop += moveY;
+    // }
   }
 
   OnScroll() {

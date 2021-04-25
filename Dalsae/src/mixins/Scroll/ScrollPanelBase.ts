@@ -5,6 +5,7 @@ import { DalsaePage } from '@/mixins';
 import * as M from '@/mixins';
 import * as I from '@/Interfaces';
 import faker from 'faker';
+import { moduleTweet } from '@/store/modules/TweetStore';
 class State {
   scrollTop = 0;
   totalHeight = 0;
@@ -21,8 +22,8 @@ class State {
 export class ScrollPanelBase extends Vue {
   state = new State();
 
-  @Prop({ default: [] })
-  listTweet!: I.Tweet[];
+  // @Prop({ default: [] })
+  // listTweet!: I.Tweet[];
 
   @Prop({ default: [] })
   listData!: M.ScrollItem<I.Tweet>[];
@@ -159,9 +160,10 @@ export class ScrollPanelBase extends Vue {
   key = 0;
 
   OnResizeWindow() {
-    for (let i = 0, len = this.listData.length; i < len; i++) {
-      this.listData[i].isResized = true;
-    }
+    moduleTweet.Resized();
+    // for (let i = 0, len = this.listData.length; i < len; i++) {
+    //   this.listData[i].isResized = true;
+    // }
   }
 
   get Total() {
