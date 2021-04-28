@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint",
+    "octref.vetur",
+    "esbenp.prettier-vscode",
+    "runem.lit-plugin",
+    "eamodio.gitlens"
+  ]
+}

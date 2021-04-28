@@ -6,6 +6,7 @@ MainSrc/Data/*
 MainSrc/Image/*
 MainSrc/Skin/*
 MainSrc/Sound/*
+Dalsae/Data/*
 !build/icons
 MainSrc/node_modules/
 npm-debug.log
@@ -17,3 +18,8 @@ StreamingBridge/.vs
 StreamingBridge/StreamingBridge/bin
 StreamingBridge/StreamingBridge/obj
 MainSrc/StreamingBridge/*
+public/
+*/electron-builder-output-dir
+Dalsae/src/views/Test/favorite_tweet.json
+Dalsae/src/Managers/favorite_tweet.json
+Dalsae/src/Interfaces/DalsaeDatas/AppKeys.ts
