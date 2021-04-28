@@ -1,7 +1,7 @@
 <template>
   <div class="scroll-panel" @scroll="OnScroll" v-if="state != undefined">
     <div class="view-port" ref="viewPort" :style="viewportStyle">
-      <div class="scroll-area" :style="listStyle">
+      <div ref="scrollPort" class="scroll-area" :style="listStyle">
         <scroll-item
           ref="scrollItem"
           v-for="(item, i) in state.listVisible"
@@ -33,13 +33,16 @@ import { moduleTweet } from '@/store/modules/TweetStore';
 
 @Component
 export default class ScrollPanel extends M.ScrollPanelBase {
+  @Ref()
+  scrollPort!: HTMLElement;
   async created() {
     // this.AddTestData();
-    for (let i = 0, len = this.listData.length; i < len; i++) {
-      this.state.totalHeight += this.state.minHeight;
-    }
+
     this.$nextTick(() => {
       window.addEventListener('resize', this.OnResizeWindow);
+      for (let i = 0, len = this.listData.length; i < len; i++) {
+        this.state.totalHeight += this.state.minHeight;
+      }
       this.SetVisibleData();
     });
   }
@@ -51,7 +54,9 @@ export default class ScrollPanel extends M.ScrollPanelBase {
     this.state.totalHeight += moveY;
     const idx = this.listData.findIndex(x => x.key == data.key) + 1; //key다음 idx부터 작업
     // const len = this.listData.length;
-    moduleTweet.MoveScroll({ moveY: moveY, idxFrom: idx, listTweet: this.listData });
+    console.log(this.scrollPort.getBoundingClientRect());
+    const top = data.top - this.scrollPort.getBoundingClientRect().top;
+    moduleTweet.MoveScroll({ moveY: moveY, idxFrom: idx, listTweet: this.listData, top: top });
     // for (let i = idx; i < len; i++) {
     //   this.listData[i].scrollTop += moveY;
     // }

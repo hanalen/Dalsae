@@ -99,6 +99,7 @@ export class ScrollPanelBase extends Vue {
       this.state.startIndex + Math.floor(this.$el.clientHeight / this.state.minHeight);
     this.state.startIndex = this.BinarySearch(this.listData, scrollTop);
     this.state.translateY = this.listData[this.state.startIndex].scrollTop;
+    if (this.state.endIndex >= this.listData.length) this.state.endIndex = this.listData.length - 1;
     const startIdx = this.state.startIndex;
     const endIdx = this.state.endIndex;
     if (prevStartIdx !== startIdx || prevEndIdx !== endIdx) this.SetVisibleData();

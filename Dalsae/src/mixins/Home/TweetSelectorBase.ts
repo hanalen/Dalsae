@@ -18,6 +18,9 @@ export class TweetSelectorBase extends Mixins(Vue, MIX.DalsaePage) {
   @Prop()
   tweet!: I.Tweet;
 
+  @Prop()
+  source!: I.Tweet;
+
   get isSmall() {
     const option = store.state.option.uiOption;
     return option.isSmallTweet && !this.state.isFocus && !this.state.isSelected;
