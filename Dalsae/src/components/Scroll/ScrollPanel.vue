@@ -48,15 +48,15 @@ export default class ScrollPanel extends M.ScrollPanelBase {
   }
 
   OnResize(data: M.ResizeEvent) {
-    console.log('onresized');
+    // console.log('onresized');
     //scrollTop은 랜더링 할 때 계산
     const moveY = data.newVal - data.oldVal;
     this.state.totalHeight += moveY;
     const idx = this.listData.findIndex(x => x.key == data.key) + 1; //key다음 idx부터 작업
     // const len = this.listData.length;
-    console.log(this.scrollPort.getBoundingClientRect());
-    const top = data.top - this.scrollPort.getBoundingClientRect().top;
-    moduleTweet.MoveScroll({ moveY: moveY, idxFrom: idx, listTweet: this.listData, top: top });
+    // console.log(this.scrollPort.getBoundingClientRect());
+    // const top = data.top - this.scrollPort.getBoundingClientRect().top;
+    moduleTweet.MoveScroll({ moveY: moveY, idxFrom: idx, listTweet: this.listData });
     // for (let i = idx; i < len; i++) {
     //   this.listData[i].scrollTop += moveY;
     // }
