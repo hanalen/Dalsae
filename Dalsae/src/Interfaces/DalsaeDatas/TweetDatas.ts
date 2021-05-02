@@ -14,7 +14,7 @@ export class Tweets {
   }
 }
 
-const minHeight = 100;
+const minHeight = 0;
 
 export class TweetDatas {
   listTweet: I.Tweet[] | unknown; //테스트용
@@ -126,8 +126,7 @@ export class TweetDatas {
       }
     });
   }
-  MoveScroll(listTweet: M.ScrollItem<I.Tweet>[], idxFrom: number, moveY: number, top: number) {
-    listTweet[idxFrom].scrollTop = top;
+  MoveScroll(listTweet: M.ScrollItem<I.Tweet>[], idxFrom: number, moveY: number) {
     for (let i = idxFrom, len = listTweet.length; i < len; i++) {
       listTweet[i].scrollTop += moveY;
     }

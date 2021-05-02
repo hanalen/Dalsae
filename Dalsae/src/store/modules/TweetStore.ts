@@ -81,7 +81,7 @@ class TweetStore extends VuexModule {
 
   @Mutation
   private moveScroll(move: A.MoveScroll) {
-    this.tweetDatas.MoveScroll(move.listTweet, move.idxFrom, move.moveY, move.top);
+    this.tweetDatas.MoveScroll(move.listTweet, move.idxFrom, move.moveY);
   }
 
   @Action
