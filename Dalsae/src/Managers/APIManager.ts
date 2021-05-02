@@ -130,6 +130,17 @@ export class APIManager {
           return result;
         }
       },
+      block: {
+        Ids: async (data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> => {
+          const result = await this.api.call.block.Ids(data);
+          moduleSwitter.BlockIds(result.data.ids);
+          console.log('--------------block------------');
+          console.log(result);
+          if (result.data.next_cursor_str !== '0')
+            this.call.block.Ids({ cursor: result.data.next_cursor_str, stringify_ids: true });
+          return result;
+        }
+      },
       oauth: {
         ReqToken: async (data: P.ReqToken): Promise<P.APIResp<P.OAuthRes>> => {
           return this.api.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {

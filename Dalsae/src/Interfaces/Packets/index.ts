@@ -5,3 +5,4 @@ export * from './OAuth';
 export * from './APIResp';
 export * from './Account';
 export * from './Media';
+export * from './Block';

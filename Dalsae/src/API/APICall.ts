@@ -254,6 +254,12 @@ export default class TwitterAPI {
             data
           })
       },
+      block: {
+        Ids: (data: P.ReqBlockIds) =>
+          this.get<P.ReqBlockIds, I.BlockIds>(baseUrl + '/blocks/ids.json', {
+            data
+          })
+      },
       oauth: {
         ReqToken: (data: P.ReqToken) =>
           this.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {

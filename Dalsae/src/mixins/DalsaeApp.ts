@@ -127,7 +127,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
       type: ETweetType.E_MENTION,
       user_id_str: moduleSwitter.selectID
     });
-    return;
+    // return;
     if (moduleSwitter.selectUser) {
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
@@ -136,6 +136,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
       window.preload.SaveSwitter(store.state.switter.switter);
       this.api.call.statuses.TimeLine();
       this.api.call.statuses.Mention();
+      this.api.call.block.Ids({ cursor: '-1', stringify_ids: true });
     } else {
       this.ShowPin();
     }
