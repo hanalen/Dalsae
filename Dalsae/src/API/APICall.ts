@@ -260,9 +260,13 @@ export default class TwitterAPI {
             data
           }),
         Destory: (data: P.ReqBlockDestroy) =>
-          this.post<P.ReqBlockDestroy, I.BlockDestroy>(baseUrl + 'blocks/destroy.json', {
-            data
-          })
+          this.post<P.ReqBlockDestroy, I.BlockDestroy>(
+            baseUrl + '/blocks/destroy.json',
+            {
+              data
+            },
+            true
+          )
       },
       oauth: {
         ReqToken: (data: P.ReqToken) =>

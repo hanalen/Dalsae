@@ -11,6 +11,7 @@ import { IOptionStore } from '@/store/modules/OptionStore';
 const pathData = 'Data/';
 const pathSwitter = 'Data/Switter.json';
 const pathOption = 'Data/Option.json';
+const pathBlockids = 'Data/block.json';
 
 export default class Preload {
   image: ImagePreload = new ImagePreload();
@@ -70,6 +71,10 @@ export default class Preload {
     return this.ReadFile<I.Switter>(pathSwitter);
   }
 
+  LoadBlock(): string[] {
+    return this.ReadFile<string[]>(pathBlockids);
+  }
+
   LoadOption(): IOptionStore {
     return this.ReadFile<IOptionStore>(pathOption);
   }
@@ -85,6 +90,10 @@ export default class Preload {
 
   SaveOption(option: IOptionStore) {
     this.SaveFile(pathOption, option);
+  }
+
+  SaveBlocks(ids: string[]) {
+    this.SaveFile(pathBlockids, ids);
   }
 
   SaveFile(path: string, data: object) {
