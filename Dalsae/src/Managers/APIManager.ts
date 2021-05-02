@@ -139,6 +139,21 @@ export class APIManager {
           if (result.data.next_cursor_str !== '0')
             this.call.block.Ids({ cursor: result.data.next_cursor_str, stringify_ids: true });
           return result;
+        },
+        UnBlock: async (data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> => {
+          const result = await this.api.call.block.Ids(data);
+          moduleSwitter.BlockIds(result.data.ids);
+          console.log('--------------block------------');
+          console.log(result);
+          if (result.data.next_cursor_str !== '0')
+            this.call.block.Ids({ cursor: result.data.next_cursor_str, stringify_ids: true });
+          return result;
+        },
+        Destroy: async (data: P.ReqBlockDestroy): Promise<P.APIResp<I.BlockDestroy>> => {
+          const result = await this.api.call.block.Destory(data);
+          console.log('--------------block------------');
+
+          return result;
         }
       },
       oauth: {

@@ -14,7 +14,7 @@ class SwitterStore extends VuexModule {
   // states
   switter: I.Switter = { selectUser: new I.DalsaeUser(), listUser: [] };
   tempUser: I.DalsaeUser = new I.DalsaeUser();
-  bolckIds: string[] = [];
+  listBlockIds: string[] = [];
 
   // getters
   get selectID() {
@@ -121,7 +121,7 @@ class SwitterStore extends VuexModule {
 
   @Mutation
   private blockIds(ids: string[]) {
-    this.bolckIds = this.bolckIds.concat(ids);
+    this.listBlockIds = this.listBlockIds.concat(ids);
   }
 
   @Action

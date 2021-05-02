@@ -258,6 +258,10 @@ export default class TwitterAPI {
         Ids: (data: P.ReqBlockIds) =>
           this.get<P.ReqBlockIds, I.BlockIds>(baseUrl + '/blocks/ids.json', {
             data
+          }),
+        Destory: (data: P.ReqBlockDestroy) =>
+          this.post<P.ReqBlockDestroy, I.BlockDestroy>(baseUrl + 'blocks/destroy.json', {
+            data
           })
       },
       oauth: {
