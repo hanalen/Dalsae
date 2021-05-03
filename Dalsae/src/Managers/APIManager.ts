@@ -139,8 +139,7 @@ export class APIManager {
           if (result.data.next_cursor_str !== '0')
             this.call.block.Ids({
               cursor: result.data.next_cursor_str,
-              stringify_ids: true,
-              skip_status: 1
+              stringify_ids: true
             });
           return result;
         },
