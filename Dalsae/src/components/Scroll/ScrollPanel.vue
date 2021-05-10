@@ -24,18 +24,21 @@
 </style>
 
 <script lang="ts">
-import { Vue, Mixins, Component, Ref, Provide, Watch } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Ref, Provide, Watch, Inject } from 'vue-property-decorator';
 import faker from 'faker';
 import * as I from '@/Interfaces';
 import * as M from '@/mixins';
 import { mixins } from 'vue-class-component';
 import { moduleTweet } from '@/store/modules/TweetStore';
-
+import { eventBus } from '@/plugins/EventBus';
 @Component
 export default class ScrollPanel extends M.ScrollPanelBase {
   @Ref()
   scrollPort!: HTMLElement;
   async created() {
+    eventBus.$on('AddTweetHome', () => {
+      this.SetVisibleData();
+    });
     // this.AddTestData();
 
     this.$nextTick(() => {

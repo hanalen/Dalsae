@@ -4,6 +4,7 @@ import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-dec
 import * as A from '@/store/Interface';
 import store from '@/store';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { eventBus } from '@/plugins';
 export interface ITweetStore {
   tweetDatas: I.TweetDatas;
 }
@@ -67,6 +68,7 @@ class TweetStore extends VuexModule {
   @Action
   AddTweet(addTweet: A.AddTweet) {
     this.context.commit('addTweet', addTweet);
+    eventBus.$emit('AddTweetHome');
   }
 
   @Mutation
