@@ -5,7 +5,14 @@
         <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
       </template>
       <v-avatar rounded :size="maxWidth">
-        <img :src="img" :class="imgClass" />
+        <v-img :src="img">
+          <template v-slot:placeholder>
+            <v-row class="fill-height ma-0" align="center" justify="center">
+              <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+            </v-row>
+          </template>
+        </v-img>
+        <!-- <img ref="refImg" :src="img" :class="imgClass" /> -->
       </v-avatar>
     </v-badge>
   </div>
