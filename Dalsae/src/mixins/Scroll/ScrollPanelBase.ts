@@ -159,9 +159,12 @@ export class ScrollPanelBase extends Vue {
   }
 
   key = 0;
-
+  timer!: NodeJS.Timeout;
   OnResizeWindow() {
-    moduleTweet.Resized();
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      moduleTweet.Resized();
+    }, 100);
     // for (let i = 0, len = this.listData.length; i < len; i++) {
     //   this.listData[i].isResized = true;
     // }
