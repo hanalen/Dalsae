@@ -85,21 +85,27 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
-  @Watch('state.scrollTop')
-  OnWatchScrollTop(newVal: number, oldVal: number) {
+  SetScroll() {
     const prevStartIdx = this.state.startIndex;
     const prevEndIdx = this.state.endIndex;
     this.state.scrollTop = this.$el.scrollTop;
-    let scrollTop = this.state.scrollTop - 500; // 상단 버퍼 px
+    let scrollTop = this.state.scrollTop - 1000; // 상단 버퍼 px
     if (scrollTop < 0) scrollTop = 0;
     this.state.endIndex =
       this.state.startIndex + Math.floor(this.$el.clientHeight / this.state.minHeight);
     this.state.startIndex = this.BinarySearch(this.listData, scrollTop);
-    this.state.translateY = this.listData[this.state.startIndex].scrollTop;
     if (this.state.endIndex >= this.listData.length) this.state.endIndex = this.listData.length - 1;
     const startIdx = this.state.startIndex;
     const endIdx = this.state.endIndex;
     if (prevStartIdx !== startIdx || prevEndIdx !== endIdx) this.SetVisibleData();
+  }
+
+  @Watch('state.scrollTop')
+  OnWatchScrollTop(newVal: number, oldVal: number) {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      this.SetScroll();
+    }, 50);
   }
 
   BinarySearch(list: M.ScrollItem<I.Tweet>[], scrollTop: number) {
