@@ -144,19 +144,19 @@ export class ScrollPanelBase extends Vue {
   get viewportStyle() {
     return {
       'background-color': 'aliceblue',
-      height: this.state.totalHeight + 'px',
-      willChange: 'auto',
-      overflow: 'hidden',
-      position: 'relative'
+      height: this.state.totalHeight + 'px'
+      // willChange: 'auto',
+      // overflow: 'hidden',
+      // position: 'relative'
     };
   }
 
-  get listStyle() {
-    return {
-      willChange: 'auto',
-      transform: 'translateY(' + this.state.translateY + 'px)'
-    };
-  }
+  // get listStyle() {
+  //   return {
+  //     willChange: 'auto',
+  //     transform: 'translateY(' + this.state.translateY + 'px)'
+  //   };
+  // }
 
   key = 0;
   timer!: NodeJS.Timeout;

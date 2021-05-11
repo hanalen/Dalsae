@@ -1,18 +1,18 @@
 <template>
   <div class="scroll-panel" @scroll="OnScroll" v-if="state != undefined">
-    <div class="view-port" ref="viewPort" :style="viewportStyle">
-      <div ref="scrollPort" class="scroll-area" :style="listStyle">
-        <scroll-item
-          ref="scrollItem"
-          v-for="(item, i) in state.listVisible"
-          :key="i"
-          :data="item"
-          v-on:on-resize="OnResize"
-        >
-          <tweet-selector :tweet="item.data"></tweet-selector>
-        </scroll-item>
-      </div>
+    <!-- <div class="view-port" ref="viewPort" :style="viewportStyle"> -->
+    <div ref="scrollPort" class="scroll-area" :style="viewportStyle">
+      <scroll-item
+        ref="scrollItem"
+        v-for="(item, i) in state.listVisible"
+        :key="i"
+        :data="item"
+        v-on:on-resize="OnResize"
+      >
+        <tweet-selector :tweet="item.data"></tweet-selector>
+      </scroll-item>
     </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -20,6 +20,9 @@
 .scroll-panel {
   height: calc(100vh - 134px);
   overflow-y: scroll;
+}
+.scroll-area {
+  position: relative;
 }
 </style>
 

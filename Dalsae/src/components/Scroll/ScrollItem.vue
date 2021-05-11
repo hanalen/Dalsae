@@ -1,5 +1,5 @@
 <template>
-  <div class="scroll-item">
+  <div class="scroll-item" :style="itemStyle">
     <slot></slot>
   </div>
 </template>
@@ -7,6 +7,8 @@
 <style lang="scss" scoped>
 .scroll-item {
   box-shadow: 0 0 0 1px #000 inset;
+  position: absolute;
+  width: 100%;
 }
 </style>
 
@@ -34,6 +36,12 @@ export default class ScrollItem extends Vue {
       // });
       // this.observer.observe(this.$el);
     });
+  }
+
+  get itemStyle() {
+    return {
+      top: `${this.data.scrollTop}px`
+    };
   }
 
   SetHeight() {
