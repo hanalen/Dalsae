@@ -17,7 +17,6 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import * as I from '@/mixins';
 @Component
 export default class ScrollItem extends Vue {
-  // observer!: ResizeObserver;
   @Prop()
   data!: I.ScrollItem<I.ScrollData>;
 
@@ -31,10 +30,6 @@ export default class ScrollItem extends Vue {
   async created() {
     this.$nextTick(() => {
       this.SetHeight();
-      // this.observer = new ResizeObserver(() => {
-      //   this.SetHeight();
-      // });
-      // this.observer.observe(this.$el);
     });
   }
 
@@ -51,13 +46,10 @@ export default class ScrollItem extends Vue {
     const newVal = this.$el.clientHeight;
     this.data.height = newVal;
     this.data.isResized = false;
-    // console.log(this.$el.getClientRects());
-    const top = this.$el.getBoundingClientRect().y;
     this.$emit('on-resize', {
       oldVal: oldVal,
       newVal: newVal,
-      key: this.data.key.toString(),
-      top: top
+      key: this.data.key.toString()
     });
   }
 

@@ -22,9 +22,6 @@ class State {
 export class ScrollPanelBase extends Vue {
   state = new State();
 
-  // @Prop({ default: [] })
-  // listTweet!: I.Tweet[];
-
   @Prop({ default: [] })
   listData!: M.ScrollItem<I.Tweet>[];
 
@@ -145,18 +142,8 @@ export class ScrollPanelBase extends Vue {
     return {
       'background-color': 'aliceblue',
       height: this.state.totalHeight + 'px'
-      // willChange: 'auto',
-      // overflow: 'hidden',
-      // position: 'relative'
     };
   }
-
-  // get listStyle() {
-  //   return {
-  //     willChange: 'auto',
-  //     transform: 'translateY(' + this.state.translateY + 'px)'
-  //   };
-  // }
 
   key = 0;
   timer!: NodeJS.Timeout;
@@ -165,9 +152,6 @@ export class ScrollPanelBase extends Vue {
     this.timer = setTimeout(() => {
       moduleTweet.Resized();
     }, 100);
-    // for (let i = 0, len = this.listData.length; i < len; i++) {
-    //   this.listData[i].isResized = true;
-    // }
   }
 
   get Total() {
