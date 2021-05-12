@@ -1,7 +1,7 @@
 import * as I from '@/Interfaces';
 import * as M from '@/mixins';
 export interface MoveScroll {
-  moveY: number;
+  height: number;
   idxFrom: number;
   listTweet: M.ScrollItem<I.Tweet>[];
 }

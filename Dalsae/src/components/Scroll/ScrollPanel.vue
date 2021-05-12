@@ -1,6 +1,6 @@
 <template>
-  <div class="scroll-panel" @scroll="OnScroll" v-if="state != undefined">
-    <!-- <div class="view-port" ref="viewPort" :style="viewportStyle"> -->
+  <!-- <div> -->
+  <div ref="scrollPanel" class="scroll-panel" @scroll="OnScroll" v-if="state != undefined">
     <div ref="scrollPort" class="scroll-area" :style="viewportStyle">
       <scroll-item
         ref="scrollItem"
@@ -13,6 +13,7 @@
       </scroll-item>
     </div>
     <!-- </div> -->
+    <!-- <tweet-selector class="temp-tweet" ref="bufTweet" :tweet="tempTweet"></tweet-selector> -->
   </div>
 </template>
 
@@ -23,6 +24,10 @@
 }
 .scroll-area {
   position: relative;
+}
+.temp-tweet {
+  position: absolute;
+  transform: translateX(-10000px);
 }
 </style>
 
@@ -39,10 +44,9 @@ export default class ScrollPanel extends M.ScrollPanelBase {
   @Ref()
   scrollPort!: HTMLElement;
   async created() {
-    eventBus.$on('AddTweetHome', () => {
-      this.SetVisibleData();
+    eventBus.$on('AddedTweet', (tweet: I.Tweet) => {
+      this.SetVisibleData(tweet);
     });
-    // this.AddTestData();
 
     this.$nextTick(() => {
       window.addEventListener('resize', this.OnResizeWindow);
@@ -53,12 +57,12 @@ export default class ScrollPanel extends M.ScrollPanelBase {
   OnResize(data: M.ResizeEvent) {
     const moveY = data.newVal - data.oldVal;
     this.state.totalHeight += moveY;
-    const idx = this.listData.findIndex(x => x.key == data.key) + 1; //key다음 idx부터 작업
-    moduleTweet.MoveScroll({ moveY: moveY, idxFrom: idx, listTweet: this.listData });
+    const idx = this.listData.findIndex(x => x.key == data.key);
+    moduleTweet.MoveScroll({ height: data.newVal, idxFrom: idx, listTweet: this.listData });
   }
 
   OnScroll() {
-    this.state.scrollTop = this.$el.scrollTop;
+    this.state.scrollTop = this.scrollPanel.scrollTop;
   }
 }
 </script>

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as I from '@/Interfaces';
 import * as M from '@/mixins';
+import { eventBus } from '@/plugins';
 export class Tweets {
   homes: M.ScrollItem<I.Tweet>[];
   mentions: M.ScrollItem<I.Tweet>[];
@@ -50,13 +51,14 @@ export class TweetDatas {
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     const idx = this.FindIndex(tweet, tweets);
-    tweets.splice(idx, 0, {
+    tweets.splice(0, 0, {
       data: tweet,
       height: minHeight,
       isResized: true,
       key: tweet.id_str,
       scrollTop: idx * minHeight
     });
+    eventBus.$emit('AddedTweet', tweet);
   }
 
   AddMention(tweet: I.Tweet | undefined, user_id_str: string) {
@@ -126,9 +128,12 @@ export class TweetDatas {
       }
     });
   }
-  MoveScroll(listTweet: M.ScrollItem<I.Tweet>[], idxFrom: number, moveY: number) {
-    for (let i = idxFrom, len = listTweet.length; i < len; i++) {
-      listTweet[i].scrollTop += moveY;
+  MoveScroll(listTweet: M.ScrollItem<I.Tweet>[], idxFrom: number, height: number) {
+    listTweet[idxFrom].height = height;
+    let total = listTweet[idxFrom].scrollTop + listTweet[idxFrom].height;
+    for (let i = idxFrom + 1, len = listTweet.length; i < len; i++) {
+      listTweet[i].scrollTop = total;
+      total += listTweet[i].height;
     }
   }
 }
