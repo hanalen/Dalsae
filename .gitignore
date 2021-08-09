@@ -8,6 +8,7 @@ DalsaeJS_Ver/Skin/*
 DalsaeJS_Ver/Sound/*
 Dalsae/Data/*
 !build/icons
+Dalsae/node_modules/
 DalsaeJS_Ver/node_modules/
 npm-debug.log
 npm-debug.log.*
