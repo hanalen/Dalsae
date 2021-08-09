@@ -16,6 +16,7 @@ class State {
   translateY = 0;
   minHeight = 40;
   isScrollLock = false;
+  queueHeight: string[] = [];
   constructor() {
     this.listVisible = [];
   }
@@ -215,8 +216,9 @@ export class ScrollPanelBase extends Vue {
         height: 0
         // height: this.state.minHeight
       });
-      this.state.isScrollLock = true;
-      this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop - this.state.minHeight });
+      this.state.queueHeight.push(tweet.id_str);
+      // this.state.isScrollLock = true;
+      // this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop - this.state.minHeight });
       return true;
     }
     return false;
@@ -226,10 +228,10 @@ export class ScrollPanelBase extends Vue {
     //await 하고 리턴값 받아서 처리하게 해야 순서가 맞는다
     if (await this.CheckLockScroll(tweet)) {
       console.log('lock scroll');
-      // this.state.listVisible = this.listData.slice(
-      //   this.state.startIndex + 1,
-      //   this.state.endIndex + 1
-      // );
+      this.state.listVisible = this.listData.slice(
+        this.state.startIndex + 1,
+        this.state.endIndex + 1
+      );
     } else {
       console.log('not lock scroll');
       this.state.listVisible = this.listData.slice(this.state.startIndex, this.state.endIndex);

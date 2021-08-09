@@ -45,6 +45,7 @@ export default class ScrollPanel extends M.ScrollPanelBase {
   scrollPort!: HTMLElement;
   async created() {
     eventBus.$on('AddedTweet', (tweet: I.Tweet) => {
+      console.log('addedtweet \r\n', tweet.full_text);
       this.SetVisibleData(tweet);
     });
 
@@ -59,6 +60,13 @@ export default class ScrollPanel extends M.ScrollPanelBase {
     this.state.totalHeight += moveY;
     const idx = this.listData.findIndex(x => x.key == data.key);
     moduleTweet.MoveScroll({ height: data.newVal, idxFrom: idx, listTweet: this.listData });
+    const idxLock = this.state.queueHeight.indexOf(data.key);
+    if (idxLock) {
+      //스크롤 락
+      console.log('on resize idx lock!', idxLock);
+      this.scrollPanel.scrollTo({ top: this.state.scrollTop + data.newVal });
+      this.state.queueHeight.splice(idxLock, 1);
+    }
   }
 
   OnScroll() {

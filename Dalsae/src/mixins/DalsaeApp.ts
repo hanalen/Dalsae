@@ -127,7 +127,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
       type: ETweetType.E_MENTION,
       user_id_str: moduleSwitter.selectID
     });
-    // return;
+    return;
     if (moduleSwitter.selectUser) {
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
