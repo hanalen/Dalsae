@@ -11,9 +11,15 @@ function createWindow() {
     width: 800,
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "../index.html"));
-
+  const isDev = process.env.NODE_ENV !== 'production';
+  
+  if(isDev){
+    mainWindow.loadURL('http://localhost:3000');
+  }else{
+    // and load the index.html of the app.
+    mainWindow.loadFile(path.join(__dirname, "../index.html"));
+  }
+    
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 }
