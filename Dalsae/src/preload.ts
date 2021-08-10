@@ -9,6 +9,12 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   for (const type of ["chrome", "node", "electron"]) {
-    replaceText(`${type}-version`, process.versions[type as keyof NodeJS.ProcessVersions]);
+    // replaceText(`${type}-version`, process.versions[type as keyof NodeJS.ProcessVersions]);
   }
 });
+
+export default class Preload {
+}
+
+type PreloadWindow = typeof window & { preload: Preload };
+(window as PreloadWindow).preload = new Preload();
