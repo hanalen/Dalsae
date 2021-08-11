@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "description": "Client for Twingyeo",
   "scripts": {
-    "rstart": "react-scripts start",
-    "rbuild": "react-scripts build",
-    "build": "tsc",
-    "watch": "tsc -w",
-    "lint": "eslint -c .eslintrc --ext .ts ./src",
-    "start": "npm run build && electron ./dist/main.js"
+    "react:dev": "set BROWSER=none && react-scripts start",
+    "electron:dev": "npm run ts:build && electron ./dist/main.js",
+    "react:rbuild": "react-scripts build",
+    "ts:build": "tsc",
+    "ts:watch": "tsc -w",
+    "lint": "eslint -c .eslintrc --ext .ts ./src"
   },
   "repository": "https://github.com/hanalen-/Dalsae",
   "author": "dalsae",
