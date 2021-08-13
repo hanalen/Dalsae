@@ -2,12 +2,15 @@
   "name": "dalsae",
   "version": "0.0.1",
   "description": "Client for Twingyeo",
+  "main": "./dist/electron.js",
   "scripts": {
     "react:dev": "set BROWSER=none && react-scripts start",
     "electron:dev": "npm run ts:build && electron ./dist/main.js",
-    "react:rbuild": "react-scripts build",
+    "react:build": "react-scripts build",
+    "electron:build": "electron-builder",
     "ts:build": "tsc",
     "ts:watch": "tsc -w",
+    "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc --ext .ts ./src"
   },
   "repository": "https://github.com/hanalen-/Dalsae",
@@ -16,6 +19,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.29.0",
     "@typescript-eslint/parser": "^4.28.4",
+    "electron-builder": "^22.11.7",
     "electron": "^13.1.7",
     "eslint": "^7.32.0",
     "typescript": "^4.3.5"
