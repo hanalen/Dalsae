@@ -16,6 +16,7 @@ class State {
   translateY = 0;
   minHeight = 40;
   isScrollLock = false;
+  listAddedKey: string[] = [];
   constructor() {
     this.listVisible = [];
   }
@@ -93,26 +94,32 @@ export class ScrollPanelBase extends Vue {
   SetIndex() {
     this.state.scrollTop = this.scrollPanel.scrollTop;
     let scrollTop = this.state.scrollTop - 1000; // 상단 버퍼 px
-    if (scrollTop < 0) scrollTop = 0;
-    this.state.endIndex =
-      this.state.startIndex + Math.floor(this.$el.clientHeight / this.state.minHeight);
-    this.state.startIndex = this.BinarySearch(this.listData, scrollTop);
-    if (scrollTop === 0) this.state.startIndex = 0; //예외처리
-    const startIdx = this.state.startIndex;
-    const endIdx = this.state.endIndex;
-    console.log(
-      startIdx,
-      endIdx,
-      this.state.startIndex + Math.floor(this.$el.clientHeight / this.state.minHeight)
-    );
+    if (scrollTop < 0) {
+      console.log('scroll top: ', this.state.scrollTop);
+      scrollTop = 0;
+      // scrollTop = this.state.scrollTop;
+    }
+    let startIndex = this.BinarySearch(this.listData, scrollTop);
+    if (startIndex < 0) startIndex = 0;
+    if (this.scrollPanel.scrollTop === 0) {
+      startIndex = 0;
+    }
+    this.state.startIndex = startIndex;
+    this.state.endIndex = startIndex + Math.floor(this.$el.clientHeight / this.state.minHeight);
+    // if (scrollTop === 0) {
+    //   console.log('scropp top is 0', this.scrollPanel.scrollTop);
+    //   this.state.startIndex = 0; //예외처리
+    // }
     this.SetVisibleData();
   }
 
   @Watch('state.scrollTop')
   OnWatchScrollTop(newVal: number, oldVal: number) {
+    if (newVal === 0) {
+      this.state.listAddedKey = [];
+    }
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      console.log('top', oldVal, newVal);
       this.SetIndex();
     }, 50);
   }

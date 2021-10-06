@@ -58,6 +58,8 @@ export class TweetDatas {
       key: tweet.id_str,
       scrollTop: idx * minHeight
     });
+    console.log('added tweet', idx, tweets[idx + 1].height, tweets[idx + 1].scrollTop);
+    this.MoveScroll(tweets, idx + 1, minHeight);
     eventBus.$emit('AddedTweet', tweet);
   }
 
