@@ -45,9 +45,7 @@ export default class ScrollPanel extends M.ScrollPanelBase {
   async created() {
     eventBus.$on('AddedTweet', (tweet: I.Tweet) => {
       console.log('addedtweet \r\n', tweet.full_text.substring(0, 10));
-      this.AddTemp(tweet.id_str);
       this.SetIndex();
-      this.scrollPanel.scrollTo({ top: this.state.scrollTop + 40 });
     });
 
     this.$nextTick(() => {
@@ -56,37 +54,18 @@ export default class ScrollPanel extends M.ScrollPanelBase {
     });
   }
 
-  AddTemp(id: string) {
-    //scrolltop이 0보다 크고 start ~ end 사이일 경우에만 사용
-    if (this.state.scrollTop > 0) {
-      const idx = this.listData.findIndex(x => x.data.id_str === id);
-      this.state.listAddedKey.splice(0, 0, id);
-      // if (this.state.startIndex <= idx && idx <= this.state.endIndex) {
-      //   this.state.listAddedKey.push(id);
-      // }
-    }
-  }
-
   //TODO 호출이 너무 많이 됨
   OnResizeTweet(data: M.ResizeEvent) {
     const moveY = data.newVal - data.oldVal;
     this.state.totalHeight += moveY;
     const idx = this.listData.findIndex(x => x.key == data.key);
+    const tweet = this.listData[idx];
+    console.log(tweet.isResized);
+    if (tweet.isResized && idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
+      console.log(this.state.startIndex, idx, moveY, this.scrollPanel.scrollTop);
+      this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop + moveY + 40 });
+    }
     moduleTweet.MoveScroll({ height: data.newVal, idxFrom: idx, listTweet: this.listData });
-    console.log(this.state.startIndex, this.state.endIndex);
-    // if (this.state.scrollTop > 0) {
-    //   //화면 밖에 있을 때 추가되고 렌더링될 떄 스크롤이 튐
-    //   const keyIndex = this.state.listAddedKey.findIndex(x => x === data.key);
-    //   if (keyIndex > -1) {
-    //     console.log('-----------------------------');
-    //     console.log(this.scrollPanel.scrollTop);
-    //     console.log(this.listData.findIndex(x => x.key === data.key));
-    //     // console.log(keyIndex);
-    //     console.log(data);
-    //     this.scrollPanel.scrollTo({ top: this.state.scrollTop - data.oldVal + data.newVal });
-    //     this.state.listAddedKey.splice(keyIndex, 1);
-    //   }
-    // }
   }
 
   OnScroll() {

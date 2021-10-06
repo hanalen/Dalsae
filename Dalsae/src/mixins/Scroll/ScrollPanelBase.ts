@@ -93,13 +93,14 @@ export class ScrollPanelBase extends Vue {
 
   SetIndex() {
     this.state.scrollTop = this.scrollPanel.scrollTop;
-    let scrollTop = this.state.scrollTop - 1000; // 상단 버퍼 px
+    let scrollTop = this.state.scrollTop; // - 1000; // 상단 버퍼 px
     if (scrollTop < 0) {
       console.log('scroll top: ', this.state.scrollTop);
       scrollTop = 0;
       // scrollTop = this.state.scrollTop;
     }
     let startIndex = this.BinarySearch(this.listData, scrollTop);
+    startIndex -= 5; //버퍼
     if (startIndex < 0) startIndex = 0;
     if (this.scrollPanel.scrollTop === 0) {
       startIndex = 0;

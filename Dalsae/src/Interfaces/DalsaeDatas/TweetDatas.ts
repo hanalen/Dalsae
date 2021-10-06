@@ -58,8 +58,6 @@ export class TweetDatas {
       key: tweet.id_str,
       scrollTop: idx * minHeight
     });
-    console.log('added tweet', idx, tweets[idx + 1].height, tweets[idx + 1].scrollTop);
-    this.MoveScroll(tweets, idx + 1, minHeight);
     eventBus.$emit('AddedTweet', tweet);
   }
 
@@ -132,6 +130,7 @@ export class TweetDatas {
   }
   MoveScroll(listTweet: M.ScrollItem<I.Tweet>[], idxFrom: number, height: number) {
     listTweet[idxFrom].height = height;
+    listTweet[idxFrom].isResized = false;
     let total = listTweet[idxFrom].scrollTop + listTweet[idxFrom].height;
     for (let i = idxFrom + 1, len = listTweet.length; i < len; i++) {
       listTweet[i].scrollTop = total;
