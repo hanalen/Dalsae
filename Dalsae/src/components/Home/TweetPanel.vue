@@ -7,28 +7,7 @@
     </v-tabs>
     <v-tabs-items v-model="tweetPanel.state.selectMenu">
       <v-tab-item :key="0">
-        <!-- <dynamic-scroller :items="tweetHome" :min-item-size="84" class="list" key-field="key">
-          <template v-slot="{ item, index, active }">
-            <dynamic-scroller-item
-              :item="item"
-              :active="active"
-              :data-index="index"
-              :data-active="active"
-            >
-              <tweet-selector :tweet="item" />
-            </dynamic-scroller-item>
-          </template>
-        </dynamic-scroller> -->
-        <!-- <virtual-list
-          class="list-dynamic"
-          :data-key="'key'"
-          :data-sources="tweetHome"
-          :data-component="itemComponent"
-          :estimate-size="80"
-          :item-class="'list-item-dynamic'"
-        /> -->
         <scroll-panel :listData="tweetHome" />
-        <!-- <tweet-selector v-for="(item, i) in tweetHome" :key="i" :tweet="item"></tweet-selector> -->
       </v-tab-item>
       <v-tab-item :key="1">
         <tweet-selector v-for="(item, i) in tweetMention" :key="i" :tweet="item"></tweet-selector>

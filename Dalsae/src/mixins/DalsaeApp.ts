@@ -35,6 +35,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   }
 
   async created() {
+    moduleTweet.Init(moduleSwitter.selectID);
     this.LoadConfig();
     this.$nextTick(() => {
       this.StartDalsae();

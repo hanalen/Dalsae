@@ -15,7 +15,7 @@ export class Tweets {
   }
 }
 
-const minHeight = 0;
+const minHeight = 40;
 
 export class TweetDatas {
   listTweet: I.Tweet[] | unknown; //테스트용

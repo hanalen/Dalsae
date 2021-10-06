@@ -4,16 +4,14 @@
     <div ref="scrollPort" class="scroll-area" :style="viewportStyle">
       <scroll-item
         ref="scrollItem"
-        v-for="(item, i) in state.listVisible"
+        v-for="(item, i) in this.state.listVisible"
         :key="i"
         :data="item"
-        v-on:on-resize="OnResize"
+        v-on:on-resize="OnResizeTweet"
       >
         <tweet-selector :tweet="item.data"></tweet-selector>
       </scroll-item>
     </div>
-    <!-- </div> -->
-    <!-- <tweet-selector class="temp-tweet" ref="bufTweet" :tweet="tempTweet"></tweet-selector> -->
   </div>
 </template>
 
@@ -43,29 +41,27 @@ import { eventBus } from '@/plugins/EventBus';
 export default class ScrollPanel extends M.ScrollPanelBase {
   @Ref()
   scrollPort!: HTMLElement;
+
   async created() {
     eventBus.$on('AddedTweet', (tweet: I.Tweet) => {
-      console.log('addedtweet \r\n', tweet.full_text);
-      this.SetVisibleData(tweet);
+      console.log('addedtweet \r\n', tweet.full_text.substring(0, 10));
+      this.SetIndex();
     });
 
     this.$nextTick(() => {
       window.addEventListener('resize', this.OnResizeWindow);
-      this.SetVisibleData();
+      this.SetIndex();
     });
   }
 
-  OnResize(data: M.ResizeEvent) {
+  OnResizeTweet(data: M.ResizeEvent) {
     const moveY = data.newVal - data.oldVal;
     this.state.totalHeight += moveY;
     const idx = this.listData.findIndex(x => x.key == data.key);
     moduleTweet.MoveScroll({ height: data.newVal, idxFrom: idx, listTweet: this.listData });
-    const idxLock = this.state.queueHeight.indexOf(data.key);
-    if (idxLock) {
-      //스크롤 락
-      console.log('on resize idx lock!', idxLock);
-      this.scrollPanel.scrollTo({ top: this.state.scrollTop + data.newVal });
-      this.state.queueHeight.splice(idxLock, 1);
+    if (this.state.scrollTop > 0) {
+      console.log(data.newVal);
+      // this.scrollPanel.scrollTo({ top: this.state.scrollTop + data.newVal });
     }
   }
 
