@@ -2,6 +2,7 @@
 import * as I from '@/Interfaces';
 import * as M from '@/mixins';
 import { eventBus } from '@/plugins';
+import { ETweetType } from '@/store/Interface';
 export class Tweets {
   homes: M.ScrollItem<I.Tweet>[];
   mentions: M.ScrollItem<I.Tweet>[];
@@ -36,7 +37,7 @@ export class TweetDatas {
     const date = new Date(tweet.created_at);
     let idx = 0;
     for (let i = 0, len = list.length; i < len; i++) {
-      if (date > new Date(list[i].data.created_at)) {
+      if (date < new Date(list[i].data.created_at)) {
         idx = i;
         break;
       }
@@ -58,7 +59,7 @@ export class TweetDatas {
       key: tweet.id_str,
       scrollTop: idx * minHeight
     });
-    eventBus.$emit('AddedTweet', tweet);
+    eventBus.$emit('AddedTweet', ETweetType.E_HOME);
   }
 
   AddMention(tweet: I.Tweet | undefined, user_id_str: string) {
@@ -75,6 +76,7 @@ export class TweetDatas {
       key: tweet.id_str,
       scrollTop: idx * minHeight
     });
+    eventBus.$emit('AddedTweet', ETweetType.E_MENTION);
   }
 
   AddHomeList(list: I.Tweet[] | undefined, user_id_str: string) {
@@ -93,7 +95,7 @@ export class TweetDatas {
         scrollTop: idx * minHeight
       });
     });
-    eventBus.$emit('AddedList');
+    eventBus.$emit('AddedTweet', ETweetType.E_HOME);
   }
   AddMentionList(list: I.Tweet[] | undefined, user_id_str: string) {
     if (!list) throw Error('No ListTweets');
@@ -112,6 +114,7 @@ export class TweetDatas {
         scrollTop: idx * minHeight
       });
     });
+    eventBus.$emit('AddedTweet', ETweetType.E_MENTION);
   }
   OnResized() {
     this.dicTweets.forEach(item => {

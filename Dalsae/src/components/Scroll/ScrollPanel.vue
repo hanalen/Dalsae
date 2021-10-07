@@ -37,19 +37,15 @@ import * as M from '@/mixins';
 import { mixins } from 'vue-class-component';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { eventBus } from '@/plugins/EventBus';
+import { ETweetType } from '@/store/Interface';
 @Component
 export default class ScrollPanel extends M.ScrollPanelBase {
   @Ref()
   scrollPort!: HTMLElement;
 
   async created() {
-    eventBus.$on('AddedTweet', (tweet: I.Tweet) => {
-      console.log('addedtweet \r\n', tweet.full_text.substring(0, 10));
-      this.SetIndex();
-    });
-    eventBus.$on('AddedList', () => {
-      console.log('addedtweetList');
-      this.SetIndex();
+    eventBus.$on('AddedTweet', (tweetType: ETweetType) => {
+      if (this.tweetType === tweetType) this.SetIndex();
     });
 
     this.$nextTick(() => {
