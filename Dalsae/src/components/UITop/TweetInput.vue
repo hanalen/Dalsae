@@ -1,22 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 <template>
   <div class="tweet-input" @drop="OnDrop">
-    <!-- <textarea
-      v-model="state.tweet"
-      spellcheck="false"
-      class="text"
-      v-on:input="Input"
-      v-on:select="selectionChange"
-      v-on:paste="Paste"
-      @keyup="selectionChange"
-      @click="selectionChange"
-      @focus="selectionChange"
-      @keydown.down="ArrowDown"
-      @keydown.up="ArrowUp"
-      @keydown.enter="EnterDown"
-      @keydown.esc="ClearInput"
-    >
-    </textarea> -->
     <v-textarea
       outlined
       hide-details
@@ -38,13 +22,20 @@
       @keydown.esc="ClearInput"
     >
     </v-textarea>
-    <div class="ui-top-right-bottom">
-      <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-      <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-      <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-      <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-      <img v-for="(item, i) in state.listImage" :src="item" :key="i" />
-      <div></div>
+    <div class="ui-top-bottom">
+      <div>
+        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
+        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
+        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
+        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
+        <img class="img-add" v-for="(item, i) in state.listImage" :src="item" :key="i" />
+      </div>
+      <div class="ui-top-bottom-right">
+        <div>{{ GetTweetLength() }}/280</div>
+        <v-btn outlined color="primary" text @click="OnClickTweet">
+          트윗 하기
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -56,6 +47,17 @@
   padding: 4px !important;
   display: flex;
   flex-direction: column;
+}
+.ui-top-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+.ui-top-bottom-right {
+  display: flex;
+}
+.img-add {
+  max-width: 100px;
+  max-height: 100px;
 }
 textarea {
   font-family: 'Malgun Gothic' !important;

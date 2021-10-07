@@ -6,12 +6,6 @@
     <div class="ui-top-right">
       <tweet-input></tweet-input>
     </div>
-    <v-btn outlined color="primary" text @click="OnAddOne">
-      1개추가
-    </v-btn>
-    <v-btn outlined color="primary" text @click="OnAddTimer">
-      초당 1개 추가
-    </v-btn>
   </div>
 </template>
 
