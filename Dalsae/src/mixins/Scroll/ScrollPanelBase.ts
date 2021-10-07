@@ -3,10 +3,12 @@ import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Watch, Prop, Ref } from 'vue-property-decorator';
 import { DalsaePage } from '@/mixins';
 import * as M from '@/mixins';
+import * as E from '@/mixins';
 import * as I from '@/Interfaces';
 import faker from 'faker';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { TweetSelectorBase } from '../Home';
+import { ETweetType } from '@/store/Interface';
 class State {
   scrollTop = 0;
   totalHeight = 0;
@@ -30,6 +32,9 @@ export class ScrollPanelBase extends Vue {
 
   @Prop({ default: [] })
   listData!: M.ScrollItem<I.Tweet>[];
+
+  @Prop()
+  tweetType!: ETweetType;
 
   AddTestData() {
     for (let i = 0; i < 200; i++) {
@@ -95,7 +100,6 @@ export class ScrollPanelBase extends Vue {
     this.state.scrollTop = this.scrollPanel.scrollTop;
     let scrollTop = this.state.scrollTop; // - 1000; // 상단 버퍼 px
     if (scrollTop < 0) {
-      console.log('scroll top: ', this.state.scrollTop);
       scrollTop = 0;
       // scrollTop = this.state.scrollTop;
     }
@@ -183,6 +187,14 @@ export class ScrollPanelBase extends Vue {
   }
 
   async SetVisibleData() {
+    const { startIndex, endIndex, listVisible } = this.state;
+    ///렌더링 범위가 바뀌지 않을 경우 변경하지 않음
+    if (this.listData.length === 0) return;
+    if (listVisible.length > 0) {
+      if (this.listData[startIndex].key === listVisible[0].key) return;
+      else if (this.listData[endIndex].key === listVisible[listVisible.length - 1].key) return;
+    }
+
     this.state.listVisible = this.listData.slice(this.state.startIndex, this.state.endIndex);
   }
 }
