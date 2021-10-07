@@ -59,12 +59,14 @@ class SwitterStore extends VuexModule {
     if (user) {
       this.switter.selectUser = user;
     } else {
-      const selUser = this.switter.selectUser;
+      const selUser = this.tempUser;
       selUser.oauth_token = publicKey;
       selUser.oauth_token_secret = secretKey;
       selUser.name = name;
       selUser.screen_name = screenName;
       selUser.user_id = userId;
+      this.switter.selectUser = this.tempUser;
+      this.tempUser = new I.DalsaeUser();
       this.switter.listUser?.push(JSON.parse(JSON.stringify(selUser)));
       console.log('sel user------');
       console.log(selUser);
@@ -105,13 +107,20 @@ class SwitterStore extends VuexModule {
 
   @Mutation
   private updateUserInfo(user: I.User) {
-    this.switter.listUser?.forEach(item => {
-      item.user = user;
-      item.name = user.name;
-    });
+    const updateUser = this.switter.listUser?.find(x => x.user_id === user.id_str);
+    if (updateUser) {
+      updateUser.user = user;
+      updateUser.name = user.name;
+      updateUser.screen_name = user.screen_name;
+    }
     if (this.switter.selectUser.user_id === user.id_str) {
       this.switter.selectUser.user = user;
     }
+  }
+
+  @Mutation
+  private changeAccount(user: I.DalsaeUser) {
+    this.switter.selectUser = user;
   }
 
   @Action
@@ -127,6 +136,11 @@ class SwitterStore extends VuexModule {
   @Action
   public BlockIds(ids: string[]) {
     this.context.commit('blockIds', ids);
+  }
+
+  @Action
+  public ChangeAccount(user: I.DalsaeUser) {
+    this.context.commit('changeAccount', user);
   }
 }
 

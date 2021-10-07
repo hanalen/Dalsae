@@ -173,7 +173,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
 
   @Provide()
   async AccountChange(user: I.DalsaeUser) {
-    store.dispatch('ChangeAccount', user);
+    moduleSwitter.ChangeAccount(user);
     this.StartDalsae();
   }
 }
