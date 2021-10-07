@@ -7,10 +7,10 @@
     </v-tabs>
     <v-tabs-items v-model="tweetPanel.state.selectMenu">
       <v-tab-item :key="0">
-        <scroll-panel :listData="tweetHome" />
+        <scroll-panel :listData="tweetHome" :tweetType="home" />
       </v-tab-item>
       <v-tab-item :key="1">
-        <tweet-selector v-for="(item, i) in tweetMention" :key="i" :tweet="item"></tweet-selector>
+        <scroll-panel :listData="tweetMention" :tweetType="mention" />
       </v-tab-item>
       <v-tab-item :key="2">
         <tweet-selector v-for="(item, i) in dm" :key="i" :tweet="item"></tweet-selector>
