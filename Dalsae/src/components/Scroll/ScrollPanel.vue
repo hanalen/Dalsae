@@ -60,6 +60,7 @@ export default class ScrollPanel extends M.ScrollPanelBase {
     this.state.totalHeight += moveY;
     const idx = this.listData.findIndex(x => x.key == data.key);
     const tweet = this.listData[idx];
+    if (!tweet) return;
     if (tweet.isResized && idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
       this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop + moveY + 40 });
     }
