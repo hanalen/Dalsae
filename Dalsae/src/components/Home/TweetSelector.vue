@@ -1,7 +1,7 @@
 <template>
   <div class="tweet-selector">
-    <tweet-small :tweet="tweet ? tweet : source.data" v-if="isSmall"> </tweet-small>
-    <tweet-normal :tweet="tweet ? tweet : source.data" v-if="isNormal"> </tweet-normal>
+    <tweet-small :tweet="tweet" v-if="isSmall"> </tweet-small>
+    <tweet-normal :tweet="tweet" v-if="isNormal"> </tweet-normal>
   </div>
 </template>
 
