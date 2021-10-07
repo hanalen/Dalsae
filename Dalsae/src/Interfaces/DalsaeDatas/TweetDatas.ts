@@ -34,11 +34,12 @@ export class TweetDatas {
   }
 
   FindIndex(tweet: I.Tweet, list: M.ScrollItem<I.Tweet>[]) {
-    const date = new Date(tweet.created_at);
+    const date = new Date(tweet.created_at).getTime();
     let idx = 0;
     for (let i = 0, len = list.length; i < len; i++) {
-      if (date < new Date(list[i].data.created_at)) {
-        idx = i;
+      const next = new Date(list[i].data.created_at).getTime();
+      idx = i + 1;
+      if (date > next) {
         break;
       }
     }
