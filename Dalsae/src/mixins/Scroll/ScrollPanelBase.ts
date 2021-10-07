@@ -143,6 +143,9 @@ export class ScrollPanelBase extends Vue {
     mid = Math.floor((high + low) / 2);
     if (mid === -1) mid = 0;
     const item = list[mid];
+    if (item === undefined) {
+      return -1;
+    }
     if (item.scrollTop <= scrollTop && scrollTop <= item.scrollTop + item.height) {
       return mid;
     } else {
