@@ -98,7 +98,7 @@ export class APIManager {
         TimeLine: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
           const id = moduleSwitter.selectID;
           const result = await this.api.call.statuses.TimeLine({
-            count: '200',
+            count: 200,
             tweet_mode: 'extended',
             max_id: maxId,
             since_id: sinceId
@@ -115,7 +115,7 @@ export class APIManager {
         Mention: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
           const id = store.getters.selectID;
           const result = await this.api.call.statuses.Mention({
-            count: '200',
+            count: 200,
             tweet_mode: 'extended',
             max_id: maxId,
             since_id: sinceId
