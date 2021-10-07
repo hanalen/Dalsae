@@ -93,6 +93,7 @@ export class TweetDatas {
         scrollTop: idx * minHeight
       });
     });
+    eventBus.$emit('AddedList');
   }
   AddMentionList(list: I.Tweet[] | undefined, user_id_str: string) {
     if (!list) throw Error('No ListTweets');

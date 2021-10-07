@@ -47,6 +47,10 @@ export default class ScrollPanel extends M.ScrollPanelBase {
       console.log('addedtweet \r\n', tweet.full_text.substring(0, 10));
       this.SetIndex();
     });
+    eventBus.$on('AddedList', () => {
+      console.log('addedtweetList');
+      this.SetIndex();
+    });
 
     this.$nextTick(() => {
       window.addEventListener('resize', this.OnResizeWindow);
@@ -60,9 +64,7 @@ export default class ScrollPanel extends M.ScrollPanelBase {
     this.state.totalHeight += moveY;
     const idx = this.listData.findIndex(x => x.key == data.key);
     const tweet = this.listData[idx];
-    console.log(tweet.isResized);
     if (tweet.isResized && idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
-      console.log(this.state.startIndex, idx, moveY, this.scrollPanel.scrollTop);
       this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop + moveY + 40 });
     }
     moduleTweet.MoveScroll({ height: data.newVal, idxFrom: idx, listTweet: this.listData });
