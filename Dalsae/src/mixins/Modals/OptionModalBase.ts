@@ -2,6 +2,7 @@ import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
 import { DalsaePage } from '../DalsaePage';
 import * as I from '@/Interfaces';
+import { moduleModal } from '@/store/modules/ModalStore';
 class State {
   isShow: boolean;
   msg: string;
@@ -30,6 +31,6 @@ export class OptionModalBase extends mixins(Vue, DalsaePage) {
 
   OnClickOption() {
     this.ShowOptionModal();
-    this.ShowOptionDetailModal();
+    moduleModal.ShowOptionDetailModal(true);
   }
 }

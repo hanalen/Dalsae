@@ -4,8 +4,8 @@ import { DalsaePage } from '@/mixins';
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import store from '@/store';
+import { moduleModal } from '@/store/modules/ModalStore';
 class State {
-  isShow: boolean;
   selectMenu: number;
   listMenu: ModalMenu[];
   listHotkeyMenu: HotkeyMenu[];
@@ -13,7 +13,6 @@ class State {
   input: string;
   isInitHotkey: boolean;
   constructor() {
-    this.isShow = false;
     this.selectMenu = 0;
     this.listMenu = [];
     this.listHotkeyMenu = [];
@@ -121,6 +120,14 @@ interface HotkeySubMenu {
 
 @Component
 export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
+  test = '';
+  get isShow() {
+    return moduleModal.bOptionDetail;
+  }
+  set isShow(bShow: boolean) {
+    moduleModal.ShowOptionDetailModal(bShow);
+  }
+
   state = new State();
   muteOption = store.state.option.muteOption;
   hotKey = store.state.option.hotKey;
@@ -135,16 +142,12 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
     }
   }
 
-  async ShowModal() {
-    this.state.isShow = true;
-  }
-
   async ClickClose() {
     this.ModalClose();
   }
 
   async ModalClose() {
-    this.state.isShow = false;
+    this.isShow = false;
   }
 
   OnClickClose() {
@@ -154,7 +157,7 @@ export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
   }
 
   CloseModal() {
-    this.state.isShow = false;
+    this.isShow = false;
   }
 
   SaveHotkey() {

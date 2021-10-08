@@ -4,7 +4,7 @@
     <v-dialog
       class="modals"
       ref="modal"
-      v-model="state.isShow"
+      v-model="isShow"
       fullscreen
       hide-overlay
       transition="dialog-bottom-transition"
