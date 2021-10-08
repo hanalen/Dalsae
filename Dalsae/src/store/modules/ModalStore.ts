@@ -14,11 +14,17 @@ class ModalStore extends VuexModule {
   bMessage = false;
   bPin = false;
   bOptionDetail = false;
+  bOption = false;
   message = '';
 
   @Action
   ChangeMenu(menu: number) {
     this.context.commit('changeMenu', menu);
+  }
+
+  @Mutation
+  private showOptionModal(bShow: boolean) {
+    this.bOption = bShow;
   }
 
   @Mutation
@@ -52,6 +58,10 @@ class ModalStore extends VuexModule {
   @Action
   ShowOptionDetailModal(bShow: boolean) {
     this.context.commit('showOptionDetailModal', bShow);
+  }
+  @Action
+  ShowOptionModal(bShow: boolean) {
+    this.context.commit('showOptionModal', bShow);
   }
 
   @Action

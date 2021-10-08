@@ -8,6 +8,7 @@ import { createApiManager } from '@/Managers';
 import store from '@/store/index';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleOption } from '@/store/modules/OptionStore';
+import { moduleModal } from '@/store/modules/ModalStore';
 import faker, { fake } from 'faker';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { ETweetType } from '@/store/Interface';
@@ -53,7 +54,7 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   }
 
   OnOptionChange() {
-    if (this.isShowOptionModal) return; //open할때
+    if (moduleModal.bOption) return; //open할때
     window.preload.SaveOption(store.state.option);
   }
 
@@ -163,12 +164,8 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   }
 
   @Provide()
-  isShowOptionModal = false;
-
-  @Provide()
   async ShowOptionModal() {
-    console.log(this.isShowOptionModal);
-    this.isShowOptionModal = !this.isShowOptionModal;
+    moduleModal.ShowOptionModal(true);
   }
 
   @Provide()

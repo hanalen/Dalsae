@@ -33,9 +33,16 @@ import * as I from '@/Interfaces';
 import TwitterAPI from '@/API/APICall';
 import { DalsaePage, DalsaeApp } from '@/mixins';
 import { moduleOption } from '@/store/modules/OptionStore';
+import { moduleModal } from '@/store/modules/ModalStore';
 
 @Component
 export default class Home extends Mixins(DalsaeApp) {
+  get isShowOptionModal() {
+    return moduleModal.bOption;
+  }
+  set isShowOptionModal(bShow: boolean) {
+    moduleModal.ShowOptionModal(bShow);
+  }
   async created() {
     this.$nextTick(() => {
       document.addEventListener('keydown', this.KeyDown);

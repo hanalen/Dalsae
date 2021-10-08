@@ -79,8 +79,5 @@ export class DalsaePage extends Vue implements MIX.DalsaePageBase {
   ShowOptionDetailModal!: () => void;
 
   @Inject()
-  isShowOptionModal!: boolean;
-
-  @Inject()
   AccountChange!: (user: I.DalsaeUser) => void;
 }
