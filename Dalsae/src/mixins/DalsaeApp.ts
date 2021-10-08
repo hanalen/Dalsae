@@ -176,4 +176,11 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     moduleSwitter.ChangeAccount(user);
     this.StartDalsae();
   }
+
+  async OnKeyDownHotKey(hotKeyType: I.E_HOTKEY) {
+    switch (hotKeyType) {
+      case I.E_HOTKEY.E_SHOWTL:
+        break;
+    }
+  }
 }

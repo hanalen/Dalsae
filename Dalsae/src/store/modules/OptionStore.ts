@@ -10,9 +10,9 @@ export interface IOptionStore {
 
 @Module({ dynamic: true, store, name: 'option' })
 class OptionStore extends VuexModule {
-  private uiOption!: I.UIOption;
-  private muteOption!: I.MuteOption;
-  private hotKey!: I.Hotkey;
+  uiOption!: I.UIOption;
+  muteOption!: I.MuteOption;
+  hotKey!: I.Hotkey;
 
   // states
   tweetDatas: I.TweetDatas = new I.TweetDatas();

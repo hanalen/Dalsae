@@ -32,9 +32,32 @@ import { Vue, Component, Mixins } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import TwitterAPI from '@/API/APICall';
 import { DalsaePage, DalsaeApp } from '@/mixins';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export default class Home extends Mixins(DalsaeApp) {
+  async created() {
+    this.$nextTick(() => {
+      document.addEventListener('keydown', this.KeyDown);
+    });
+  }
+  KeyDown(e: KeyboardEvent) {
+    const hotKey = moduleOption.hotKey as any;
+    if (document?.activeElement?.tagName == 'TEXTAREA') return;
+    Object.keys(hotKey).forEach(key => {
+      const currentHotKey = hotKey[key] as I.Key;
+      if (
+        currentHotKey.isCtrl == e.ctrlKey &&
+        currentHotKey.isAlt == e.altKey &&
+        currentHotKey.isShift == e.shiftKey &&
+        currentHotKey.key.toUpperCase() == e.key.toUpperCase()
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.OnKeyDownHotKey(currentHotKey.hotkeyType);
+      }
+    });
+  }
   ClickLink(e: Event) {
     // const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
     // console.log(listTweet[this.index]);
