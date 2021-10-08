@@ -2,7 +2,7 @@
 <template>
   <v-app>
     <message-modal ref="messageModal"> </message-modal>
-    <pin-modal ref="pinModal"></pin-modal>
+    <pin-modal></pin-modal>
     <option-detail-modal ref="optionDetailModal"></option-detail-modal>
     <v-app-bar app max-height="90" height="90">
       <top-selector> </top-selector>
@@ -42,6 +42,12 @@ export default class Home extends Mixins(DalsaeApp) {
   }
   set isShowOptionModal(bShow: boolean) {
     moduleModal.ShowOptionModal(bShow);
+  }
+  get isShowPinModal() {
+    return moduleModal.bPin;
+  }
+  set isShowPinModal(bShow: boolean) {
+    moduleModal.ShowPinModal(bShow);
   }
   async created() {
     this.$nextTick(() => {

@@ -21,9 +21,6 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
   messageModal!: MIX.MessageModalBase;
 
   @Ref()
-  pinModal!: MIX.PinModalBase;
-
-  @Ref()
   optionDetailModal!: MIX.OptionDetailModalBase;
 
   @Provide()
@@ -153,14 +150,12 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
 
   @Provide()
   async ShowPin() {
-    console.log('showpin');
-    if (!this.pinModal) return;
-    this.pinModal.ShowModal();
+    moduleModal.ShowPinModal(true);
   }
 
   @Provide()
   async ShowOptionDetailModal() {
-    this.optionDetailModal.ShowModal();
+    moduleModal.ShowOptionDetailModal(true);
   }
 
   @Provide()

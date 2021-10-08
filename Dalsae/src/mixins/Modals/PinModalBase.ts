@@ -4,12 +4,11 @@ import { DalsaePage } from '@/mixins';
 import * as M from '@/Managers';
 import store from '@/store';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { moduleModal } from '@/store/modules/ModalStore';
 
 class State {
-  isShow: boolean;
   pin: string;
   constructor() {
-    this.isShow = false;
     this.pin = '';
   }
 }
@@ -23,7 +22,6 @@ export class PinModalBase extends mixins(Vue, DalsaePage) {
 
   async ShowModal() {
     moduleSwitter.Reset();
-    this.state.isShow = true;
     this.state.pin = '';
     // eslint-disable-next-line @typescript-eslint/camelcase
     const result = await this.api.call.oauth.ReqToken({ oauth_callback: 'oob' });
@@ -55,20 +53,16 @@ export class PinModalBase extends mixins(Vue, DalsaePage) {
 
   async ClickOk() {
     await this.GetAccessToken(this.state.pin);
-    this.ModalClose();
+    this.CloseModal();
     this.StartDalsae();
   }
 
   async ClickClose() {
-    this.ModalClose();
+    this.CloseModal();
   }
 
-  async ModalClose() {
-    this.state.isShow = false;
+  async CloseModal() {
+    moduleModal.ShowPinModal(false);
     this.state.pin = '';
-  }
-
-  CloseModal() {
-    this.state.isShow = false;
   }
 }
