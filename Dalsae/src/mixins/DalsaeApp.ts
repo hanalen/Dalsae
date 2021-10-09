@@ -18,12 +18,13 @@ export class DalsaeApp extends Vue {
   }
 
   @Watch('selectUserID', { immediate: true, deep: true })
-  OnChangeData(newID: string) {
+  OnChangeData(newID: string, oldID: string) {
     this.$nextTick(() => {
-      if (newID || moduleSwitter.selectUser) {
-        this.StartDalsae();
-      } else {
+      if (!newID && !moduleSwitter.selectUser) {
         moduleModal.ShowPinModal(true);
+      }
+      if (newID && oldID) {
+        this.StartDalsae();
       }
     });
   }
@@ -32,7 +33,7 @@ export class DalsaeApp extends Vue {
     moduleTweet.Init(moduleSwitter.selectID);
     this.LoadConfig();
     this.$nextTick(() => {
-      // this.StartDalsae();
+      this.StartDalsae();
     });
   }
 
