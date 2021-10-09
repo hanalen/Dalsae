@@ -1,5 +1,5 @@
 import { mixins } from 'vue-class-component';
-import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
+import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
 import * as M from '@/Managers';
 import store from '@/store';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
@@ -16,6 +16,20 @@ class State {
 @Component
 export class PinModalBase extends Vue {
   state = new State();
+
+  get isShow() {
+    return moduleModal.bPin;
+  }
+  set isShow(bShow: boolean) {
+    moduleModal.ShowPinModal(bShow);
+  }
+
+  @Watch('isShow', { immediate: true, deep: true })
+  OnChangeShow(newVal: boolean) {
+    if (newVal) {
+      this.ShowModal();
+    }
+  }
 
   async ShowModal() {
     moduleSwitter.Reset();

@@ -1,6 +1,6 @@
 <template>
   <div class="message-modal">
-    <v-dialog persistent class="modals" ref="modal" v-model="state.isShow" max-width="300">
+    <v-dialog persistent class="modals" ref="modal" v-model="isShow" max-width="300">
       <v-card>
         <v-card-title class="headline">
           인증을 진행 해주세요
@@ -36,6 +36,7 @@
 <script lang="ts">
 import { Mixins, Component, Ref } from 'vue-property-decorator';
 import { PinModalBase } from '@/mixins';
+import { moduleModal } from '@/store/modules/ModalStore';
 
 @Component
 export default class PinModal extends PinModalBase {

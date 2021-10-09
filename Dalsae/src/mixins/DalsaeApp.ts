@@ -2,7 +2,7 @@
 import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import * as M from '@/Managers';
-import { Vue, Component, Provide, Ref } from 'vue-property-decorator';
+import { Vue, Component, Provide, Ref, Watch } from 'vue-property-decorator';
 import store from '@/store/index';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleOption } from '@/store/modules/OptionStore';
@@ -13,11 +13,26 @@ import { moduleUI } from '@/store/modules/UIStore';
 import { moduleApi } from '@/store/modules/APIStore';
 @Component
 export class DalsaeApp extends Vue {
+  get selectUserID() {
+    return moduleSwitter.selectID;
+  }
+
+  @Watch('selectUserID', { immediate: true, deep: true })
+  OnChangeData(newID: string) {
+    this.$nextTick(() => {
+      if (newID || moduleSwitter.selectUser) {
+        this.StartDalsae();
+      } else {
+        moduleModal.ShowPinModal(true);
+      }
+    });
+  }
+
   async created() {
     moduleTweet.Init(moduleSwitter.selectID);
     this.LoadConfig();
     this.$nextTick(() => {
-      this.StartDalsae();
+      // this.StartDalsae();
     });
   }
 
@@ -101,8 +116,6 @@ export class DalsaeApp extends Vue {
       moduleApi.call.statuses.TimeLine();
       // moduleApi.call.statuses.Mention();
       // moduleApi.call.block.Ids({ cursor: '-1', stringify_ids: true });
-    } else {
-      moduleModal.ShowPinModal(true);
     }
   }
 
