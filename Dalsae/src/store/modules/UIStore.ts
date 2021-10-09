@@ -39,11 +39,17 @@ class UIStore extends VuexModule {
         if (moduleTweet.homes.length <= change.index) {
           change.index = moduleTweet.homes.length - 1;
         }
+        if (change.index < 0) {
+          change.index = 0;
+        }
         this.panelHome.index = change.index;
         break;
       case ETweetType.E_MENTION:
         if (moduleTweet.mentions.length <= change.index) {
           change.index = moduleTweet.homes.length - 1;
+        }
+        if (change.index < 0) {
+          change.index = 0;
         }
         this.panelMention.index = change.index;
         break;
@@ -54,11 +60,17 @@ class UIStore extends VuexModule {
         if (moduleTweet.favorites.length <= change.index) {
           change.index = moduleTweet.homes.length - 1;
         }
+        if (change.index < 0) {
+          change.index = 0;
+        }
         this.panelFavorite.index = change.index;
         break;
       case ETweetType.E_OPEN:
         if (moduleTweet.opens.length <= change.index) {
           change.index = moduleTweet.homes.length - 1;
+        }
+        if (change.index < 0) {
+          change.index = 0;
         }
         this.panelOpen.index = change.index;
         break;

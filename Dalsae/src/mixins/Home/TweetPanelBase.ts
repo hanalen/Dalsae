@@ -44,12 +44,10 @@ export class TweetPanelBase extends Vue {
 
   KeyDown(e: KeyboardEvent) {
     if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
-      console.log(e.code);
       if (e.code === 'ArrowUp') {
         e.preventDefault();
         this.ArrowUp();
       } else if (e.code === 'ArrowDown') {
-        console.log('arrow down');
         e.preventDefault();
         this.ArrowDown();
       }

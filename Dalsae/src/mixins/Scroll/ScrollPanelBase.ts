@@ -8,6 +8,7 @@ import faker from 'faker';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { TweetSelectorBase } from '../Home';
 import { ETweetType } from '@/store/Interface';
+import { moduleUI } from '@/store/modules/UIStore';
 class State {
   scrollTop = 0;
   totalHeight = 0;
@@ -29,11 +30,59 @@ export class ScrollPanelBase extends Vue {
   @Ref()
   scrollPanel!: HTMLElement;
 
+  @Ref()
+  scrollItem!: Vue[];
+
   @Prop({ default: [] })
   listData!: M.ScrollItem<I.Tweet>[];
 
   @Prop()
   tweetType!: ETweetType;
+
+  get panelIndex() {
+    switch (this.tweetType) {
+      case ETweetType.E_HOME:
+        return moduleUI.panelHome.index;
+      case ETweetType.E_MENTION:
+        return moduleUI.panelMention.index;
+      case ETweetType.E_FAVORITE:
+        return moduleUI.panelFavorite.index;
+      case ETweetType.E_OPEN:
+        return moduleUI.panelOpen.index;
+      default:
+        return moduleUI.panelHome.index;
+    }
+  }
+
+  @Watch('panelIndex')
+  OnChangePanelIndex(newVal: number) {
+    if (!this.scrollItem) return;
+    console.log('index', newVal);
+    const selectTweet = this.listData[newVal];
+    const idx = this.state.listVisible.findIndex(x => x.key === selectTweet.key);
+    if (idx === -1) {
+      console.log('panel index idx is -1');
+      console.log('selecttweet', selectTweet);
+      console.log(this.state.listVisible);
+      return;
+    }
+    const component = this.scrollItem[idx];
+    const tweetPos = component.$el.getBoundingClientRect();
+    const panelPos = this.scrollPanel.getBoundingClientRect();
+    const tweetBottom = tweetPos.y + tweetPos.height;
+    const panelBottom = panelPos.y + panelPos.height;
+    console.log(tweetPos, panelPos, selectTweet);
+    if (tweetBottom > panelBottom) {
+      //내려가는 로직
+      const top = tweetBottom - panelBottom;
+      console.log('down', panelBottom, tweetBottom);
+      this.scrollPanel.scrollTo({ top: this.state.scrollTop + top });
+    } else if (tweetPos.top < panelPos.y) {
+      //올라가는 로직
+      console.log('up');
+      this.scrollPanel.scrollTo({ top: selectTweet.scrollTop });
+    }
+  }
 
   AddTestData() {
     for (let i = 0; i < 200; i++) {
@@ -96,6 +145,7 @@ export class ScrollPanelBase extends Vue {
   }
 
   SetIndex() {
+    //화살표로 아래로 내려갔다 올라왔을 경우 scrolltop이 0일 때 startIndex가 제대로 0으로 계산 안 되는 문제 있음
     this.state.scrollTop = this.scrollPanel.scrollTop;
     let scrollTop = this.state.scrollTop; // - 1000; // 상단 버퍼 px
     if (scrollTop < 0) {
