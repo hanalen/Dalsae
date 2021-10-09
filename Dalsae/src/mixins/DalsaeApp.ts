@@ -120,11 +120,22 @@ export class DalsaeApp extends Vue {
   }
 
   async OnKeyDownHotKey(hotKeyType: I.E_HOTKEY) {
+    console.log('hotkey', hotKeyType);
     switch (hotKeyType) {
-      case I.E_HOTKEY.E_SHOWTL:
+      case I.E_HOTKEY.SHOWTL:
+        moduleUI.ChangeMenu(0);
+        break;
+      case I.E_HOTKEY.SHOWMENTION:
         moduleUI.ChangeMenu(1);
         break;
-      case I.E_HOTKEY.E_SHOWMENTION:
+      case I.E_HOTKEY.SHOWDM:
+        moduleUI.ChangeMenu(2);
+        break;
+      case I.E_HOTKEY.SHOWFAVORITE:
+        moduleUI.ChangeMenu(3);
+        break;
+      case I.E_HOTKEY.SHOWURL:
+        moduleUI.ChangeMenu(4);
         break;
     }
   }

@@ -27,29 +27,29 @@ export interface Key {
 }
 
 export enum E_HOTKEY {
-  E_SHOWTL,
-  E_SHOWMENTION,
-  E_SHOWDM,
-  E_SHOWFAVORITE,
-  E_SHOWURL,
-  E_REPLY,
-  E_REPLYALL,
-  E_SENDDM,
-  E_LOADING,
-  E_COPY,
-  E_CANCLE,
-  E_LOADCONV,
-  E_SHOWQT,
-  E_RETWEET,
-  E_SENDQT,
-  E_SENDFAVORITE,
-  E_HASH,
-  E_DELETE,
-  E_INPUT,
-  E_SHOWCONTEXT,
-  E_HOME,
-  E_END,
-  E_SHOWIMAGE
+  SHOWTL = 'SHOWTL',
+  SHOWMENTION = 'SHOWMENTION',
+  SHOWDM = 'SHOWDM',
+  SHOWFAVORITE = 'SHOWFAVORITE',
+  SHOWURL = 'SHOWURL',
+  REPLY = 'REPLY',
+  REPLYALL = 'REPLYALL',
+  SENDDM = 'SENDDM',
+  LOADING = 'LOADING',
+  COPY = 'COPY',
+  CANCLE = 'CANCLE',
+  LOADCONV = 'LOADCONV',
+  SHOWQT = 'SHOWQT',
+  RETWEET = 'RETWEET',
+  SENDQT = 'SENDQT',
+  SENDFAVORITE = 'SENDFAVORITE',
+  HASH = 'HASH',
+  DELETE = 'DELETE',
+  INPUT = 'INPUT',
+  SHOWCONTEXT = 'SHOWCONTEXT',
+  HOME = 'HOME',
+  END = 'END',
+  SHOWIMAGE = 'SHOWIMAGE'
 }
 
 export class Hotkey {
@@ -87,161 +87,161 @@ export class Hotkey {
       isAlt: false,
       isShift: false,
       key: '1',
-      hotkeyType: E_HOTKEY.E_HOME
+      hotkeyType: E_HOTKEY.SHOWTL
     };
     this.showMention = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: '2',
-      hotkeyType: E_HOTKEY.E_SHOWMENTION
+      hotkeyType: E_HOTKEY.SHOWMENTION
     };
     this.showDM = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: '3',
-      hotkeyType: E_HOTKEY.E_SENDDM
+      hotkeyType: E_HOTKEY.SHOWDM
     };
     this.showFavorite = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: '4',
-      hotkeyType: E_HOTKEY.E_SHOWFAVORITE
+      hotkeyType: E_HOTKEY.SHOWFAVORITE
     };
     this.showUrl = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: '5',
-      hotkeyType: E_HOTKEY.E_SHOWURL
+      hotkeyType: E_HOTKEY.SHOWURL
     };
     this.reply = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'r',
-      hotkeyType: E_HOTKEY.E_REPLY
+      hotkeyType: E_HOTKEY.REPLY
     };
     this.replyAll = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'a',
-      hotkeyType: E_HOTKEY.E_REPLYALL
+      hotkeyType: E_HOTKEY.REPLYALL
     };
     this.sendDM = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'd',
-      hotkeyType: E_HOTKEY.E_SENDDM
+      hotkeyType: E_HOTKEY.SENDDM
     };
     this.loading = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: ' ',
-      hotkeyType: E_HOTKEY.E_LOADING
+      hotkeyType: E_HOTKEY.LOADING
     };
     this.copy = {
       isCtrl: true,
       isAlt: false,
       isShift: false,
       key: 'c',
-      hotkeyType: E_HOTKEY.E_COPY
+      hotkeyType: E_HOTKEY.COPY
     };
     this.cancle = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'escape',
-      hotkeyType: E_HOTKEY.E_CANCLE
+      hotkeyType: E_HOTKEY.CANCLE
     };
     this.loadConv = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'c',
-      hotkeyType: E_HOTKEY.E_LOADCONV
+      hotkeyType: E_HOTKEY.LOADCONV
     };
     this.showQt = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'x',
-      hotkeyType: E_HOTKEY.E_SHOWQT
+      hotkeyType: E_HOTKEY.SHOWQT
     };
     this.retweet = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 't',
-      hotkeyType: E_HOTKEY.E_RETWEET
+      hotkeyType: E_HOTKEY.RETWEET
     };
     this.sendQt = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'w',
-      hotkeyType: E_HOTKEY.E_SENDQT
+      hotkeyType: E_HOTKEY.SENDQT
     };
     this.sendFavorite = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'f',
-      hotkeyType: E_HOTKEY.E_SENDFAVORITE
+      hotkeyType: E_HOTKEY.SENDFAVORITE
     };
     this.hash = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'h',
-      hotkeyType: E_HOTKEY.E_HASH
+      hotkeyType: E_HOTKEY.HASH
     };
     this.delete = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'delete',
-      hotkeyType: E_HOTKEY.E_DELETE
+      hotkeyType: E_HOTKEY.DELETE
     };
     this.input = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'u',
-      hotkeyType: E_HOTKEY.E_INPUT
+      hotkeyType: E_HOTKEY.INPUT
     };
     this.showContext = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'v',
-      hotkeyType: E_HOTKEY.E_SHOWCONTEXT
+      hotkeyType: E_HOTKEY.SHOWCONTEXT
     };
     this.home = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'home',
-      hotkeyType: E_HOTKEY.E_HOME
+      hotkeyType: E_HOTKEY.HOME
     };
     this.end = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'end',
-      hotkeyType: E_HOTKEY.E_END
+      hotkeyType: E_HOTKEY.END
     };
     this.showImage = {
       isCtrl: false,
       isAlt: false,
       isShift: false,
       key: 'g',
-      hotkeyType: E_HOTKEY.E_SHOWIMAGE
+      hotkeyType: E_HOTKEY.SHOWIMAGE
     };
   }
 }

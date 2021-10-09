@@ -12,10 +12,7 @@ export interface IOptionStore {
 class OptionStore extends VuexModule {
   uiOption!: I.UIOption;
   muteOption!: I.MuteOption;
-  hotKey!: I.Hotkey;
-
-  // states
-  tweetDatas: I.TweetDatas = new I.TweetDatas();
+  hotKey: I.Hotkey = new I.Hotkey();
 
   // getters
   @Mutation
