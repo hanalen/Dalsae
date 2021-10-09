@@ -37,15 +37,8 @@ import { TweetPanelBase } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 import TweetSelector from '@/components/Home/TweetSelector.vue';
 import { Component as Compo } from 'vue';
-import { moduleUI } from '@/store/modules/UIStore';
 @Component
 export default class TweetPanel extends TweetPanelBase {
-  get selectMenu() {
-    return moduleUI.selectMenu;
-  }
-  set selectMenu(menu: number) {
-    moduleUI.ChangeMenu(menu);
-  }
   listMenu = [
     { name: 'home', value: 0 },
     { name: 'mention', value: 1 },
@@ -53,5 +46,11 @@ export default class TweetPanel extends TweetPanelBase {
     { name: 'favorite', value: 3 },
     { name: 'url', value: 4 }
   ];
+
+  async created() {
+    this.$nextTick(() => {
+      document.addEventListener('keydown', this.KeyDown);
+    });
+  }
 }
 </script>
