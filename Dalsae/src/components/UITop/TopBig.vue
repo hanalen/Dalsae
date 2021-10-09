@@ -41,7 +41,7 @@
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/camelcase */
-import { DalsaeApp, DalsaePage, UITopBase } from '@/mixins';
+import { DalsaeApp, UITopBase } from '@/mixins';
 import faker from 'faker';
 import { mixins } from 'vue-class-component';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
@@ -51,7 +51,7 @@ import { AddTweet, ETweetType } from '@/store/Interface';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { eventBus } from '@/plugins/EventBus';
 @Component
-export default class TopBig extends mixins(UITopBase) {
+export default class TopBig extends UITopBase {
   AddTestTweet() {
     const tweet: I.Tweet = {
       full_text: faker.lorem.text() + faker.lorem.text(),

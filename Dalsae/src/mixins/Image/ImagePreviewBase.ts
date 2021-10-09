@@ -5,7 +5,4 @@ import * as I from '@/Interfaces';
 export class ImagePopupPreviewBase extends Mixins(Vue) {
   @Prop()
   media!: I.Media;
-
-  @Inject()
-  PreviewClick!: (media: I.Media) => void;
 }

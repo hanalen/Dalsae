@@ -1,10 +1,10 @@
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
-import { DalsaePage } from '@/mixins';
 import * as M from '@/Managers';
 import store from '@/store';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleModal } from '@/store/modules/ModalStore';
+import { moduleApi } from '@/store/modules/APIStore';
 
 class State {
   pin: string;
@@ -14,17 +14,14 @@ class State {
 }
 
 @Component
-export class PinModalBase extends mixins(Vue, DalsaePage) {
+export class PinModalBase extends Vue {
   state = new State();
-
-  @Inject()
-  StartDalsae!: () => void;
 
   async ShowModal() {
     moduleSwitter.Reset();
     this.state.pin = '';
     // eslint-disable-next-line @typescript-eslint/camelcase
-    const result = await this.api.call.oauth.ReqToken({ oauth_callback: 'oob' });
+    const result = await moduleApi.call.oauth.ReqToken({ oauth_callback: 'oob' });
     if (!result.data) return;
     result.data.oauth_token_secret;
     console.log(result.data);
@@ -44,7 +41,7 @@ export class PinModalBase extends mixins(Vue, DalsaePage) {
 
   async GetAccessToken(pin: string) {
     // eslint-disable-next-line @typescript-eslint/camelcase
-    const result = await this.api.call.oauth.ReqAccessToken({ oauth_verifier: pin });
+    const result = await moduleApi.call.oauth.ReqAccessToken({ oauth_verifier: pin });
     if (result.data) {
       window.preload.SaveSwitter(store.state.switter.switter);
       this.CloseModal();
@@ -54,7 +51,6 @@ export class PinModalBase extends mixins(Vue, DalsaePage) {
   async ClickOk() {
     await this.GetAccessToken(this.state.pin);
     this.CloseModal();
-    this.StartDalsae();
   }
 
   async ClickClose() {

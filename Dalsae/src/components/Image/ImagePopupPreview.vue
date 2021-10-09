@@ -21,7 +21,6 @@ img {
 <script lang="ts">
 import { Vue, Component, Mixins } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
-import TwitterAPI from '@/API/APICall';
 import * as MIX from '@/mixins/Image';
 
 @Component

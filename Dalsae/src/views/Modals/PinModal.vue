@@ -35,11 +35,10 @@
 
 <script lang="ts">
 import { Mixins, Component, Ref } from 'vue-property-decorator';
-import { DalsaePage, PinModalBase } from '@/mixins';
-// interface BaseInterface extends DalsaePage {}
+import { PinModalBase } from '@/mixins';
 
 @Component
-export default class PinModal extends Mixins(DalsaePage, PinModalBase) {
+export default class PinModal extends PinModalBase {
   async crated() {
     console.log('msg modal crated');
   }

@@ -39,9 +39,9 @@
 </style>
 
 <script lang="ts">
-import { DalsaeApp, DalsaePage, TweetBase } from '@/mixins';
+import { DalsaeApp, TweetBase } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide, Inject, Prop } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 @Component
-export default class TweetNormal extends Mixins(TweetBase) {}
+export default class TweetNormal extends TweetBase {}
 </script>

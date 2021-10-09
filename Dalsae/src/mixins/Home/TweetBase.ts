@@ -15,7 +15,7 @@ class State {
 }
 
 @Component
-export class TweetBase extends Mixins(Vue, MIX.DalsaePage) {
+export class TweetBase extends Vue {
   state: State = new State();
   @Prop()
   tweet!: I.Tweet;

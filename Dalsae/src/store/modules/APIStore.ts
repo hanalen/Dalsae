@@ -1,22 +1,16 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as M from '@/Managers';
-import TwitterAPI from '@/API/APICall';
+import TwitterRequest from '@/API/TwitterRequest';
 import * as P from '@/Interfaces';
 import * as I from '@/Interfaces';
 import * as S from '@/store/Interface';
 import store from '@/store/index';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
-import { mapMutations } from 'vuex';
+import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 
-export class APIManager {
-  api = new TwitterAPI();
-
-  private _ShowMessage!: (msg: string) => void;
-  private _ShowConfirm!: (msg: string) => Promise<boolean>;
-  constructor(showMesage: (msg: string) => void, showConfirm: (msg: string) => Promise<boolean>) {
-    this._ShowMessage = showMesage;
-    this._ShowConfirm = showConfirm;
-  }
+@Module({ dynamic: true, store, name: 'api' })
+class APIStore extends VuexModule {
+  api = new TwitterRequest();
 
   get call() {
     return {
@@ -177,10 +171,4 @@ export class APIManager {
     };
   }
 }
-
-export function createApiManager(
-  showMesage: (msg: string) => void,
-  showConfirm: (msg: string) => Promise<boolean>
-) {
-  return new APIManager(showMesage, showConfirm);
-}
+export const moduleApi = getModule(APIStore);

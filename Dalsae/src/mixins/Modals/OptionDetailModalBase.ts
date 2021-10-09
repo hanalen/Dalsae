@@ -1,6 +1,5 @@
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
-import { DalsaePage } from '@/mixins';
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import store from '@/store';
@@ -119,7 +118,7 @@ interface HotkeySubMenu {
 }
 
 @Component
-export class OptionDetailModalBase extends mixins(Vue, DalsaePage) {
+export class OptionDetailModalBase extends Vue {
   test = '';
   get isShow() {
     return moduleModal.bOptionDetail;

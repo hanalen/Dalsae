@@ -40,7 +40,7 @@ function CreateHeader(authorization: string, contentType?: string) {
   // };
 }
 
-export default class TwitterAPI {
+export default class TwitterRequest {
   async request<TReq, TResp>(
     url: string,
     method: P.Method,

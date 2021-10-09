@@ -1,8 +1,8 @@
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
-import { DalsaePage } from '../DalsaePage';
 import * as I from '@/Interfaces';
 import { moduleModal } from '@/store/modules/ModalStore';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
 class State {
   isShow: boolean;
   msg: string;
@@ -16,21 +16,21 @@ class State {
   }
 }
 @Component
-export class OptionModalBase extends mixins(Vue, DalsaePage) {
+export class OptionModalBase extends Vue {
   state: State = new State();
 
   OnClickAddAccount() {
-    this.ShowOptionModal();
-    this.ShowPin();
+    moduleModal.ShowOptionModal(true);
+    moduleModal.ShowPinModal(true);
   }
 
   OnClickAccount(account: I.DalsaeUser) {
-    this.ShowOptionModal();
-    this.AccountChange(account);
+    moduleModal.ShowOptionModal(true);
+    moduleSwitter.ChangeAccount(account);
   }
 
-  OnClickOption() {
-    this.ShowOptionModal();
+  OnClickOptionDetail() {
+    moduleModal.ShowOptionModal(false);
     moduleModal.ShowOptionDetailModal(true);
   }
 }

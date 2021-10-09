@@ -4,20 +4,9 @@ import * as M from '@/Managers';
 import { mixins } from 'vue-class-component';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { ETweetType } from '@/store/Interface';
-class State {
-  selectMenu: number;
-  constructor() {
-    this.selectMenu = 0;
-  }
-}
 
 @Component
 export class TweetPanelBase extends Vue {
-  state: State = new State();
-  async MenuChange(menu: number) {
-    this.state.selectMenu = menu;
-  }
-
   get home() {
     return ETweetType.E_HOME;
   }

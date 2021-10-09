@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
-import { DalsaePage } from '@/mixins';
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import store from '@/store';
@@ -16,7 +15,7 @@ class State {
 }
 
 @Component
-export class UITopBase extends mixins(Vue, DalsaePage) {
+export class UITopBase extends Vue {
   state = new State();
   user = store.state.switter.switter;
   propicPath = '';

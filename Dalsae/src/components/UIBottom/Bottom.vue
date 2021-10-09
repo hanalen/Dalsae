@@ -4,9 +4,7 @@
       <v-icon>mdi-menu</v-icon>
     </v-btn>
     <v-btn icon rounded v-for="(item, i) in listIcons" :key="i" @click="ClickMenu(item.value)">
-      <v-icon :color="item.value === tweetPanel.state.selectMenu ? 'primary' : 'secondary'">{{
-        item.name
-      }}</v-icon>
+      <v-icon :color="item.value === selectMenu ? 'primary' : 'secondary'">{{ item.name }}</v-icon>
     </v-btn>
   </div>
 </template>
@@ -19,11 +17,15 @@
 </style>
 
 <script lang="ts">
-import { DalsaeApp, DalsaePage } from '@/mixins';
+import { DalsaeApp } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
-
+import { moduleModal } from '@/store/modules/ModalStore';
+import { moduleUI } from '@/store/modules/UIStore';
 @Component
-export default class Bottom extends Mixins(DalsaePage) {
+export default class Bottom extends Vue {
+  get selectMenu() {
+    return moduleUI.selectMenu;
+  }
   listIcons = [
     {
       name: 'mdi-home',
@@ -49,11 +51,11 @@ export default class Bottom extends Mixins(DalsaePage) {
 
   async ClickOption() {
     console.log('click option');
-    this.ShowOptionModal();
+    moduleModal.ShowOptionModal(true);
   }
 
   async ClickMenu(menu: number) {
-    this.tweetPanel.MenuChange(menu);
+    moduleUI.ChangeMenu(menu);
   }
 }
 </script>

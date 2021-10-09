@@ -34,11 +34,11 @@
 </style>
 
 <script lang="ts">
-import { DalsaeApp, DalsaePage, TweetBase, ImagePage } from '@/mixins';
+import { DalsaeApp, TweetBase, ImagePage } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide, Inject, Prop } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 @Component
-export default class PropicImage extends Mixins(Vue) {
+export default class PropicImage extends Vue {
   @Prop()
   user!: I.User;
 

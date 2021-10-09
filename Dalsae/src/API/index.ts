@@ -1,1 +1,1 @@
-export * from './APICall';
+export * from './TwitterRequest';

@@ -1,11 +1,11 @@
 <template>
   <div class="tweet-panel" ref="tweetPanel">
-    <v-tabs v-model="tweetPanel.state.selectMenu" hide-slider hidden>
+    <v-tabs v-model="selectMenu" hide-slider hidden>
       <v-tab v-for="(item, i) in listMenu" :key="i">
         {{ item.name }}
       </v-tab>
     </v-tabs>
-    <v-tabs-items v-model="tweetPanel.state.selectMenu">
+    <v-tabs-items v-model="selectMenu">
       <v-tab-item :key="0">
         <scroll-panel :listData="tweetHome" :tweetType="home" />
       </v-tab-item>
@@ -33,13 +33,19 @@
 </style>
 
 <script lang="ts">
-import { TweetPanelBase, DalsaePage } from '@/mixins';
+import { TweetPanelBase } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 import TweetSelector from '@/components/Home/TweetSelector.vue';
 import { Component as Compo } from 'vue';
+import { moduleUI } from '@/store/modules/UIStore';
 @Component
-export default class TweetPanel extends Mixins(TweetPanelBase, DalsaePage) {
-  itemComponent: Compo = TweetSelector;
+export default class TweetPanel extends TweetPanelBase {
+  get selectMenu() {
+    return moduleUI.selectMenu;
+  }
+  set selectMenu(menu: number) {
+    moduleUI.ChangeMenu(menu);
+  }
   listMenu = [
     { name: 'home', value: 0 },
     { name: 'mention', value: 1 },

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Watch, Prop, Ref } from 'vue-property-decorator';
-import { DalsaePage } from '@/mixins';
 import * as M from '@/mixins';
 import * as E from '@/mixins';
 import * as I from '@/Interfaces';

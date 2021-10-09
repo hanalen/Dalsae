@@ -11,13 +11,10 @@ class State {
 }
 
 @Component
-export class ImagePreviewBase extends Mixins(Vue, MIX.DalsaePage) {
+export class ImagePreviewBase extends Vue {
   state: State = new State();
   @Prop()
   media!: I.Media[]; //이미지 뷰어 때문에 tweet으로 들고 있어야 함...
-
-  @Inject()
-  OpenImage!: () => void;
 
   imgPreview(src: I.Media) {
     return src.media_url_https + ':thumb';
@@ -26,7 +23,7 @@ export class ImagePreviewBase extends Mixins(Vue, MIX.DalsaePage) {
   Click(e: Event) {
     // console.log('click');
     this.state.isHover = this.state.isHover;
-    this.OpenImage();
+    // this.OpenImage();
     // window.preload.image.OpenImageWindow(this.mngTweet.homes[0], this.mngOption.uiOption);
     // window.preload.image.OpenImageWindow(this.mngTweet.homes[0]);
   }

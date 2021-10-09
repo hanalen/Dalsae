@@ -22,12 +22,12 @@
 <style lang="scss" scoped></style>
 
 <script lang="ts">
-import { DalsaeApp, DalsaePage } from '@/mixins';
+import { DalsaeApp } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 import * as I from '@/Managers/ErrorManager';
 import store from '@/store';
 @Component
-export default class TopSelector extends Mixins(DalsaePage) {
+export default class TopSelector extends Vue {
   listMsg = I.ErrorManager.instence().listMsg;
   get uiOption() {
     return store.state.option.uiOption;

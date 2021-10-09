@@ -70,10 +70,10 @@ textarea {
 </style>
 
 <script lang="ts">
-import { DalsaeApp, DalsaePage, UITopBase, TweetInputBase } from '@/mixins';
+import { DalsaeApp, UITopBase, TweetInputBase } from '@/mixins';
 import { mixins } from 'vue-class-component';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
-export default class TweetInput extends mixins(TweetInputBase) {}
+export default class TweetInput extends TweetInputBase {}
 </script>

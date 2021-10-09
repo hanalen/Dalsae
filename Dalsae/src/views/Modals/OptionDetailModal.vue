@@ -243,11 +243,10 @@
 
 <script lang="ts">
 import { Mixins, Component, Ref } from 'vue-property-decorator';
-import { DalsaePage, OptionDetailModalBase, PinModalBase } from '@/mixins';
-// interface BaseInterface extends DalsaePage {}
+import { OptionDetailModalBase, PinModalBase } from '@/mixins';
 
 @Component
-export default class OptionDetailModal extends Mixins(OptionDetailModalBase) {
+export default class OptionDetailModal extends OptionDetailModalBase {
   async crated() {
     console.log('option detail modal created');
   }

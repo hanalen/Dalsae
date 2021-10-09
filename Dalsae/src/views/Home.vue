@@ -30,8 +30,7 @@
 <script lang="ts">
 import { Vue, Component, Mixins } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
-import TwitterAPI from '@/API/APICall';
-import { DalsaePage, DalsaeApp } from '@/mixins';
+import { DalsaeApp } from '@/mixins';
 import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleModal } from '@/store/modules/ModalStore';
 

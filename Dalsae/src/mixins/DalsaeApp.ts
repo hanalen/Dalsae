@@ -1,37 +1,18 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import TwitterAPI from '@/API/APICall';
 import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import * as M from '@/Managers';
 import { Vue, Component, Provide, Ref } from 'vue-property-decorator';
-import { createApiManager } from '@/Managers';
 import store from '@/store/index';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleModal } from '@/store/modules/ModalStore';
 import faker, { fake } from 'faker';
 import { moduleTweet } from '@/store/modules/TweetStore';
-import { ETweetType } from '@/store/Interface';
+import { moduleUI } from '@/store/modules/UIStore';
+import { moduleApi } from '@/store/modules/APIStore';
 @Component
-export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
-  @Provide()
-  api = createApiManager(this.ShowMessage, this.ShowConfirm);
-
-  @Ref()
-  messageModal!: MIX.MessageModalBase;
-
-  @Ref()
-  optionDetailModal!: MIX.OptionDetailModalBase;
-
-  @Provide()
-  tweetPanel = new MIX.TweetPanelBase();
-
-  @Provide()
-  async ShowMessage(msg: string) {
-    if (!this.messageModal) return;
-    this.messageModal.ShowModal(msg);
-  }
-
+export class DalsaeApp extends Vue {
   async created() {
     moduleTweet.Init(moduleSwitter.selectID);
     this.LoadConfig();
@@ -110,68 +91,27 @@ export class DalsaeApp extends Vue implements MIX.DalsaePageBase {
     return list;
   }
 
-  @Provide()
   async StartDalsae() {
-    const home = this.LoadTestTweet();
-    const mention = this.LoadTestTweet();
-    moduleTweet.AddTweet({
-      listTweet: home,
-      tweet: undefined,
-      type: ETweetType.E_HOME,
-      user_id_str: moduleSwitter.selectID
-    });
-    moduleTweet.AddTweet({
-      listTweet: mention,
-      tweet: undefined,
-      type: ETweetType.E_MENTION,
-      user_id_str: moduleSwitter.selectID
-    });
-    return;
     if (moduleSwitter.selectUser) {
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
-      await this.api.call.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
+      await moduleApi.call.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
       window.preload.SaveSwitter(store.state.switter.switter);
-      this.api.call.statuses.TimeLine();
-      this.api.call.statuses.Mention();
-      this.api.call.block.Ids({ cursor: '-1', stringify_ids: true });
+      moduleApi.call.statuses.TimeLine();
+      // moduleApi.call.statuses.Mention();
+      // moduleApi.call.block.Ids({ cursor: '-1', stringify_ids: true });
     } else {
-      this.ShowPin();
+      moduleModal.ShowPinModal(true);
     }
-  }
-
-  @Provide()
-  async ShowConfirm(msg: string): Promise<boolean> {
-    return new Promise(resolve => {
-      resolve(false);
-    });
-  }
-
-  @Provide()
-  async ShowPin() {
-    moduleModal.ShowPinModal(true);
-  }
-
-  @Provide()
-  async ShowOptionDetailModal() {
-    moduleModal.ShowOptionDetailModal(true);
-  }
-
-  @Provide()
-  async ShowOptionModal() {
-    moduleModal.ShowOptionModal(true);
-  }
-
-  @Provide()
-  async AccountChange(user: I.DalsaeUser) {
-    moduleSwitter.ChangeAccount(user);
-    this.StartDalsae();
   }
 
   async OnKeyDownHotKey(hotKeyType: I.E_HOTKEY) {
     switch (hotKeyType) {
       case I.E_HOTKEY.E_SHOWTL:
+        moduleUI.ChangeMenu(1);
+        break;
+      case I.E_HOTKEY.E_SHOWMENTION:
         break;
     }
   }

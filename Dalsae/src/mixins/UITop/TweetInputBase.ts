@@ -1,7 +1,7 @@
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
-import { DalsaePage } from '@/mixins';
 import * as M from '@/Managers';
+import { moduleApi } from '@/store/modules/APIStore';
 
 class State {
   tweet: string;
@@ -13,7 +13,7 @@ class State {
 }
 
 @Component
-export class TweetInputBase extends mixins(Vue, DalsaePage) {
+export class TweetInputBase extends Vue {
   regex = new RegExp(
     /[(http|ftp|https):\/\/]*[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/gi
   );
@@ -85,7 +85,7 @@ export class TweetInputBase extends mixins(Vue, DalsaePage) {
   }
 
   SendTweet() {
-    this.api.call.statuses.Update(this.state.tweet, this.state.listImage);
+    moduleApi.call.statuses.Update(this.state.tweet, this.state.listImage);
     this.state.tweet = '';
     this.state.listImage = [];
   }

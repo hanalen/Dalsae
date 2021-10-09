@@ -1,4 +1,3 @@
-import TwitterAPI from '@/API/APICall';
 import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import * as M from '@/Managers';

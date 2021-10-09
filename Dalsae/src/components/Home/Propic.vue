@@ -41,13 +41,13 @@
 </style>
 
 <script lang="ts">
-import { DalsaeApp, DalsaePage, TweetBase } from '@/mixins';
+import { DalsaeApp, TweetBase } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide, Inject, Prop } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import store from '@/store';
 
 @Component
-export default class Propic extends Mixins(DalsaePage) {
+export default class Propic extends Vue {
   @Prop()
   user!: I.User;
   uiOption!: I.UIOption;

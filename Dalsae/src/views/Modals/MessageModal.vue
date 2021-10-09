@@ -24,11 +24,10 @@
 
 <script lang="ts">
 import { Mixins, Component, Ref } from 'vue-property-decorator';
-import { DalsaePage, MessageModalBase } from '@/mixins';
-// interface BaseInterface extends DalsaePage {}
+import { MessageModalBase } from '@/mixins';
 
 @Component
-export default class MessageModal extends Mixins(DalsaePage, MessageModalBase) {
+export default class MessageModal extends MessageModalBase {
   async crated() {
     console.log('msg modal crated');
   }

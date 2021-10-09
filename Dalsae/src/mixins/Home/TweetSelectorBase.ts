@@ -12,7 +12,7 @@ class State {
 }
 
 @Component
-export class TweetSelectorBase extends Mixins(Vue, MIX.DalsaePage) {
+export class TweetSelectorBase extends Vue {
   state: State = new State();
 
   @Prop()

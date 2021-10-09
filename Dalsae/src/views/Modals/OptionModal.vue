@@ -15,7 +15,10 @@
           <v-icon class="clickAble" style="font-size:48px; color:#1da1f2" @click="OnClickAddAccount"
             >mdi-dots-horizontal-circle-outline</v-icon
           >
-          <v-icon class="clickAble" style="font-size:48px; color:#1da1f2" @click="OnClickOption"
+          <v-icon
+            class="clickAble"
+            style="font-size:48px; color:#1da1f2"
+            @click="OnClickOptionDetail"
             >mdi-cog</v-icon
           >
         </v-card>
@@ -82,7 +85,7 @@
 
 <script lang="ts">
 import { Mixins, Component, Ref } from 'vue-property-decorator';
-import { DalsaePage, OptionModalBase } from '@/mixins';
+import { OptionModalBase } from '@/mixins';
 import store from '@/store';
 import * as I from '@/Interfaces';
 
