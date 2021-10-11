@@ -145,12 +145,10 @@ export class ScrollPanelBase extends Vue {
   }
 
   SetIndex() {
-    //화살표로 아래로 내려갔다 올라왔을 경우 scrolltop이 0일 때 startIndex가 제대로 0으로 계산 안 되는 문제 있음
     this.state.scrollTop = this.scrollPanel.scrollTop;
-    let scrollTop = this.state.scrollTop; // - 1000; // 상단 버퍼 px
+    let scrollTop = this.state.scrollTop;
     if (scrollTop < 0) {
       scrollTop = 0;
-      // scrollTop = this.state.scrollTop;
     }
     let startIndex = this.BinarySearch(this.listData, scrollTop);
     startIndex -= 5; //버퍼
@@ -160,10 +158,6 @@ export class ScrollPanelBase extends Vue {
     }
     this.state.startIndex = startIndex;
     this.state.endIndex = startIndex + Math.floor(this.$el.clientHeight / this.state.minHeight);
-    // if (scrollTop === 0) {
-    //   console.log('scropp top is 0', this.scrollPanel.scrollTop);
-    //   this.state.startIndex = 0; //예외처리
-    // }
     this.SetVisibleData();
   }
 
@@ -236,13 +230,8 @@ export class ScrollPanelBase extends Vue {
   }
 
   async SetVisibleData() {
-    const { startIndex, endIndex, listVisible } = this.state;
-    ///렌더링 범위가 바뀌지 않을 경우 변경하지 않음
+    //중복 렌더링일 경우 로직 개선 필요
     if (this.listData.length === 0) return;
-    if (listVisible.length > 0) {
-      if (this.listData[startIndex].key === listVisible[0].key) return;
-      else if (this.listData[endIndex].key === listVisible[listVisible.length - 1].key) return;
-    }
 
     this.state.listVisible = this.listData.slice(this.state.startIndex, this.state.endIndex);
   }
