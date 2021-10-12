@@ -3,7 +3,7 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import * as M from '@/mixins';
 import store from '@/store';
-import { ETweetType, ChangeIndex } from '@/store/Interface';
+import { ETweetType, ChangeIndex, ContextEvent } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
 
 export interface IPanelState {
@@ -21,6 +21,11 @@ class UIStore extends VuexModule {
   panelDm: IPanelState = { tweetType: ETweetType.E_DM, index: -1, selectedId: '' };
   panelFavorite: IPanelState = { tweetType: ETweetType.E_FAVORITE, index: -1, selectedId: '' };
   panelOpen: IPanelState = { tweetType: ETweetType.E_OPEN, index: -1, selectedId: '' };
+
+  contextTweet: I.Tweet = new I.Tweet();
+  isShowContext = false;
+  contextX = 0;
+  contextY = 0;
 
   @Mutation
   private changeMenu(menu: number) {
@@ -89,6 +94,21 @@ class UIStore extends VuexModule {
     change.index = listTweet.findIndex(x => x.key === change.selectedId);
     if (change.index === -1) return;
     this.context.commit('changeIndex', change);
+  }
+
+  @Mutation
+  private onContext(contextEvent: ContextEvent) {
+    this.isShowContext = contextEvent.isShow;
+    if (contextEvent.tweet) {
+      this.contextTweet = contextEvent.tweet;
+    }
+    this.contextX = contextEvent.x;
+    this.contextY = contextEvent.y;
+  }
+
+  @Action
+  OnContext(contextEvent: ContextEvent) {
+    this.context.commit('onContext', contextEvent);
   }
 }
 

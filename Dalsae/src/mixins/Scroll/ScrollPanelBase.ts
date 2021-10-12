@@ -72,7 +72,6 @@ export class ScrollPanelBase extends Vue {
   @Watch('panelIndex')
   OnChangePanelIndex(newVal: number) {
     if (!this.scrollItem) return;
-    console.log('index', newVal);
     const selectTweet = this.listData[newVal];
     const idx = this.state.listVisible.findIndex(x => x.key === selectTweet.key);
     if (idx === -1) {
