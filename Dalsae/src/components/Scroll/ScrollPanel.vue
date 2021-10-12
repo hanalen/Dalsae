@@ -9,7 +9,7 @@
         :data="item"
         v-on:on-resize="OnResizeTweet"
       >
-        <tweet-selector :tweet="item.data"></tweet-selector>
+        <tweet-selector :tweet="item.data" :selected="selectedId === item.key"></tweet-selector>
       </scroll-item>
     </div>
   </div>

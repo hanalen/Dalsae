@@ -19,7 +19,7 @@ export class TweetSelectorBase extends Vue {
   tweet!: I.Tweet;
 
   @Prop()
-  source!: I.Tweet;
+  selected = false;
 
   get isSmall() {
     const option = store.state.option.uiOption;

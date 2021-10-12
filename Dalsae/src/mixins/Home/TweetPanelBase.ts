@@ -1,6 +1,7 @@
 import { Vue, Mixins, Component, Inject, Emit } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as M from '@/Managers';
+import * as I from '@/Interfaces';
 import { mixins } from 'vue-class-component';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { ETweetType } from '@/store/Interface';
@@ -54,7 +55,7 @@ export class TweetPanelBase extends Vue {
     }
   }
 
-  ArrowUp() {
+  get state() {
     let state!: IPanelState;
     switch (this.selectMenu) {
       case 0:
@@ -76,31 +77,58 @@ export class TweetPanelBase extends Vue {
         state = moduleUI.panelHome;
         break;
     }
-    moduleUI.ChangeIndex({ tweetType: state.tweetType, index: state.index - 1 });
+    return state;
+  }
+
+  get listTweet() {
+    let listTweet!: MIX.ScrollItem<I.Tweet>[];
+    switch (this.selectMenu) {
+      case 0:
+        listTweet = this.tweetHome;
+        break;
+      case 1:
+        listTweet = this.tweetMention;
+        break;
+      case 2:
+        break;
+      case 3:
+        listTweet = this.tweetFavorite;
+        break;
+      case 4:
+        listTweet = this.tweetOpens;
+        break;
+      default:
+        listTweet = this.tweetHome;
+        break;
+    }
+    return listTweet;
+  }
+
+  ArrowUp() {
+    const state = this.state;
+    const listTweet = this.listTweet;
+    let index = state.index - 1;
+
+    if (index >= listTweet.length) index = listTweet.length - 1;
+    else if (index < 0) index = 0;
+    moduleUI.ChangeIndex({
+      tweetType: state.tweetType,
+      index: index,
+      selectedId: listTweet[index].key
+    });
   }
 
   ArrowDown() {
-    let state!: IPanelState;
-    switch (this.selectMenu) {
-      case 0:
-        state = moduleUI.panelHome;
-        break;
-      case 1:
-        state = moduleUI.panelMention;
-        break;
-      case 2:
-        state = moduleUI.panelDm;
-        break;
-      case 3:
-        state = moduleUI.panelFavorite;
-        break;
-      case 4:
-        state = moduleUI.panelOpen;
-        break;
-      default:
-        state = moduleUI.panelHome;
-        break;
-    }
-    moduleUI.ChangeIndex({ tweetType: state.tweetType, index: state.index + 1 });
+    const state = this.state;
+    const listTweet = this.listTweet;
+    let index = state.index + 1;
+
+    if (index >= listTweet.length) index = listTweet.length - 1;
+    else if (index < 0) index = 0;
+    moduleUI.ChangeIndex({
+      tweetType: state.tweetType,
+      index: index,
+      selectedId: listTweet[index].key
+    });
   }
 }

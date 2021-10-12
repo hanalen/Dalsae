@@ -54,6 +54,21 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
+  get selectedId() {
+    switch (this.tweetType) {
+      case ETweetType.E_HOME:
+        return moduleUI.panelHome.selectedId;
+      case ETweetType.E_MENTION:
+        return moduleUI.panelMention.selectedId;
+      case ETweetType.E_FAVORITE:
+        return moduleUI.panelFavorite.selectedId;
+      case ETweetType.E_OPEN:
+        return moduleUI.panelOpen.selectedId;
+      default:
+        return moduleUI.panelHome.selectedId;
+    }
+  }
+
   @Watch('panelIndex')
   OnChangePanelIndex(newVal: number) {
     if (!this.scrollItem) return;
@@ -71,15 +86,12 @@ export class ScrollPanelBase extends Vue {
     const panelPos = this.scrollPanel.getBoundingClientRect();
     const tweetBottom = tweetPos.y + tweetPos.height;
     const panelBottom = panelPos.y + panelPos.height;
-    console.log(tweetPos, panelPos, selectTweet);
     if (tweetBottom > panelBottom) {
       //내려가는 로직
       const top = tweetBottom - panelBottom;
-      console.log('down', panelBottom, tweetBottom);
       this.scrollPanel.scrollTo({ top: this.state.scrollTop + top });
     } else if (tweetPos.top < panelPos.y) {
       //올라가는 로직
-      console.log('up');
       this.scrollPanel.scrollTo({ top: selectTweet.scrollTop });
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet">
+  <div class="tweet" :class="{ selected: selected }">
     <div class="tweet-conv">
       <v-icon>mdi-plus-box-outline</v-icon>
     </div>
@@ -23,6 +23,9 @@
   font-size: 14px;
   border-bottom: dashed 1px rgba(0, 0, 0, 0.12);
   padding: 4px;
+}
+.selected {
+  background-color: #e7f5fe;
 }
 .tweet-conv {
   display: flex;

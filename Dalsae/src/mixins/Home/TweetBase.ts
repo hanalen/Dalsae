@@ -5,20 +5,13 @@ import moment from 'moment';
 import { moduleOption } from '@/store/modules/OptionStore';
 import store from '@/store';
 
-class State {
-  isSelected: boolean;
-  isFocus: boolean;
-  constructor() {
-    this.isFocus = false;
-    this.isSelected = false;
-  }
-}
-
 @Component
 export class TweetBase extends Vue {
-  state: State = new State();
   @Prop()
   tweet!: I.Tweet;
+
+  @Prop()
+  selected = false;
 
   @Provide()
   OpenImage() {
