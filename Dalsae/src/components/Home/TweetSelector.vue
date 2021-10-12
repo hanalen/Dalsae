@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet-selector">
+  <div class="tweet-selector" @click="OnClickTweet">
     <tweet-small :tweet="tweet" :selected="selected" v-if="isSmall"> </tweet-small>
     <tweet-normal :tweet="tweet" :selected="selected" v-if="isNormal"> </tweet-normal>
   </div>

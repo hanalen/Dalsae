@@ -10,6 +10,7 @@ class State {
     this.isSelected = false;
   }
 }
+import { eventBus } from '@/plugins/EventBus';
 
 @Component
 export class TweetSelectorBase extends Vue {
@@ -20,6 +21,11 @@ export class TweetSelectorBase extends Vue {
 
   @Prop()
   selected = false;
+
+  OnClickTweet(e: MouseEvent) {
+    e.preventDefault();
+    eventBus.$emit('OnClickTweet', this.tweet.id_str);
+  }
 
   get isSmall() {
     const option = store.state.option.uiOption;

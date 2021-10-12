@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
+import * as M from '@/mixins';
 import store from '@/store';
 import { ETweetType, ChangeIndex } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
@@ -60,6 +61,33 @@ class UIStore extends VuexModule {
 
   @Action
   ChangeIndex(change: ChangeIndex) {
+    this.context.commit('changeIndex', change);
+  }
+
+  @Action
+  ChangeSelectTweet(change: ChangeIndex) {
+    let listTweet: M.ScrollItem<I.Tweet>[] = [];
+    switch (change.tweetType) {
+      case ETweetType.E_HOME:
+        listTweet = moduleTweet.homes;
+        break;
+      case ETweetType.E_MENTION:
+        listTweet = moduleTweet.mentions;
+        break;
+      case ETweetType.E_DM:
+        break;
+      case ETweetType.E_FAVORITE:
+        listTweet = moduleTweet.favorites;
+        break;
+      case ETweetType.E_OPEN:
+        listTweet = moduleTweet.opens;
+        break;
+      default:
+        listTweet = moduleTweet.homes;
+        break;
+    }
+    change.index = listTweet.findIndex(x => x.key === change.selectedId);
+    if (change.index === -1) return;
     this.context.commit('changeIndex', change);
   }
 }

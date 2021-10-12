@@ -30,6 +30,7 @@
 </style>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/camelcase */
 import { Vue, Mixins, Component, Ref, Provide, Watch, Inject } from 'vue-property-decorator';
 import faker from 'faker';
 import * as I from '@/Interfaces';
@@ -38,6 +39,7 @@ import { mixins } from 'vue-class-component';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { eventBus } from '@/plugins/EventBus';
 import { ETweetType } from '@/store/Interface';
+import { moduleUI } from '@/store/modules/UIStore';
 @Component
 export default class ScrollPanel extends M.ScrollPanelBase {
   @Ref()
@@ -46,6 +48,10 @@ export default class ScrollPanel extends M.ScrollPanelBase {
   async created() {
     eventBus.$on('AddedTweet', (tweetType: ETweetType) => {
       if (this.tweetType === tweetType) this.SetIndex();
+    });
+
+    eventBus.$on('OnClickTweet', (tweetId: string) => {
+      moduleUI.ChangeSelectTweet({ tweetType: this.tweetType, selectedId: tweetId, index: -1 });
     });
 
     this.$nextTick(() => {
