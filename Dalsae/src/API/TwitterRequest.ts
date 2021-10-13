@@ -245,6 +245,17 @@ export default class TwitterRequest {
           this.post<P.ReqUpdate, I.Tweet>(baseUrl + '/statuses/update.json', {
             data
           }),
+        Retweet: (data: P.ReqRetweet) =>
+          this.post<P.ReqRetweet, I.Tweet>(baseUrl + '/statuses/retweet/' + data.id_str + '.json', {
+            data
+          }),
+        UnRetweet: (data: P.ReqRetweet) =>
+          this.post<P.ReqRetweet, I.Tweet>(
+            baseUrl + '/statuses/unretweet/' + data.id_str + '.json',
+            {
+              data
+            }
+          ),
         TimeLine: (data: P.ReqTimeLine) =>
           this.get<P.ReqTimeLine, I.Tweet[]>(baseUrl + '/statuses/home_timeline.json', {
             data

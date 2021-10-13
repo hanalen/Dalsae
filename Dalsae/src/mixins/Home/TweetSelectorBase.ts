@@ -246,6 +246,8 @@ export class TweetSelectorBase extends Vue {
 
   OnClickRetweet(value: number) {
     console.log('retweet');
+    if (this.orgTweet.retweeted) moduleApi.call.statuses.UnRetweet(this.tweet.id_str);
+    else moduleApi.call.statuses.Retweet(this.tweet.id_str);
   }
 
   OnClickQT(value: number) {

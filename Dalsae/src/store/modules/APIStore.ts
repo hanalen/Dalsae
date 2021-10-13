@@ -94,6 +94,14 @@ class APIStore extends VuexModule {
           });
           return result;
         },
+        Retweet: async (id_str: string): Promise<P.APIResp<I.Tweet>> => {
+          const result = await this.api.call.statuses.Retweet({ id_str: id_str });
+          return result;
+        },
+        UnRetweet: async (id_str: string): Promise<P.APIResp<I.Tweet>> => {
+          const result = await this.api.call.statuses.UnRetweet({ id_str: id_str });
+          return result;
+        },
         TimeLine: async (maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> => {
           const id = moduleSwitter.selectID;
           const result = await this.api.call.statuses.TimeLine({
