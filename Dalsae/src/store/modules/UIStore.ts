@@ -52,8 +52,6 @@ class UIStore extends VuexModule {
     replyTweet: new I.Tweet()
   };
 
-  replyTweet: I.Tweet = new I.Tweet();
-
   @Mutation
   private changeMenu(menu: number) {
     this.selectMenu = menu;
@@ -154,8 +152,8 @@ class UIStore extends VuexModule {
   }
 
   @Mutation
-  changeReplyTweet(tweet: I.Tweet) {
-    this.replyTweet = tweet;
+  private changeReplyTweet(tweet: I.Tweet) {
+    this.stateInput.replyTweet = tweet;
   }
 
   @Action
@@ -174,7 +172,7 @@ class UIStore extends VuexModule {
   }
 
   @Mutation
-  setImage(listImage: string[]) {
+  private setImage(listImage: string[]) {
     this.stateInput.listImage = listImage;
   }
 

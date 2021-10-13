@@ -1,6 +1,7 @@
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
 import * as M from '@/Managers';
+import * as I from '@/Interfaces';
 import { moduleApi } from '@/store/modules/APIStore';
 import { moduleUI } from '@/store/modules/UIStore';
 @Component
@@ -69,6 +70,7 @@ export class TweetInputBase extends Vue {
   OnEsc(e: Event) {
     this.inputText = '';
     this.listImage = [];
+    moduleUI.ChangeReplyTweet(new I.Tweet());
   }
 
   selectionChange(e: Event) {
@@ -93,10 +95,11 @@ export class TweetInputBase extends Vue {
   }
 
   SendTweet() {
-    const { inputText, listImage } = moduleUI.stateInput;
-    moduleApi.call.statuses.Update(inputText, listImage);
+    const { inputText, listImage, replyTweet } = moduleUI.stateInput;
+    moduleApi.call.statuses.Update(inputText, listImage, replyTweet.id_str);
     this.inputText = '';
     this.listImage = [];
+    moduleUI.ChangeReplyTweet(new I.Tweet());
   }
 
   ClearInput(e: Event) {

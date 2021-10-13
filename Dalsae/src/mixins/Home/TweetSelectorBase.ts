@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { Vue, Mixins, Component, Inject, Emit, Provide, Prop } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
@@ -12,6 +13,7 @@ import { eventBus } from '@/plugins/EventBus';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleOption } from '@/store/modules/OptionStore';
+import { moduleApi } from '@/store/modules/APIStore';
 
 interface ContextItem {
   title: string;
@@ -206,17 +208,40 @@ export class TweetSelectorBase extends Vue {
   }
 
   OnClickMedia(value: number) {
+    window.preload.image.OpenImageWindow(this.tweet, moduleOption.uiOption);
   }
 
   OnClickLink(value: number) {
+    const context = this.listContext.find(x => x.value === value);
+    if (!context) return;
+    const url = this.orgTweet.entities.urls.find(x => x.display_url === context.title);
+    if (!url) return;
+    window.preload.OpenBrowser(url.expanded_url);
   }
 
   OnClickReply(value: number) {
     console.log('reply');
+    const mentions = `@${this.orgUser.screen_name} `;
+    moduleUI.ChangeReplyTweet(this.tweet);
+    moduleUI.SetInputText(mentions);
   }
 
   OnClickReplyAll(value: number) {
     console.log('reply all');
+    const set = new Set();
+    set.add(this.tweet.user.screen_name);
+    set.add(this.orgUser.screen_name);
+    this.orgTweet.entities.user_mentions.forEach(user => {
+      set.add(user.screen_name);
+    });
+    const screenName = moduleSwitter.selectUser?.user.screen_name;
+    if (screenName) set.delete(screenName);
+    let mentions = '';
+    set.forEach(user => {
+      mentions += `@${user} `;
+    });
+    moduleUI.ChangeReplyTweet(this.tweet);
+    moduleUI.SetInputText(mentions);
   }
 
   OnClickRetweet(value: number) {

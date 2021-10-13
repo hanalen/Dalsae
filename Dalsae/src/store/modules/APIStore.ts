@@ -74,7 +74,11 @@ class APIStore extends VuexModule {
         }
       },
       statuses: {
-        Update: async (tweet: string, image: string[]): Promise<P.APIResp<I.Tweet>> => {
+        Update: async (
+          tweet: string,
+          image: string[],
+          in_reply_to_status_id?: string
+        ): Promise<P.APIResp<I.Tweet>> => {
           let mediaStr = '';
           if (image) {
             for (let i = 0; i < image.length; i++) {
@@ -85,7 +89,8 @@ class APIStore extends VuexModule {
           }
           const result = await this.api.call.statuses.Update({
             status: tweet,
-            media_ids: mediaStr
+            media_ids: mediaStr,
+            in_reply_to_status_id: in_reply_to_status_id
           });
           return result;
         },
