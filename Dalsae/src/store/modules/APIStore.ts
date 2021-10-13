@@ -94,6 +94,10 @@ class APIStore extends VuexModule {
           });
           return result;
         },
+        Destroy: async (id_str: string): Promise<P.APIResp<I.Tweet>> => {
+          const result = await this.api.call.statuses.Destroy({ id_str: id_str });
+          return result;
+        },
         Retweet: async (id_str: string): Promise<P.APIResp<I.Tweet>> => {
           const result = await this.api.call.statuses.Retweet({ id_str: id_str });
           return result;
@@ -134,6 +138,16 @@ class APIStore extends VuexModule {
               listTweet: result.data
             });
           }
+          return result;
+        }
+      },
+      favorites: {
+        Create: async (id_str: string): Promise<P.APIResp<I.Tweet>> => {
+          const result = await this.api.call.favorites.Create({ id: id_str });
+          return result;
+        },
+        Destroy: async (id_str: string): Promise<P.APIResp<I.Tweet>> => {
+          const result = await this.api.call.favorites.Destroy({ id: id_str });
           return result;
         }
       },

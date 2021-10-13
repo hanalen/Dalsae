@@ -245,6 +245,10 @@ export default class TwitterRequest {
           this.post<P.ReqUpdate, I.Tweet>(baseUrl + '/statuses/update.json', {
             data
           }),
+        Destroy: (data: P.ReqDestroy) =>
+          this.post<P.ReqRetweet, I.Tweet>(baseUrl + '/statuses/destroy/' + data.id_str + '.json', {
+            data
+          }),
         Retweet: (data: P.ReqRetweet) =>
           this.post<P.ReqRetweet, I.Tweet>(baseUrl + '/statuses/retweet/' + data.id_str + '.json', {
             data
@@ -264,6 +268,12 @@ export default class TwitterRequest {
           this.get<P.ReqMention, I.Tweet[]>(baseUrl + '/statuses/mentions_timeline.json', {
             data
           })
+      },
+      favorites: {
+        Create: (data: P.ReqCreate) =>
+          this.post<P.ReqCreate, I.Tweet>(baseUrl + '/favorites/create.json', { data }),
+        Destroy: (data: P.ReqCreate) =>
+          this.post<P.ReqCreate, I.Tweet>(baseUrl + '/favorites/destroy.json', { data })
       },
       block: {
         Ids: (data: P.ReqBlockIds) =>

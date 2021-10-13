@@ -169,7 +169,7 @@ export class TweetSelectorBase extends Vue {
 
     this.listUsers.forEach(user => {
       listContext.push({
-        title: `${user}의 프로필 보기`,
+        title: `${user}의 프로필 보기(미구현)`,
         onClick: this.OnClickProfile,
         value: value++,
         isDivider: false
@@ -246,16 +246,20 @@ export class TweetSelectorBase extends Vue {
 
   OnClickRetweet(value: number) {
     console.log('retweet');
-    if (this.orgTweet.retweeted) moduleApi.call.statuses.UnRetweet(this.tweet.id_str);
-    else moduleApi.call.statuses.Retweet(this.tweet.id_str);
+    if (this.orgTweet.retweeted) moduleApi.call.statuses.UnRetweet(this.orgTweet.id_str);
+    else moduleApi.call.statuses.Retweet(this.orgTweet.id_str);
   }
 
   OnClickQT(value: number) {
     console.log('qt');
+    const str = `https://twitter.com/${this.orgUser.screen_name}/status/${this.orgTweet.id_str}`;
+    moduleUI.SetInputText(str);
   }
 
   OnClickFavorite(value: number) {
     console.log('favo');
+    if (this.orgTweet.favorited) moduleApi.call.favorites.Destroy(this.orgTweet.id_str);
+    else moduleApi.call.favorites.Create(this.orgTweet.id_str);
   }
 
   OnClickProfile(value: number) {
@@ -264,6 +268,8 @@ export class TweetSelectorBase extends Vue {
 
   OnClickWeb(value: number) {
     console.log('web');
+    const url = `https://twitter.com/${this.orgUser.screen_name}/status/${this.orgTweet.id_str}`;
+    window.preload.OpenBrowser(url);
   }
 
   OnClickCopy(value: number) {
@@ -272,6 +278,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickDelete(value: number) {
     console.log('delete');
+    moduleApi.call.statuses.Destroy(this.orgTweet.id_str);
   }
 
   get orgTweet() {
