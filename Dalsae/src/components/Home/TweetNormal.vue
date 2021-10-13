@@ -12,7 +12,7 @@
       <span class="tweet-date">{{ date }}{{ via }}</span>
     </div>
     <div class="img-preview">
-      <image-preview :media="media"></image-preview>
+      <image-preview :media="media" :tweet="tweet"></image-preview>
     </div>
   </div>
 </template>
