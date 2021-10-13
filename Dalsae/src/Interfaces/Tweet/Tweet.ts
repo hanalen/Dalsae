@@ -45,4 +45,16 @@ export class Tweet {
     };
     this.extended_entities = { media: [] };
   }
+
+  get orgTweet(): I.Tweet {
+    return this.retweeted_status ? this.retweeted_status : this; //원본 트윗 저장
+  }
+
+  get orgUser() {
+    return this.orgTweet.user;
+  }
+
+  get media() {
+    return this.orgTweet.extended_entities?.media;
+  }
 }
