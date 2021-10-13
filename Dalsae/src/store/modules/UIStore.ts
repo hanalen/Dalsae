@@ -21,6 +21,12 @@ interface StateContext {
   y: number;
 }
 
+interface StateInput {
+  replyTweet: I.Tweet;
+  inputText: string;
+  listImage: string[];
+}
+
 @Module({ dynamic: true, store, name: 'ui' })
 class UIStore extends VuexModule {
   // states
@@ -39,6 +45,14 @@ class UIStore extends VuexModule {
     x: 0,
     y: 0
   };
+
+  stateInput: StateInput = {
+    inputText: '',
+    listImage: [],
+    replyTweet: new I.Tweet()
+  };
+
+  replyTweet: I.Tweet = new I.Tweet();
 
   @Mutation
   private changeMenu(menu: number) {
@@ -137,6 +151,36 @@ class UIStore extends VuexModule {
   @Action
   ChageContextIndex(index: number) {
     this.context.commit('changeContextIndex', index);
+  }
+
+  @Mutation
+  changeReplyTweet(tweet: I.Tweet) {
+    this.replyTweet = tweet;
+  }
+
+  @Action
+  ChangeReplyTweet(tweet: I.Tweet) {
+    this.context.commit('changeReplyTweet', tweet);
+  }
+
+  @Mutation
+  private setInputText(text: string) {
+    this.stateInput.inputText = text;
+  }
+
+  @Action
+  SetInputText(text: string) {
+    this.context.commit('setInputText', text);
+  }
+
+  @Mutation
+  setImage(listImage: string[]) {
+    this.stateInput.listImage = listImage;
+  }
+
+  @Action
+  SetImage(listImage: string[]) {
+    this.context.commit('setImage', listImage);
   }
 }
 

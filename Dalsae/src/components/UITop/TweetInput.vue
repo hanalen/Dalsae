@@ -10,7 +10,7 @@
       :spellcheck="false"
       height="44"
       v-on:paste="Paste"
-      v-model="state.tweet"
+      v-model="inputText"
       @keyup.esc="OnEsc"
       @dragenter="OnDragEnter"
       @keyup="selectionChange"
@@ -28,7 +28,7 @@
         <v-icon color="primary">mdi-plus-circle-outline</v-icon>
         <v-icon color="primary">mdi-plus-circle-outline</v-icon>
         <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-        <img class="img-add" v-for="(item, i) in state.listImage" :src="item" :key="i" />
+        <img class="img-add" v-for="(item, i) in listImage" :src="item" :key="i" />
       </div>
       <div class="ui-top-bottom-right">
         <div>{{ GetTweetLength() }}/280</div>
