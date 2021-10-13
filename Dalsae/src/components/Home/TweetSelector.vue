@@ -10,11 +10,11 @@
             <v-divider v-if="item.isDivider" :key="`divider-${i}`"></v-divider>
             <v-list-item v-else :key="`item-${i}`" :value="item.value">
               <template>
-                <v-list-item-content @click="item.onClick">
+                <v-list-item-content @click="item.onClick(item.value)">
                   <v-list-item-title v-text="item.title"></v-list-item-title>
                 </v-list-item-content>
                 <v-spacer v-if="item.hotKey"></v-spacer>
-                <v-list-item-content v-if="item.hotKey" @click="item.onClick">
+                <v-list-item-content v-if="item.hotKey" @click="item.onClick(item.value)">
                   <v-list-item-title v-text="item.hotKey"></v-list-item-title>
                 </v-list-item-content>
               </template>

@@ -16,7 +16,7 @@ import { moduleOption } from '@/store/modules/OptionStore';
 interface ContextItem {
   title: string;
   hotKey?: string;
-  onClick: () => void | undefined;
+  onClick: (value: number) => void | undefined;
   value?: number;
   isDivider: boolean;
 }
@@ -118,7 +118,7 @@ export class TweetSelectorBase extends Vue {
       this.orgTweet.entities.urls.forEach(url => {
         listContext.push({
           title: url.display_url,
-          onClick: this.OnClickMedia,
+          onClick: this.OnClickLink,
           value: value++,
           isDivider: false
         });
@@ -205,47 +205,45 @@ export class TweetSelectorBase extends Vue {
     return listContext;
   }
 
-  OnClickMedia() {
-    console.log('media');
+  OnClickMedia(value: number) {
   }
 
-  OnClickLing() {
-    console.log('link');
+  OnClickLink(value: number) {
   }
 
-  OnClickReply() {
+  OnClickReply(value: number) {
     console.log('reply');
   }
 
-  OnClickReplyAll() {
+  OnClickReplyAll(value: number) {
     console.log('reply all');
   }
 
-  OnClickRetweet() {
+  OnClickRetweet(value: number) {
     console.log('retweet');
   }
 
-  OnClickQT() {
+  OnClickQT(value: number) {
     console.log('qt');
   }
 
-  OnClickFavorite() {
+  OnClickFavorite(value: number) {
     console.log('favo');
   }
 
-  OnClickProfile() {
+  OnClickProfile(value: number) {
     console.log('profile');
   }
 
-  OnClickWeb() {
+  OnClickWeb(value: number) {
     console.log('web');
   }
 
-  OnClickCopy() {
+  OnClickCopy(value: number) {
     console.log('copy');
   }
 
-  OnClickDelete() {
+  OnClickDelete(value: number) {
     console.log('delete');
   }
 
