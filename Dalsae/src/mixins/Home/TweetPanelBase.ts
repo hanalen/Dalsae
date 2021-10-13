@@ -47,10 +47,18 @@ export class TweetPanelBase extends Vue {
     if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
       if (e.code === 'ArrowUp') {
         e.preventDefault();
-        this.ArrowUp();
+        if (moduleUI.stateContext.isShow) {
+          moduleUI.ChageContextIndex(moduleUI.stateContext.index - 1);
+        } else {
+          this.ArrowUp();
+        }
       } else if (e.code === 'ArrowDown') {
         e.preventDefault();
-        this.ArrowDown();
+        if (moduleUI.stateContext.isShow) {
+          moduleUI.ChageContextIndex(moduleUI.stateContext.index + 1);
+        } else {
+          this.ArrowDown();
+        }
       }
     }
   }

@@ -5,9 +5,18 @@
     <tweet-normal :tweet="tweet" :selected="selected" v-if="isNormal"> </tweet-normal>
     <v-menu v-model="isShowContext" :position-x="x" :position-y="y" absolute offset-y>
       <v-list>
-        <v-list-item v-for="(item, index) in listContext" :key="index" link>
-          <v-list-item-title @click="item.click">{{ item.title }}</v-list-item-title>
-        </v-list-item>
+        <v-list-item-group v-model="contextIndex">
+          <template v-for="(item, i) in listContext">
+            <v-divider v-if="item.isDivider" :key="`divider-${i}`"></v-divider>
+            <v-list-item v-else :key="`item-${i}`" :value="item.value">
+              <template>
+                <v-list-item-content @click="item.onClick">
+                  <v-list-item-title v-text="item.title"></v-list-item-title>
+                </v-list-item-content>
+              </template>
+            </v-list-item>
+          </template>
+        </v-list-item-group>
       </v-list>
     </v-menu>
   </div>
@@ -17,6 +26,7 @@
 
 <script lang="ts">
 import { DalsaeApp, TweetSelectorBase } from '@/mixins';
+import { eventBus } from '@/plugins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component

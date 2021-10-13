@@ -12,6 +12,15 @@ export interface IPanelState {
   selectedId: string;
 }
 
+interface StateContext {
+  tweet: I.Tweet;
+  index: number;
+  maxIndex: number;
+  isShow: boolean;
+  x: number;
+  y: number;
+}
+
 @Module({ dynamic: true, store, name: 'ui' })
 class UIStore extends VuexModule {
   // states
@@ -22,10 +31,14 @@ class UIStore extends VuexModule {
   panelFavorite: IPanelState = { tweetType: ETweetType.E_FAVORITE, index: -1, selectedId: '' };
   panelOpen: IPanelState = { tweetType: ETweetType.E_OPEN, index: -1, selectedId: '' };
 
-  contextTweet: I.Tweet = new I.Tweet();
-  isShowContext = false;
-  contextX = 0;
-  contextY = 0;
+  stateContext: StateContext = {
+    tweet: new I.Tweet(),
+    index: 0,
+    maxIndex: 0,
+    isShow: false,
+    x: 0,
+    y: 0
+  };
 
   @Mutation
   private changeMenu(menu: number) {
@@ -98,17 +111,32 @@ class UIStore extends VuexModule {
 
   @Mutation
   private onContext(contextEvent: ContextEvent) {
-    this.isShowContext = contextEvent.isShow;
+    this.stateContext.index = 0;
+    this.stateContext.isShow = contextEvent.isShow;
     if (contextEvent.tweet) {
-      this.contextTweet = contextEvent.tweet;
+      this.stateContext.tweet = contextEvent.tweet;
     }
-    this.contextX = contextEvent.x;
-    this.contextY = contextEvent.y;
+    this.stateContext.x = contextEvent.x;
+    this.stateContext.y = contextEvent.y;
+    this.stateContext.maxIndex = contextEvent.maxIndex;
   }
 
   @Action
   OnContext(contextEvent: ContextEvent) {
     this.context.commit('onContext', contextEvent);
+  }
+
+  @Mutation
+  private changeContextIndex(index: number) {
+    if (index < 0) index = 0;
+    else if (index > this.stateContext.maxIndex) index = this.stateContext.maxIndex;
+
+    this.stateContext.index = index;
+  }
+
+  @Action
+  ChageContextIndex(index: number) {
+    this.context.commit('changeContextIndex', index);
   }
 }
 
