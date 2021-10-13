@@ -35,7 +35,7 @@ export class PinModalBase extends Vue {
     moduleSwitter.Reset();
     this.state.pin = '';
     // eslint-disable-next-line @typescript-eslint/camelcase
-    const result = await moduleApi.call.oauth.ReqToken({ oauth_callback: 'oob' });
+    const result = await moduleApi.oauth.ReqToken({ oauth_callback: 'oob' });
     if (!result.data) return;
     result.data.oauth_token_secret;
     console.log(result.data);
@@ -55,7 +55,7 @@ export class PinModalBase extends Vue {
 
   async GetAccessToken(pin: string) {
     // eslint-disable-next-line @typescript-eslint/camelcase
-    const result = await moduleApi.call.oauth.ReqAccessToken({ oauth_verifier: pin });
+    const result = await moduleApi.oauth.ReqAccessToken({ oauth_verifier: pin });
     if (result.data) {
       window.preload.SaveSwitter(store.state.switter.switter);
       this.CloseModal();

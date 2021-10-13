@@ -95,66 +95,6 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
-  AddTestData() {
-    for (let i = 0; i < 200; i++) {
-      const data: I.Tweet = {
-        full_text: faker.lorem.text() + faker.lorem.text(),
-        created_at: Date.now.toString(),
-        entities: { hashtags: [], media: [], urls: [], user_mentions: [] },
-        extended_entities: { media: [] },
-        favorite_count: 0,
-        favorited: false,
-        id_str: faker.datatype.number(1000000).toString(),
-        in_reply_to_screen_name: '',
-        in_reply_to_status_id_str: '',
-        in_reply_to_user_id_str: '',
-        is_quote_status: false,
-        place: '',
-        retweet_count: 0,
-        retweeted: false,
-        retweeted_status: undefined,
-        source: '',
-        user: {
-          profile_image_url_https: faker.image.avatar(),
-          name: faker.name.firstName(),
-          screen_name: faker.finance.accountName(),
-          created_at: Date.now.toString(),
-          default_profile: false,
-          default_profile_image: false,
-          description: '',
-          favourites_count: 0,
-          follow_request_sent: false,
-          followers_count: 0,
-          following: false,
-          friends_count: 0,
-          has_extended_profile: false,
-          id_str: faker.datatype.number(1000000).toString(),
-          listed_count: 0,
-          location: '',
-          profile_background_color: '',
-          profile_background_image_url: '',
-          profile_background_image_url_https: '',
-          profile_background_tile: false,
-          profile_banner_url: '',
-          profile_image_url: faker.image.avatar(),
-          profile_link_color: '',
-          profile_sidebar_border_color: '',
-          profile_sidebar_fill_color: '',
-          protected: false,
-          statuses_count: 0,
-          verified: false
-        }
-      };
-      this.listData.push({
-        data: data,
-        height: 40,
-        isResized: true,
-        key: i.toString(),
-        scrollTop: this.state.minHeight * i
-      });
-    }
-  }
-
   SetIndex() {
     this.state.scrollTop = this.scrollPanel.scrollTop;
     let scrollTop = this.state.scrollTop;

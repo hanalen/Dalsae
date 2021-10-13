@@ -40,7 +40,7 @@ function CreateHeader(authorization: string, contentType?: string) {
   // };
 }
 
-export default class TwitterRequest {
+export class TwitterRequest {
   async request<TReq, TResp>(
     url: string,
     method: P.Method,
@@ -302,3 +302,5 @@ export default class TwitterRequest {
     };
   }
 }
+const twitterRequest = new TwitterRequest();
+export default twitterRequest;

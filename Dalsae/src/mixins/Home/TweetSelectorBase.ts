@@ -247,8 +247,8 @@ export class TweetSelectorBase extends Vue {
 
   OnClickRetweet(value: number) {
     console.log('retweet');
-    if (this.orgTweet.retweeted) moduleApi.call.statuses.UnRetweet(this.orgTweet.id_str);
-    else moduleApi.call.statuses.Retweet(this.orgTweet.id_str);
+    if (this.orgTweet.retweeted) moduleApi.statuses.UnRetweet(this.orgTweet.id_str);
+    else moduleApi.statuses.Retweet(this.orgTweet.id_str);
   }
 
   OnClickQT(value: number) {
@@ -259,8 +259,8 @@ export class TweetSelectorBase extends Vue {
 
   OnClickFavorite(value: number) {
     console.log('favo');
-    if (this.orgTweet.favorited) moduleApi.call.favorites.Destroy(this.orgTweet.id_str);
-    else moduleApi.call.favorites.Create(this.orgTweet.id_str);
+    if (this.orgTweet.favorited) moduleApi.favorites.Destroy(this.orgTweet.id_str);
+    else moduleApi.favorites.Create(this.orgTweet.id_str);
   }
 
   OnClickProfile(value: number) {
@@ -279,7 +279,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickDelete(value: number) {
     console.log('delete');
-    moduleApi.call.statuses.Destroy(this.orgTweet.id_str);
+    moduleApi.statuses.Destroy(this.orgTweet.id_str);
   }
 
   get orgTweet() {

@@ -96,7 +96,7 @@ export class TweetInputBase extends Vue {
 
   SendTweet() {
     const { inputText, listImage, replyTweet } = moduleUI.stateInput;
-    moduleApi.call.statuses.Update(inputText, listImage, replyTweet.id_str);
+    moduleApi.statuses.Update(inputText, listImage, replyTweet.id_str);
     this.inputText = '';
     this.listImage = [];
     moduleUI.ChangeReplyTweet(new I.Tweet());
