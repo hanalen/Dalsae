@@ -4,6 +4,7 @@ import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import store from '@/store';
 import { moduleModal } from '@/store/modules/ModalStore';
+import { moduleOption } from '@/store/modules/OptionStore';
 class State {
   selectMenu: number;
   listMenu: ModalMenu[];
@@ -128,8 +129,8 @@ export class OptionDetailModalBase extends Vue {
   }
 
   state = new State();
-  muteOption = store.state.option.muteOption;
-  hotKey = store.state.option.hotKey;
+  muteOption = moduleOption.muteOption;
+  hotKey = moduleOption.hotKey;
 
   @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
   OnSelectMenuChanged(newMenu: number) {
@@ -152,7 +153,11 @@ export class OptionDetailModalBase extends Vue {
   OnClickClose() {
     this.CloseModal();
     this.SaveHotkey();
-    window.preload.SaveOption(store.state.option);
+    window.preload.SaveOption({
+      hotKey: moduleOption.hotKey,
+      muteOption: moduleOption.muteOption,
+      uiOption: moduleOption.uiOption
+    });
   }
 
   CloseModal() {
@@ -178,7 +183,7 @@ export class OptionDetailModalBase extends Vue {
     }
     const hotkey = Object.fromEntries(map);
     this.hotKey = hotkey;
-    store.state.option.hotKey = hotkey;
+    moduleOption.hotKey = hotkey;
   }
 
   OnAdd(list: string[], word: string) {

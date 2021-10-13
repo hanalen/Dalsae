@@ -13,13 +13,8 @@ export class TweetBase extends Vue {
   @Prop()
   selected = false;
 
-  @Provide()
-  OpenImage() {
-    window.preload.image.OpenImageWindow(this.tweet, this.uiOption);
-  }
-
   get uiOption() {
-    return store.state.option.uiOption;
+    return moduleOption.uiOption;
   }
 
   get orgTweet() {

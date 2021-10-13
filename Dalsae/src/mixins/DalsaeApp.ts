@@ -45,11 +45,19 @@ export class DalsaeApp extends Vue {
     }
     const option = window.preload.LoadOption();
     moduleOption.ChangeOptions(option);
+    if (!option) {
+      const { uiOption, muteOption, hotKey } = moduleOption;
+      window.preload.SaveOption({ uiOption: uiOption, muteOption: muteOption, hotKey: hotKey });
+    }
   }
 
   OnOptionChange() {
     if (moduleModal.bOption) return; //open할때
-    window.preload.SaveOption(store.state.option);
+    window.preload.SaveOption({
+      hotKey: moduleOption.hotKey,
+      muteOption: moduleOption.muteOption,
+      uiOption: moduleOption.uiOption
+    });
   }
 
   LoadTestTweet() {

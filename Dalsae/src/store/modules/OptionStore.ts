@@ -10,8 +10,30 @@ export interface IOptionStore {
 
 @Module({ dynamic: true, store, name: 'option' })
 class OptionStore extends VuexModule {
-  uiOption!: I.UIOption;
-  muteOption!: I.MuteOption;
+  uiOption: I.UIOption = {
+    isBigPropic: true,
+    isLoadOrgImg: false,
+    isSendCheck: false,
+    isSendEnter: true,
+    isSendRTCheck: true,
+    isSendRTProtected: true,
+    isShowBottomPreview: true,
+    isShowPreview: true,
+    isShowPropic: true,
+    isShowTweet: true,
+    isSmallInput: false,
+    isSmallTweet: false,
+    isUseRead: false
+  };
+  muteOption: I.MuteOption = {
+    highlight: [],
+    keyword: [],
+    tweet: [],
+    user: [],
+    client: [],
+    isMuteMention: true,
+    isShowMute: true
+  };
   hotKey: I.Hotkey = new I.Hotkey();
 
   // getters

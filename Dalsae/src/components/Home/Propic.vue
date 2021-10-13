@@ -45,14 +45,15 @@ import { DalsaeApp, TweetBase } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide, Inject, Prop } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import store from '@/store';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export default class Propic extends Vue {
   @Prop()
   user!: I.User;
-  uiOption!: I.UIOption;
-  async created() {
-    this.uiOption = store.state.option.uiOption;
+
+  get uiOption() {
+    return moduleOption.uiOption;
   }
 
   get maxWidth() {

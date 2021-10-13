@@ -88,9 +88,10 @@ import { Mixins, Component, Ref } from 'vue-property-decorator';
 import { OptionModalBase } from '@/mixins';
 import store from '@/store';
 import * as I from '@/Interfaces';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export default class OptionModal extends OptionModalBase {
-  option = store.state.option.uiOption;
+  option = moduleOption.uiOption;
 }
 </script>

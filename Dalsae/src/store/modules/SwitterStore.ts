@@ -68,8 +68,6 @@ class SwitterStore extends VuexModule {
       this.switter.selectUser = this.tempUser;
       this.tempUser = new I.DalsaeUser();
       this.switter.listUser?.push(JSON.parse(JSON.stringify(selUser)));
-      console.log('sel user------');
-      console.log(selUser);
       moduleTweet.Init(userId);
     }
   }
@@ -82,7 +80,6 @@ class SwitterStore extends VuexModule {
   @Mutation
   private initSwitter(switter: I.Switter) {
     this.switter = switter;
-    console.log(this.switter);
   }
 
   @Action

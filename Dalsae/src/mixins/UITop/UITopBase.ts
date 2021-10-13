@@ -4,6 +4,7 @@ import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import store from '@/store';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 class State {
   tweet: string;
@@ -19,7 +20,7 @@ export class UITopBase extends Vue {
   state = new State();
   user = store.state.switter.switter;
   propicPath = '';
-  option = store.state.option.uiOption;
+  option = moduleOption.uiOption;
 
   @Watch('user', { immediate: true, deep: true })
   OnUserChanged(switter: I.Switter) {
@@ -32,11 +33,11 @@ export class UITopBase extends Vue {
   }
 
   get isShowPropic() {
-    return store.state.option.uiOption.isShowPropic;
+    return moduleOption.uiOption.isShowPropic;
   }
 
   get propicClass() {
-    const option = store.state.option.uiOption;
+    const option = moduleOption.uiOption;
     if (option.isBigPropic) return 'big';
     else return 'normal';
   }
