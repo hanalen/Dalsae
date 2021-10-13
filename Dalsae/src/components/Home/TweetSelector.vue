@@ -13,6 +13,10 @@
                 <v-list-item-content @click="item.onClick">
                   <v-list-item-title v-text="item.title"></v-list-item-title>
                 </v-list-item-content>
+                <v-spacer v-if="item.hotKey"></v-spacer>
+                <v-list-item-content v-if="item.hotKey" @click="item.onClick">
+                  <v-list-item-title v-text="item.hotKey"></v-list-item-title>
+                </v-list-item-content>
               </template>
             </v-list-item>
           </template>

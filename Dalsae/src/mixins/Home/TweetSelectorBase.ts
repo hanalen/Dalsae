@@ -11,9 +11,11 @@ class State {
 import { eventBus } from '@/plugins/EventBus';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 interface ContextItem {
   title: string;
+  hotKey?: string;
   onClick: () => void | undefined;
   value?: number;
   isDivider: boolean;
@@ -88,14 +90,26 @@ export class TweetSelectorBase extends Vue {
     return arr;
   }
 
+  GetHotKeyText(key: I.Key) {
+    if (!key.key) return;
+    let ret = '';
+    if (key.isCtrl) ret += 'Ctrl + ';
+    if (key.isShift) ret += 'Shift + ';
+    if (key.isAlt) ret += 'Alt + ';
+    ret += key.key.toUpperCase();
+    return ret;
+  }
+
   get listContext() {
     let value = 0;
     const listContext: ContextItem[] = [];
+    const hotKey = moduleOption.hotKey;
     if (this.media) {
       listContext.push({
         title: this.orgTweet.extended_entities.media[0].display_url,
         onClick: this.OnClickMedia,
         value: value++,
+        hotKey: this.GetHotKeyText(hotKey.showImage),
         isDivider: false
       });
       listContext.push({ title: '', onClick: () => {}, isDivider: true });
@@ -116,12 +130,14 @@ export class TweetSelectorBase extends Vue {
       title: '답글',
       onClick: this.OnClickReply,
       value: value++,
+      hotKey: this.GetHotKeyText(hotKey.reply),
       isDivider: false
     });
     listContext.push({
       title: '모두에게답글',
       onClick: this.OnClickReplyAll,
       value: value++,
+      hotKey: this.GetHotKeyText(hotKey.replyAll),
       isDivider: false
     });
     listContext.push({ title: '', onClick: () => {}, isDivider: true });
@@ -130,18 +146,21 @@ export class TweetSelectorBase extends Vue {
       title: this.orgTweet.retweeted ? '리트윗 해제' : '리트윗',
       onClick: this.OnClickRetweet,
       value: value++,
+      hotKey: this.GetHotKeyText(hotKey.retweet),
       isDivider: false
     });
     listContext.push({
       title: '인용 리트윗',
       onClick: this.OnClickQT,
       value: value++,
+      hotKey: this.GetHotKeyText(hotKey.sendQt),
       isDivider: false
     });
     listContext.push({
       title: this.orgTweet.favorited ? '관심글 해제' : '관심글',
       onClick: this.OnClickFavorite,
       value: value++,
+      hotKey: this.GetHotKeyText(hotKey.sendFavorite),
       isDivider: false
     });
     listContext.push({ title: '', onClick: () => {}, isDivider: true });
@@ -167,6 +186,7 @@ export class TweetSelectorBase extends Vue {
       title: '트윗 내용 복사',
       onClick: this.OnClickCopy,
       value: value++,
+      hotKey: this.GetHotKeyText(hotKey.copy),
       isDivider: false
     });
 
@@ -177,6 +197,7 @@ export class TweetSelectorBase extends Vue {
         title: '트윗 삭제',
         onClick: this.OnClickDelete,
         value: value++,
+        hotKey: this.GetHotKeyText(hotKey.delete),
         isDivider: false
       });
     }
