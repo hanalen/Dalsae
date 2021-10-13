@@ -90,6 +90,21 @@ class TweetStore extends VuexModule {
   MoveScroll(move: A.MoveScroll) {
     this.context.commit('moveScroll', move);
   }
+
+  @Mutation
+  private updateRTandFav(tweet: I.Tweet) {
+    this.homes.forEach(item => {
+      if (item.data.orgTweet.id_str === tweet.orgTweet.id_str) {
+        item.data.orgTweet.retweeted = tweet.orgTweet.retweeted;
+        item.data.orgTweet.favorited = tweet.orgTweet.favorited;
+      }
+    });
+  }
+
+  @Action
+  UpdateRTandFav(tweet: I.Tweet) {
+    this.context.commit('updateRTandFav', tweet);
+  }
 }
 
 export const moduleTweet = getModule(TweetStore);

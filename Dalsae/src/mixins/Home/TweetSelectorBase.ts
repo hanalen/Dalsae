@@ -18,7 +18,7 @@ import { moduleApi } from '@/store/modules/APIStore';
 interface ContextItem {
   title: string;
   hotKey?: string;
-  onClick: (value: number) => void | undefined;
+  onClick: (value: number) => void;
   value?: number;
   isDivider: boolean;
 }
@@ -209,58 +209,38 @@ export class TweetSelectorBase extends Vue {
   }
 
   OnClickMedia(value: number) {
-    window.preload.image.OpenImageWindow(this.tweet, moduleOption.uiOption);
+    moduleUI.utils.OpenImage(this.tweet);
   }
 
   OnClickLink(value: number) {
     const context = this.listContext.find(x => x.value === value);
     if (!context) return;
-    const url = this.orgTweet.entities.urls.find(x => x.display_url === context.title);
-    if (!url) return;
-    window.preload.OpenBrowser(url.expanded_url);
+    moduleUI.utils.OpenLink(this.tweet, context.title);
   }
 
   OnClickReply(value: number) {
     console.log('reply');
-    const mentions = `@${this.orgUser.screen_name} `;
-    moduleUI.ChangeReplyTweet(this.tweet);
-    moduleUI.SetInputText(mentions);
+    moduleUI.utils.Reply(this.tweet);
   }
 
   OnClickReplyAll(value: number) {
     console.log('reply all');
-    const set = new Set();
-    set.add(this.tweet.user.screen_name);
-    set.add(this.orgUser.screen_name);
-    this.orgTweet.entities.user_mentions.forEach(user => {
-      set.add(user.screen_name);
-    });
-    const screenName = moduleSwitter.selectUser?.user.screen_name;
-    if (screenName) set.delete(screenName);
-    let mentions = '';
-    set.forEach(user => {
-      mentions += `@${user} `;
-    });
-    moduleUI.ChangeReplyTweet(this.tweet);
-    moduleUI.SetInputText(mentions);
+    moduleUI.utils.ReplyAll(this.tweet);
   }
 
   OnClickRetweet(value: number) {
     console.log('retweet');
-    if (this.orgTweet.retweeted) moduleApi.statuses.UnRetweet(this.orgTweet.id_str);
-    else moduleApi.statuses.Retweet(this.orgTweet.id_str);
+    moduleApi.statuses.Retweet(this.tweet);
   }
 
   OnClickQT(value: number) {
     console.log('qt');
-    const str = `https://twitter.com/${this.orgUser.screen_name}/status/${this.orgTweet.id_str}`;
-    moduleUI.SetInputText(str);
+    moduleUI.utils.OnClickQt(this.tweet);
   }
 
   OnClickFavorite(value: number) {
     console.log('favo');
-    if (this.orgTweet.favorited) moduleApi.favorites.Destroy(this.orgTweet.id_str);
-    else moduleApi.favorites.Create(this.orgTweet.id_str);
+    moduleApi.favorites.Create(this.tweet);
   }
 
   OnClickProfile(value: number) {
@@ -269,8 +249,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickWeb(value: number) {
     console.log('web');
-    const url = `https://twitter.com/${this.orgUser.screen_name}/status/${this.orgTweet.id_str}`;
-    window.preload.OpenBrowser(url);
+    moduleUI.utils.OnClickViewWeb(this.tweet);
   }
 
   OnClickCopy(value: number) {
@@ -279,7 +258,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickDelete(value: number) {
     console.log('delete');
-    moduleApi.statuses.Destroy(this.orgTweet.id_str);
+    moduleApi.statuses.Destroy(this.tweet);
   }
 
   get orgTweet() {

@@ -89,18 +89,32 @@ class Statuses {
     });
     return result;
   }
-  async Destroy(id_str: string): Promise<P.APIResp<I.Tweet>> {
-    const result = await twitterRequest.call.statuses.Destroy({ id_str: id_str });
-    return result;
+  async Destroy(tweet: I.Tweet): Promise<void | P.APIResp<I.Tweet>> {
+    if (moduleSwitter.selectUser?.user.id_str === tweet.orgUser.id_str) {
+      const { id_str } = tweet.orgUser;
+      const result = await twitterRequest.call.statuses.Destroy({ id_str: id_str });
+      return result;
+    }
   }
-  async Retweet(id_str: string): Promise<P.APIResp<I.Tweet>> {
-    const result = await twitterRequest.call.statuses.Retweet({ id_str: id_str });
-    moduleTweet.Retweeted(result.data);
-    return result;
+  async Retweet(tweet: I.Tweet): Promise<P.APIResp<I.Tweet>> {
+    if (tweet.orgTweet.retweeted) {
+      return this.UnRetweet(tweet);
+    } else {
+      const { id_str } = tweet.orgTweet;
+      const result = await twitterRequest.call.statuses.Retweet({ id_str: id_str });
+      moduleTweet.UpdateRTandFav(result.data);
+      return result;
+    }
   }
-  async UnRetweet(id_str: string): Promise<P.APIResp<I.Tweet>> {
-    const result = await twitterRequest.call.statuses.UnRetweet({ id_str: id_str });
-    return result;
+  async UnRetweet(tweet: I.Tweet): Promise<P.APIResp<I.Tweet>> {
+    if (!tweet.orgTweet.retweeted) {
+      return this.Retweet(tweet);
+    } else {
+      const { id_str } = tweet.orgTweet;
+      const result = await twitterRequest.call.statuses.UnRetweet({ id_str: id_str });
+      moduleTweet.UpdateRTandFav(result.data);
+      return result;
+    }
   }
   async TimeLine(maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> {
     const id = moduleSwitter.selectID;
@@ -139,13 +153,25 @@ class Statuses {
 }
 
 class Favorites {
-  async Create(id_str: string): Promise<P.APIResp<I.Tweet>> {
-    const result = await twitterRequest.call.favorites.Create({ id: id_str });
-    return result;
+  async Create(tweet: I.Tweet): Promise<P.APIResp<I.Tweet>> {
+    if (tweet.orgTweet.favorited) {
+      return this.Destroy(tweet);
+    } else {
+      const { id_str } = tweet.orgTweet;
+      const result = await twitterRequest.call.favorites.Create({ id: id_str });
+      moduleTweet.UpdateRTandFav(result.data);
+      return result;
+    }
   }
-  async Destroy(id_str: string): Promise<P.APIResp<I.Tweet>> {
-    const result = await twitterRequest.call.favorites.Destroy({ id: id_str });
-    return result;
+  async Destroy(tweet: I.Tweet): Promise<P.APIResp<I.Tweet>> {
+    if (!tweet.orgTweet.favorited) {
+      return this.Create(tweet);
+    } else {
+      const { id_str } = tweet.orgTweet;
+      const result = await twitterRequest.call.favorites.Destroy({ id: id_str });
+      moduleTweet.UpdateRTandFav(result.data);
+      return result;
+    }
   }
 }
 
