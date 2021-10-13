@@ -52,6 +52,37 @@ class UIStore extends VuexModule {
     replyTweet: new I.Tweet()
   };
 
+  get selectTweet() {
+    let state: IPanelState;
+    let listTweet: M.ScrollItem<I.Tweet>[] = [];
+    switch (this.selectMenu) {
+      case 0:
+        state = this.panelHome;
+        listTweet = moduleTweet.homes;
+        break;
+      case 1:
+        state = this.panelMention;
+        listTweet = moduleTweet.mentions;
+        break;
+      case 2:
+        state = this.panelDm;
+        break;
+      case 3:
+        state = this.panelFavorite;
+        listTweet = moduleTweet.favorites;
+        break;
+      case 4:
+        state = this.panelOpen;
+        listTweet = moduleTweet.opens;
+        break;
+      default:
+        state = this.panelHome;
+        listTweet = moduleTweet.homes;
+        break;
+    }
+    return listTweet[state.index];
+  }
+
   @Mutation
   private changeMenu(menu: number) {
     this.selectMenu = menu;
