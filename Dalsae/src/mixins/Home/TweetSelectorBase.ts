@@ -15,7 +15,7 @@ import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleApi } from '@/store/modules/APIStore';
 
-interface ContextItem {
+export interface ContextItem {
   title: string;
   hotKey?: string;
   onClick: (value: number) => void;
@@ -50,7 +50,7 @@ export class TweetSelectorBase extends Vue {
   set isShowContext(isShow: boolean) {
     eventBus.$emit('OnClickTweet', this.tweet.id_str);
     const { x, y } = moduleUI.stateContext;
-    moduleUI.OnContext({ x: x, y: y, isShow: isShow, maxIndex: 0 });
+    moduleUI.OnContext({ x: x, y: y, isShow: isShow, maxIndex: 0, listContext: this.listContext });
   }
 
   get contextIndex() {
@@ -75,7 +75,8 @@ export class TweetSelectorBase extends Vue {
       x: e.x,
       y: e.y,
       isShow: true,
-      maxIndex: this.contextMaxIndex
+      maxIndex: this.contextMaxIndex,
+      listContext: this.listContext
     });
   }
 

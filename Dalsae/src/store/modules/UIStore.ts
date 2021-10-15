@@ -7,6 +7,7 @@ import { ETweetType, ChangeIndex, ContextEvent } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
+import { ContextItem } from '@/mixins';
 
 export interface IPanelState {
   tweetType: ETweetType;
@@ -21,6 +22,7 @@ interface StateContext {
   isShow: boolean;
   x: number;
   y: number;
+  listContext: ContextItem[];
 }
 
 interface StateInput {
@@ -37,7 +39,12 @@ class Utils {
   OpenImage(tweet: I.Tweet) {
     window.preload.image.OpenImageWindow(tweet, moduleOption.uiOption);
   }
-  //TODO Context링크를 엔터키로 열게 될 경우 title을 구할 방법이 현재 구조상으로 없음
+  OnEnterByContext() {
+    const { index, listContext } = this.moduleUI.stateContext;
+    const context = listContext.find(x => x.value === index);
+    context?.onClick(index);
+    this.moduleUI.OnContext({ isShow: false, x: 0, y: 0, listContext: [], maxIndex: 0 });
+  }
   OpenLink(tweet: I.Tweet, title: string) {
     const url = tweet.orgTweet.entities.urls.find(x => x.display_url === title);
     if (!url) return;
@@ -91,7 +98,8 @@ class UIStore extends VuexModule {
     maxIndex: 0,
     isShow: false,
     x: 0,
-    y: 0
+    y: 0,
+    listContext: []
   };
 
   stateInput: StateInput = {
@@ -210,6 +218,7 @@ class UIStore extends VuexModule {
     this.stateContext.x = contextEvent.x;
     this.stateContext.y = contextEvent.y;
     this.stateContext.maxIndex = contextEvent.maxIndex;
+    this.stateContext.listContext = contextEvent.listContext;
   }
 
   @Action
