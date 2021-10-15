@@ -34,5 +34,13 @@ import { eventBus } from '@/plugins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
-export default class TweetSelector extends Mixins(TweetSelectorBase) {}
+export default class TweetSelector extends Mixins(TweetSelectorBase) {
+  async created() {
+    eventBus.$on('ShowContextMenu', (key: string) => {
+      if (this.tweet.id_str !== key) return;
+      const pos = this.$el.getBoundingClientRect();
+      this.OnContext(new MouseEvent('click', { clientX: 0, clientY: pos.top }));
+    });
+  }
+}
 </script>

@@ -11,6 +11,7 @@ import faker, { fake } from 'faker';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleApi } from '@/store/modules/APIStore';
+import { eventBus } from '@/plugins';
 @Component
 export class DalsaeApp extends Vue {
   get selectUserID() {
@@ -90,6 +91,41 @@ export class DalsaeApp extends Vue {
         break;
       case I.E_HOTKEY.SHOWURL:
         moduleUI.ChangeMenu(4);
+        break;
+      case I.E_HOTKEY.SENDDM:
+        break;
+      case I.E_HOTKEY.LOADING:
+        break;
+      case I.E_HOTKEY.COPY:
+        break;
+      case I.E_HOTKEY.LOADCONV:
+        break;
+      case I.E_HOTKEY.SHOWQT:
+        break;
+      case I.E_HOTKEY.SENDQT:
+        break;
+      case I.E_HOTKEY.HASH:
+        break;
+      case I.E_HOTKEY.DELETE:
+        break;
+      case I.E_HOTKEY.INPUT:
+        break;
+      case I.E_HOTKEY.SHOWCONTEXT:
+        eventBus.$emit('ShowContextMenu', moduleUI.selectTweet.key);
+        break;
+      case I.E_HOTKEY.HOME:
+        break;
+      case I.E_HOTKEY.END:
+        break;
+      case I.E_HOTKEY.SHOWIMAGE:
+        break;
+      case I.E_HOTKEY.RETWEET:
+        break;
+      case I.E_HOTKEY.SENDFAVORITE:
+        break;
+      case I.E_HOTKEY.REPLY:
+        break;
+      case I.E_HOTKEY.REPLYALL:
         break;
     }
   }
