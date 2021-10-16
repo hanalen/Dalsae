@@ -75,6 +75,17 @@ export default class Home extends Mixins(DalsaeApp) {
       if (moduleUI.stateContext.isShow) {
         moduleUtil.OnEnterByContext();
       }
+    } else if (e.key === 'Escape') {
+      if (moduleUI.stateContext.isShow) {
+        const { x, y, maxIndex, listContext } = moduleUI.stateContext;
+        moduleUI.OnContext({
+          isShow: false,
+          x: x,
+          y: y,
+          maxIndex: maxIndex,
+          listContext: listContext
+        });
+      }
     }
   }
   ClickLink(e: Event) {
