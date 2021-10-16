@@ -12,6 +12,7 @@ import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleApi } from '@/store/modules/APIStore';
 import { eventBus } from '@/plugins';
+import { moduleUtil } from '@/store/modules/UtilStore';
 @Component
 export class DalsaeApp extends Vue {
   get selectUserID() {
@@ -103,10 +104,12 @@ export class DalsaeApp extends Vue {
       case I.E_HOTKEY.SHOWQT:
         break;
       case I.E_HOTKEY.SENDQT:
+        moduleUtil.OnClickQt(moduleUI.selectTweet.data);
         break;
       case I.E_HOTKEY.HASH:
         break;
       case I.E_HOTKEY.DELETE:
+        moduleApi.statuses.Destroy(moduleUI.selectTweet.data);
         break;
       case I.E_HOTKEY.INPUT:
         break;
@@ -118,14 +121,19 @@ export class DalsaeApp extends Vue {
       case I.E_HOTKEY.END:
         break;
       case I.E_HOTKEY.SHOWIMAGE:
+        moduleUtil.OpenImage(moduleUI.selectTweet.data);
         break;
       case I.E_HOTKEY.RETWEET:
+        moduleApi.statuses.Retweet(moduleUI.selectTweet.data);
         break;
       case I.E_HOTKEY.SENDFAVORITE:
+        moduleApi.favorites.Create(moduleUI.selectTweet.data);
         break;
       case I.E_HOTKEY.REPLY:
+        moduleUtil.Reply(moduleUI.selectTweet.data);
         break;
       case I.E_HOTKEY.REPLYALL:
+        moduleUtil.ReplyAll(moduleUI.selectTweet.data);
         break;
     }
   }
