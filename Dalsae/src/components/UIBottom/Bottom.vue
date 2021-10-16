@@ -5,6 +5,16 @@
     </v-btn>
     <v-btn icon rounded v-for="(item, i) in listIcons" :key="i" @click="ClickMenu(item.value)">
       <v-icon :color="item.value === selectMenu ? 'primary' : 'secondary'">{{ item.name }}</v-icon>
+
+      <!-- <v-progress-circular
+        v-if="isShowLoad(item.value)"
+        :width="3"
+        color="primary"
+        indeterminate
+      ></v-progress-circular>
+      <v-icon v-else :color="item.value === selectMenu ? 'primary' : 'secondary'">{{
+        item.name
+      }}</v-icon> -->
     </v-btn>
   </div>
 </template>
@@ -56,6 +66,28 @@ export default class Bottom extends Vue {
 
   async ClickMenu(menu: number) {
     moduleUI.ChangeMenu(menu);
+  }
+
+  isShowLoad(menu: number) {
+    if (menu === 0) {
+      return this.isLoadHome;
+    } else if (menu === 1) {
+      return this.isLoadMention;
+    } else if (menu === 3) {
+      return this.isLoadFavorite;
+    }
+  }
+
+  get isLoadHome() {
+    return moduleUI.panelHome.isLoad;
+  }
+
+  get isLoadMention() {
+    return moduleUI.panelMention.isLoad;
+  }
+
+  get isLoadFavorite() {
+    return moduleUI.panelFavorite.isLoad;
   }
 }
 </script>
