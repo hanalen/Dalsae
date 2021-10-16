@@ -9,6 +9,7 @@ import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
 import { ContextItem } from '@/mixins';
 import { moduleUI } from './UIStore';
+import { moduleApi } from './APIStore';
 
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
@@ -64,6 +65,20 @@ class UtilStore extends VuexModule {
     });
     moduleUI.ChangeReplyTweet(tweet);
     moduleUI.SetInputText(mentions);
+  }
+  @Action
+  LoadTweets() {
+    switch (moduleUI.selectMenu) {
+      case 0:
+        moduleApi.statuses.TimeLine('', moduleTweet.homes[0].data.id_str);
+        break;
+      case 1:
+        moduleApi.statuses.Mention('', moduleTweet.mentions[0].data.id_str);
+        break;
+      case 3:
+        moduleApi.favorites.List('', moduleTweet.homes[0].data.id_str);
+        break;
+    }
   }
 }
 export const moduleUtil = getModule(UtilStore);

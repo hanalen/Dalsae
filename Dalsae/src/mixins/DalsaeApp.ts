@@ -96,6 +96,7 @@ export class DalsaeApp extends Vue {
       case I.E_HOTKEY.SENDDM:
         break;
       case I.E_HOTKEY.LOADING:
+        moduleUtil.LoadTweets();
         break;
       case I.E_HOTKEY.COPY:
         break;

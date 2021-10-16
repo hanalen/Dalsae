@@ -273,7 +273,9 @@ export class TwitterRequest {
         Create: (data: P.ReqCreate) =>
           this.post<P.ReqCreate, I.Tweet>(baseUrl + '/favorites/create.json', { data }),
         Destroy: (data: P.ReqCreate) =>
-          this.post<P.ReqCreate, I.Tweet>(baseUrl + '/favorites/destroy.json', { data })
+          this.post<P.ReqCreate, I.Tweet>(baseUrl + '/favorites/destroy.json', { data }),
+        List: (data: P.ReqTimeLine) =>
+          this.post<P.ReqTimeLine, I.Tweet[]>(baseUrl + 'favorites/list.json', { data })
       },
       block: {
         Ids: (data: P.ReqBlockIds) =>
