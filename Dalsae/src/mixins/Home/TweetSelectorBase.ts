@@ -49,7 +49,7 @@ export class TweetSelectorBase extends Vue {
     return moduleUI.stateContext.isShow && moduleUI.stateContext.tweet.id_str === this.tweet.id_str;
   }
   set isShowContext(isShow: boolean) {
-    eventBus.$emit('OnClickTweet', this.tweet.id_str);
+    if (isShow) eventBus.$emit('OnClickTweet', this.tweet.id_str);
     const { x, y } = moduleUI.stateContext;
     moduleUI.OnContext({ x: x, y: y, isShow: isShow, maxIndex: 0, listContext: this.listContext });
   }
