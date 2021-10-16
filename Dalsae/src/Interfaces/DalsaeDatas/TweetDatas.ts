@@ -52,9 +52,10 @@ export class TweetDatas {
     const tweets = this.dicTweets.get(user_id_str)?.homes;
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
+    if (tweets.find(x => x.key === tweet.id_str)) return; //exists
     const idx = this.FindIndex(tweet, tweets);
-    tweets.splice(0, 0, {
-      data: tweet,
+    tweets.splice(idx, 0, {
+      data: new I.Tweet(tweet),
       height: minHeight,
       isResized: true,
       key: tweet.id_str,
@@ -69,9 +70,10 @@ export class TweetDatas {
     const tweets = this.dicTweets.get(user_id_str)?.mentions;
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
+    if (tweets.find(x => x.key === tweet.id_str)) return; //exists
     const idx = this.FindIndex(tweet, tweets);
     tweets.splice(idx, 0, {
-      data: tweet,
+      data: new I.Tweet(tweet),
       height: minHeight,
       isResized: true,
       key: tweet.id_str,
@@ -87,14 +89,16 @@ export class TweetDatas {
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
-      const idx = this.FindIndex(tweet, tweets);
-      tweets.splice(idx, 0, {
-        data: tweet,
-        height: minHeight,
-        isResized: true,
-        key: tweet.id_str,
-        scrollTop: idx * minHeight
-      });
+      if (!tweets.find(x => x.key === tweet.id_str)) {
+        const idx = this.FindIndex(tweet, tweets);
+        tweets.splice(idx, 0, {
+          data: new I.Tweet(tweet),
+          height: minHeight,
+          isResized: true,
+          key: tweet.id_str,
+          scrollTop: idx * minHeight
+        });
+      }
     });
     eventBus.$emit('AddedTweet', ETweetType.E_HOME);
   }
@@ -106,14 +110,16 @@ export class TweetDatas {
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
-      const idx = this.FindIndex(tweet, tweets);
-      tweets.splice(idx, 0, {
-        data: tweet,
-        height: minHeight,
-        isResized: true,
-        key: tweet.id_str,
-        scrollTop: idx * minHeight
-      });
+      if (!tweets.find(x => x.key === tweet.id_str)) {
+        const idx = this.FindIndex(tweet, tweets);
+        tweets.splice(idx, 0, {
+          data: new I.Tweet(tweet),
+          height: minHeight,
+          isResized: true,
+          key: tweet.id_str,
+          scrollTop: idx * minHeight
+        });
+      }
     });
     eventBus.$emit('AddedTweet', ETweetType.E_MENTION);
   }
