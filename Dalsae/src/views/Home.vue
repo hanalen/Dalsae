@@ -34,6 +34,7 @@ import { DalsaeApp } from '@/mixins';
 import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleUI } from '@/store/modules/UIStore';
+import { moduleUtil } from '@/store/modules/UtilStore';
 
 @Component
 export default class Home extends Mixins(DalsaeApp) {
@@ -72,7 +73,7 @@ export default class Home extends Mixins(DalsaeApp) {
     });
     if (e.key === 'Enter') {
       if (moduleUI.stateContext.isShow) {
-        moduleUI.utils.OnEnterByContext();
+        moduleUtil.OnEnterByContext();
       }
     }
   }

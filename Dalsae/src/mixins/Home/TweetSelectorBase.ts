@@ -14,6 +14,7 @@ import { moduleUI } from '@/store/modules/UIStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleApi } from '@/store/modules/APIStore';
+import { moduleUtil } from '@/store/modules/UtilStore';
 
 export interface ContextItem {
   title: string;
@@ -210,23 +211,24 @@ export class TweetSelectorBase extends Vue {
   }
 
   OnClickMedia(value: number) {
-    moduleUI.utils.OpenImage(this.tweet);
+    moduleUtil.OpenImage(this.tweet);
   }
 
   OnClickLink(value: number) {
     const context = this.listContext.find(x => x.value === value);
     if (!context) return;
-    moduleUI.utils.OpenLink(this.tweet, context.title);
+    moduleUtil.OpenLink(this.tweet, context.title);
   }
 
   OnClickReply(value: number) {
     console.log('reply');
-    moduleUI.utils.Reply(this.tweet);
+    console.log(this.tweet.orgTweet, this.tweet.orgUser);
+    moduleUtil.Reply(this.tweet);
   }
 
   OnClickReplyAll(value: number) {
     console.log('reply all');
-    moduleUI.utils.ReplyAll(this.tweet);
+    moduleUtil.ReplyAll(this.tweet);
   }
 
   OnClickRetweet(value: number) {
@@ -236,7 +238,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickQT(value: number) {
     console.log('qt');
-    moduleUI.utils.OnClickQt(this.tweet);
+    moduleUtil.OnClickQt(this.tweet);
   }
 
   OnClickFavorite(value: number) {
@@ -250,7 +252,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickWeb(value: number) {
     console.log('web');
-    moduleUI.utils.OnClickViewWeb(this.tweet);
+    moduleUtil.OnClickViewWeb(this.tweet);
   }
 
   OnClickCopy(value: number) {
