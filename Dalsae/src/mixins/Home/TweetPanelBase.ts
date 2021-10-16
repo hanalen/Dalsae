@@ -43,6 +43,18 @@ export class TweetPanelBase extends Vue {
     return moduleTweet.opens;
   }
 
+  get isLoadHome() {
+    return moduleUI.panelHome.isLoad;
+  }
+
+  get isLoadMention() {
+    return moduleUI.panelMention.isLoad;
+  }
+
+  get isLoadFavorite() {
+    return moduleUI.panelFavorite.isLoad;
+  }
+
   KeyDown(e: KeyboardEvent) {
     if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
       if (e.code === 'ArrowUp') {

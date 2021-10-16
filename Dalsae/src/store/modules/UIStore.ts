@@ -3,7 +3,7 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import * as M from '@/mixins';
 import store from '@/store';
-import { ETweetType, ChangeIndex, ContextEvent } from '@/store/Interface';
+import { ETweetType, ChangeIndex, ContextEvent, LoadEvent } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
@@ -13,6 +13,7 @@ export interface IPanelState {
   tweetType: ETweetType;
   index: number;
   selectedId: string;
+  isLoad: boolean;
 }
 
 interface StateContext {
@@ -35,11 +36,31 @@ interface StateInput {
 class UIStore extends VuexModule {
   // states
   selectMenu = 0;
-  panelHome: IPanelState = { tweetType: ETweetType.E_HOME, index: -1, selectedId: '' };
-  panelMention: IPanelState = { tweetType: ETweetType.E_MENTION, index: -1, selectedId: '' };
-  panelDm: IPanelState = { tweetType: ETweetType.E_DM, index: -1, selectedId: '' };
-  panelFavorite: IPanelState = { tweetType: ETweetType.E_FAVORITE, index: -1, selectedId: '' };
-  panelOpen: IPanelState = { tweetType: ETweetType.E_OPEN, index: -1, selectedId: '' };
+  panelHome: IPanelState = {
+    tweetType: ETweetType.E_HOME,
+    index: -1,
+    selectedId: '',
+    isLoad: false
+  };
+  panelMention: IPanelState = {
+    tweetType: ETweetType.E_MENTION,
+    index: -1,
+    selectedId: '',
+    isLoad: false
+  };
+  panelDm: IPanelState = { tweetType: ETweetType.E_DM, index: -1, selectedId: '', isLoad: false };
+  panelFavorite: IPanelState = {
+    tweetType: ETweetType.E_FAVORITE,
+    index: -1,
+    selectedId: '',
+    isLoad: false
+  };
+  panelOpen: IPanelState = {
+    tweetType: ETweetType.E_OPEN,
+    index: -1,
+    selectedId: '',
+    isLoad: false
+  };
 
   stateContext: StateContext = {
     tweet: new I.Tweet(),
@@ -216,6 +237,26 @@ class UIStore extends VuexModule {
   @Action
   SetImage(listImage: string[]) {
     this.context.commit('setImage', listImage);
+  }
+
+  @Mutation
+  private setLoad(event: LoadEvent) {
+    switch (event.tweetType) {
+      case ETweetType.E_HOME:
+        this.panelHome.isLoad = event.isLoad;
+        break;
+      case ETweetType.E_MENTION:
+        this.panelMention.isLoad = event.isLoad;
+        break;
+      case ETweetType.E_FAVORITE:
+        this.panelFavorite.isLoad = event.isLoad;
+        break;
+    }
+  }
+
+  @Action
+  SetLoad(event: LoadEvent) {
+    this.context.commit('setLoad', event);
   }
 }
 

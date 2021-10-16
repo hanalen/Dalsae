@@ -4,3 +4,4 @@ export * from './SetKey';
 export * from './MoveScroll';
 export * from './ChangeIndex';
 export * from './ContextEvent';
+export * from './LoadEvent';

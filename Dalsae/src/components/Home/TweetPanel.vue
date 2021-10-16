@@ -7,15 +7,33 @@
     </v-tabs>
     <v-tabs-items v-model="selectMenu">
       <v-tab-item :key="0">
+        <v-progress-circular
+          v-if="isLoadHome"
+          :width="3"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
         <scroll-panel :listData="tweetHome" :tweetType="home" />
       </v-tab-item>
       <v-tab-item :key="1">
+        <v-progress-circular
+          v-if="isLoadMention"
+          :width="3"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
         <scroll-panel :listData="tweetMention" :tweetType="mention" />
       </v-tab-item>
       <v-tab-item :key="2">
         <tweet-selector v-for="(item, i) in dm" :key="i" :tweet="item"></tweet-selector>
       </v-tab-item>
       <v-tab-item :key="3">
+        <v-progress-circular
+          v-if="isLoadFavorite"
+          :width="3"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
         <tweet-selector v-for="(item, i) in tweetFavorite" :key="i" :tweet="item"></tweet-selector>
       </v-tab-item>
       <v-tab-item :key="4">

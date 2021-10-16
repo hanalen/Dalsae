@@ -9,6 +9,8 @@ import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import twitterRequest from '@/API/TwitterRequest';
 import { moduleTweet } from './TweetStore';
+import { moduleUI } from './UIStore';
+import { ETweetType } from '@/store/Interface';
 
 class Account {
   async VerifyCredentials(): Promise<P.APIResp<I.User>> {
@@ -117,6 +119,7 @@ class Statuses {
     }
   }
   async TimeLine(maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> {
+    moduleUI.SetLoad({ isLoad: true, tweetType: ETweetType.E_HOME });
     const id = moduleSwitter.selectID;
     const result = await twitterRequest.call.statuses.TimeLine({
       count: 200,
@@ -124,6 +127,7 @@ class Statuses {
       max_id: maxId,
       since_id: sinceId
     });
+    moduleUI.SetLoad({ isLoad: false, tweetType: ETweetType.E_HOME });
     if (result.data) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_HOME,
@@ -134,6 +138,7 @@ class Statuses {
     return result;
   }
   async Mention(maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> {
+    moduleUI.SetLoad({ isLoad: true, tweetType: ETweetType.E_MENTION });
     const id = store.getters.selectID;
     const result = await twitterRequest.call.statuses.Mention({
       count: 200,
@@ -141,6 +146,7 @@ class Statuses {
       max_id: maxId,
       since_id: sinceId
     });
+    moduleUI.SetLoad({ isLoad: false, tweetType: ETweetType.E_MENTION });
     if (result.data) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_MENTION,
@@ -171,6 +177,24 @@ class Favorites {
       const result = await twitterRequest.call.favorites.Destroy({ id: id_str });
       moduleTweet.UpdateRTandFav(result.data);
       return result;
+    }
+  }
+  async List(max_id?: string, since_id?: string) {
+    moduleUI.SetLoad({ isLoad: true, tweetType: ETweetType.E_FAVORITE });
+    const id = moduleSwitter.selectID;
+    const result = await twitterRequest.call.favorites.List({
+      count: 200,
+      tweet_mode: 'extended',
+      max_id: max_id,
+      since_id: since_id
+    });
+    moduleUI.SetLoad({ isLoad: false, tweetType: ETweetType.E_FAVORITE });
+    if (result.data) {
+      store.dispatch('AddTweet', {
+        type: S.ETweetType.E_FAVORITE,
+        user_id_str: id,
+        listTweet: result.data
+      });
     }
   }
 }
