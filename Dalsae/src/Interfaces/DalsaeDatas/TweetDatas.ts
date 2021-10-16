@@ -38,10 +38,10 @@ export class TweetDatas {
     let idx = 0;
     for (let i = 0, len = list.length; i < len; i++) {
       const next = new Date(list[i].data.created_at).getTime();
-      idx = i + 1;
       if (date > next) {
         break;
       }
+      idx = i + 1;
     }
     return idx;
   }
