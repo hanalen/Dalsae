@@ -49,6 +49,8 @@ export class ScrollPanelBase extends Vue {
         return moduleUI.panelFavorite.index;
       case ETweetType.E_OPEN:
         return moduleUI.panelOpen.index;
+      case ETweetType.E_CONV:
+        return moduleUI.panelConv.index;
       default:
         return moduleUI.panelHome.index;
     }
@@ -64,6 +66,8 @@ export class ScrollPanelBase extends Vue {
         return moduleUI.panelFavorite.selectedId;
       case ETweetType.E_OPEN:
         return moduleUI.panelOpen.selectedId;
+      case ETweetType.E_CONV:
+        return moduleUI.panelConv.selectedId;
       default:
         return moduleUI.panelHome.selectedId;
     }

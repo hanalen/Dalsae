@@ -8,11 +8,13 @@ export class Tweets {
   mentions: M.ScrollItem<I.Tweet>[];
   favorites: M.ScrollItem<I.Tweet>[];
   opens: M.ScrollItem<I.Tweet>[];
+  conv: M.ScrollItem<I.Tweet>[];
   constructor() {
     this.homes = [];
     this.mentions = [];
     this.favorites = [];
     this.opens = [];
+    this.conv = [];
   }
 }
 

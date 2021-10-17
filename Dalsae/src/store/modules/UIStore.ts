@@ -61,6 +61,12 @@ class UIStore extends VuexModule {
     selectedId: '',
     isLoad: false
   };
+  panelConv: IPanelState = {
+    tweetType: ETweetType.E_CONV,
+    index: -1,
+    selectedId: '',
+    isLoad: false
+  };
 
   stateContext: StateContext = {
     tweet: new I.Tweet(),
@@ -143,6 +149,10 @@ class UIStore extends VuexModule {
         this.panelOpen.index = change.index;
         this.panelOpen.selectedId = change.selectedId;
         break;
+      case ETweetType.E_CONV:
+        this.panelConv.index = change.index;
+        this.panelConv.selectedId = change.selectedId;
+        break;
     }
   }
 
@@ -168,6 +178,9 @@ class UIStore extends VuexModule {
         break;
       case ETweetType.E_OPEN:
         listTweet = moduleTweet.opens;
+        break;
+      case ETweetType.E_CONV:
+        listTweet = moduleTweet.convs;
         break;
       default:
         listTweet = moduleTweet.homes;
@@ -250,6 +263,9 @@ class UIStore extends VuexModule {
         break;
       case ETweetType.E_FAVORITE:
         this.panelFavorite.isLoad = event.isLoad;
+        break;
+      case ETweetType.E_CONV:
+        this.panelConv.isLoad = event.isLoad;
         break;
     }
   }

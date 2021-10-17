@@ -39,6 +39,10 @@ export class TweetPanelBase extends Vue {
     return moduleTweet.favorites;
   }
 
+  get tweetConv() {
+    return moduleTweet.convs;
+  }
+
   get tweetOpens() {
     return moduleTweet.opens;
   }

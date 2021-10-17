@@ -36,6 +36,11 @@ class TweetStore extends VuexModule {
     return tweets ? tweets.opens : [];
   }
 
+  get convs() {
+    const tweets = this.tweetDatas.dicTweets.get(moduleSwitter.selectID);
+    return tweets ? tweets.conv : [];
+  }
+
   @Mutation
   private init(userId: string) {
     this.tweetDatas.dicTweets.set(userId, new I.Tweets());
@@ -61,6 +66,8 @@ class TweetStore extends VuexModule {
       case A.ETweetType.E_FAVORITE:
         break;
       case A.ETweetType.E_OPEN:
+        break;
+      case A.ETweetType.E_CONV:
         break;
     }
   }
