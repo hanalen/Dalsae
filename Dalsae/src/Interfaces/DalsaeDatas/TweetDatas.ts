@@ -67,12 +67,14 @@ export class TweetDatas {
     if (!tweets) throw Error('No ListTweets');
     if (tweets.find(x => x.key === tweet.id_str)) return; //exists
     const idx = this.FindIndex(tweet, tweets);
+    const prevTweet = tweets[idx - 1];
+    const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
     tweets.splice(idx, 0, {
       data: new I.Tweet(tweet),
       height: minHeight,
       isResized: true,
       key: tweet.id_str,
-      scrollTop: idx * minHeight
+      scrollTop: scrollTop
     });
     eventBus.$emit('AddedTweet', ETweetType.E_HOME);
   }
@@ -85,12 +87,14 @@ export class TweetDatas {
     if (!tweets) throw Error('No ListTweets');
     if (tweets.find(x => x.key === tweet.id_str)) return; //exists
     const idx = this.FindIndex(tweet, tweets);
+    const prevTweet = tweets[idx - 1];
+    const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
     tweets.splice(idx, 0, {
       data: new I.Tweet(tweet),
       height: minHeight,
       isResized: true,
       key: tweet.id_str,
-      scrollTop: idx * minHeight
+      scrollTop: scrollTop
     });
     eventBus.$emit('AddedTweet', ETweetType.E_MENTION);
   }
@@ -104,12 +108,14 @@ export class TweetDatas {
     list.forEach(tweet => {
       if (!tweets.find(x => x.key === tweet.id_str)) {
         const idx = this.FindIndex(tweet, tweets);
+        const prevTweet = tweets[idx - 1];
+        const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
         tweets.splice(idx, 0, {
           data: new I.Tweet(tweet),
           height: minHeight,
           isResized: true,
           key: tweet.id_str,
-          scrollTop: idx * minHeight
+          scrollTop: scrollTop
         });
       }
     });
@@ -125,12 +131,14 @@ export class TweetDatas {
     list.forEach(tweet => {
       if (!tweets.find(x => x.key === tweet.id_str)) {
         const idx = this.FindIndex(tweet, tweets);
+        const prevTweet = tweets[idx - 1];
+        const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
         tweets.splice(idx, 0, {
           data: new I.Tweet(tweet),
           height: minHeight,
           isResized: true,
           key: tweet.id_str,
-          scrollTop: idx * minHeight
+          scrollTop: scrollTop
         });
       }
     });
@@ -146,12 +154,14 @@ export class TweetDatas {
     list.forEach(tweet => {
       if (!tweets.find(x => x.key === tweet.id_str)) {
         const idx = this.FindIndex(tweet, tweets);
+        const prevTweet = tweets[idx - 1];
+        const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
         tweets.splice(idx, 0, {
           data: new I.Tweet(tweet),
           height: minHeight,
           isResized: true,
           key: tweet.id_str,
-          scrollTop: idx * minHeight
+          scrollTop: scrollTop
         });
       }
     });
@@ -167,12 +177,14 @@ export class TweetDatas {
     if (!tweets) throw Error('No ListTweets');
     if (!tweets.find(x => x.key === tweet.id_str)) {
       const idx = this.FindIndex(tweet, tweets);
+      const prevTweet = tweets[idx - 1];
+      const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
       tweets.splice(idx, 0, {
         data: new I.Tweet(tweet),
         height: minHeight,
         isResized: true,
         key: tweet.id_str,
-        scrollTop: idx * minHeight
+        scrollTop: scrollTop
       });
     } else {
       console.log('key exists');
