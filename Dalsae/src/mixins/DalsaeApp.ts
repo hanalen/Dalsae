@@ -13,6 +13,7 @@ import { moduleUI } from '@/store/modules/UIStore';
 import { moduleApi } from '@/store/modules/APIStore';
 import { eventBus } from '@/plugins';
 import { moduleUtil } from '@/store/modules/UtilStore';
+import { ETweetType } from '@/store/Interface';
 @Component
 export class DalsaeApp extends Vue {
   get selectUserID() {
@@ -101,8 +102,18 @@ export class DalsaeApp extends Vue {
       case I.E_HOTKEY.COPY:
         break;
       case I.E_HOTKEY.LOADCONV:
+        console.log('conv');
+        moduleUtil.LoadConv(moduleUI.selectTweet.data);
+        moduleUI.ChangeMenu(5);
         break;
       case I.E_HOTKEY.SHOWQT:
+        moduleTweet.ShowQt({
+          tweet: moduleUI.selectTweet.data,
+          listTweet: undefined,
+          user_id_str: moduleSwitter.selectID,
+          type: ETweetType.E_CONV
+        });
+        moduleUI.ChangeMenu(5);
         break;
       case I.E_HOTKEY.SENDQT:
         moduleUtil.OnClickQt(moduleUI.selectTweet.data);

@@ -98,6 +98,22 @@ class Statuses {
       return result;
     }
   }
+  async Show(id_str: string) {
+    moduleUI.SetLoad({ tweetType: ETweetType.E_CONV, isLoad: true });
+    const result = await twitterRequest.call.statuses.Show({ id: id_str, tweet_mode: 'extended' });
+    moduleUI.SetLoad({ tweetType: ETweetType.E_CONV, isLoad: false });
+    if (result.data) {
+      console.log('result data', result.data);
+      moduleTweet.AddConv({
+        tweet: result.data,
+        type: ETweetType.E_CONV,
+        listTweet: undefined,
+        user_id_str: moduleSwitter.selectID
+      });
+    }
+    return result;
+  }
+
   async Retweet(tweet: I.Tweet): Promise<P.APIResp<I.Tweet>> {
     if (tweet.orgTweet.retweeted) {
       return this.UnRetweet(tweet);

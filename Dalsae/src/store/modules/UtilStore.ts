@@ -80,5 +80,32 @@ class UtilStore extends VuexModule {
         break;
     }
   }
+
+  ///대화 불러오기
+  @Action
+  LoadConv(tweet: I.Tweet) {
+    moduleTweet.AddConv({
+      listTweet: undefined,
+      tweet: tweet,
+      type: ETweetType.E_CONV,
+      user_id_str: moduleSwitter.selectID
+    });
+    let id_str = tweet.orgTweet.in_reply_to_status_id_str;
+    if (!id_str) return;
+    let find = moduleTweet.tweetDatas.FindTweet(id_str, moduleSwitter.selectID);
+    while (find) {
+      moduleTweet.AddConv({
+        listTweet: undefined,
+        tweet: find,
+        type: ETweetType.E_CONV,
+        user_id_str: moduleSwitter.selectID
+      });
+      id_str = find.in_reply_to_status_id_str;
+      find = moduleTweet.tweetDatas.FindTweet(id_str, moduleSwitter.selectID);
+    }
+    if (id_str && !find) {
+      moduleApi.statuses.Show(id_str);
+    }
+  }
 }
 export const moduleUtil = getModule(UtilStore);

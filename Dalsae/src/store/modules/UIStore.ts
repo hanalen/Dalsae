@@ -107,6 +107,10 @@ class UIStore extends VuexModule {
         state = this.panelOpen;
         listTweet = moduleTweet.opens;
         break;
+      case 5:
+        state = this.panelConv;
+        listTweet = moduleTweet.convs;
+        break;
       default:
         state = this.panelHome;
         listTweet = moduleTweet.homes;

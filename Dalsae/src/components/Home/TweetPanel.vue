@@ -39,6 +39,9 @@
       <v-tab-item :key="4">
         <tweet-selector v-for="(item, i) in tweetOpens" :key="i" :tweet="item"></tweet-selector>
       </v-tab-item>
+      <v-tab-item :key="5">
+        <scroll-panel :listData="tweetConv" :tweetType="conv" />
+      </v-tab-item>
     </v-tabs-items>
   </div>
 </template>
@@ -62,7 +65,8 @@ export default class TweetPanel extends TweetPanelBase {
     { name: 'mention', value: 1 },
     { name: 'dm', value: 2 },
     { name: 'favorite', value: 3 },
-    { name: 'url', value: 4 }
+    { name: 'url', value: 4 },
+    { name: 'conv', value: 5 }
   ];
 
   async created() {

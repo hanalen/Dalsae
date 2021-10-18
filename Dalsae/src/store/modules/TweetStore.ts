@@ -5,6 +5,7 @@ import * as A from '@/store/Interface';
 import store from '@/store';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { eventBus } from '@/plugins';
+import { ETweetType } from '@/store/Interface';
 export interface ITweetStore {
   tweetDatas: I.TweetDatas;
 }
@@ -111,6 +112,37 @@ class TweetStore extends VuexModule {
   @Action
   UpdateRTandFav(tweet: I.Tweet) {
     this.context.commit('updateRTandFav', tweet);
+  }
+
+  @Mutation
+  private showQt(addTweet: A.AddTweet) {
+    if (addTweet.tweet) this.tweetDatas.AddConv(addTweet.tweet, addTweet.user_id_str);
+  }
+
+  @Action
+  ShowQt(addTweet: A.AddTweet) {
+    this.context.commit('showQt', addTweet);
+  }
+
+  @Mutation
+  private addConv(addTweet: A.AddTweet) {
+    console.log(addTweet);
+    if (addTweet.tweet) this.tweetDatas.AddConv(addTweet.tweet, addTweet.user_id_str);
+  }
+
+  @Action
+  AddConv(addTweet: A.AddTweet) {
+    this.context.commit('addConv', addTweet);
+  }
+
+  @Mutation
+  private clearConv(user_id_str: string) {
+    this.tweetDatas.ClearTweet(ETweetType.E_CONV, user_id_str);
+  }
+
+  @Action
+  ClearConv(user_id_str: string) {
+    this.context.commit('clearConv', user_id_str);
   }
 }
 

@@ -35,6 +35,7 @@ export class Tweet {
       this.retweet_count = tweet.retweet_count;
       this.favorite_count = tweet.favorite_count;
       this.place = tweet.place;
+      this.in_reply_to_status_id_str = tweet.in_reply_to_status_id_str;
     } else {
       this.created_at = '';
       this.id_str = '';

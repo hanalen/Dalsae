@@ -1,4 +1,4 @@
-import { Vue, Mixins, Component, Inject, Emit } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Inject, Emit, Watch } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
@@ -6,6 +6,7 @@ import { mixins } from 'vue-class-component';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { ETweetType } from '@/store/Interface';
 import { IPanelState, moduleUI } from '@/store/modules/UIStore';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
 
 @Component
 export class TweetPanelBase extends Vue {
@@ -15,12 +16,24 @@ export class TweetPanelBase extends Vue {
   set selectMenu(menu: number) {
     moduleUI.ChangeMenu(menu);
   }
+
+  @Watch('selectMenu', { immediate: true, deep: true })
+  OnChangeSelectMenu(newVal: number, oldVal: number) {
+    if (oldVal === 5) {
+      moduleTweet.ClearConv(moduleSwitter.selectID);
+    }
+  }
+
   get home() {
     return ETweetType.E_HOME;
   }
 
   get mention() {
     return ETweetType.E_MENTION;
+  }
+
+  get conv() {
+    return ETweetType.E_CONV;
   }
 
   get tweetHome() {

@@ -35,6 +35,17 @@ export class TweetDatas {
     }
   }
 
+  FindTweet(tweetIdStr: string, userIdStr: string) {
+    const homes = this.dicTweets.get(userIdStr)?.homes;
+    const mentions = this.dicTweets.get(userIdStr)?.mentions;
+    if (!homes || !mentions) return;
+    const findA = homes.find(x => x.data.id_str === tweetIdStr);
+    if (findA) return findA?.data;
+    const findB = mentions.find(x => x.data.id_str === tweetIdStr);
+    if (findB) return findB?.data;
+    return null;
+  }
+
   FindIndex(tweet: I.Tweet, list: M.ScrollItem<I.Tweet>[]) {
     const date = new Date(tweet.created_at).getTime();
     let idx = 0;
@@ -125,6 +136,69 @@ export class TweetDatas {
     });
     eventBus.$emit('AddedTweet', ETweetType.E_MENTION);
   }
+  AddFavoriteList(list: I.Tweet[], user_id_str: string) {
+    if (!list) throw Error('No ListTweets');
+    this.CheckKey(user_id_str);
+
+    const tweets = this.dicTweets.get(user_id_str)?.favorites;
+    //TODO 에러 처리 해야함
+    if (!tweets) throw Error('No ListTweets');
+    list.forEach(tweet => {
+      if (!tweets.find(x => x.key === tweet.id_str)) {
+        const idx = this.FindIndex(tweet, tweets);
+        tweets.splice(idx, 0, {
+          data: new I.Tweet(tweet),
+          height: minHeight,
+          isResized: true,
+          key: tweet.id_str,
+          scrollTop: idx * minHeight
+        });
+      }
+    });
+    eventBus.$emit('AddedTweet', ETweetType.E_FAVORITE);
+  }
+  AddConv(tweet: I.Tweet, user_id_str: string) {
+    console.log(tweet, user_id_str);
+    if (!tweet) throw Error('No Tweet');
+    this.CheckKey(user_id_str);
+
+    const tweets = this.dicTweets.get(user_id_str)?.conv;
+    //TODO 에러 처리 해야함
+    if (!tweets) throw Error('No ListTweets');
+    if (!tweets.find(x => x.key === tweet.id_str)) {
+      const idx = this.FindIndex(tweet, tweets);
+      tweets.splice(idx, 0, {
+        data: new I.Tweet(tweet),
+        height: minHeight,
+        isResized: true,
+        key: tweet.id_str,
+        scrollTop: idx * minHeight
+      });
+    } else {
+      console.log('key exists');
+    }
+    eventBus.$emit('AddedTweet', ETweetType.E_CONV);
+  }
+  ClearTweet(tweetType: ETweetType, user_id_str: string) {
+    this.CheckKey(user_id_str);
+
+    const tweets = this.dicTweets.get(user_id_str);
+    if (!tweets) return;
+    switch (tweetType) {
+      case ETweetType.E_HOME:
+        tweets.homes = [];
+        break;
+      case ETweetType.E_MENTION:
+        tweets.mentions = [];
+        break;
+      case ETweetType.E_FAVORITE:
+        tweets.favorites = [];
+        break;
+      case ETweetType.E_CONV:
+        tweets.conv = [];
+        break;
+    }
+  }
   OnResized() {
     this.dicTweets.forEach(item => {
       for (let i = 0, len = item.homes.length; i < len; i++) {
@@ -138,6 +212,9 @@ export class TweetDatas {
       }
       for (let i = 0, len = item.opens.length; i < len; i++) {
         item.opens[i].isResized = true;
+      }
+      for (let i = 0, len = item.conv.length; i < len; i++) {
+        item.conv[i].isResized = true;
       }
     });
   }
