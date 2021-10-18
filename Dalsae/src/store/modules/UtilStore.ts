@@ -10,7 +10,7 @@ import { moduleOption } from './OptionStore';
 import { ContextItem } from '@/mixins';
 import { moduleUI } from './UIStore';
 import { moduleApi } from './APIStore';
-
+import copy from 'copy-to-clipboard';
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
   @Action
@@ -106,6 +106,21 @@ class UtilStore extends VuexModule {
     if (id_str && !find) {
       moduleApi.statuses.Show(id_str);
     }
+  }
+
+  @Action
+  CopyTweet(tweet: I.Tweet) {
+    let text = tweet.orgTweet.full_text;
+    text = text;
+    tweet.entities.urls.forEach(url => {
+      text = text.replace(url.url, url.expanded_url);
+    });
+    if (tweet.media) {
+      tweet.media.forEach(media => {
+        text = text.replace(media.url, media.display_url);
+      });
+    }
+    copy(text);
   }
 }
 export const moduleUtil = getModule(UtilStore);

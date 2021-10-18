@@ -100,6 +100,7 @@ export class DalsaeApp extends Vue {
         moduleUtil.LoadTweets();
         break;
       case I.E_HOTKEY.COPY:
+        moduleUtil.CopyTweet(moduleUI.selectTweet.data);
         break;
       case I.E_HOTKEY.LOADCONV:
         console.log('conv');

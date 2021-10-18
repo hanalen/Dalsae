@@ -257,6 +257,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickCopy(value: number) {
     console.log('copy');
+    moduleUtil.CopyTweet(this.tweet);
   }
 
   OnClickDelete(value: number) {
