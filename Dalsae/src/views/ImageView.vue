@@ -36,7 +36,7 @@ import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 
 @Component
-export default class Image extends Mixins(MIX.ImagePage) {
+export default class ImageView extends Mixins(MIX.ImagePage) {
   ClickLink(e: Event) {
     // const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
     // console.log(listTweet[this.index]);
