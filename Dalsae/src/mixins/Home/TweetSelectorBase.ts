@@ -260,6 +260,11 @@ export class TweetSelectorBase extends Vue {
 
   OnClickProfile(value: number) {
     console.log('profile');
+    const context = this.listContext.find(x => x.value === value);
+    if (!context) return;
+    const userScreenName = context.title.substring(0, context.title.indexOf(' /'));
+    console.log('user', userScreenName);
+    window.preload.profile.OpenProfileWindow(userScreenName);
   }
 
   OnClickHash(value: number) {

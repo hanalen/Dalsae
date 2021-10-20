@@ -7,6 +7,7 @@ import fs from 'fs-extra';
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import { IOptionStore } from '@/store/modules/OptionStore';
+import ProfilePreload from './ProfilePreload';
 
 const pathData = 'Data/';
 const pathSwitter = 'Data/Switter.json';
@@ -15,6 +16,7 @@ const pathBlockids = 'Data/block.json';
 
 export default class Preload {
   image: ImagePreload = new ImagePreload();
+  profile: ProfilePreload = new ProfilePreload();
   ClickLink() {
     ipcName = Math.random() * (99999 - 0) + 0;
     console.log('asdfasdf');

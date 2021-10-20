@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Home from '../views/Home.vue';
 import ImageView from '@/views/ImageView.vue';
+import ProfileView from '@/views/ProfileView.vue';
 
 function register() {
   const files = require.context('../', true, /\.vue$/i);
@@ -19,13 +20,6 @@ export const routes: Array<RouteConfig> = [
     name: 'Home',
     component: Home
   },
-  // {
-  //   path: '/test',
-  //   name: 'test',
-  //   component: () => import('../views/Test/TestWindow.vue'),
-  //   props: route => ({ userid: route.params })
-  //   // props: true
-  // },
   {
     path: '/ImageView',
     name: 'ImageView',
@@ -33,12 +27,10 @@ export const routes: Array<RouteConfig> = [
     props: route => ({ tweetId: route.params })
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/ProfileView',
+    name: 'ProfileView',
+    component: ProfileView,
+    props: route => ({ screenName: route.params })
   }
 ];
 
