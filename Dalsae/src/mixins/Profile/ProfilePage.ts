@@ -7,23 +7,23 @@ import { moduleProfile } from '@/store/modules/ProfileStore';
 
 @Component
 export class ProfilePage extends Vue {
-  get isLoad() {
-    return moduleProfile.isLoad;
+  get isLoadProfile() {
+    return moduleProfile.isLoadProfile;
   }
 
-  set isLoad(isLoad: boolean) {
+  set isLoadProfile(isLoad: boolean) {
     moduleProfile.SetLoad(isLoad);
   }
 
   async LoadUserInfo(screenName: string) {
-    this.isLoad = true;
+    this.isLoadProfile = true;
     const resp = await moduleApi.users.Show({ screen_name: screenName });
     if (!resp.data) {
       //TODO 에러 표시
     } else {
       moduleProfile.ChangeUser(resp.data);
     }
-    this.isLoad = false;
+    this.isLoadProfile = false;
   }
 
   get userText() {

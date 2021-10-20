@@ -12,7 +12,7 @@ import { ContextItem } from '@/mixins';
 @Module({ dynamic: true, store, name: 'profile' })
 class ProfileStore extends VuexModule {
   selectUser: I.User = new I.User();
-  isLoad = false;
+  isLoadProfile = false;
   selectMenu = 0;
 
   @Mutation
@@ -27,7 +27,7 @@ class ProfileStore extends VuexModule {
 
   @Mutation
   private setLoad(isLoad: boolean) {
-    this.isLoad = isLoad;
+    this.isLoadProfile = isLoad;
   }
 
   @Action

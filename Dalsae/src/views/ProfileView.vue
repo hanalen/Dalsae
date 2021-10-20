@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-progress-circular
-      v-if="isLoad"
+      v-if="isLoadProfile"
       :width="5"
       color="primary"
       indeterminate
