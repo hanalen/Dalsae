@@ -9,6 +9,8 @@ export default class ImagePreload {
     const window = new remote.BrowserWindow({
       show: true,
       title: 'dalsae-image',
+      width: 1900,
+      height: 1200,
       webPreferences: {
         webSecurity: false,
         nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,

@@ -34,8 +34,8 @@ console.log(path.join(__dirname, 'preload'));
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1900,
+    height: 1200,
     title: 'dalsae',
     webPreferences: {
       // Use pluginOptions.`nodeIntegration, leave this alone
