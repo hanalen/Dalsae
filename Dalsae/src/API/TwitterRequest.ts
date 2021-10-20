@@ -299,6 +299,18 @@ export class TwitterRequest {
             data
           })
       },
+      followers: {
+        List: (data: P.ReqList) =>
+          this.get<P.ReqShow, I.FollowerList>(baseUrl + '/followers/list.json', {
+            data
+          })
+      },
+      friends: {
+        List: (data: P.ReqList) =>
+          this.get<P.ReqShow, I.FollowerList>(baseUrl + '/friends/list.json', {
+            data
+          })
+      },
       oauth: {
         ReqToken: (data: P.ReqToken) =>
           this.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {

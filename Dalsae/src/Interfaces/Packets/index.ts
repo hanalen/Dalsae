@@ -8,3 +8,4 @@ export * from './Media';
 export * from './Block';
 export * from './Favorites';
 export * from './Users';
+export * from './Followers';

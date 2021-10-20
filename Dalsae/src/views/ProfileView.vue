@@ -111,6 +111,7 @@ import { Vue, Component, Mixins } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { moduleProfile } from '@/store/modules/ProfileStore';
 
 @Component
 export default class ProfileView extends MIX.ProfilePage {
@@ -136,14 +137,14 @@ export default class ProfileView extends MIX.ProfilePage {
 
   */
   async created() {
-    this.$nextTick(() => {
-      console.log('profile window created');
-      const id = this.$route.query.screenName.toString();
-      console.log('id: ' + id);
-      const switter = window.preload.profile.GetSwitter(id);
-      moduleSwitter.InitSwitter(switter);
-      this.LoadUserInfo(id);
-    });
+    console.log('profile window created');
+    const id = this.$route.query.screenName.toString();
+    console.log('id: ' + id);
+    const switter = window.preload.profile.GetSwitter(id);
+    moduleSwitter.InitSwitter(switter);
+    await this.LoadUserInfo(id);
+    this.LoadFollowerList();
+    this.LoadFollowingList();
   }
 }
 </script>

@@ -12,7 +12,7 @@ export class ProfilePage extends Vue {
   }
 
   set isLoadProfile(isLoad: boolean) {
-    moduleProfile.SetLoad(isLoad);
+    moduleProfile.SetLoadUser(isLoad);
   }
 
   async LoadUserInfo(screenName: string) {
@@ -21,13 +21,42 @@ export class ProfilePage extends Vue {
     if (!resp.data) {
       //TODO 에러 표시
     } else {
-      moduleProfile.ChangeUser(resp.data);
+      moduleProfile.ChangeShowUser(resp.data);
+      moduleProfile.ChangeSelectUser(resp.data);
     }
     this.isLoadProfile = false;
   }
 
+  async LoadFollowerList() {
+    const resp = await moduleApi.followers.List({
+      screen_name: moduleProfile.selectUser.screen_name,
+      count: 200
+    });
+    if (resp.data) {
+      moduleProfile.AddFollowerList(resp.data);
+    }
+  }
+
+  async LoadFollowingList() {
+    const resp = await moduleApi.friends.List({
+      screen_name: moduleProfile.selectUser.screen_name,
+      count: 200
+    });
+    if (resp.data) {
+      moduleProfile.AddFollowingList(resp.data);
+    }
+  }
+
+  get listFollower() {
+    return moduleProfile.listFollower.users;
+  }
+
+  get listFollowing() {
+    return moduleProfile.listFollowing.users;
+  }
+
   get userText() {
-    const { name, screen_name } = moduleProfile.selectUser;
+    const { name, screen_name } = moduleProfile.showUser;
     return name + '<br />' + screen_name;
   }
 
@@ -40,51 +69,49 @@ export class ProfilePage extends Vue {
   }
 
   get userHeader() {
-    return moduleProfile.selectUser.profile_banner_url;
+    return moduleProfile.showUser.profile_banner_url;
   }
 
   get userPropic() {
-    return moduleProfile.selectUser.profile_image_url_https.replace('_normal', '_bigger');
+    return moduleProfile.showUser.profile_image_url_https.replace('_normal', '_bigger');
   }
 
   get countTweet() {
-    if (!moduleProfile.selectUser) return '';
-    return moduleProfile.selectUser.statuses_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    if (!moduleProfile.showUser) return '';
+    return moduleProfile.showUser.statuses_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
   get countFollowing() {
-    return moduleProfile.selectUser.friends_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return moduleProfile.showUser.friends_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
   get countFollower() {
-    return moduleProfile.selectUser.followers_count
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return moduleProfile.showUser.followers_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   get name() {
-    return moduleProfile.selectUser.protected
-      ? moduleProfile.selectUser.name + '🔒'
-      : moduleProfile.selectUser.name;
+    return moduleProfile.showUser.protected
+      ? moduleProfile.showUser.name + '🔒'
+      : moduleProfile.showUser.name;
   }
   get screenName() {
-    return moduleProfile.selectUser.screen_name;
+    return moduleProfile.showUser.screen_name;
   }
 
   get userBio() {
-    const text = moduleProfile.selectUser.description;
-    if (moduleProfile.selectUser.entities?.description.length > 0) {
-      moduleProfile.selectUser.entities?.description.forEach(url => {
+    const text = moduleProfile.showUser.description;
+    if (moduleProfile.showUser.entities?.description.length > 0) {
+      moduleProfile.showUser.entities?.description.forEach(url => {
         text.replace(url.display_url, url.expanded_url);
       });
     }
-    return moduleProfile.selectUser.description;
+    return moduleProfile.showUser.description;
   }
 
   get place() {
-    return moduleProfile.selectUser.location;
+    return moduleProfile.showUser.location;
   }
 
   get url() {
-    const entities = moduleProfile.selectUser.entities;
+    const entities = moduleProfile.showUser.entities;
     if (!entities) return '';
     if (entities.url.urls.length > 0) {
       return entities.url.urls[0].expanded_url;

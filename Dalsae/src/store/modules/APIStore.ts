@@ -241,6 +241,20 @@ class Users {
   }
 }
 
+class Followers {
+  async List(data: P.ReqList): Promise<P.APIResp<I.FollowerList>> {
+    const result = await twitterRequest.call.followers.List(data);
+    return result;
+  }
+}
+
+class Friends {
+  async List(data: P.ReqList): Promise<P.APIResp<I.FollowerList>> {
+    const result = await twitterRequest.call.friends.List(data);
+    return result;
+  }
+}
+
 class OAuth {
   async ReqToken(data: P.ReqToken): Promise<P.APIResp<P.OAuthRes>> {
     return twitterRequest.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {
@@ -276,5 +290,7 @@ class APIStore extends VuexModule {
   block = new Block();
   oauth = new OAuth();
   users = new Users();
+  followers = new Followers();
+  friends = new Friends();
 }
 export const moduleApi = getModule(APIStore);
