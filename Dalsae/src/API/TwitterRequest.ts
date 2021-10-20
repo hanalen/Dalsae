@@ -293,6 +293,12 @@ export class TwitterRequest {
             true
           )
       },
+      users: {
+        Show: (data: P.ReqShow) =>
+          this.get<P.ReqShow, I.User>(baseUrl + '/users/show.json', {
+            data
+          })
+      },
       oauth: {
         ReqToken: (data: P.ReqToken) =>
           this.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {
