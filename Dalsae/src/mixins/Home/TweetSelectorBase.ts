@@ -180,6 +180,18 @@ export class TweetSelectorBase extends Vue {
     });
 
     listContext.push({ title: '', onClick: () => {}, isDivider: true });
+    if (this.tweet.entities.hashtags.length) {
+      this.orgTweet.entities.hashtags.forEach(hash => {
+        listContext.push({
+          title: `#${hash.text}`,
+          onClick: this.OnClickHash,
+          hotKey: this.GetHotKeyText(hotKey.hash),
+          value: value++,
+          isDivider: false
+        });
+      });
+      listContext.push({ title: '', onClick: () => {}, isDivider: true });
+    }
 
     listContext.push({
       title: '웹에서 열기',
@@ -248,6 +260,16 @@ export class TweetSelectorBase extends Vue {
 
   OnClickProfile(value: number) {
     console.log('profile');
+  }
+
+  OnClickHash(value: number) {
+    console.log(value);
+    const context = this.listContext.find(x => x.value === value);
+    if (!context) return;
+    const hash = this.tweet.entities.hashtags.find(x => x.text === context.title.replace('#', ''));
+    console.log('hash', hash);
+    if (!hash) return;
+    moduleUtil.AddHash(hash);
   }
 
   OnClickWeb(value: number) {

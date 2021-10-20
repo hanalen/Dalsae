@@ -78,6 +78,7 @@ export class DalsaeApp extends Vue {
 
   async OnKeyDownHotKey(hotKeyType: I.E_HOTKEY) {
     console.log('hotkey', hotKeyType);
+    const selectTweet = moduleUI.selectTweet.data;
     switch (hotKeyType) {
       case I.E_HOTKEY.SHOWTL:
         moduleUI.ChangeMenu(0);
@@ -100,16 +101,16 @@ export class DalsaeApp extends Vue {
         moduleUtil.LoadTweets();
         break;
       case I.E_HOTKEY.COPY:
-        moduleUtil.CopyTweet(moduleUI.selectTweet.data);
+        moduleUtil.CopyTweet(selectTweet);
         break;
       case I.E_HOTKEY.LOADCONV:
         console.log('conv');
-        moduleUtil.LoadConv(moduleUI.selectTweet.data);
+        moduleUtil.LoadConv(selectTweet);
         moduleUI.ChangeMenu(5);
         break;
       case I.E_HOTKEY.SHOWQT:
         moduleTweet.ShowQt({
-          tweet: moduleUI.selectTweet.data,
+          tweet: selectTweet,
           listTweet: undefined,
           user_id_str: moduleSwitter.selectID,
           type: ETweetType.E_CONV
@@ -117,36 +118,37 @@ export class DalsaeApp extends Vue {
         moduleUI.ChangeMenu(5);
         break;
       case I.E_HOTKEY.SENDQT:
-        moduleUtil.OnClickQt(moduleUI.selectTweet.data);
+        moduleUtil.OnClickQt(selectTweet);
         break;
       case I.E_HOTKEY.HASH:
+        moduleUtil.AddHashs(selectTweet);
         break;
       case I.E_HOTKEY.DELETE:
-        moduleApi.statuses.Destroy(moduleUI.selectTweet.data);
+        moduleApi.statuses.Destroy(selectTweet);
         break;
       case I.E_HOTKEY.INPUT:
         break;
       case I.E_HOTKEY.SHOWCONTEXT:
-        eventBus.$emit('ShowContextMenu', moduleUI.selectTweet.key);
+        eventBus.$emit('ShowContextMenu', selectTweet.id_str);
         break;
       case I.E_HOTKEY.HOME:
         break;
       case I.E_HOTKEY.END:
         break;
       case I.E_HOTKEY.SHOWIMAGE:
-        moduleUtil.OpenImage(moduleUI.selectTweet.data);
+        moduleUtil.OpenImage(selectTweet);
         break;
       case I.E_HOTKEY.RETWEET:
-        moduleApi.statuses.Retweet(moduleUI.selectTweet.data);
+        moduleApi.statuses.Retweet(selectTweet);
         break;
       case I.E_HOTKEY.SENDFAVORITE:
-        moduleApi.favorites.Create(moduleUI.selectTweet.data);
+        moduleApi.favorites.Create(selectTweet);
         break;
       case I.E_HOTKEY.REPLY:
-        moduleUtil.Reply(moduleUI.selectTweet.data);
+        moduleUtil.Reply(selectTweet);
         break;
       case I.E_HOTKEY.REPLYALL:
-        moduleUtil.ReplyAll(moduleUI.selectTweet.data);
+        moduleUtil.ReplyAll(selectTweet);
         break;
     }
   }

@@ -122,5 +122,21 @@ class UtilStore extends VuexModule {
     }
     copy(text);
   }
+
+  @Action
+  AddHashs(tweet: I.Tweet) {
+    if (!tweet.entities.hashtags.length) return;
+    let text = '';
+    tweet.entities.hashtags.forEach(hash => {
+      text += `#${hash.text} `;
+    });
+    moduleUI.SetInputText(text);
+  }
+
+  @Action
+  AddHash(hash: I.Hashtag) {
+    if (!hash) return;
+    moduleUI.SetInputText(`#${hash.text}`);
+  }
 }
 export const moduleUtil = getModule(UtilStore);
