@@ -3,7 +3,7 @@ import Log from 'electron-log';
 import path from 'path';
 import * as I from '@/Interfaces';
 export default class ProfilePreload {
-  OpenProfileWindow(userScreenName: string) {
+  OpenProfileWindow(screenName: string, switter: I.Switter) {
     console.log('open prifle');
     // Log.info('tweet id: ' + tweetId);
     const window = new remote.BrowserWindow({
@@ -19,13 +19,18 @@ export default class ProfilePreload {
       }
     });
     window.loadURL(
-      `${process.env.WEBPACK_DEV_SERVER_URL as string}ProfileView?screenName=${userScreenName}`
+      `${process.env.WEBPACK_DEV_SERVER_URL as string}ProfileView?screenName=${screenName}`
     );
     console.log(
       'url: ',
-      `${process.env.WEBPACK_DEV_SERVER_URL as string}ProfileView?screenName=${userScreenName}`
+      `${process.env.WEBPACK_DEV_SERVER_URL as string}ProfileView?screenName=${screenName}`
     );
     window.webContents.openDevTools();
-    ipcRenderer.send('AddChannel', { name: `profile_${userScreenName}`, value: userScreenName });
+    ipcRenderer.send('AddChannel', { name: `switter_${screenName}`, value: switter });
+  }
+
+  GetSwitter(screenName: string) {
+    const switter: I.Switter = ipcRenderer.sendSync('switter_' + screenName);
+    return switter;
   }
 }
