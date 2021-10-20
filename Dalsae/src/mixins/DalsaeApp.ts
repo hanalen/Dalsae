@@ -78,7 +78,8 @@ export class DalsaeApp extends Vue {
 
   async OnKeyDownHotKey(hotKeyType: I.E_HOTKEY) {
     console.log('hotkey', hotKeyType);
-    const selectTweet = moduleUI.selectTweet.data;
+    let selectTweet: I.Tweet | undefined = undefined;
+    if (moduleUI.selectTweet) selectTweet = moduleUI.selectTweet.data;
     switch (hotKeyType) {
       case I.E_HOTKEY.SHOWTL:
         moduleUI.ChangeMenu(0);
@@ -101,12 +102,14 @@ export class DalsaeApp extends Vue {
         moduleUtil.LoadTweets();
         break;
       case I.E_HOTKEY.COPY:
-        moduleUtil.CopyTweet(selectTweet);
+        if (selectTweet) moduleUtil.CopyTweet(selectTweet);
         break;
       case I.E_HOTKEY.LOADCONV:
         console.log('conv');
-        moduleUtil.LoadConv(selectTweet);
-        moduleUI.ChangeMenu(5);
+        if (selectTweet) {
+          moduleUtil.LoadConv(selectTweet);
+          moduleUI.ChangeMenu(5);
+        }
         break;
       case I.E_HOTKEY.SHOWQT:
         moduleTweet.ShowQt({
@@ -118,37 +121,37 @@ export class DalsaeApp extends Vue {
         moduleUI.ChangeMenu(5);
         break;
       case I.E_HOTKEY.SENDQT:
-        moduleUtil.OnClickQt(selectTweet);
+        if (selectTweet) moduleUtil.OnClickQt(selectTweet);
         break;
       case I.E_HOTKEY.HASH:
-        moduleUtil.AddHashs(selectTweet);
+        if (selectTweet) moduleUtil.AddHashs(selectTweet);
         break;
       case I.E_HOTKEY.DELETE:
-        moduleApi.statuses.Destroy(selectTweet);
+        if (selectTweet) moduleApi.statuses.Destroy(selectTweet);
         break;
       case I.E_HOTKEY.INPUT:
         break;
       case I.E_HOTKEY.SHOWCONTEXT:
-        eventBus.$emit('ShowContextMenu', selectTweet.id_str);
+        if (selectTweet) eventBus.$emit('ShowContextMenu', selectTweet.id_str);
         break;
       case I.E_HOTKEY.HOME:
         break;
       case I.E_HOTKEY.END:
         break;
       case I.E_HOTKEY.SHOWIMAGE:
-        moduleUtil.OpenImage(selectTweet);
+        if (selectTweet) moduleUtil.OpenImage(selectTweet);
         break;
       case I.E_HOTKEY.RETWEET:
-        moduleApi.statuses.Retweet(selectTweet);
+        if (selectTweet) moduleApi.statuses.Retweet(selectTweet);
         break;
       case I.E_HOTKEY.SENDFAVORITE:
-        moduleApi.favorites.Create(selectTweet);
+        if (selectTweet) moduleApi.favorites.Create(selectTweet);
         break;
       case I.E_HOTKEY.REPLY:
-        moduleUtil.Reply(selectTweet);
+        if (selectTweet) moduleUtil.Reply(selectTweet);
         break;
       case I.E_HOTKEY.REPLYALL:
-        moduleUtil.ReplyAll(selectTweet);
+        if (selectTweet) moduleUtil.ReplyAll(selectTweet);
         break;
     }
   }
