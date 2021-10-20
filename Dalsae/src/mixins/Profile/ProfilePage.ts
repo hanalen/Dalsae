@@ -96,6 +96,14 @@ export class ProfilePage extends Vue {
     return moduleProfile.showUser.screen_name;
   }
 
+  get selectName() {
+    return moduleProfile.selectUser.name;
+  }
+
+  get selectScreenName() {
+    return moduleProfile.selectUser.screen_name;
+  }
+
   get userBio() {
     const text = moduleProfile.showUser.description;
     if (moduleProfile.showUser.entities?.description.length > 0) {
@@ -113,7 +121,7 @@ export class ProfilePage extends Vue {
   get url() {
     const entities = moduleProfile.showUser.entities;
     if (!entities) return '';
-    if (entities.url.urls.length > 0) {
+    if (entities.url?.urls?.length > 0) {
       return entities.url.urls[0].expanded_url;
     } else {
       return '';

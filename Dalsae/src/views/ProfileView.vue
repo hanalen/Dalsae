@@ -57,9 +57,9 @@
         <v-tab :key="0">
           <div class="tab-name">
             <div class="tab-name-left">
-              {{ name }}
+              {{ selectScreenName }}
               <br />
-              {{ screenName }}
+              {{ selectName }}
             </div>
             <div class="tab-name-right">
               의 팔로잉
@@ -69,9 +69,9 @@
         <v-tab :key="1">
           <div class="tab-name">
             <div class="tab-name-left">
-              {{ screenName }}
+              {{ selectScreenName }}
               <br />
-              {{ name }}
+              {{ selectName }}
             </div>
             <div class="tab-name-right">
               의 팔로워
@@ -81,10 +81,10 @@
       </v-tabs>
       <v-tabs-items v-model="selectMenu">
         <v-tab-item :key="0">
-          팔로잉 목록
+          <profile-user v-for="(user, i) in listFollowing" :user="user" :key="i" />
         </v-tab-item>
         <v-tab-item :key="1">
-          팔로워 목록
+          <profile-user v-for="(user, i) in listFollower" :user="user" :key="i" />
         </v-tab-item>
       </v-tabs-items>
     </div>
