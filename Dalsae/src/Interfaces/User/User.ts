@@ -8,6 +8,7 @@ export class User {
   location: string;
   description: string;
   url?: I.Url;
+  entities: I.UserEntitie;
   protected: boolean;
   followers_count: number; //팔로워 수
   friends_count: number; //팔로잉 수
@@ -60,5 +61,6 @@ export class User {
     this.screen_name = '';
     this.statuses_count = 0;
     this.verified = false;
+    this.entities = { description: [], url: { urls: [] } };
   }
 }

@@ -42,7 +42,8 @@ export class DalsaeUser {
       protected: false,
       screen_name: '',
       statuses_count: 0,
-      verified: false
+      verified: false,
+      entities: { url: { urls: [] }, description: [] }
     };
   }
 }
