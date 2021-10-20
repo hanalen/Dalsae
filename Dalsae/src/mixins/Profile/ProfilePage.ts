@@ -26,6 +26,11 @@ export class ProfilePage extends Vue {
     this.isLoad = false;
   }
 
+  get userText() {
+    const { name, screen_name } = moduleProfile.selectUser;
+    return name + '<br />' + screen_name;
+  }
+
   get selectMenu() {
     return moduleProfile.selectMenu;
   }

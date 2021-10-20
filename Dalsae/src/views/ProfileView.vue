@@ -55,10 +55,28 @@
       </div>
       <v-tabs v-model="selectMenu">
         <v-tab :key="0">
-          팔로잉
+          <div class="tab-name">
+            <div class="tab-name-left">
+              {{ name }}
+              <br />
+              {{ screenName }}
+            </div>
+            <div class="tab-name-right">
+              의 팔로잉
+            </div>
+          </div>
         </v-tab>
         <v-tab :key="1">
-          팔로워
+          <div class="tab-name">
+            <div class="tab-name-left">
+              {{ screenName }}
+              <br />
+              {{ name }}
+            </div>
+            <div class="tab-name-right">
+              의 팔로워
+            </div>
+          </div>
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="selectMenu">
@@ -78,7 +96,8 @@
 .profile-left,
 .profile-count-left,
 profile-count-right,
-profile-count {
+profile-count,
+tab-name {
   display: flex;
 }
 .profile-count-left,
