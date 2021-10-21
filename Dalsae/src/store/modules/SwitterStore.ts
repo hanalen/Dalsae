@@ -151,7 +151,7 @@ class SwitterStore extends VuexModule {
 
   @Mutation
   initFollowDatas(datas: FollowDatas) {
-    this.followDatas = datas;
+    this.followDatas.dicUsers = datas.dicUsers;
   }
 
   @Action
@@ -160,22 +160,22 @@ class SwitterStore extends VuexModule {
   }
 
   @Mutation
-  private addFollowingList(listUser: I.User[]) {
-    this.followDatas.AddFollowing(listUser, this.selectID);
+  private addFollowingList(listUser: I.FollowerList) {
+    this.followDatas.AddFollowing(listUser.users, this.selectID);
   }
 
   @Action
-  AddFollowingList(listUser: I.User[]) {
+  AddFollowingList(listUser: I.FollowerList) {
     this.context.commit('addFollowingList', listUser);
   }
 
   @Mutation
-  private addFollowerList(listUser: I.User[]) {
-    this.followDatas.AddFollower(listUser, this.selectID);
+  private addFollowerList(listUser: I.FollowerList) {
+    this.followDatas.AddFollower(listUser.users, this.selectID);
   }
 
   @Action
-  AddFollowerList(listUser: I.User[]) {
+  AddFollowerList(listUser: I.FollowerList) {
     this.context.commit('addFollowerList', listUser);
   }
 
