@@ -264,7 +264,12 @@ export class TweetSelectorBase extends Vue {
     if (!context) return;
     const userScreenName = context.title.substring(0, context.title.indexOf(' /'));
     console.log('user', userScreenName);
-    window.preload.profile.OpenProfileWindow(userScreenName, moduleSwitter.switter);
+    window.preload.profile.OpenProfileWindow(
+      userScreenName,
+      moduleSwitter.switter,
+      moduleSwitter.followDatas,
+      moduleSwitter.listBlockIds
+    );
   }
 
   OnClickHash(value: number) {

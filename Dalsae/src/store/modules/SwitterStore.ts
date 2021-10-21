@@ -4,6 +4,7 @@ import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-dec
 import * as A from '@/store/Interface';
 import store from '@/store';
 import { moduleTweet } from '@/store/modules/TweetStore';
+import { FollowDatas } from '@/Interfaces/DalsaeDatas/FollowDatas';
 export interface ISwitterState {
   switter: I.Switter;
   tempUser: I.DalsaeUser;
@@ -15,6 +16,14 @@ class SwitterStore extends VuexModule {
   switter: I.Switter = { selectUser: new I.DalsaeUser(), listUser: [] };
   tempUser: I.DalsaeUser = new I.DalsaeUser();
   listBlockIds: string[] = [];
+  followDatas = new FollowDatas();
+
+  get listFollower() {
+    return this.followDatas.dicUsers.get(this.selectID)?.listFollower;
+  }
+  get listFolloing() {
+    return this.followDatas.dicUsers.get(this.selectID)?.listFollowing;
+  }
 
   // getters
   get selectID() {
@@ -138,6 +147,46 @@ class SwitterStore extends VuexModule {
   @Action
   public ChangeAccount(user: I.DalsaeUser) {
     this.context.commit('changeAccount', user);
+  }
+
+  @Mutation
+  initFollowDatas(datas: FollowDatas) {
+    this.followDatas = datas;
+  }
+
+  @Action
+  InitFollowDatas(datas: FollowDatas) {
+    this.context.commit('initFollowDatas', datas);
+  }
+
+  @Mutation
+  private addFollowingList(listUser: I.User[]) {
+    this.followDatas.AddFollowing(listUser, this.selectID);
+  }
+
+  @Action
+  AddFollowingList(listUser: I.User[]) {
+    this.context.commit('addFollowingList', listUser);
+  }
+
+  @Mutation
+  private addFollowerList(listUser: I.User[]) {
+    this.followDatas.AddFollower(listUser, this.selectID);
+  }
+
+  @Action
+  AddFollowerList(listUser: I.User[]) {
+    this.context.commit('addFollowerList', listUser);
+  }
+
+  @Mutation
+  private initBlockIds(ids: string[]) {
+    this.listBlockIds = ids;
+  }
+
+  @Action
+  InitBlockIds(ids: string[]) {
+    this.context.commit('initBlockIds', ids);
   }
 }
 
