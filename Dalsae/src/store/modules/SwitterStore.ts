@@ -188,6 +188,16 @@ class SwitterStore extends VuexModule {
   InitBlockIds(ids: string[]) {
     this.context.commit('initBlockIds', ids);
   }
+
+  @Mutation
+  private updateFollowInfo(user: I.User) {
+    this.followDatas.UpdateUserInfo(user, this.selectID);
+  }
+
+  @Action
+  UpdateFollowInfo(user: I.User) {
+    this.context.commit('updateFollowInfo', user);
+  }
 }
 
 export const moduleSwitter = getModule(SwitterStore);

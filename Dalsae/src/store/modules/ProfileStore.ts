@@ -127,7 +127,6 @@ class ProfileStore extends VuexModule {
 
   @Mutation
   private updateFollowUserInfo(user: I.User) {
-    user.following = !user.following;
     const idx = this.listFollower.users.findIndex(x => x.id_str === user.id_str);
     if (idx > -1) {
       this.listFollower.users.splice(idx, 1, user);
@@ -142,6 +141,7 @@ class ProfileStore extends VuexModule {
   @Action
   UpdateFollowUserInfo(user: I.User) {
     this.context.commit('updateFollowUserInfo', user);
+    this.context.commit('updateFollowInfo', user);
   }
 }
 
