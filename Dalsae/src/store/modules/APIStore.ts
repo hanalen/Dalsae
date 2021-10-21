@@ -11,6 +11,7 @@ import twitterRequest from '@/API/TwitterRequest';
 import { moduleTweet } from './TweetStore';
 import { moduleUI } from './UIStore';
 import { ETweetType } from '@/store/Interface';
+import { moduleProfile } from './ProfileStore';
 
 class Account {
   async VerifyCredentials(): Promise<P.APIResp<I.User>> {
@@ -255,6 +256,23 @@ class Friends {
   }
 }
 
+class Friendships {
+  async Create(data: P.ReqFollowCreate): Promise<P.APIResp<I.User>> {
+    const result = await twitterRequest.call.friendships.Create(data);
+    if (result.data) {
+      moduleProfile.UpdateFollowUserInfo(result.data);
+    }
+    return result;
+  }
+  async Destroy(data: P.ReqFollowDestroy): Promise<P.APIResp<I.User>> {
+    const result = await twitterRequest.call.friendships.Destroy(data);
+    if (result.data) {
+      moduleProfile.UpdateFollowUserInfo(result.data);
+    }
+    return result;
+  }
+}
+
 class OAuth {
   async ReqToken(data: P.ReqToken): Promise<P.APIResp<P.OAuthRes>> {
     return twitterRequest.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {
@@ -292,5 +310,6 @@ class APIStore extends VuexModule {
   users = new Users();
   followers = new Followers();
   friends = new Friends();
+  friendships = new Friendships();
 }
 export const moduleApi = getModule(APIStore);

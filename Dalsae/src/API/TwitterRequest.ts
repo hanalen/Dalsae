@@ -311,6 +311,16 @@ export class TwitterRequest {
             data
           })
       },
+      friendships: {
+        Create: (data: P.ReqFollowCreate) =>
+          this.post<P.ReqShow, I.User>(baseUrl + '/friendships/create.json', {
+            data
+          }),
+        Destroy: (data: P.ReqFollowDestroy) =>
+          this.post<P.ReqShow, I.User>(baseUrl + '/friendships/destroy.json', {
+            data
+          })
+      },
       oauth: {
         ReqToken: (data: P.ReqToken) =>
           this.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {

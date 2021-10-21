@@ -16,6 +16,7 @@ class ProfileStore extends VuexModule {
   isLoadProfile = false;
   isLoadFollowing = false;
   isLoadFollower = false;
+  isFollwRequest = false;
   selectMenu = 0;
   listFollower: I.FollowerList = { next_cursor_str: '', users: [], previous_cursor_str: '' };
   listFollowing: I.FollowerList = { next_cursor_str: '', users: [], previous_cursor_str: '' };
@@ -112,6 +113,35 @@ class ProfileStore extends VuexModule {
   @Action
   Clear() {
     this.context.commit('clear');
+  }
+
+  @Mutation
+  private setFollowRequest(isLoad: boolean) {
+    this.isFollwRequest = isLoad;
+  }
+
+  @Action
+  SetFollowRequest(isLoad: boolean) {
+    this.context.commit('setFollowRequest', isLoad);
+  }
+
+  @Mutation
+  private updateFollowUserInfo(user: I.User) {
+    user.following = !user.following;
+    const idx = this.listFollower.users.findIndex(x => x.id_str === user.id_str);
+    if (idx > -1) {
+      this.listFollower.users.splice(idx, 1, user);
+    }
+    const idx2 = this.listFollowing.users.findIndex(x => x.id_str === user.id_str);
+    if (idx2 > -1) {
+      this.listFollowing.users.splice(idx2, 1, user);
+    }
+    //TODO 메인 윈도우store에 데이터 넘겨야 함
+  }
+
+  @Action
+  UpdateFollowUserInfo(user: I.User) {
+    this.context.commit('updateFollowUserInfo', user);
   }
 }
 

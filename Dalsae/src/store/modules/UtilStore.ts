@@ -11,6 +11,7 @@ import { ContextItem } from '@/mixins';
 import { moduleUI } from './UIStore';
 import { moduleApi } from './APIStore';
 import copy from 'copy-to-clipboard';
+import { moduleProfile } from './ProfileStore';
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
   @Action
@@ -141,6 +142,19 @@ class UtilStore extends VuexModule {
   AddHash(hash: I.Hashtag) {
     if (!hash) return;
     moduleUI.SetInputText(`#${hash.text}`);
+  }
+
+  @Action
+  Follow(user: I.User) {
+    if (!user) return;
+    if (moduleProfile.isFollwRequest) return; //글로벌로 요청 중
+    moduleProfile.SetFollowRequest(true);
+    if (user.following) {
+      moduleApi.friendships.Destroy({ screen_name: user.screen_name });
+    } else {
+      moduleApi.friendships.Create({ screen_name: user.screen_name });
+    }
+    moduleProfile.SetFollowRequest(false);
   }
 }
 export const moduleUtil = getModule(UtilStore);

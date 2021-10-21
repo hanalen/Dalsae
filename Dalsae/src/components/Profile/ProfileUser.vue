@@ -21,7 +21,9 @@
           <span>{{ screenName }}</span>
         </div>
         <div class="top-right">
-          <button>팔롱</button>
+          <v-btn outlined color="primary" text @click="OnClickFollow">
+            {{ followText }}
+          </v-btn>
         </div>
       </div>
       <div class="bottom">
@@ -38,9 +40,12 @@
 </style>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/camelcase */
 import { Vue, Mixins, Component, Ref, Provide, Prop } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import { moduleProfile } from '@/store/modules/ProfileStore';
+import { moduleApi } from '@/store/modules/APIStore';
+import { moduleUtil } from '@/store/modules/UtilStore';
 
 @Component
 export default class ProfileUser extends Vue {
@@ -50,6 +55,23 @@ export default class ProfileUser extends Vue {
   OnClickUser(e: MouseEvent) {
     console.log(e);
     moduleProfile.ChangeShowUser(this.user);
+  }
+
+  get isLoad() {
+    return moduleProfile.isFollwRequest;
+  }
+
+  set isLoad(isLoad: boolean) {
+    moduleProfile.SetFollowRequest(isLoad);
+  }
+
+  async OnClickFollow() {
+    console.log('foolow');
+    moduleUtil.Follow(this.user);
+  }
+
+  get followText() {
+    return this.user.following ? '언팔로우' : '팔로잉';
   }
 
   get propic() {
