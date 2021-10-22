@@ -8,6 +8,7 @@ import { ETweetType } from '@/store/Interface';
 import { IPanelState, moduleUI } from '@/store/modules/UIStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { eventBus } from '@/plugins';
+import { moduleUtil } from '@/store/modules/UtilStore';
 
 @Component
 export class TweetPanelBase extends Vue {
@@ -74,7 +75,7 @@ export class TweetPanelBase extends Vue {
   }
 
   KeyDown(e: KeyboardEvent) {
-    if (document?.activeElement?.tagName == 'TEXTAREA') return;
+    if (!moduleUtil.isFocusPanel) return;
     if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
       if (e.code === 'ArrowUp') {
         e.preventDefault();

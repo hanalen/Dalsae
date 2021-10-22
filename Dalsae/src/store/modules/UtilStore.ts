@@ -12,8 +12,15 @@ import { moduleUI } from './UIStore';
 import { moduleApi } from './APIStore';
 import copy from 'copy-to-clipboard';
 import { moduleProfile } from './ProfileStore';
+import { moduleModal } from './ModalStore';
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
+  get isFocusPanel() {
+    if (document?.activeElement?.tagName == 'TEXTAREA') return false;
+    const { bOption, bMessage, bOptionDetail, bPin } = moduleModal;
+    if (bOption || bMessage || bOption || bOptionDetail || bPin) return false;
+    return true;
+  }
   @Action
   OpenImage(tweet: I.Tweet) {
     window.preload.image.OpenImageWindow(tweet, moduleOption.uiOption);

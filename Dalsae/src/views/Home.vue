@@ -57,7 +57,7 @@ export default class Home extends Mixins(DalsaeApp) {
   }
   KeyDown(e: KeyboardEvent) {
     const hotKey = moduleOption.hotKey as any;
-    if (document?.activeElement?.tagName == 'TEXTAREA') return;
+    if (!moduleUtil.isFocusPanel) return;
     Object.keys(hotKey).forEach(key => {
       const currentHotKey = hotKey[key] as I.Key;
       if (
