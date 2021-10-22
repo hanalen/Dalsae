@@ -27,6 +27,11 @@ class SwitterStore extends VuexModule {
     return this.followDatas.dicUsers.get(this.selectID)?.listFollowing;
   }
 
+  get listMuteIds() {
+    const ret = this.dicMuteIds.get(this.switter.selectUser.user_id);
+    return ret ? ret : [];
+  }
+
   // getters
   get selectID() {
     console.log('selectid', this.switter.selectUser);

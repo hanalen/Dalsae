@@ -63,14 +63,16 @@ class TweetStore extends VuexModule {
             tweet,
             user_id_str,
             moduleOption.muteOption,
-            moduleSwitter.listBlockIds
+            moduleSwitter.listBlockIds,
+            moduleSwitter.listMuteIds
           );
         else
           this.tweetDatas.AddHomeList(
             listTweet,
             user_id_str,
             moduleOption.muteOption,
-            moduleSwitter.listBlockIds
+            moduleSwitter.listBlockIds,
+            moduleSwitter.listMuteIds
           );
         break;
       case A.ETweetType.E_MENTION:
@@ -79,14 +81,16 @@ class TweetStore extends VuexModule {
             tweet,
             user_id_str,
             moduleOption.muteOption,
-            moduleSwitter.listBlockIds
+            moduleSwitter.listBlockIds,
+            moduleSwitter.listMuteIds
           );
         else
           this.tweetDatas.AddMentionList(
             listTweet,
             user_id_str,
             moduleOption.muteOption,
-            moduleSwitter.listBlockIds
+            moduleSwitter.listBlockIds,
+            moduleSwitter.listMuteIds
           );
         break;
       case A.ETweetType.E_FAVORITE:

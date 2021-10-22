@@ -39,10 +39,11 @@ export class TweetDatas {
     tweet: I.Tweet,
     userIdStr: string,
     muteOption: I.MuteOption,
-    blockIds: string[]
+    blockIds: string[],
+    muteIds: string[]
   ): boolean {
     if (this.CheckBlock(tweet, blockIds)) return false;
-    if (this.CheckMute(tweet, userIdStr, muteOption)) return false;
+    if (this.CheckMute(tweet, userIdStr, muteOption, muteIds)) return false;
     return true;
   }
 
@@ -50,10 +51,12 @@ export class TweetDatas {
     tweet: I.Tweet,
     userIdStr: string,
     muteOption: I.MuteOption,
-    blockIds: string[]
+    blockIds: string[],
+    muteIds: string[]
   ): boolean {
     if (this.CheckBlock(tweet, blockIds)) return false;
-    if (this.CheckMute(tweet, userIdStr, muteOption) && muteOption.isMuteMention) return false;
+    if (this.CheckMute(tweet, userIdStr, muteOption, muteIds) && muteOption.isMuteMention)
+      return false;
     return true;
   }
 
@@ -81,7 +84,12 @@ export class TweetDatas {
     return false;
   }
 
-  CheckMute(tweet: I.Tweet, userIdStr: string, muteOption: I.MuteOption): boolean {
+  CheckMute(
+    tweet: I.Tweet,
+    userIdStr: string,
+    muteOption: I.MuteOption,
+    muteIds: string[]
+  ): boolean {
     const { client, keyword } = muteOption;
     const orgTweet = tweet.retweeted_status ? tweet.retweeted_status : tweet;
     let source = orgTweet.source;
@@ -105,6 +113,11 @@ export class TweetDatas {
       if (tweetIds.includes(orgTweet.id_str)) return true;
     }
     //TODO 공홈에서 땡겨온 유저 뮤트 목록이랑 연동 필요
+
+    for (let i = 0; i < muteIds.length; i++) {
+      if (muteIds.indexOf(orgTweet.user.id_str)) return true;
+      else if (muteIds.indexOf(tweet.user.id_str)) return true;
+    }
     return false;
   }
 
@@ -136,7 +149,8 @@ export class TweetDatas {
     tweet: I.Tweet | undefined,
     user_id_str: string,
     muteOption: I.MuteOption,
-    blockIds: string[]
+    blockIds: string[],
+    muteIds: string[]
   ) {
     if (!tweet) throw Error('No ListTweets');
     this.CheckKey(user_id_str);
@@ -144,14 +158,14 @@ export class TweetDatas {
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     if (tweets.find(x => x.key === tweet.id_str)) return; //exists
-    if (!this.CheckShowHomeTweet(tweet, user_id_str, muteOption, blockIds)) return; //muted
+    if (!this.CheckShowHomeTweet(tweet, user_id_str, muteOption, blockIds, muteIds)) return; //muted
     //체크순서
     //멘션 -> 멘션으로 처리 넘김
     //!멘션->블락&뮤트 체크
     if (this.CheckMention(tweet, user_id_str, muteOption)) {
-      this.AddMention(tweet, user_id_str, muteOption, blockIds);
+      this.AddMention(tweet, user_id_str, muteOption, blockIds, muteIds);
     } else {
-      if (!this.CheckShowHomeTweet(tweet, user_id_str, muteOption, blockIds)) return;
+      if (!this.CheckShowHomeTweet(tweet, user_id_str, muteOption, blockIds, muteIds)) return;
     }
     const idx = this.FindIndex(tweet, tweets);
     const prevTweet = tweets[idx - 1];
@@ -170,7 +184,8 @@ export class TweetDatas {
     tweet: I.Tweet | undefined,
     user_id_str: string,
     muteOption: I.MuteOption,
-    blockIds: string[]
+    blockIds: string[],
+    muteIds: string[]
   ) {
     if (!tweet) throw Error('No ListTweets');
     this.CheckKey(user_id_str);
@@ -178,7 +193,7 @@ export class TweetDatas {
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     if (tweets.find(x => x.key === tweet.id_str)) return; //exists
-    if (!this.CheckShowMentionTweet(tweet, user_id_str, muteOption, blockIds)) return; //muted
+    if (!this.CheckShowMentionTweet(tweet, user_id_str, muteOption, blockIds, muteIds)) return; //muted
     const idx = this.FindIndex(tweet, tweets);
     const prevTweet = tweets[idx - 1];
     const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
@@ -196,7 +211,8 @@ export class TweetDatas {
     list: I.Tweet[] | undefined,
     user_id_str: string,
     muteOption: I.MuteOption,
-    blockIds: string[]
+    blockIds: string[],
+    muteIds: string[]
   ) {
     this.CheckKey(user_id_str);
     if (!list) throw Error('No ListTweets');
@@ -205,11 +221,13 @@ export class TweetDatas {
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
       if (!tweets.find(x => x.key === tweet.id_str)) {
-        if (!this.CheckShowHomeTweet(tweet, user_id_str, muteOption, blockIds)) return true; //muted
+        if (!this.CheckShowHomeTweet(tweet, user_id_str, muteOption, blockIds, muteIds))
+          return true; //muted
         if (this.CheckMention(tweet, user_id_str, muteOption)) {
-          this.AddMention(tweet, user_id_str, muteOption, blockIds);
+          this.AddMention(tweet, user_id_str, muteOption, blockIds, muteIds);
         } else {
-          if (!this.CheckShowHomeTweet(tweet, user_id_str, muteOption, blockIds)) return true;
+          if (!this.CheckShowHomeTweet(tweet, user_id_str, muteOption, blockIds, muteIds))
+            return true;
         }
         const idx = this.FindIndex(tweet, tweets);
         const prevTweet = tweets[idx - 1];
@@ -229,7 +247,8 @@ export class TweetDatas {
     list: I.Tweet[] | undefined,
     user_id_str: string,
     muteOption: I.MuteOption,
-    blockIds: string[]
+    blockIds: string[],
+    muteIds: string[]
   ) {
     if (!list) throw Error('No ListTweets');
     this.CheckKey(user_id_str);
@@ -239,7 +258,7 @@ export class TweetDatas {
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
       if (!tweets.find(x => x.key === tweet.id_str)) {
-        if (!this.CheckShowMentionTweet(tweet, user_id_str, muteOption, blockIds)) return; //muted
+        if (!this.CheckShowMentionTweet(tweet, user_id_str, muteOption, blockIds, muteIds)) return; //muted
         const idx = this.FindIndex(tweet, tweets);
         const prevTweet = tweets[idx - 1];
         const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
