@@ -94,7 +94,7 @@ class Statuses {
   }
   async Destroy(tweet: I.Tweet): Promise<void | P.APIResp<I.Tweet>> {
     if (moduleSwitter.selectUser?.user.id_str === tweet.orgUser.id_str) {
-      const { id_str } = tweet.orgUser;
+      const { id_str } = tweet.orgTweet;
       const result = await twitterRequest.call.statuses.Destroy({ id_str: id_str });
       return result;
     }
