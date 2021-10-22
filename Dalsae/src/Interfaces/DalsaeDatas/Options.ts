@@ -247,7 +247,6 @@ export class Hotkey {
 }
 
 export interface MuteOption {
-  user: string[];
   keyword: string[];
   client: string[];
   tweet: I.Tweet[];

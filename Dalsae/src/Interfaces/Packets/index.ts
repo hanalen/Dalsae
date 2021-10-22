@@ -10,3 +10,4 @@ export * from './Favorites';
 export * from './Users';
 export * from './Followers';
 export * from './Friendships';
+export * from './Mutes';

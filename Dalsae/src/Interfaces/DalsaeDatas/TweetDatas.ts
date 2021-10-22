@@ -63,7 +63,6 @@ export class TweetDatas {
     const { highlight } = muteOption;
     for (let i = 0; i < highlight.length; i++) {
       if (tweet.full_text.indexOf(highlight[i]) > -1) {
-        console.log('highlight', highlight[i], tweet.full_text);
         return true;
       }
     }
@@ -90,14 +89,12 @@ export class TweetDatas {
     source = source.substring(0, source.indexOf('<'));
     for (let i = 0; i < client.length; i++) {
       if (client.includes(source)) {
-        console.log('muted', source, tweet.source);
         return true;
       }
     }
 
     for (let i = 0; i < keyword.length; i++) {
       if (tweet.full_text.toUpperCase().indexOf(keyword[i].toUpperCase()) > -1) {
-        console.log('muted', keyword[i], tweet.full_text);
         return true;
       }
     }
@@ -281,7 +278,6 @@ export class TweetDatas {
     eventBus.$emit('AddedTweet', ETweetType.E_FAVORITE);
   }
   AddConv(tweet: I.Tweet, user_id_str: string) {
-    console.log(tweet, user_id_str);
     if (!tweet) throw Error('No Tweet');
     this.CheckKey(user_id_str);
 

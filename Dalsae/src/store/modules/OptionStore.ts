@@ -29,7 +29,6 @@ class OptionStore extends VuexModule {
     highlight: [],
     keyword: [],
     tweet: [],
-    user: [],
     client: [],
     isMuteMention: true,
     isShowMute: true
@@ -75,7 +74,6 @@ class OptionStore extends VuexModule {
         highlight: [],
         keyword: [],
         tweet: [],
-        user: [],
         client: [],
         isMuteMention: true,
         isShowMute: true

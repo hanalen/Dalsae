@@ -16,6 +16,8 @@ class SwitterStore extends VuexModule {
   switter: I.Switter = { selectUser: new I.DalsaeUser(), listUser: [] };
   tempUser: I.DalsaeUser = new I.DalsaeUser();
   listBlockIds: string[] = [];
+  dicMuteIds: Map<string, string[]> = new Map();
+
   followDatas = new FollowDatas();
 
   get listFollower() {
@@ -27,6 +29,7 @@ class SwitterStore extends VuexModule {
 
   // getters
   get selectID() {
+    console.log('selectid', this.switter.selectUser);
     let id = this.switter.selectUser.user_id;
     id = id ? id : '';
     return id;
@@ -97,6 +100,7 @@ class SwitterStore extends VuexModule {
     if (switter) {
       switter.listUser?.forEach(user => {
         moduleTweet.Init(user.user_id);
+        this.dicMuteIds.set(user.user_id, []);
       });
     }
   }
@@ -126,6 +130,7 @@ class SwitterStore extends VuexModule {
 
   @Mutation
   private changeAccount(user: I.DalsaeUser) {
+    console.log('change account', user.user_id);
     this.switter.selectUser = user;
   }
 
@@ -142,6 +147,23 @@ class SwitterStore extends VuexModule {
   @Action
   public BlockIds(ids: string[]) {
     this.context.commit('blockIds', ids);
+  }
+
+  @Mutation
+  private muteIds(ids: string[]) {
+    const selectId = this.switter.selectUser.user_id;
+    const list = this.dicMuteIds.get(selectId);
+    console.log('muteids', selectId, ids);
+    if (!list) {
+      if (selectId) this.dicMuteIds.set(selectId, ids);
+    } else {
+      list.push(...ids);
+    }
+  }
+
+  @Action
+  MuteIds(ids: string[]) {
+    this.context.commit('muteIds', ids);
   }
 
   @Action

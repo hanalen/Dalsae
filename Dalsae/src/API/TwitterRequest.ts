@@ -321,6 +321,16 @@ export class TwitterRequest {
             data
           })
       },
+      mutes: {
+        Ids: (data: P.ReqMuteIds) =>
+          this.get<P.ReqMuteIds, I.BlockIds>(baseUrl + '/mutes/users/ids.json', {
+            data
+          }),
+        List: (data: P.ReqMuteList) =>
+          this.get<P.ReqMuteList, I.BlockIds>(baseUrl + '/mutes/users/list.json', {
+            data
+          })
+      },
       oauth: {
         ReqToken: (data: P.ReqToken) =>
           this.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {

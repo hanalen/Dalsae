@@ -256,6 +256,20 @@ class Friends {
   }
 }
 
+class Mutes {
+  async Ids(data: P.ReqMuteIds): Promise<P.APIResp<I.BlockIds>> {
+    const result = await twitterRequest.call.mutes.Ids(data);
+    if (result.data) {
+      moduleSwitter.MuteIds(result.data.ids);
+    }
+    return result;
+  }
+  async List(data: P.ReqMuteList): Promise<P.APIResp<I.BlockIds>> {
+    const result = await twitterRequest.call.mutes.List(data);
+    return result;
+  }
+}
+
 class Friendships {
   async Create(data: P.ReqFollowCreate): Promise<P.APIResp<I.User>> {
     const result = await twitterRequest.call.friendships.Create(data);
@@ -315,5 +329,6 @@ class APIStore extends VuexModule {
   followers = new Followers();
   friends = new Friends();
   friendships = new Friendships();
+  mutes = new Mutes();
 }
 export const moduleApi = getModule(APIStore);
