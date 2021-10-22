@@ -115,8 +115,8 @@ export class TweetDatas {
     //TODO 공홈에서 땡겨온 유저 뮤트 목록이랑 연동 필요
 
     for (let i = 0; i < muteIds.length; i++) {
-      if (muteIds.indexOf(orgTweet.user.id_str)) return true;
-      else if (muteIds.indexOf(tweet.user.id_str)) return true;
+      if (muteIds.includes(orgTweet.user.id_str)) return true;
+      else if (muteIds.includes(tweet.user.id_str)) return true;
     }
     return false;
   }
