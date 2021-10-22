@@ -36,9 +36,14 @@ class State {
         menuSub: [{ title: '단어 알림', icon: 'mdi-filter', menuNumber: 4 }]
       },
       {
+        title: '필터링 상세 설정',
+        subTitle: '특정 조건 필터링을 제외 할 수 있습니다.',
+        menuSub: [{ title: '필터링 상세 설정', icon: 'mdi-filter', menuNumber: 5 }]
+      },
+      {
         title: '단축키 설정',
         subTitle: '프로그램을 보다 편하게 ',
-        menuSub: [{ title: '단축키 설정', icon: 'mdi-filter', menuNumber: 5 }]
+        menuSub: [{ title: '단축키 설정', icon: 'mdi-filter', menuNumber: 6 }]
       }
     );
     this.listHotkeyMenu.push(
@@ -133,14 +138,20 @@ export class OptionDetailModalBase extends Vue {
     moduleModal.ShowOptionDetailModal(bShow);
   }
 
+  get muteOption() {
+    return moduleOption.muteOption;
+  }
+
+  get hotKey() {
+    return moduleOption.hotKey;
+  }
+
   state = new State();
-  muteOption = moduleOption.muteOption;
-  hotKey = moduleOption.hotKey;
 
   @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
   OnSelectMenuChanged(newMenu: number) {
     this.state.input = '';
-    if (newMenu === 5 && !this.state.isInitHotkey) {
+    if (newMenu === 6 && !this.state.isInitHotkey) {
       //created에서 호출 시 ref 생성 전이라 오류 생김
       this.SetHotkey();
       this.state.isInitHotkey = true;

@@ -222,7 +222,24 @@
                 </v-card-actions>
               </v-card>
             </v-tab-item>
-            <v-tab-item :key="5" eager
+            <v-tab-item :key="5">
+              <v-card outlined height="100vh">
+                <v-card-title>
+                  필터링 상세 설정
+                </v-card-title>
+                <v-card-subtitle>
+                  특정 상황의 필터링 표시를 설정 합니다.<br />
+                  ※달새는 차단한 사람을 절대 표시 하지 않습니다.
+                </v-card-subtitle>
+                <v-list class="overflow-y-auto" dense max-height="300px">
+                  <v-switch
+                    v-model="muteOption.isMuteMention"
+                    label="멘션 및 알림 설정도 필터링 처리"
+                  ></v-switch>
+                </v-list>
+              </v-card>
+            </v-tab-item>
+            <v-tab-item :key="6" eager
               ><!--eager: mounted할때 렌더링하는 옵션-->
               <v-card outlined height="100vh">
                 <v-card-title>
