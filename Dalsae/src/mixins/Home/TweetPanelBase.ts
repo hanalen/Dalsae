@@ -7,6 +7,7 @@ import { moduleTweet } from '@/store/modules/TweetStore';
 import { ETweetType } from '@/store/Interface';
 import { IPanelState, moduleUI } from '@/store/modules/UIStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { eventBus } from '@/plugins';
 
 @Component
 export class TweetPanelBase extends Vue {
@@ -73,6 +74,7 @@ export class TweetPanelBase extends Vue {
   }
 
   KeyDown(e: KeyboardEvent) {
+    if (document?.activeElement?.tagName == 'TEXTAREA') return;
     if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
       if (e.code === 'ArrowUp') {
         e.preventDefault();
@@ -142,12 +144,21 @@ export class TweetPanelBase extends Vue {
   }
 
   ArrowUp() {
+    console.log(document?.activeElement?.tagName);
+    if (this.listTweet.length === 0) {
+      eventBus.$emit('FocusInput');
+      return;
+    }
     const state = this.state;
     const listTweet = this.listTweet;
     let index = state.index - 1;
 
-    if (index >= listTweet.length) index = listTweet.length - 1;
-    else if (index < 0) index = 0;
+    if (index >= listTweet.length) {
+      index = listTweet.length - 1;
+    } else if (index < 0) {
+      eventBus.$emit('FocusInput');
+      index = 0;
+    }
     moduleUI.ChangeIndex({
       tweetType: state.tweetType,
       index: index,
@@ -156,6 +167,7 @@ export class TweetPanelBase extends Vue {
   }
 
   ArrowDown() {
+    if (this.listTweet.length === 0) return;
     const state = this.state;
     const listTweet = this.listTweet;
     let index = state.index + 1;

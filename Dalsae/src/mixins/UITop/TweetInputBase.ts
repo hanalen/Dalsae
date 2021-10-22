@@ -1,11 +1,15 @@
 import { mixins } from 'vue-class-component';
-import { Vue, Component, Inject, Emit } from 'vue-property-decorator';
+import { Vue, Component, Inject, Emit, Ref } from 'vue-property-decorator';
 import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import { moduleApi } from '@/store/modules/APIStore';
 import { moduleUI } from '@/store/modules/UIStore';
+import { moduleOption } from '@/store/modules/OptionStore';
+import { eventBus } from '@/plugins';
 @Component
 export class TweetInputBase extends Vue {
+  @Ref()
+  textArea!: HTMLInputElement;
   get inputText() {
     return moduleUI.stateInput.inputText;
   }
@@ -76,18 +80,39 @@ export class TweetInputBase extends Vue {
   selectionChange(e: Event) {
     // console.log(e);
   }
-
-  ArrowDown(e: Event) {
-    // console.log(e);
+  CheckLastLine(e: KeyboardEvent) {
+    const index = this.inputText.lastIndexOf('\n');
+    if (index == -1) return true;
+    if (!e.target) return;
+    const pos = (e.target as HTMLInputElement).selectionStart; //커서 위치
+    if (!pos) return;
+    // console.log('index: '+index + '/ pos: '+pos + '/ len: '+this.tweetText.length)
+    if (index < pos && pos <= this.inputText.length) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  ArrowUp(e: Event) {
-    // console.log(e);
+  ArrowDown(e: KeyboardEvent) {
+    if (this.CheckLastLine(e)) {
+      e.stopPropagation();
+      e.preventDefault();
+      console.log('input key down');
+      eventBus.$emit('FocusPanel', moduleUI.selectMenu);
+    }
   }
 
-  EnterDown(e: Event) {
-    e.preventDefault();
-    this.SendTweet();
+  EnterDown(e: KeyboardEvent) {
+    const { ctrlKey, shiftKey, altKey } = e;
+    const { isSendEnter } = moduleOption.uiOption;
+    if (ctrlKey && !shiftKey && !altKey) {
+      e.preventDefault();
+      this.SendTweet();
+    } else if (isSendEnter && !ctrlKey && !shiftKey && !altKey) {
+      e.preventDefault();
+      this.SendTweet();
+    }
   }
 
   OnClickTweet(e: Event) {

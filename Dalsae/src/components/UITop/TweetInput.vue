@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/camelcase */
 <template>
   <div class="tweet-input" @drop="OnDrop">
-    <v-textarea
+    <textarea
+      ref="textArea"
       outlined
       hide-details
       :auto-grow="false"
@@ -17,11 +17,10 @@
       @click="selectionChange"
       @focus="selectionChange"
       @keydown.down="ArrowDown"
-      @keydown.up="ArrowUp"
       @keydown.enter="EnterDown"
       @keydown.esc="ClearInput"
     >
-    </v-textarea>
+    </textarea>
     <div class="ui-top-bottom">
       <div>
         <v-icon color="primary">mdi-plus-circle-outline</v-icon>
@@ -71,9 +70,18 @@ textarea {
 
 <script lang="ts">
 import { DalsaeApp, UITopBase, TweetInputBase } from '@/mixins';
+import { eventBus } from '@/plugins';
 import { mixins } from 'vue-class-component';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
 @Component
-export default class TweetInput extends TweetInputBase {}
+export default class TweetInput extends TweetInputBase {
+  async created() {
+    this.$nextTick(() => {
+      eventBus.$on('FocusInput', () => {
+        this.textArea.focus();
+      });
+    });
+  }
+}
 </script>

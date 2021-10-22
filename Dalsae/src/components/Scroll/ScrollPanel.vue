@@ -1,6 +1,12 @@
 <template>
   <!-- <div> -->
-  <div ref="scrollPanel" class="scroll-panel" @scroll="OnScroll" v-if="state != undefined">
+  <div
+    ref="scrollPanel"
+    tabindex="-1"
+    class="scroll-panel"
+    @scroll="OnScroll"
+    v-if="state != undefined"
+  >
     <div ref="scrollPort" class="scroll-area" :style="viewportStyle">
       <scroll-item
         ref="scrollItem"
@@ -19,6 +25,7 @@
 .scroll-panel {
   height: calc(100vh - 134px);
   overflow-y: scroll;
+  outline: none !important;
 }
 .scroll-area {
   position: relative;
@@ -71,6 +78,12 @@ export default class ScrollPanel extends M.ScrollPanelBase {
         index: this.listData.length - 1,
         selectedId: last.key
       });
+    });
+
+    eventBus.$on('FocusPanel', (tweetType: ETweetType) => {
+      if (this.tweetType !== tweetType) return;
+      console.log('focus panel');
+      this.scrollPanel.focus();
     });
 
     eventBus.$on('OnClickTweet', (tweetId: string) => {
