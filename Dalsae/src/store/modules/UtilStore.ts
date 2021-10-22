@@ -16,7 +16,6 @@ import { moduleModal } from './ModalStore';
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
   get isFocusPanel() {
-    if (document?.activeElement?.tagName == 'TEXTAREA') return false;
     const { bOption, bMessage, bOptionDetail, bPin } = moduleModal;
     if (bOption || bMessage || bOption || bOptionDetail || bPin) return false;
     return true;

@@ -75,7 +75,7 @@ export class TweetPanelBase extends Vue {
   }
 
   KeyDown(e: KeyboardEvent) {
-    if (!moduleUtil.isFocusPanel) return;
+    if (!moduleUtil.isFocusPanel || document?.activeElement?.tagName === 'TEXTAREA') return;
     if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
       if (e.code === 'ArrowUp') {
         e.preventDefault();
