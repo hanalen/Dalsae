@@ -243,15 +243,39 @@ class Users {
 }
 
 class Followers {
-  async List(data: P.ReqList): Promise<P.APIResp<I.FollowerList>> {
+  async List(data: P.ReqList, selectId: string): Promise<P.APIResp<I.FollowerList>> {
     const result = await twitterRequest.call.followers.List(data);
+    if (result.data && selectId && data.screen_name === '') {
+      moduleSwitter.AddFollowerList({ followList: result.data, selectId: selectId });
+    }
+    if (result.data.next_cursor_str !== '0')
+      this.List(
+        {
+          screen_name: '',
+          count: 200,
+          cursor: result.data.next_cursor_str
+        },
+        selectId
+      );
     return result;
   }
 }
 
 class Friends {
-  async List(data: P.ReqList): Promise<P.APIResp<I.FollowerList>> {
+  async List(data: P.ReqList, selectId: string): Promise<P.APIResp<I.FollowerList>> {
     const result = await twitterRequest.call.friends.List(data);
+    if (result.data && selectId && data.screen_name === '') {
+      moduleSwitter.AddFollowingList({ followList: result.data, selectId: selectId });
+    }
+    if (result.data.next_cursor_str !== '0')
+      this.List(
+        {
+          screen_name: '',
+          count: 200,
+          cursor: result.data.next_cursor_str
+        },
+        selectId
+      );
     return result;
   }
 }

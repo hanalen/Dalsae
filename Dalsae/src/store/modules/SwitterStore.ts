@@ -21,10 +21,14 @@ class SwitterStore extends VuexModule {
   followDatas = new FollowDatas();
 
   get listFollower() {
-    return this.followDatas.dicUsers.get(this.selectID)?.listFollower;
+    const selectId = this.switter.selectUser.user_id;
+    const datas = this.followDatas.dicUsers.get(selectId);
+    return datas ? datas.listFollower : [];
   }
-  get listFolloing() {
-    return this.followDatas.dicUsers.get(this.selectID)?.listFollowing;
+  get listFollowing() {
+    const selectId = this.switter.selectUser.user_id;
+    const datas = this.followDatas.dicUsers.get(selectId);
+    return datas ? datas.listFollowing : [];
   }
 
   get listMuteIds() {
@@ -85,6 +89,7 @@ class SwitterStore extends VuexModule {
       this.tempUser = new I.DalsaeUser();
       this.switter.listUser?.push(JSON.parse(JSON.stringify(selUser)));
       moduleTweet.Init(userId);
+      this.followDatas.dicUsers.set(userId, { listFollower: [], listFollowing: [] });
     }
   }
 
@@ -104,6 +109,7 @@ class SwitterStore extends VuexModule {
     if (switter) {
       switter.listUser?.forEach(user => {
         moduleTweet.Init(user.user_id);
+        this.followDatas.dicUsers.set(user.user_id, { listFollower: [], listFollowing: [] });
         this.dicMuteIds.set(user.user_id, []);
       });
     }
@@ -184,22 +190,24 @@ class SwitterStore extends VuexModule {
   }
 
   @Mutation
-  private addFollowingList(listUser: I.FollowerList) {
-    this.followDatas.AddFollowing(listUser.users, this.selectID);
+  private addFollowingList(listUser: A.AddFollowList) {
+    const selectId = this.switter.selectUser.user_id;
+    this.followDatas.AddFollowing(listUser.followList.users, selectId);
   }
 
   @Action
-  AddFollowingList(listUser: I.FollowerList) {
+  AddFollowingList(listUser: A.AddFollowList) {
     this.context.commit('addFollowingList', listUser);
   }
 
   @Mutation
-  private addFollowerList(listUser: I.FollowerList) {
-    this.followDatas.AddFollower(listUser.users, this.selectID);
+  private addFollowerList(listUser: A.AddFollowList) {
+    const selectId = this.switter.selectUser.user_id;
+    this.followDatas.AddFollower(listUser.followList.users, selectId);
   }
 
   @Action
-  AddFollowerList(listUser: I.FollowerList) {
+  AddFollowerList(listUser: A.AddFollowList) {
     this.context.commit('addFollowerList', listUser);
   }
 
@@ -215,7 +223,8 @@ class SwitterStore extends VuexModule {
 
   @Mutation
   private updateFollowInfo(user: I.User) {
-    this.followDatas.UpdateUserInfo(user, this.selectID);
+    const selectId = this.switter.selectUser.user_id;
+    this.followDatas.UpdateUserInfo(user, selectId);
   }
 
   @Action

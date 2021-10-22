@@ -28,20 +28,26 @@ export class ProfilePage extends Vue {
   }
 
   async LoadFollowerList() {
-    const resp = await moduleApi.followers.List({
-      screen_name: moduleProfile.selectUser.screen_name,
-      count: 200
-    });
+    const resp = await moduleApi.followers.List(
+      {
+        screen_name: moduleProfile.selectUser.screen_name,
+        count: 200
+      },
+      ''
+    );
     if (resp.data) {
       moduleProfile.AddFollowerList(resp.data);
     }
   }
 
   async LoadFollowingList() {
-    const resp = await moduleApi.friends.List({
-      screen_name: moduleProfile.selectUser.screen_name,
-      count: 200
-    });
+    const resp = await moduleApi.friends.List(
+      {
+        screen_name: moduleProfile.selectUser.screen_name,
+        count: 200
+      },
+      ''
+    );
     if (resp.data) {
       moduleProfile.AddFollowingList(resp.data);
     }

@@ -70,9 +70,12 @@ export class DalsaeApp extends Vue {
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
       await moduleApi.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
       window.preload.SaveSwitter(store.state.switter.switter);
+      moduleApi.friends.List({ screen_name: '', count: 200 }, moduleSwitter.selectID);
+      moduleApi.followers.List({ screen_name: '', count: 200 }, moduleSwitter.selectID);
+      moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true });
+      moduleApi.block.Ids({ cursor: '-1', stringify_ids: true });
       moduleApi.statuses.TimeLine();
-      // moduleApi.statuses.Mention();
-      // moduleApi.block.Ids({ cursor: '-1', stringify_ids: true });
+      moduleApi.statuses.Mention();
     }
   }
 
