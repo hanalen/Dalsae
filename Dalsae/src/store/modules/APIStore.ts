@@ -262,7 +262,7 @@ class Friendships {
     if (result.data) {
       result.data.following = !result.data.following;
       moduleProfile.UpdateFollowUserInfo(result.data);
-      window.preload.profile.UpdateFollow(result.data);
+      // window.preload.profile.UpdateFollow(result.data);
     }
     return result;
   }
@@ -271,7 +271,7 @@ class Friendships {
     if (result.data) {
       result.data.following = !result.data.following;
       moduleProfile.UpdateFollowUserInfo(result.data);
-      window.preload.profile.UpdateFollow(result.data);
+      // window.preload.profile.UpdateFollow(result.data);
     }
     return result;
   }
