@@ -46,53 +46,53 @@ class State {
         title: '화면 전환',
         subtitle: '',
         menuSub: [
-          { label: '타임라인 보기', name: 'showTL' },
-          { label: '알림 보기', name: 'showMention' },
-          { label: '쪽지 보기', name: 'showDM' },
-          { label: '관심글 보기', name: 'showFavorite' },
-          { label: '최근 연 링크 보기', name: 'showUrl' }
+          { label: '타임라인 보기', hotKeyType: I.E_HOTKEY.SHOWTL },
+          { label: '알림 보기', hotKeyType: I.E_HOTKEY.SHOWMENTION },
+          { label: '쪽지 보기', hotKeyType: I.E_HOTKEY.SHOWDM },
+          { label: '관심글 보기', hotKeyType: I.E_HOTKEY.SHOWFAVORITE },
+          { label: '최근 연 링크 보기', hotKeyType: I.E_HOTKEY.SHOWURL }
         ]
       },
       {
         title: '답변 기능',
         subtitle: '',
         menuSub: [
-          { label: '모두에게 답변하기', name: 'replyAll' },
-          { label: '작성자에게 답변하기 ', name: 'reply' },
-          { label: '쪽지 보내기', name: 'sendDM' }
+          { label: '모두에게 답변하기', hotKeyType: I.E_HOTKEY.REPLYALL },
+          { label: '작성자에게 답변하기 ', hotKeyType: I.E_HOTKEY.REPLY },
+          { label: '쪽지 보내기', hotKeyType: I.E_HOTKEY.SENDDM }
         ]
       },
       {
         title: '트윗 기능',
         subtitle: '',
         menuSub: [
-          { label: '대화 불러오기', name: 'loadConv' },
-          { label: '인용 트윗 보기', name: 'showQt' },
-          { label: '리트윗', name: 'retweet' },
-          { label: '인용 리트윗', name: 'sendQt' },
-          { label: '관심글 등록', name: 'sendFavorite' },
-          { label: '해시태그 추가', name: 'hash' },
-          { label: '트윗 삭제', name: 'delete' }
+          { label: '대화 불러오기', hotKeyType: I.E_HOTKEY.LOADCONV },
+          { label: '인용 트윗 보기', hotKeyType: I.E_HOTKEY.SHOWQT },
+          { label: '리트윗', hotKeyType: I.E_HOTKEY.RETWEET },
+          { label: '인용 리트윗', hotKeyType: I.E_HOTKEY.SENDQT },
+          { label: '관심글 등록', hotKeyType: I.E_HOTKEY.SENDFAVORITE },
+          { label: '해시태그 추가', hotKeyType: I.E_HOTKEY.HASH },
+          { label: '트윗 삭제', hotKeyType: I.E_HOTKEY.DELETE }
         ]
       },
       {
         title: 'UI 기능',
         subtitle: '',
         menuSub: [
-          { label: '입력칸으로 이동', name: 'input' },
-          { label: '트윗 메뉴 열기', name: 'showContext' },
-          { label: '가장 위로 이동', name: 'home' },
-          { label: '가장 아래로 이동', name: 'end' },
-          { label: '미디어 열기', name: 'showImage' }
+          { label: '입력칸으로 이동', hotKeyType: I.E_HOTKEY.INPUT },
+          { label: '트윗 메뉴 열기', hotKeyType: I.E_HOTKEY.SHOWCONTEXT },
+          { label: '가장 위로 이동', hotKeyType: I.E_HOTKEY.HOME },
+          { label: '가장 아래로 이동', hotKeyType: I.E_HOTKEY.END },
+          { label: '미디어 열기', hotKeyType: I.E_HOTKEY.SHOWIMAGE }
         ]
       },
       {
         title: '기타 기능',
         subtitle: '',
         menuSub: [
-          { label: '불러오기', name: 'loading' },
-          { label: '트윗 복사하기', name: 'copy' },
-          { label: '입력 취소하기', name: 'cancle' }
+          { label: '불러오기', hotKeyType: I.E_HOTKEY.LOADING },
+          { label: '트윗 복사하기', hotKeyType: I.E_HOTKEY.COPY },
+          { label: '입력 취소하기', hotKeyType: I.E_HOTKEY.CANCLE }
         ]
       }
     );
@@ -119,7 +119,7 @@ interface HotkeyMenu {
 }
 
 interface HotkeySubMenu {
-  name: string;
+  hotKeyType: string;
   label: string;
 }
 
@@ -172,8 +172,10 @@ export class OptionDetailModalBase extends Vue {
   SaveHotkey() {
     if (!this.state.isInitHotkey) return;
     const map = new Map();
-    for (const key of Object.keys(this.hotKey)) {
-      const str = this.GetTextFiledText(key);
+    const anyHotKey = this.hotKey as any;
+    for (const key of Object.keys(anyHotKey)) {
+      const hotKeyType = (anyHotKey[key] as I.Key).hotkeyType;
+      const str = this.GetTextFiledText(hotKeyType);
       const isCtrl = str.indexOf('Ctrl') > -1;
       const isAlt = str.indexOf('Alt') > -1;
       const isShift = str.indexOf('Shift') > -1;
@@ -184,11 +186,16 @@ export class OptionDetailModalBase extends Vue {
       if (code == 'Space') {
         code = ' ';
       }
-      map.set(key, { isCtrl: isCtrl, isShift: isShift, isAlt: isAlt, key: code });
+      map.set(key, {
+        isCtrl: isCtrl,
+        isShift: isShift,
+        isAlt: isAlt,
+        key: code,
+        hotkeyType: hotKeyType
+      });
     }
     const hotkey = Object.fromEntries(map);
-    this.hotKey = hotkey;
-    moduleOption.hotKey = hotkey;
+    moduleOption.ChangeHotkey(hotkey);
   }
 
   OnAdd(list: string[], word: string) {
@@ -210,14 +217,14 @@ export class OptionDetailModalBase extends Vue {
     list.splice(index, 1);
   }
   SetHotkey() {
-    console.log(this.$refs);
     for (const [key, value] of Object.entries(this.hotKey)) {
-      let str = value.isCtrl ? 'Ctrl+' : '';
-      str += value.isAlt ? 'Alt+' : '';
-      str += value.isShift ? 'Shift+' : '';
-      str += value.key.charAt(0).toUpperCase() + value.key.substring(1, 999);
+      const hotKey = value as I.Key;
+      let str = hotKey.isCtrl ? 'Ctrl+' : '';
+      str += hotKey.isAlt ? 'Alt+' : '';
+      str += hotKey.isShift ? 'Shift+' : '';
+      str += hotKey.key.charAt(0).toUpperCase() + hotKey.key.substring(1, 999);
       if (str == ' ') str = 'Space';
-      this.SetTextFieldText(key, str);
+      this.SetTextFieldText(hotKey.hotkeyType, str);
     }
   }
 

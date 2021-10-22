@@ -238,9 +238,9 @@
                     </v-list-item-title>
                     <v-list-item v-for="(sub, j) in item.menuSub" :key="j">
                       <v-text-field
-                        :ref="sub.name"
+                        :ref="sub.hotKeyType"
                         :label="sub.label"
-                        @keydown="OnKeyDown($event, sub.name)"
+                        @keydown="OnKeyDown($event, sub.hotKeyType)"
                       ></v-text-field>
                     </v-list-item>
                   </v-list-item-group>
