@@ -6,6 +6,7 @@ import store from '@/store';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { eventBus } from '@/plugins';
 import { ETweetType } from '@/store/Interface';
+import { moduleOption } from './OptionStore';
 export interface ITweetStore {
   tweetDatas: I.TweetDatas;
 }
@@ -57,12 +58,36 @@ class TweetStore extends VuexModule {
     const { type, tweet, listTweet, user_id_str } = { ...addTweet };
     switch (type) {
       case A.ETweetType.E_HOME:
-        if (tweet) this.tweetDatas.AddHome(tweet, user_id_str);
-        else this.tweetDatas.AddHomeList(listTweet, user_id_str);
+        if (tweet)
+          this.tweetDatas.AddHome(
+            tweet,
+            user_id_str,
+            moduleOption.muteOption,
+            moduleSwitter.listBlockIds
+          );
+        else
+          this.tweetDatas.AddHomeList(
+            listTweet,
+            user_id_str,
+            moduleOption.muteOption,
+            moduleSwitter.listBlockIds
+          );
         break;
       case A.ETweetType.E_MENTION:
-        if (tweet) this.tweetDatas.AddMention(tweet, user_id_str);
-        else this.tweetDatas.AddMentionList(listTweet, user_id_str);
+        if (tweet)
+          this.tweetDatas.AddMention(
+            tweet,
+            user_id_str,
+            moduleOption.muteOption,
+            moduleSwitter.listBlockIds
+          );
+        else
+          this.tweetDatas.AddMentionList(
+            listTweet,
+            user_id_str,
+            moduleOption.muteOption,
+            moduleSwitter.listBlockIds
+          );
         break;
       case A.ETweetType.E_FAVORITE:
         break;
