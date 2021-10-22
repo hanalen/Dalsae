@@ -34,7 +34,6 @@ class SwitterStore extends VuexModule {
 
   // getters
   get selectID() {
-    console.log('selectid', this.switter.selectUser);
     let id = this.switter.selectUser.user_id;
     id = id ? id : '';
     return id;
@@ -135,7 +134,6 @@ class SwitterStore extends VuexModule {
 
   @Mutation
   private changeAccount(user: I.DalsaeUser) {
-    console.log('change account', user.user_id);
     this.switter.selectUser = user;
   }
 
@@ -158,7 +156,6 @@ class SwitterStore extends VuexModule {
   private muteIds(ids: string[]) {
     const selectId = this.switter.selectUser.user_id;
     const list = this.dicMuteIds.get(selectId);
-    console.log('muteids', selectId, ids);
     if (!list) {
       if (selectId) this.dicMuteIds.set(selectId, ids);
     } else {
