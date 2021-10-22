@@ -31,9 +31,14 @@ class State {
         ]
       },
       {
+        title: '단어 알림 설정',
+        subTitle: '특정 단어가 들어간 트윗을 알림 표시 합니다.',
+        menuSub: [{ title: '단어 알림', icon: 'mdi-filter', menuNumber: 4 }]
+      },
+      {
         title: '단축키 설정',
         subTitle: '프로그램을 보다 편하게 ',
-        menuSub: [{ title: '단축키 설정', icon: 'mdi-filter', menuNumber: 4 }]
+        menuSub: [{ title: '단축키 설정', icon: 'mdi-filter', menuNumber: 5 }]
       }
     );
     this.listHotkeyMenu.push(
@@ -135,7 +140,7 @@ export class OptionDetailModalBase extends Vue {
   @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
   OnSelectMenuChanged(newMenu: number) {
     this.state.input = '';
-    if (newMenu === 4 && !this.state.isInitHotkey) {
+    if (newMenu === 5 && !this.state.isInitHotkey) {
       //created에서 호출 시 ref 생성 전이라 오류 생김
       this.SetHotkey();
       this.state.isInitHotkey = true;

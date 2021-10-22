@@ -184,7 +184,45 @@
                 </v-card-actions>
               </v-card>
             </v-tab-item>
-            <v-tab-item :key="4" eager
+            <v-tab-item :key="4">
+              <v-card outlined height="100vh">
+                <v-card-title>
+                  단어 알림
+                </v-card-title>
+                <v-card-subtitle>
+                  특정 단어가 들어간 트윗을 알림 표시 합니다.
+                </v-card-subtitle>
+                <v-list class="overflow-y-auto" dense max-height="300px">
+                  <v-list-item-group v-model="state.selectWord" color="primary">
+                    <v-list-item v-for="(item, i) in muteOption.highlight" :key="i">
+                      <v-list-item-content @click="state.input = item">
+                        <v-list-item-title v-text="item"></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+                <v-card-actions>
+                  <v-text-field label="알림 단어 입력" v-model="state.input"></v-text-field>
+                  <v-btn
+                    outlined
+                    color="primary"
+                    text
+                    @click="OnAdd(muteOption.highlight, state.input)"
+                  >
+                    추가
+                  </v-btn>
+                  <v-btn
+                    outlined
+                    color="red"
+                    text
+                    @click="OnRemove(muteOption.highlight, state.input)"
+                  >
+                    삭제
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-tab-item>
+            <v-tab-item :key="5" eager
               ><!--eager: mounted할때 렌더링하는 옵션-->
               <v-card outlined height="100vh">
                 <v-card-title>
