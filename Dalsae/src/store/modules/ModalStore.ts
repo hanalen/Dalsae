@@ -2,6 +2,7 @@
 import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import store from '@/store';
+import * as A from '@/store/Interface';
 
 @Module({ dynamic: true, store, name: 'modal' })
 class ModalStore extends VuexModule {
@@ -10,6 +11,8 @@ class ModalStore extends VuexModule {
   bPin = false;
   bOptionDetail = false;
   bOption = false;
+  bAutoComplete = false;
+  autoCompleteWord = '';
   message = '';
 
   @Action
@@ -57,6 +60,17 @@ class ModalStore extends VuexModule {
   @Action
   ShowOptionModal(bShow: boolean) {
     this.context.commit('showOptionModal', bShow);
+  }
+
+  @Mutation
+  private setAutoComplete(changeEvent: A.ChangeAutoComplete) {
+    this.bAutoComplete = changeEvent.bShow;
+    this.autoCompleteWord = changeEvent.word;
+  }
+
+  @Action
+  SetAutoComplete(changeEvent: A.ChangeAutoComplete) {
+    this.context.commit('setAutoComplete', changeEvent);
   }
 
   @Action

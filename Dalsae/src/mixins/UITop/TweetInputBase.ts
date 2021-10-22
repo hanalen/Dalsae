@@ -6,6 +6,8 @@ import { moduleApi } from '@/store/modules/APIStore';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleOption } from '@/store/modules/OptionStore';
 import { eventBus } from '@/plugins';
+import { moduleModal } from '@/store/modules/ModalStore';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
 @Component
 export class TweetInputBase extends Vue {
   @Ref()
@@ -78,7 +80,30 @@ export class TweetInputBase extends Vue {
   }
 
   selectionChange(e: Event) {
-    // console.log(e);
+    const position = (e.target as HTMLInputElement).selectionStart;
+    if (position === null) return;
+    let sIndex = 0; //word로 끊을 시작 index
+    let eIndex = 0; //word로 끊을 끝 index
+    for (let i = position; i > -1; i--) {
+      //현재 커서 앞의 최초 스페이스 찾기
+      sIndex = i; //index 0이 @일 경우도 있으므로 시작이 0일 수도 있어서 매번 대입
+      if (this.inputText[i - 1] === ' ') {
+        break;
+      }
+    }
+    for (let i = position; i <= this.inputText.length; i++) {
+      //현재 커서 뒤의 최초 스페이스 찾기
+      eIndex = i; //index가 length일 경우도 있으므로 매번 대입
+      if (this.inputText[i] === ' ' || this.inputText[i] === '\n') {
+        break;
+      }
+    }
+    const word = this.inputText.substring(sIndex, eIndex);
+    if (word[0] === '@') {
+      moduleModal.SetAutoComplete({ bShow: true, word: word.substring(1, word.length) });
+    } else {
+      moduleModal.SetAutoComplete({ bShow: false, word: '' });
+    }
   }
   CheckLastLine(e: KeyboardEvent) {
     const index = this.inputText.lastIndexOf('\n');

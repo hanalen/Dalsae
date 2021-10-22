@@ -16,6 +16,7 @@
       <top-big v-if="!uiOption.isSmallInput"> </top-big>
       <top-small v-if="uiOption.isSmallInput"> </top-small>
     </slot>
+    <auto-complete></auto-complete>
   </div>
 </template>
 
