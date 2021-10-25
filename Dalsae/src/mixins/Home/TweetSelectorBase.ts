@@ -18,6 +18,7 @@ import { moduleUtil } from '@/store/modules/UtilStore';
 
 export interface ContextItem {
   title: string;
+  titleTwo?: string;
   hotKey?: string;
   onClick: (value: number) => void;
   value?: number;
@@ -82,15 +83,12 @@ export class TweetSelectorBase extends Vue {
   }
 
   get listUsers() {
-    const arr: string[] = [];
-    let name = '';
-    name = `${this.orgUser.screen_name} / ${this.orgUser.name}`;
-    if (!arr.includes(name)) arr.push(name);
-    name = `${this.tweet.user.screen_name} / ${this.tweet.user.name}`;
-    if (!arr.includes(name)) arr.push(name);
-    this.orgTweet.entities.user_mentions.forEach(user => {
-      name = `${user.screen_name} / ${user.name}`;
-      if (!arr.includes(name)) arr.push(name);
+    const arr: I.UserMention[] = [];
+    //org, user, mentions
+    arr.push(this.tweet.orgUser);
+    if (!arr.find(x => x.id_str === this.tweet.user.id_str)) arr.push(this.tweet.user);
+    this.tweet.entities.user_mentions.forEach(user => {
+      if (!arr.find(x => x.id_str === user.id_str)) arr.push(user);
     });
     return arr;
   }
@@ -172,14 +170,15 @@ export class TweetSelectorBase extends Vue {
 
     this.listUsers.forEach(user => {
       listContext.push({
-        title: `${user}의 프로필 보기(미구현)`,
+        title: `@${user.screen_name}의 프로필 보기`,
+        titleTwo: user.name,
         onClick: this.OnClickProfile,
         value: value++,
         isDivider: false
       });
+      listContext.push({ title: '', onClick: () => {}, isDivider: true });
     });
 
-    listContext.push({ title: '', onClick: () => {}, isDivider: true });
     if (this.tweet.entities.hashtags.length) {
       this.orgTweet.entities.hashtags.forEach(hash => {
         listContext.push({

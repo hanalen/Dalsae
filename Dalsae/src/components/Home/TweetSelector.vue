@@ -10,13 +10,21 @@
             <v-divider v-if="item.isDivider" :key="`divider-${i}`"></v-divider>
             <v-list-item v-else :key="`item-${i}`" :value="item.value">
               <template>
-                <v-list-item-content @click="item.onClick(item.value)">
-                  <v-list-item-title v-text="item.title"></v-list-item-title>
-                </v-list-item-content>
-                <v-spacer v-if="item.hotKey"></v-spacer>
-                <v-list-item-content v-if="item.hotKey" @click="item.onClick(item.value)">
-                  <v-list-item-title v-text="item.hotKey"></v-list-item-title>
-                </v-list-item-content>
+                <div class="context-item" @click="item.onClick(item.value)">
+                  <span v-if="!item.titleTwo">
+                    {{ item.title }}
+                  </span>
+                  <div v-else>
+                    {{ item.title }}
+                    <br />
+                    <span>
+                      {{ item.titleTwo }}
+                    </span>
+                  </div>
+                  <span v-if="item.hotKey">
+                    {{ item.hotKey }}
+                  </span>
+                </div>
               </template>
             </v-list-item>
           </template>
@@ -26,7 +34,18 @@
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.v-list-item {
+  min-height: 24px !important;
+  max-width: 300px !important;
+  font-size: 14px !important;
+}
+.context-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+</style>
 
 <script lang="ts">
 import { DalsaeApp, TweetSelectorBase } from '@/mixins';
