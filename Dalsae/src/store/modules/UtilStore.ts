@@ -17,8 +17,8 @@ import { eventBus } from '@/plugins';
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
   get isFocusPanel() {
-    const { bOption, bMessage, bOptionDetail, bPin } = moduleModal;
-    if (bOption || bMessage || bOption || bOptionDetail || bPin) return false;
+    const { bOption, stateMessage, bOptionDetail, bPin } = moduleModal;
+    if (bOption || stateMessage.bMessage || bOption || bOptionDetail || bPin) return false;
     return true;
   }
   @Action

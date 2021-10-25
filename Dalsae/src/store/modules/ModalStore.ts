@@ -3,12 +3,22 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import store from '@/store';
 import * as A from '@/store/Interface';
+import * as M from '@/mixins';
 import { moduleSwitter } from './SwitterStore';
+
+class MessageState {
+  listMessage: M.Message[];
+  bMessage: boolean;
+  constructor() {
+    this.listMessage = [];
+    this.bMessage = false;
+  }
+}
 
 @Module({ dynamic: true, store, name: 'modal' })
 class ModalStore extends VuexModule {
   // states
-  bMessage = false;
+  stateMessage = new MessageState();
   bPin = false;
   bOptionDetail = false;
   bOption = false;
@@ -45,10 +55,7 @@ class ModalStore extends VuexModule {
   private showPinModal(bShow: boolean) {
     this.bPin = bShow;
   }
-  @Mutation
-  private showMessageModal(bShow: boolean) {
-    this.bMessage = bShow;
-  }
+
   @Mutation
   private showOptionDetailModal(bShow: boolean) {
     this.bOptionDetail = bShow;
@@ -56,7 +63,7 @@ class ModalStore extends VuexModule {
   @Mutation
   private closeAll() {
     this.bPin = false;
-    this.bMessage = false;
+    this.stateMessage.bMessage = false;
     this.bOptionDetail = false;
   }
 
@@ -103,6 +110,28 @@ class ModalStore extends VuexModule {
   @Action
   CloseAll() {
     this.context.commit('closeAll');
+  }
+
+  @Mutation
+  private removeMessage(msg: M.Message) {
+    const idx = this.stateMessage.listMessage.findIndex(x => x.key === msg.key);
+    if (idx > -1) this.stateMessage.listMessage.splice(idx, 1);
+  }
+
+  @Mutation
+  private addMessage(msg: M.Message) {
+    this.stateMessage.listMessage.push(msg);
+  }
+
+  @Action
+  AddMessage(msg: M.Message) {
+    msg.key = Date.now();
+    this.context.commit('addMessage', msg);
+    if (msg.time > 0) {
+      setTimeout(() => {
+        this.context.commit('removeMessage', msg);
+      }, msg.time * 1000);
+    }
   }
 }
 

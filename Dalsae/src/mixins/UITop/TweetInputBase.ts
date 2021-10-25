@@ -1,6 +1,5 @@
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Ref } from 'vue-property-decorator';
-import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import { moduleApi } from '@/store/modules/APIStore';
 import { moduleUI } from '@/store/modules/UIStore';

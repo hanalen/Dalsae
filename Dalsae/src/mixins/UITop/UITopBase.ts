@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
-import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import store from '@/store';
 import { moduleOption } from '@/store/modules/OptionStore';

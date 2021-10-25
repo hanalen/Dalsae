@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import * as M from '@/Managers';
 import TwitterRequest from '@/API/TwitterRequest';
 import * as P from '@/Interfaces';
 import * as I from '@/Interfaces';

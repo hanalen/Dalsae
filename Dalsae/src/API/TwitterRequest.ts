@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as P from '@/Interfaces';
 import * as I from '@/Interfaces';
-import * as M from '@/Managers';
-import { ErrorManager } from '@/Managers';
+import * as M from '@/mixins';
+import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import axios from 'axios';
 const baseUrl = 'https://api.twitter.com/1.1';
@@ -41,6 +41,76 @@ function CreateHeader(authorization: string, contentType?: string) {
 }
 
 export class TwitterRequest {
+  GetApiError(e: I.ResponseTwitterError): string {
+    console.log(e);
+    let message = '';
+    if (!e.errors || e.errors.length < 1) return '';
+    switch (e.errors[0].code) {
+      case 34:
+        message = '해당 유저는 없습니다.';
+        break;
+      case 44:
+        message = '잘못 된 요청';
+        break;
+      case 64:
+        message = '계정이 일시 정지 되었습니다.';
+        break;
+      case 87:
+        message = '달새는 해당 동작을 할 수 없습니다.';
+        break;
+      case 88:
+        message = '불러오기 제한, 몇 분 뒤 시도해주세요.';
+        break;
+      case 89:
+        message =
+          '잘못되거나 만료 된 토큰. 오류가 지속될 경우 Data폴더에 Switter를 지운 후 시도해주세요';
+        break;
+      case 130:
+      case 131:
+        message = '트위터 내부 오류';
+        break;
+      case 135:
+        message = '인증할 수 없습니다.';
+        break;
+      case 136:
+        message = '저런, 당신을 차단한 사람입니다.';
+        break;
+      case 139:
+        message = '이미 관심글에 등록 된 트윗입니다.';
+        break;
+      case 144:
+        message = '삭제된 트윗입니다.';
+        break;
+      case 150:
+        message = '상대방에게 쪽지를 보낼 수 없습니다.';
+        break;
+      case 151:
+        message = '메시지를 보내는 중 에러가 발생했습니다';
+        break;
+      case 179:
+        message = '대화 트윗을 쓴 유저가 잠금 계정입니다.';
+        break;
+      case 185:
+        message = '트윗 제한. 트잉여님 트윗 적당히 써주세요.';
+        break;
+      case 187:
+        message = '중복 트윗입니다. 같은 내용을 적지 말아주세요 :(';
+        break;
+      case 327:
+        message = '이미 리트윗 한 트윗입니다.';
+        break;
+      case 323:
+        message = 'GIF와 이미지를 동시에 업로드 할 수 없습니다.';
+        break;
+      case 324:
+        message = '이미지 용량이 5mb를 넘어 업로드 할 수 없습니다.';
+        break;
+      case 386:
+        message = '트윗이 280자를 넘어 전송할 수 없습니다.';
+        break;
+    }
+    return message;
+  }
   async request<TReq, TResp>(
     url: string,
     method: P.Method,
@@ -65,9 +135,14 @@ export class TwitterRequest {
       console.log('catch');
       console.log(e);
       if (e instanceof I.ResponseTwitterError) {
-        ErrorManager.instence().APIError(e);
+        const error = this.GetApiError(e as I.ResponseTwitterError);
+        moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: error });
       } else {
-        ErrorManager.instence().Error(e);
+        moduleModal.AddMessage({
+          errorType: M.Messagetype.E_ERROR,
+          time: 3,
+          message: (e as Error).message
+        });
       }
       return e;
     }
@@ -128,9 +203,14 @@ export class TwitterRequest {
       console.log('catch');
       console.log(e);
       if (e instanceof I.ResponseTwitterError) {
-        ErrorManager.instence().APIError(e);
+        const error = this.GetApiError(e as I.ResponseTwitterError);
+        moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: error });
       } else {
-        ErrorManager.instence().Error(e);
+        moduleModal.AddMessage({
+          errorType: M.Messagetype.E_ERROR,
+          time: 3,
+          message: (e as Error).message
+        });
       }
       return e;
     }
@@ -174,9 +254,14 @@ export class TwitterRequest {
       console.log('catch');
       console.log(e);
       if (e instanceof I.ResponseTwitterError) {
-        ErrorManager.instence().APIError(e);
+        const error = this.GetApiError(e as I.ResponseTwitterError);
+        moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: error });
       } else {
-        ErrorManager.instence().Error(e);
+        moduleModal.AddMessage({
+          errorType: M.Messagetype.E_ERROR,
+          time: 3,
+          message: (e as Error).message
+        });
       }
       return e;
     }

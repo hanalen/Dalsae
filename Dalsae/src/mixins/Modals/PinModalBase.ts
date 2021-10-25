@@ -1,6 +1,5 @@
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
-import * as M from '@/Managers';
 import store from '@/store';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleModal } from '@/store/modules/ModalStore';

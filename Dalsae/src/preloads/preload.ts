@@ -4,7 +4,6 @@ import path from 'path';
 let ipcName = Math.random() * (99999 - 0) + 0;
 import ImagePreload from './ImagePreload';
 import fs from 'fs-extra';
-import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import { IOptionStore } from '@/store/modules/OptionStore';
 import ProfilePreload from './ProfilePreload';

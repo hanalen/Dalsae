@@ -1,6 +1,5 @@
 import { Vue, Mixins, Component, Inject, Emit, Watch } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
-import * as M from '@/Managers';
 import * as I from '@/Interfaces';
 import { mixins } from 'vue-class-component';
 import { moduleTweet } from '@/store/modules/TweetStore';
