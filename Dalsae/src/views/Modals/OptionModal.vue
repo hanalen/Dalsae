@@ -2,9 +2,9 @@
   <div>
     <v-list>
       <v-list-item>
-        <v-card width="256px" v-if="this.$store.state.switter.switter != undefined">
+        <div v-if="this.$store.state.switter.switter != undefined">
           <v-avatar
-            class="clickAble"
+            class="click-able"
             v-for="(item, i) in this.$store.state.switter.switter.listUser"
             :key="i"
             :size="40"
@@ -12,19 +12,19 @@
           >
             <img :src="item.user.profile_image_url" />
           </v-avatar>
-          <v-icon class="clickAble" style="font-size:48px; color:#1da1f2" @click="OnClickAddAccount"
+          <v-icon
+            class="click-able"
+            style="font-size:40px; color:#1da1f2"
+            @click="OnClickAddAccount"
             >mdi-dots-horizontal-circle-outline</v-icon
           >
           <v-icon
-            class="clickAble"
-            style="font-size:48px; color:#1da1f2"
+            class="click-able"
+            style="font-size:40px; color:#1da1f2"
             @click="OnClickOptionDetail"
             >mdi-cog</v-icon
           >
-        </v-card>
-        <!-- <v-list-item-content> -->
-        <!-- <v-list-item-title>John Leider</v-list-item-title> -->
-        <!-- </v-list-item-content> -->
+        </div>
       </v-list-item>
       <v-divider></v-divider>
       <v-list-item>
@@ -78,8 +78,11 @@
 </template>
 
 <style lang="scss" scoped>
-.clickAble:hover {
+.click-able:hover {
   cursor: pointer;
+}
+.click-able {
+  margin: 2px !important;
 }
 </style>
 
