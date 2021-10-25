@@ -36,6 +36,7 @@ interface StateInput {
 class UIStore extends VuexModule {
   // states
   selectMenu = 0;
+  selectionStart = 0; //textarea 커서 위치... 이게 있어야 emit 안하고 멘션 자동완성 할 수 있음
   panelHome: IPanelState = {
     tweetType: ETweetType.E_HOME,
     index: -1,
@@ -277,6 +278,16 @@ class UIStore extends VuexModule {
   @Action
   SetLoad(event: LoadEvent) {
     this.context.commit('setLoad', event);
+  }
+
+  @Mutation
+  private setSelectionStart(position: number) {
+    this.selectionStart = position;
+  }
+
+  @Action
+  SetSelectionStart(position: number) {
+    this.context.commit('setSelectionStart', position);
   }
 }
 

@@ -1,9 +1,11 @@
 <template>
   <div class="auto-complete" v-if="isShow">
-    <div>
-      {{ word }}
-    </div>
-    <div v-for="(user, i) in users" :key="i">{{ user.name }} / {{ user.screen_name }}</div>
+    <user-small
+      v-for="(user, i) in users"
+      :key="i"
+      :user="user"
+      v-on:on-click-small-user="OnClickUser"
+    />
   </div>
 </template>
 
@@ -15,6 +17,7 @@
   width: 300px;
   height: 100px;
   background-color: azure;
+  overflow-y: scroll;
 }
 </style>
 
@@ -26,6 +29,7 @@ import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { moduleUtil } from '@/store/modules/UtilStore';
 
 @Component
 export default class AutoComplete extends Vue {
@@ -38,22 +42,40 @@ export default class AutoComplete extends Vue {
   }
 
   get users() {
-    if (!moduleModal.bAutoComplete) return [];
-    const word = moduleModal.autoCompleteWord.toUpperCase();
-    if (!word) return [];
-    console.log(word);
-    if (!moduleSwitter.listFollowing || !moduleSwitter.listFollower) return [];
-    const following = moduleSwitter.listFollowing.filter(
-      x => x.screen_name.toUpperCase().indexOf(word) > -1 || x.name.toUpperCase().indexOf(word) > -1
-    );
-    const follower = moduleSwitter.listFollower.filter(
-      x => x.screen_name.toUpperCase().indexOf(word) > -1 || x.name.toUpperCase().indexOf(word) > -1
-    );
-    console.log(following, follower);
-    return following.concat(follower);
+    return moduleModal.users;
   }
+
   async created() {
-    console.log('created');
+    this.$nextTick(() => {
+      document.addEventListener('keydown', this.OnKeyDown);
+    });
+  }
+
+  OnClickUser(user: I.User) {
+    moduleUtil.AutoCompleted(user);
+  }
+
+  OnKeyDown(e: KeyboardEvent) {
+    if (!moduleModal.bAutoComplete) return;
+    if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
+      if (e.code === 'ArrowUp') {
+        e.preventDefault();
+        let index = moduleModal.indexAutoComplete - 1;
+        if (index < 0) index = 0;
+        else if (index >= this.users.length) index = this.users.length - 1;
+        moduleModal.SetIndexAutoComplete(moduleModal.indexAutoComplete - 1);
+      } else if (e.code === 'ArrowDown') {
+        e.preventDefault();
+        let index = moduleModal.indexAutoComplete - 1;
+        if (index < 0) index = 0;
+        else if (index >= this.users.length) index = this.users.length - 1;
+        moduleModal.SetIndexAutoComplete(moduleModal.indexAutoComplete + 1);
+      }
+    }
+  }
+
+  async beforeDestroy() {
+    document.removeEventListener('keydown', this.OnKeyDown);
   }
 }
 </script>

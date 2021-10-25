@@ -13,6 +13,7 @@ import { moduleApi } from './APIStore';
 import copy from 'copy-to-clipboard';
 import { moduleProfile } from './ProfileStore';
 import { moduleModal } from './ModalStore';
+import { eventBus } from '@/plugins';
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
   get isFocusPanel() {
@@ -161,6 +162,20 @@ class UtilStore extends VuexModule {
       moduleApi.friendships.Create({ screen_name: user.screen_name });
     }
     moduleProfile.SetFollowRequest(false);
+  }
+
+  @Action
+  AutoCompleted(user: I.User | undefined) {
+    if (!moduleModal.bAutoComplete) return;
+    let text = moduleUI.stateInput.inputText;
+    const { autoCompleteWord, indexAutoComplete } = moduleModal;
+    if (!user) {
+      user = moduleModal.users[indexAutoComplete];
+    }
+    text = text.replace(`@${autoCompleteWord}`, `@${user.screen_name} `);
+    moduleModal.SetAutoComplete({ bShow: false, word: '' });
+    moduleUI.SetInputText(text);
+    eventBus.$emit('FocusInput');
   }
 }
 export const moduleUtil = getModule(UtilStore);

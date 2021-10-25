@@ -80,8 +80,10 @@ export class TweetInputBase extends Vue {
   }
 
   selectionChange(e: Event) {
+    if (e.type === 'focus') return; //focus일 경우 selection위치가 변경되지 않음, 자동 완성에 필요한 예외 처리
     const position = (e.target as HTMLInputElement).selectionStart;
     if (position === null) return;
+    moduleUI.SetSelectionStart(position);
     let sIndex = 0; //word로 끊을 시작 index
     let eIndex = 0; //word로 끊을 끝 index
     for (let i = position; i > -1; i--) {
