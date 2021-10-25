@@ -1,10 +1,22 @@
 /* eslint-disable @typescript-eslint/camelcase */
 <template>
   <v-app>
+    <div class="app-alert">
+      <v-alert
+        dense
+        text
+        :type="item.errorType"
+        v-for="(item, i) in listMsg"
+        :key="i"
+        transition="scale-transition"
+      >
+        {{ item.message }}
+      </v-alert>
+    </div>
     <message-modal ref="messageModal"> </message-modal>
     <pin-modal></pin-modal>
     <option-detail-modal ref="optionDetailModal"></option-detail-modal>
-    <v-app-bar app max-height="90" height="90">
+    <v-app-bar app :height="topHeight">
       <top-selector> </top-selector>
     </v-app-bar>
     <v-main>
@@ -27,6 +39,20 @@
   </v-app>
 </template>
 
+<style lang="scss" scoped>
+.app-alert {
+  // background-color: rgba(0, 1, 1, 0.137);
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  align-items: center;
+  width: 100vw;
+}
+</style>
+
 <script lang="ts">
 import { Vue, Component, Mixins } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
@@ -38,6 +64,14 @@ import { moduleUtil } from '@/store/modules/UtilStore';
 
 @Component
 export default class Home extends Mixins(DalsaeApp) {
+  get listMsg() {
+    return moduleModal.stateMessage.listMessage;
+  }
+  get topHeight() {
+    let ret = 0;
+    ret += moduleOption.uiOption.isSmallInput ? 40 : 90;
+    return ret;
+  }
   get isShowOptionModal() {
     return moduleModal.bOption;
   }
