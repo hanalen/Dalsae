@@ -70,6 +70,7 @@ export default class Home extends Mixins(DalsaeApp) {
   get topHeight() {
     let ret = 0;
     ret += moduleOption.uiOption.isSmallInput ? 40 : 90;
+    ret += moduleUI.stateInput.listImage.length > 0 ? 300 : 0;
     return ret;
   }
   get isShowOptionModal() {

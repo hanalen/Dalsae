@@ -27,7 +27,6 @@
         <v-icon color="primary">mdi-plus-circle-outline</v-icon>
         <v-icon color="primary">mdi-plus-circle-outline</v-icon>
         <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-        <img class="img-add" v-for="(item, i) in listImage" :src="item" :key="i" />
       </div>
       <div class="ui-top-bottom-right">
         <div>{{ GetTweetLength() }}/280</div>
@@ -36,13 +35,14 @@
         </v-btn>
       </div>
     </div>
+    <input-image> </input-image>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .tweet-input {
   // width: calc(100vw - 20px);
-  height: 90px;
+  // height: 90px;
   padding: 4px !important;
   display: flex;
   flex-direction: column;
