@@ -4,7 +4,7 @@ import * as I from '@/Interfaces';
 import * as M from '@/mixins';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 const baseUrl = 'https://api.twitter.com/1.1';
 
 function CreateOptions(
@@ -132,11 +132,10 @@ export class TwitterRequest {
       console.log(resp);
       return { data: resp.data };
     } catch (e) {
-      console.log('catch');
-      console.log(e);
-      if (e instanceof I.ResponseTwitterError) {
-        const error = this.GetApiError(e as I.ResponseTwitterError);
-        moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: error });
+      const error = e as any;
+      if (error.response) {
+        const errorMsg = this.GetApiError(error.response.data);
+        moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: errorMsg });
       } else {
         moduleModal.AddMessage({
           errorType: M.Messagetype.E_ERROR,
@@ -202,9 +201,10 @@ export class TwitterRequest {
     } catch (e) {
       console.log('catch');
       console.log(e);
-      if (e instanceof I.ResponseTwitterError) {
-        const error = this.GetApiError(e as I.ResponseTwitterError);
-        moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: error });
+      const error = e as any;
+      if (error.response) {
+        const errorMsg = this.GetApiError(error.response.data);
+        moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: errorMsg });
       } else {
         moduleModal.AddMessage({
           errorType: M.Messagetype.E_ERROR,
@@ -253,9 +253,10 @@ export class TwitterRequest {
     } catch (e) {
       console.log('catch');
       console.log(e);
-      if (e instanceof I.ResponseTwitterError) {
-        const error = this.GetApiError(e as I.ResponseTwitterError);
-        moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: error });
+      const error = e as any;
+      if (error.response) {
+        const errorMsg = this.GetApiError(error.response.data);
+        moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: errorMsg });
       } else {
         moduleModal.AddMessage({
           errorType: M.Messagetype.E_ERROR,
