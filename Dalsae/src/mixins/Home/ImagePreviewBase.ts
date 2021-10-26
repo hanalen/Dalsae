@@ -5,18 +5,11 @@ import moment from 'moment';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleOption } from '@/store/modules/OptionStore';
 
-class State {
-  isHover: boolean;
-  constructor() {
-    this.isHover = false;
-  }
-}
-
 @Component
 export class ImagePreviewBase extends Vue {
-  state: State = new State();
+  isHover = false;
   @Prop()
-  media!: I.Media[]; //이미지 뷰어 때문에 tweet으로 들고 있어야 함...
+  media!: I.Media[];
 
   @Prop()
   tweet!: I.Tweet;
@@ -26,18 +19,14 @@ export class ImagePreviewBase extends Vue {
   }
 
   Click(e: Event) {
-    this.state.isHover = this.state.isHover;
+    // this.state.isHover = this.state.isHover;
     window.preload.image.OpenImageWindow(this.tweet, moduleOption.uiOption);
   }
   MouseOver(e: Event) {
-    // this.state.isHover = true;
+    this.isHover = true;
   }
   MouseOut(e: Event) {
-    // this.state.isHover = false;
-  }
-
-  get imgClass() {
-    return this.state.isHover ? 'bounce-enter-active' : 'bounce-leave-active';
+    this.isHover = false;
   }
 
   get maxWidth() {
