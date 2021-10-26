@@ -2,10 +2,10 @@
   <div>
     <div class="image-content" @mousewheel="MouseWheel">
       <div class="arrow" v-if="media.length > 1 && !state.isZoom">
-        <div class="left-button">
+        <div class="left-button" @click="OnClickPrev">
           <v-icon x-large>mdi-chevron-left</v-icon>
         </div>
-        <div class="right-button">
+        <div class="right-button" @click="OnClickNext">
           <v-icon x-large>mdi-chevron-right</v-icon>
         </div>
       </div>
@@ -50,6 +50,10 @@
   max-width: 100%;
   max-height: 100%;
   height: auto;
+  // cursor: pointer;
+}
+.left-button,
+.right-button {
   cursor: pointer;
 }
 .left-button {

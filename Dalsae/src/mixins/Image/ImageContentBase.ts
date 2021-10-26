@@ -60,6 +60,14 @@ export class ImageContentBase extends Mixins(Vue) {
     return str;
   }
 
+  OnClickNext() {
+    this.$emit('on-next');
+  }
+
+  OnClickPrev() {
+    this.$emit('on-prev');
+  }
+
   MouseWheel(e: Event) {
     // console.log(e);
   }

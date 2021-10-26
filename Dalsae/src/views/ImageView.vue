@@ -20,13 +20,19 @@
           </v-icon>
         </v-btn>
       </v-container>
-      <v-container :id="main">
-        <image-content :tweet="tweet" :index="index"> </image-content>
+      <v-container>
+        <image-content :tweet="tweet" :index="index" v-on:on-prev="OnPrev" v-on:on-next="OnNext">
+        </image-content>
       </v-container>
     </v-main>
     <v-footer fixed height="120">
       <div class="bottom">
-        <image-popup-preview v-for="(media, i) in media" :media="media" :key="i">
+        <image-popup-preview
+          v-for="(media, i) in media"
+          :media="media"
+          :key="i"
+          v-on:on-click-media="OnClickMedia"
+        >
         </image-popup-preview>
       </div>
     </v-footer>
@@ -103,6 +109,8 @@ export default class ImageView extends Mixins(MIX.ImagePage) {
     this.tweet = window.preload.LoadTestImageTweet();
     this.$nextTick(() => {
       this.bMounted = true;
+    });
+    return;
     console.log('img window created');
     const id = this.$route.query.tweetId;
     console.log('id: ' + id);
