@@ -13,7 +13,21 @@ class State {
 export class ImagePage extends Vue {
   state = new State();
   tweet!: I.Tweet;
-  option!: I.UIOption;
+  option: I.UIOption = {
+    isBigPropic: true,
+    isLoadOrgImg: false,
+    isSendCheck: false,
+    isSendEnter: true,
+    isSendRTCheck: true,
+    isSendRTProtected: true,
+    isShowBottomPreview: true,
+    isShowPreview: true,
+    isShowPropic: true,
+    isShowTweet: true,
+    isSmallInput: false,
+    isSmallTweet: false,
+    isUseRead: false
+  };
   index = 0;
   get orgTweet() {
     return this.tweet.retweeted_status ? this.tweet.retweeted_status : this.tweet; //원본 트윗 저장
