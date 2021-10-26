@@ -6,7 +6,6 @@
 
 <style lang="scss" scoped>
 .scroll-item {
-  box-shadow: 0 0 0 1px #000 inset;
   position: absolute;
   width: 100%;
 }

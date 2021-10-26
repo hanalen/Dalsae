@@ -165,12 +165,10 @@ export class ScrollPanelBase extends Vue {
     if (last) {
       const top = last.scrollTop + last.height;
       return {
-        'background-color': 'aliceblue',
         height: top + 'px'
       };
     } else {
       return {
-        'background-color': 'aliceblue',
         height: 0 + 'px'
       };
     }

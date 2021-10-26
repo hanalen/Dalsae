@@ -13,6 +13,10 @@ export class TweetBase extends Vue {
   @Prop()
   selected = false;
 
+  get isConv() {
+    return this.orgTweet.in_reply_to_status_id_str ? true : false;
+  }
+
   get uiOption() {
     return moduleOption.uiOption;
   }
