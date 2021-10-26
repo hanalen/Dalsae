@@ -61,18 +61,18 @@ export class ImageContentBase extends Mixins(Vue) {
   }
 
   MouseWheel(e: Event) {
-    console.log(e);
+    // console.log(e);
   }
   MouseDown(e: Event) {
-    console.log(e);
+    // console.log(e);
   }
   MouseLeave(e: Event) {
-    console.log(e);
+    // console.log(e);
   }
   MouseUp(e: Event) {
-    console.log(e);
+    // console.log(e);
   }
   MouseMove(e: Event) {
-    console.log(e);
+    // console.log(e);
   }
 }
