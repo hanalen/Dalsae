@@ -47,3 +47,10 @@
   align-items: baseline !important;
   padding:  0px !important;
 }
+.v-dialog--fullscreen {
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+}
+.v-list-item__subtitle{
+  white-space: inherit !important;
+}

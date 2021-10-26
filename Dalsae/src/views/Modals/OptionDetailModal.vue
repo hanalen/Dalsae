@@ -36,6 +36,7 @@
                 <v-list-item-title>{{ sub.title }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
+            <v-divider></v-divider>
           </v-list>
         </div>
         <div class="center">
@@ -248,7 +249,7 @@
                 <v-card-subtitle>
                   프로그램을 보다 편하게 사용 할 수 있게 합니다.
                 </v-card-subtitle>
-                <v-list dense max-height="500px" class="overflow-y-auto">
+                <v-list dense class="overflow-y-auto" max-height="calc(100% - 150px)">
                   <v-list-item-group v-for="(item, i) in state.listHotkeyMenu" :key="i">
                     <v-list-item-title>
                       {{ item.title }}
@@ -260,6 +261,7 @@
                         @keydown="OnKeyDown($event, sub.hotKeyType)"
                       ></v-text-field>
                     </v-list-item>
+                    <v-divider></v-divider>
                   </v-list-item-group>
                 </v-list>
               </v-card>
@@ -279,6 +281,12 @@
 </template>
 
 <style lang="scss" scoped>
+.v-text-field {
+  width: 150px !important;
+}
+.v-list-item {
+  min-height: 30px;
+}
 .flex {
   display: flex;
 }
@@ -286,10 +294,10 @@
   width: 220px;
 }
 .center {
-  width: calc(100vw - 370px);
+  width: calc(100vw - 240px);
 }
 .right {
-  width: 150px;
+  width: 40px;
 }
 .click-able {
   cursor: pointer;

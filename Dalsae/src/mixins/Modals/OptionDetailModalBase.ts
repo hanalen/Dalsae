@@ -42,7 +42,7 @@ class State {
       {
         title: '단축키 설정',
         subTitle: '프로그램을 보다 편하게 ',
-        menuSub: [{ title: '단축키 설정', icon: 'mdi-filter', menuNumber: 6 }]
+        menuSub: [{ title: '단축키 설정', icon: 'mdi-keyboard', menuNumber: 6 }]
       }
     );
     this.listHotkeyMenu.push(
