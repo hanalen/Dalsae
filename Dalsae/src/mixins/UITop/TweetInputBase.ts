@@ -12,6 +12,8 @@ import { moduleSwitter } from '@/store/modules/SwitterStore';
 export class TweetInputBase extends Vue {
   @Ref()
   textArea!: HTMLInputElement;
+  @Ref()
+  refFile!: HTMLInputElement;
   get inputText() {
     return moduleUI.stateInput.inputText;
   }
@@ -39,6 +41,21 @@ export class TweetInputBase extends Vue {
   regex = new RegExp(
     /[(http|ftp|https):\/\/]*[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/gi
   );
+
+  OnClickAddImage(e: MouseEvent) {
+    this.refFile.click();
+  }
+
+  OnFileChange(e: Event) {
+    if (!e.target) return;
+    const target = e.target as HTMLInputElement;
+    const files = target.files;
+    if (!files) return;
+    if (!files.length) return;
+    for (let i = 0; i < files.length; i++) {
+      this.FileToString(files[i]);
+    }
+  }
 
   OnDrop(e: DragEvent) {
     if (!e.dataTransfer) return;

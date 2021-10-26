@@ -1,5 +1,13 @@
 <template>
   <div class="tweet-input" @drop="OnDrop">
+    <input
+      ref="refFile"
+      type="file"
+      hidden="hidden"
+      accept="image/gif, image/jpeg, image/png"
+      @change="OnFileChange"
+      multiple
+    />
     <textarea
       ref="textArea"
       outlined
@@ -23,10 +31,13 @@
     </textarea>
     <div class="ui-top-bottom">
       <div>
-        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
-        <v-icon color="primary">mdi-plus-circle-outline</v-icon>
+        <v-icon
+          v-if="listImage.length < 4 && !isAddedMedia"
+          color="info"
+          @click="OnClickAddImage"
+          class="click-able"
+          >mdi-image-outline</v-icon
+        >
       </div>
       <div class="ui-top-bottom-right">
         <div>{{ GetTweetLength() }}/280</div>
@@ -46,6 +57,9 @@
   padding: 4px !important;
   display: flex;
   flex-direction: column;
+}
+.click-able:hover {
+  cursor: pointer;
 }
 .ui-top-bottom {
   display: flex;
