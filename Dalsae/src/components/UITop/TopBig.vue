@@ -11,7 +11,6 @@
 
 <style lang="scss" scoped>
 .ui-top-big {
-  width: calc(100vw - 20px);
   height: 90px;
   padding: 4px !important;
   display: flex;

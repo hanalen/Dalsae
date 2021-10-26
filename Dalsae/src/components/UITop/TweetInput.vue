@@ -40,9 +40,11 @@
         >
       </div>
       <div class="ui-top-bottom-right">
-        <div>{{ GetTweetLength() }}/280</div>
-        <v-btn outlined color="primary" text @click="OnClickTweet">
-          트윗 하기
+        <div class="tweet-count">
+          <span>({{ GetTweetLength() }} / 280)</span>
+        </div>
+        <v-btn height="30px" width="80px" outlined color="primary" @click="OnClickTweet">
+          트윗하기
         </v-btn>
       </div>
     </div>
@@ -58,12 +60,31 @@
   display: flex;
   flex-direction: column;
 }
+textarea {
+  border-radius: 4px;
+  border: 1px solid #c1c1c1;
+}
+textarea:focus {
+  outline: none;
+  border-radius: 4px;
+  border: 1px solid #007cd6;
+}
 .click-able:hover {
   cursor: pointer;
+}
+.tweet-count {
+  font-size: 14px;
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  margin-right: 8px;
+  margin-top: -4px;
 }
 .ui-top-bottom {
   display: flex;
   justify-content: space-between;
+  height: 40px;
+  padding: 4px;
 }
 .ui-top-bottom-right {
   display: flex;

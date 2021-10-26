@@ -8,7 +8,11 @@
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.ui-top-selector {
+  width: 100vw;
+}
+</style>
 
 <script lang="ts">
 import { DalsaeApp } from '@/mixins';

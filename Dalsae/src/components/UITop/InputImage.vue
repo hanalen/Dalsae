@@ -32,7 +32,7 @@
 <style lang="scss" scoped>
 .input-image {
   width: 500px;
-  height: 300px;
+  height: 280px;
   overflow: hidden;
 }
 .image-list {
