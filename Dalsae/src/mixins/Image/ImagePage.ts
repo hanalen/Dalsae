@@ -23,14 +23,21 @@ export class ImagePage extends Vue {
     return this.orgTweet.extended_entities.media;
   }
 
-  @Provide()
-  PreviewClick(media: I.Media) {
-    console.log(media);
-    for (let i = 0; i < this.media.length; i++) {
-      if (media.media_url_https === this.media[i].media_url_https) {
-        this.index = i;
-        break;
-      }
+  OnPrev() {
+    this.index--;
+    if (this.index < 0) {
+      this.index = 0;
     }
+  }
+
+  OnNext() {
+    this.index++;
+    if (this.index >= this.media.length) {
+      this.index = this.media.length - 1;
+    }
+  }
+  OnClickMedia(media: I.Media) {
+    const index = this.media.findIndex(x => x.id_str === media.id_str);
+    if (index > -1) this.index = index;
   }
 }
