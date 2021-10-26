@@ -1,6 +1,7 @@
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Ref } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
+import * as M from '@/mixins';
 import { moduleApi } from '@/store/modules/APIStore';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleOption } from '@/store/modules/OptionStore';
@@ -27,6 +28,14 @@ export class TweetInputBase extends Vue {
     moduleUI.SetImage(listImage);
   }
 
+  get isAddedMedia() {
+    if (this.listImage.length > 0) {
+      return this.listImage[0].indexOf('data:image/gif') === 0;
+    } else {
+      return false;
+    }
+  }
+
   regex = new RegExp(
     /[(http|ftp|https):\/\/]*[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/gi
   );
@@ -43,25 +52,48 @@ export class TweetInputBase extends Vue {
 
   FileToString(file: File | null) {
     if (!file) return;
-    if (this.listImage.length >= 4) {
-      //todo error message
-      //이미지 4개 초과 시 에러 메시지 출력
-      return;
-    }
     const reader = new FileReader();
     reader.onload = e => {
       const img = e.target?.result as string;
-      for (let i = 0; i < this.listImage.length; i++) {
-        if (this.listImage[i] === img) {
-          //동일한 이미지 등록 시 스킵처리
-          return;
-        }
-      }
-      const listImage: string[] = this.listImage.slice();
-      listImage.push(img);
-      this.listImage = listImage;
+      this.AddImage(img);
     };
     reader.readAsDataURL(file);
+  }
+
+  AddImage(img: string) {
+    if (this.isAddedMedia) {
+      moduleModal.AddMessage({
+        errorType: M.Messagetype.E_INFO,
+        message: 'GIF는 하나만 등록 가능합니다.',
+        time: 3
+      });
+    } else if (this.listImage.length >= 4) {
+      moduleModal.AddMessage({
+        errorType: M.Messagetype.E_INFO,
+        message: '이미지는 4장까지 등록 가능합니다.',
+        time: 3
+      });
+    } else if (this.listImage.findIndex(x => x === img) > -1) {
+      //동일한 이미지 등록 시 스킵처리
+      moduleModal.AddMessage({
+        errorType: M.Messagetype.E_INFO,
+        message: '동일한 파일은 추가 할 수 없습니다.',
+        time: 3
+      });
+    } else {
+      const isGif = img.indexOf('data:image/gif') === 0;
+      if (isGif && this.listImage.length > 0) {
+        moduleModal.AddMessage({
+          errorType: M.Messagetype.E_INFO,
+          message: '이미지와 GIF는 동시에 등록이 불가능합니다.',
+          time: 3
+        });
+      } else {
+        const listImage: string[] = this.listImage.slice();
+        listImage.push(img);
+        this.listImage = listImage;
+      }
+    }
   }
 
   OnDragEnter(e: Event) {
