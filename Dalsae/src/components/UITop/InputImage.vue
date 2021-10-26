@@ -1,39 +1,35 @@
 <template>
   <div class="input-image" v-if="listImage.length > 0">
     <div class="image-list list-one" v-if="length === 1">
-      <img class="img-item" :src="listImage[0]" />
+      <add-image :img="listImage[0]" :index="0"></add-image>
     </div>
     <div class="image-list list-two" v-else-if="length === 2">
-      <img class="img-item" :src="listImage[0]" />
-      <img class="img-item" :src="listImage[1]" />
+      <add-image :img="listImage[0]" :index="0"></add-image>
+      <add-image :img="listImage[1]" :index="1"></add-image>
     </div>
     <div class="image-list list-three" v-else-if="length === 3">
       <div class="left">
-        <img class="img-item" :src="listImage[0]" />
-        <img class="img-item" :src="listImage[2]" />
+        <add-image :img="listImage[0]" :index="0"></add-image>
+        <add-image :img="listImage[2]" :index="2"></add-image>
       </div>
       <div class="right">
-        <img class="img-item" :src="listImage[1]" />
+        <add-image :img="listImage[1]" :index="1"></add-image>
       </div>
     </div>
     <div class="image-list list-four" v-else-if="length === 4">
       <div class="left">
-        <img class="img-item" :src="listImage[0]" />
-        <img class="img-item" :src="listImage[2]" />
+        <add-image :img="listImage[0]" :index="0"></add-image>
+        <add-image :img="listImage[2]" :index="2"></add-image>
       </div>
       <div class="right">
-        <img class="img-item" :src="listImage[1]" />
-        <img class="img-item" :src="listImage[3]" />
+        <add-image :img="listImage[1]" :index="1"></add-image>
+        <add-image :img="listImage[3]" :index="3"></add-image>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-img {
-  object-fit: cover;
-  padding: 4px;
-}
 .input-image {
   width: 500px;
   height: 300px;
@@ -75,9 +71,10 @@ img {
   }
 }
 .list-four {
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   .img-item {
     // width: 25%;
+    // width: 50%;
     height: 140px;
   }
 }
