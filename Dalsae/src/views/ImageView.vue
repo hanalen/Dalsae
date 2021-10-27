@@ -104,6 +104,7 @@ import { Vue, Component, Mixins, Ref } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import { moduleImage } from '@/store/modules/ImageStore';
+import { moduleOption } from '@/store/modules/OptionStore';
 @Component
 export default class ImageView extends Mixins(MIX.ImagePage) {
   @Ref()
@@ -142,39 +143,19 @@ export default class ImageView extends Mixins(MIX.ImagePage) {
   OnClickExpand(e: MouseEvent) {
     this.bExpanded = true;
   }
-  ClickLink(e: Event) {
-    // const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
-    // console.log(listTweet[this.index]);
-    // window.preload.image.OpenImageWindow(
-    //   listTweet[this.index].id_str.toString(),
-    //   listTweet[this.index]
-    // );
-    // this.index++;
-  }
-
-  async ClickModal() {
-    // await this.ShowMessage('modal test');
-  }
 
   async created() {
-    const tweet = window.preload.LoadTestImageTweet();
-    moduleImage.SetTweet(new I.Tweet(tweet));
     this.$nextTick(() => {
       this.bMounted = true;
       window.addEventListener('keydown', this.OnKeyDown);
     });
-    return;
-    // console.log('img window created');
-    // const id = this.$route.query.tweetId;
-    // console.log('id: ' + id);
-    // if (id) {
-    //   const option = window.preload.image.GetOption(id.toString());
-    //   this.option = JSON.parse(option);
-    //   const json = window.preload.image.GetTweet(id.toString());
-    //   this.tweet = JSON.parse(json);
-    //   console.log(this.tweet);
-    //   console.log(this.option);
-    // }
+    const id = this.$route.query.tweetId;
+    if (id) {
+      const option = window.preload.image.GetOption(id.toString());
+      moduleOption.ChangeOption(option);
+      const json = window.preload.image.GetTweet(id.toString());
+      moduleImage.SetTweet(new I.Tweet(JSON.parse(json)));
+    }
   }
 }
 </script>
