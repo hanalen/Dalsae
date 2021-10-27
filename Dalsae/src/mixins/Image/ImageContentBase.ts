@@ -42,7 +42,7 @@ export class ImageContentBase extends Mixins(Vue) {
   }
   get styleContent() {
     return {
-      height: 'calc(100vh - 300px)'
+      height: 'calc(100vh - 310px)'
     };
   }
   get imgStyle() {

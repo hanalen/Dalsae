@@ -24,11 +24,12 @@
         <image-content :style="styleContent" :tweet="tweet" :index="index"> </image-content>
       </v-container>
     </v-main>
-    <v-footer fixed height="120">
+    <v-footer fixed height="130">
       <div class="bottom">
         <image-popup-preview
           v-for="(media, i) in media"
           :media="media"
+          :progress="listProgress[i]"
           :key="i"
           v-on:on-click-media="OnClickMedia"
         >
@@ -40,7 +41,7 @@
 
 <style lang="scss" scoped>
 #main {
-  height: calc(100% - 120px) !important;
+  height: calc(100% - 130px) !important;
 }
 .btn-expand {
   background-color: rgba(160, 160, 160, 0.11);
@@ -81,7 +82,7 @@ export default class ImageView extends Mixins(MIX.ImagePage) {
   }
   get styleContent() {
     return {
-      height: 'calc(100vh - 300px)'
+      height: 'calc(100vh - 310px)'
     };
   }
   get isBigTweet() {

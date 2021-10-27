@@ -107,7 +107,9 @@ class ImageStore extends VuexModule {
   @Mutation
   private changeProgress(change: M.ChangeProgress) {
     if (change.index > 3) return;
-    this.stateProgress.listProgress[change.index] = change.progress;
+    this.stateProgress.listProgress[change.index].percent = change.progress.percent;
+    this.stateProgress.listProgress[change.index].bError = change.progress.bError;
+    this.stateProgress.listProgress[change.index].bStartDownload = change.progress.bStartDownload;
   }
 
   @Action

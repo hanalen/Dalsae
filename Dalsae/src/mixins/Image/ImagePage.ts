@@ -25,6 +25,10 @@ export class ImagePage extends Vue {
     return this.orgTweet.extended_entities.media;
   }
 
+  get listProgress() {
+    return moduleImage.stateProgress.listProgress;
+  }
+
   OnClickMedia(media: I.Media) {
     const index = this.media.findIndex(x => x.id_str === media.id_str);
     if (index > -1) {
