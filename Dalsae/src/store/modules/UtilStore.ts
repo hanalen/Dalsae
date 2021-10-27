@@ -18,7 +18,9 @@ import { eventBus } from '@/plugins';
 class UtilStore extends VuexModule {
   get isFocusPanel() {
     const { bOption, stateMessage, bOptionDetail, bPin } = moduleModal;
-    if (bOption || stateMessage.bMessage || bOption || bOptionDetail || bPin) return false;
+    const { bAutoComplete } = moduleModal.stateAutoComplete;
+    if (bOption || bAutoComplete || stateMessage.bMessage || bOption || bOptionDetail || bPin)
+      return false;
     return true;
   }
   @Action

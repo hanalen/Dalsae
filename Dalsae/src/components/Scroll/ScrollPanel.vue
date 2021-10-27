@@ -47,6 +47,8 @@ import { moduleTweet } from '@/store/modules/TweetStore';
 import { eventBus } from '@/plugins/EventBus';
 import { ETweetType } from '@/store/Interface';
 import { moduleUI } from '@/store/modules/UIStore';
+import { moduleModal } from '@/store/modules/ModalStore';
+import { moduleUtil } from '@/store/modules/UtilStore';
 @Component
 export default class ScrollPanel extends M.ScrollPanelBase {
   @Ref()
@@ -82,6 +84,7 @@ export default class ScrollPanel extends M.ScrollPanelBase {
 
     eventBus.$on('FocusPanel', (tweetType: ETweetType) => {
       if (this.tweetType !== tweetType) return;
+      if (!moduleUtil.isFocusPanel) return;
       console.log('focus panel');
       this.scrollPanel.focus();
     });

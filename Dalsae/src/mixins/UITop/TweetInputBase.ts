@@ -8,6 +8,7 @@ import { moduleOption } from '@/store/modules/OptionStore';
 import { eventBus } from '@/plugins';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { moduleUtil } from '@/store/modules/UtilStore';
 @Component
 export class TweetInputBase extends Vue {
   @Ref()
@@ -149,17 +150,20 @@ export class TweetInputBase extends Vue {
       }
     }
     const word = this.inputText.substring(sIndex, eIndex);
+    if (word === `@${moduleModal.stateAutoComplete.autoCompleteWord}`) return;
     if (word[0] === '@') {
       moduleModal.SetAutoComplete({
         ...moduleModal.stateAutoComplete,
         bAutoComplete: true,
-        autoCompleteWord: word.substring(1, word.length)
+        autoCompleteWord: word.substring(1, word.length),
+        indexAutoComplete: 0
       });
     } else {
       moduleModal.SetAutoComplete({
         ...moduleModal.stateAutoComplete,
         bAutoComplete: false,
-        autoCompleteWord: ''
+        autoCompleteWord: '',
+        indexAutoComplete: 0
       });
     }
   }
@@ -179,10 +183,11 @@ export class TweetInputBase extends Vue {
 
   ArrowDown(e: KeyboardEvent) {
     if (this.CheckLastLine(e)) {
-      e.stopPropagation();
-      e.preventDefault();
-      console.log('input key down');
-      eventBus.$emit('FocusPanel', moduleUI.selectMenu);
+      if (moduleUtil.isFocusPanel) {
+        e.stopPropagation();
+        e.preventDefault();
+        eventBus.$emit('FocusPanel', moduleUI.selectMenu);
+      }
     }
   }
 
