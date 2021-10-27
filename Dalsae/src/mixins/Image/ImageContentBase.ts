@@ -84,6 +84,55 @@ export class ImageContentBase extends Mixins(Vue) {
     return str;
   }
 
+  Zoom() {
+    const img = this.img[this.index];
+    let percent = 1.0;
+    if (img.clientHeight <= img.naturalHeight) {
+      //확대 비율을 구하기
+      percent = img.clientHeight / img.naturalHeight;
+    } else if (img.clientWidth <= img.naturalWidth) {
+      percent = img.clientWidth / img.naturalWidth;
+    }
+    percent = parseFloat((percent + 0.1).toFixed(1));
+    if (percent < 0.1) percent = 0.1;
+    else if (percent > 1.0) percent = 1.0;
+
+    this.SetImageSize(percent);
+  }
+
+  ZoomOut() {
+    if (!this.isZoomAble) return;
+    this.state.isZoom = true;
+    const img = this.img[this.index];
+    let percent = 1.0;
+    if (img.clientHeight <= img.naturalHeight) {
+      //확대 비율을 구하기
+      percent = img.clientHeight / img.naturalHeight;
+    } else if (img.clientWidth <= img.naturalWidth) {
+      percent = img.clientWidth / img.naturalWidth;
+    }
+    percent = parseFloat((percent - 0.1).toFixed(1));
+    if (percent < 0.1) percent = 0.1;
+    else if (percent > 1.0) percent = 1.0;
+
+    this.SetImageSize(percent);
+  }
+
+  ZoomReset() {
+    if (this.state.isZoom) {
+      this.SetImageSize(1.0);
+    } else {
+      this.state.maxWidth = 0;
+      this.state.maxHeight = 0;
+    }
+  }
+  SetImageSize(percent: number) {
+    //percent: 0.0~1.0 단위!
+    const img = this.img[this.index];
+    this.state.maxWidth = img.naturalWidth * percent;
+    this.state.maxHeight = img.naturalHeight * percent;
+  }
+
   OnClickNext() {
     this.$emit('on-next');
   }
