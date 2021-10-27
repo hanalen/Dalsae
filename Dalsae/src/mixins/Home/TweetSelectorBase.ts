@@ -170,7 +170,7 @@ export class TweetSelectorBase extends Vue {
 
     this.listUsers.forEach(user => {
       listContext.push({
-        title: `@${user.screen_name}의 프로필 보기`,
+        title: `@${user.screen_name} 의 프로필 보기`,
         titleTwo: user.name,
         onClick: this.OnClickProfile,
         value: value++,
@@ -258,11 +258,9 @@ export class TweetSelectorBase extends Vue {
   }
 
   OnClickProfile(value: number) {
-    console.log('profile');
     const context = this.listContext.find(x => x.value === value);
     if (!context) return;
-    const userScreenName = context.title.substring(0, context.title.indexOf(' /'));
-    console.log('user', userScreenName);
+    const userScreenName = context.title.substring(0, context.title.indexOf(' '));
     window.preload.profile.OpenProfileWindow(
       userScreenName,
       moduleSwitter.switter,
