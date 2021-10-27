@@ -4,7 +4,11 @@
     <v-main app>
       <v-container fluid :style="styleTop">
         <div :style="styleTweet" ref="refTweet">
-          <tweet-image v-if="option.isShowTweet" :tweet="tweet" :option="option"></tweet-image>
+          <tweet-selector
+            v-if="option.isShowTweet"
+            :selected="false"
+            :tweet="tweet"
+          ></tweet-selector>
         </div>
         <v-btn
           v-if="isBigTweet && !bExpanded"
@@ -20,7 +24,7 @@
           </v-icon>
         </v-btn>
       </v-container>
-      <v-container>
+      <v-container @contextmenu="OnContext">
         <image-content :style="styleContent" :tweet="tweet" :index="index"> </image-content>
       </v-container>
     </v-main>
@@ -36,6 +40,36 @@
         </image-popup-preview>
       </div>
     </v-footer>
+    <v-menu v-model="isShowContext" :position-x="x" :position-y="y" absolute offset-y>
+      <v-list>
+        <v-list-item-group v-model="indexContext">
+          <v-list-item value="0">
+            <template>
+              <div class="context-item" @click="OnClickSave">
+                <span>
+                  현재 이미지 저장
+                </span>
+                <span>
+                  (Ctrl + S)
+                </span>
+              </div>
+            </template>
+          </v-list-item>
+          <v-list-item value="1">
+            <template>
+              <div class="context-item" @click="OnClickSaveAll">
+                <span>
+                  모든 이미지 저장
+                </span>
+                <span>
+                  (Ctrl + A)
+                </span>
+              </div>
+            </template>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-menu>
   </v-app>
 </template>
 
@@ -51,6 +85,17 @@
 }
 .v-toolbar__content {
   align-items: baseline !important;
+}
+
+.v-list-item {
+  min-height: 24px !important;
+  max-width: 300px !important;
+  font-size: 14px !important;
+}
+.context-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 </style>
 
@@ -113,7 +158,7 @@ export default class ImageView extends Mixins(MIX.ImagePage) {
 
   async created() {
     const tweet = window.preload.LoadTestImageTweet();
-    moduleImage.SetTweet(tweet);
+    moduleImage.SetTweet(new I.Tweet(tweet));
     this.$nextTick(() => {
       this.bMounted = true;
       window.addEventListener('keydown', this.OnKeyDown);

@@ -5,6 +5,7 @@ import { moduleImage } from '@/store/modules/ImageStore';
 
 @Component
 export class ImagePage extends Vue {
+  indexContext = 0;
   get tweet() {
     return moduleImage.tweet;
   }
@@ -29,6 +30,20 @@ export class ImagePage extends Vue {
     return moduleImage.stateProgress.listProgress;
   }
 
+  get isShowContext() {
+    return moduleImage.stateImage.isShowContext;
+  }
+  set isShowContext(isShow: boolean) {
+    moduleImage.ChangeState({ ...moduleImage.stateImage, isShowContext: isShow });
+  }
+
+  get x() {
+    return moduleImage.stateImage.clickX;
+  }
+  get y() {
+    return moduleImage.stateImage.clickY;
+  }
+
   OnClickMedia(media: I.Media) {
     const index = this.media.findIndex(x => x.id_str === media.id_str);
     if (index > -1) {
@@ -45,6 +60,21 @@ export class ImagePage extends Vue {
         this.Save(i);
       }
     }
+  }
+
+  OnClickSave(e: MouseEvent) {
+    this.Save(this.index);
+  }
+
+  OnClickSaveAll(e: MouseEvent) {
+    for (let i = 0; i < this.media.length; i++) {
+      this.Save(i);
+    }
+  }
+
+  OnContext(e: MouseEvent) {
+    this.isShowContext = true;
+    moduleImage.ChangeState({ ...moduleImage.stateImage, clickX: e.pageX, clickY: e.pageY });
   }
 
   Save(index: number) {

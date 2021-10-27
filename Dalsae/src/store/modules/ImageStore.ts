@@ -16,6 +16,7 @@ class ImageViewState {
   clickY: number;
   isDrag: boolean;
   index: number;
+  isShowContext: boolean;
 
   constructor() {
     this.isZoom = false;
@@ -29,6 +30,7 @@ class ImageViewState {
     this.clickY = 0;
     this.isDrag = false;
     this.index = 0;
+    this.isShowContext = false;
   }
 }
 
