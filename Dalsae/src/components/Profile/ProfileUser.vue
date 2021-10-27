@@ -24,6 +24,11 @@
           <v-btn outlined color="primary" text @click="OnClickFollow">
             {{ followText }}
           </v-btn>
+          <v-btn icon rounded @click="ClickMenu(item.value)">
+            <v-icon :color="'primary'">
+              mdi-dots-horizontal
+            </v-icon>
+          </v-btn>
         </div>
       </div>
       <div class="bottom">
@@ -46,6 +51,8 @@ import * as I from '@/Interfaces';
 import { moduleProfile } from '@/store/modules/ProfileStore';
 import { moduleApi } from '@/store/modules/APIStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
+import { ContextItem } from '@/mixins';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
 
 @Component
 export default class ProfileUser extends Vue {
@@ -57,6 +64,30 @@ export default class ProfileUser extends Vue {
     moduleProfile.ChangeShowUser(this.user);
   }
 
+  get listContext() {
+    let value = 0;
+    const listContext: ContextItem[] = [];
+    listContext.push({
+      title: '차단하기',
+      onClick: this.OnBlock,
+      value: value++,
+      isDivider: false
+    });
+    listContext.push({
+      title: '뮤트 하기',
+      onClick: this.OnMute,
+      value: value++,
+      isDivider: false
+    });
+    listContext.push({
+      title: '리트윗 끄기',
+      onClick: this.OnOffRetweet,
+      value: value++,
+      isDivider: false
+    });
+    return listContext;
+  }
+
   get isLoad() {
     return moduleProfile.isFollwRequest;
   }
@@ -66,8 +97,19 @@ export default class ProfileUser extends Vue {
   }
 
   async OnClickFollow() {
-    console.log('foolow');
     moduleUtil.Follow(this.user);
+  }
+
+  async OnBlock(value: number) {
+    console.log('on block');
+  }
+
+  async OnOffRetweet(value: number) {
+    console.log('on off rt');
+  }
+
+  async OnMute(value: number) {
+    console.log('on mute');
   }
 
   get followText() {

@@ -1,9 +1,11 @@
 <template>
-  <div class="auto-complete" v-if="isShow" :style="style">
+  <div class="auto-complete" v-if="isShow" :style="style" ref="refScrollPanel">
     <user-small
+      ref="refUserSmall"
       v-for="(user, i) in users"
       :key="i"
       :user="user"
+      :index="i"
       v-on:on-click-small-user="OnClickUser"
     />
   </div>
@@ -34,6 +36,11 @@ import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export default class AutoComplete extends Vue {
+  @Ref()
+  refUserSmall!: Vue[];
+  @Ref()
+  refScrollPanel!: HTMLElement;
+
   get isShow() {
     return moduleModal.stateAutoComplete.bAutoComplete;
   }
@@ -88,15 +95,22 @@ export default class AutoComplete extends Vue {
         if (index < 0) index = 0;
         else if (index >= this.users.length) index = this.users.length - 1;
         moduleModal.SetAutoComplete({ ...moduleModal.stateAutoComplete, indexAutoComplete: index });
+        this.MoveScroll();
       } else if (e.code === 'ArrowDown') {
         e.preventDefault();
         const { indexAutoComplete } = moduleModal.stateAutoComplete;
-        let index = indexAutoComplete - 1;
+        let index = indexAutoComplete + 1;
         if (index < 0) index = 0;
         else if (index >= this.users.length) index = this.users.length - 1;
         moduleModal.SetAutoComplete({ ...moduleModal.stateAutoComplete, indexAutoComplete: index });
+        this.MoveScroll();
       }
     }
+  }
+
+  MoveScroll() {
+    const index = moduleModal.stateAutoComplete.indexAutoComplete;
+    this.refUserSmall[index].$el.scrollIntoView();
   }
 
   async beforeDestroy() {
