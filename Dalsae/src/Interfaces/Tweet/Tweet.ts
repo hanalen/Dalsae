@@ -50,6 +50,7 @@ export class Tweet {
         user_mentions: [],
         media: [
           {
+            media_url: '',
             id_str: '',
             media_url_https: '',
             url: '',

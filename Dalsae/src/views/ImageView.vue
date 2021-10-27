@@ -121,6 +121,7 @@ export default class ImageView extends Mixins(MIX.ImagePage) {
     this.tweet = window.preload.LoadTestImageTweet();
     this.$nextTick(() => {
       this.bMounted = true;
+      window.addEventListener('keydown', this.OnKeyDown);
     });
     return;
     console.log('img window created');
