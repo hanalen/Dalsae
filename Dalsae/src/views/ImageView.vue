@@ -21,15 +21,7 @@
         </v-btn>
       </v-container>
       <v-container>
-        <image-content
-          :style="styleContent"
-          :tweet="tweet"
-          :index="index"
-          v-on:on-prev="OnPrev"
-          v-on:on-next="OnNext"
-          v-on:on-change-index="OnChangeIndex"
-        >
-        </image-content>
+        <image-content :style="styleContent" :tweet="tweet" :index="index"> </image-content>
       </v-container>
     </v-main>
     <v-footer fixed height="120">
@@ -65,6 +57,7 @@
 import { Vue, Component, Mixins, Ref } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
+import { moduleImage } from '@/store/modules/ImageStore';
 @Component
 export default class ImageView extends Mixins(MIX.ImagePage) {
   @Ref()
@@ -118,23 +111,24 @@ export default class ImageView extends Mixins(MIX.ImagePage) {
   }
 
   async created() {
-    this.tweet = window.preload.LoadTestImageTweet();
+    const tweet = window.preload.LoadTestImageTweet();
+    moduleImage.SetTweet(tweet);
     this.$nextTick(() => {
       this.bMounted = true;
       window.addEventListener('keydown', this.OnKeyDown);
     });
     return;
-    console.log('img window created');
-    const id = this.$route.query.tweetId;
-    console.log('id: ' + id);
-    if (id) {
-      const option = window.preload.image.GetOption(id.toString());
-      this.option = JSON.parse(option);
-      const json = window.preload.image.GetTweet(id.toString());
-      this.tweet = JSON.parse(json);
-      console.log(this.tweet);
-      console.log(this.option);
-    }
+    // console.log('img window created');
+    // const id = this.$route.query.tweetId;
+    // console.log('id: ' + id);
+    // if (id) {
+    //   const option = window.preload.image.GetOption(id.toString());
+    //   this.option = JSON.parse(option);
+    //   const json = window.preload.image.GetTweet(id.toString());
+    //   this.tweet = JSON.parse(json);
+    //   console.log(this.tweet);
+    //   console.log(this.option);
+    // }
   }
 }
 </script>
