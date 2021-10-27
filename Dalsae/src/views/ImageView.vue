@@ -27,6 +27,7 @@
           :index="index"
           v-on:on-prev="OnPrev"
           v-on:on-next="OnNext"
+          v-on:on-change-index="OnChangeIndex"
         >
         </image-content>
       </v-container>

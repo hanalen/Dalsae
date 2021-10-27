@@ -38,7 +38,6 @@
   overflow-x: scroll;
   overflow: hidden;
   margin: auto;
-  cursor: pointer;
 }
 .img-div {
   display: flex;
@@ -53,7 +52,9 @@
   max-width: 100%;
   max-height: 100%;
   height: auto;
-  // cursor: pointer;
+}
+img {
+  cursor: pointer;
 }
 .left-button,
 .right-button {
@@ -64,12 +65,14 @@
   left: 20px;
   top: 50%;
   color: white;
+  z-index: 10;
 }
 .right-button {
   position: absolute;
   right: 20px;
   top: 50%;
   color: white;
+  z-index: 10;
 }
 .right-button:hover,
 .left-button:hover {
@@ -89,5 +92,11 @@ import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 
 @Component
-export default class ImageContent extends Mixins(MIX.ImageContentBase) {}
+export default class ImageContent extends Mixins(MIX.ImageContentBase) {
+  async created() {
+    this.$nextTick(() => {
+      window.addEventListener('keydown', this.OnKeyDown);
+    });
+  }
+}
 </script>

@@ -54,4 +54,9 @@ export class ImagePage extends Vue {
     const index = this.media.findIndex(x => x.id_str === media.id_str);
     if (index > -1) this.index = index;
   }
+  OnChangeIndex(index: number) {
+    if (index < 0) index = 0;
+    else if (index >= this.media.length) index = this.media.length - 1;
+    this.index = index;
+  }
 }

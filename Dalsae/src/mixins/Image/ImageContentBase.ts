@@ -72,19 +72,25 @@ export class ImageContentBase extends Mixins(Vue) {
     };
   }
   get imgStyle() {
-    const state = this.state;
-    const width = state.maxWidth === 0 ? '100%' : `${state.maxWidth}px`;
-    const height = state.maxHeight === 0 ? '100%' : `${state.maxHeight}px`;
-    const str = `transform: translate(${state.left}px, ${state.top}px), max-width: ${width}, max-height: ${height}`;
-    return {
-      // width: state.maxWidth === 0 ? '100%' : `${state.maxWidth}px`,
-      // height: state.maxHeight === 0 ? '100%' : `${state.maxHeight}px`,
-      transform: `translate(${state.left}px, ${state.top}px)`
-    };
-    return str;
+    const { isZoom, maxWidth, maxHeight, left, top } = this.state;
+    const width = maxWidth === 0 ? '100%' : `${maxWidth}px`;
+    const height = maxHeight === 0 ? '100%' : `${maxHeight}px`;
+    if (isZoom && maxWidth === 0 && maxHeight === 0) {
+      return {
+        transform: `translate(${left}px, ${top}px)`
+      };
+    } else {
+      return {
+        'max-width': width,
+        'max-height': height,
+        transform: `translate(${left}px, ${top}px)`
+      };
+    }
   }
 
   Zoom() {
+    if (!this.isZoomAble) return;
+    this.state.isZoom = true;
     const img = this.img[this.index];
     let percent = 1.0;
     if (img.clientHeight <= img.naturalHeight) {
@@ -168,6 +174,7 @@ export class ImageContentBase extends Mixins(Vue) {
         this.state.prevY = 0;
         this.state.left = 0;
         this.state.top = 0;
+        this.ZoomReset();
       }
     }
     this.state.isDrag = false;
@@ -181,6 +188,39 @@ export class ImageContentBase extends Mixins(Vue) {
       this.state.prevY = e.pageY;
       this.state.left += x;
       this.state.top += y;
+    }
+  }
+  OnKeyDown(e: KeyboardEvent) {
+    if (e.key === '1') {
+      this.$emit('on-change-index', 0);
+    } else if (e.key === '2') {
+      this.$emit('on-change-index', 1);
+    } else if (e.key === '3') {
+      this.$emit('on-change-index', 2);
+    } else if (e.key === '4') {
+      this.$emit('on-change-index', 3);
+    } else if (e.key === 'e') {
+      this.Zoom();
+    } else if (e.key === 'q') {
+      this.ZoomOut();
+    } else if (e.key === 'w') {
+      if (!this.state.isZoom) return;
+      this.state.top -= 20;
+    } else if (e.key === 'a') {
+      if (!this.state.isZoom) return;
+      this.state.left -= 20;
+    } else if (e.key === 's') {
+      if (!this.state.isZoom) return;
+      this.state.top += 20;
+    } else if (e.key === 'd') {
+      if (!this.state.isZoom) return;
+      this.state.left += 20;
+    } else if (e.key === ' ') {
+      if (this.isZoomAble) {
+        const zoom = !this.state.isZoom;
+        this.state = new State();
+        this.state.isZoom = zoom;
+      }
     }
   }
 }
