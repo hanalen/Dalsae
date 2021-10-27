@@ -14,8 +14,10 @@
   position: fixed;
   width: 300px;
   height: 200px;
-  background-color: azure;
+  background-color: rgb(238, 238, 238);
   overflow-y: scroll;
+  border-radius: 10px;
+  box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 </style>
 
@@ -33,11 +35,11 @@ import { moduleOption } from '@/store/modules/OptionStore';
 @Component
 export default class AutoComplete extends Vue {
   get isShow() {
-    return moduleModal.bAutoComplete;
+    return moduleModal.stateAutoComplete.bAutoComplete;
   }
 
   get word() {
-    return moduleModal.autoCompleteWord;
+    return moduleModal.stateAutoComplete.autoCompleteWord;
   }
 
   get users() {
@@ -77,20 +79,22 @@ export default class AutoComplete extends Vue {
   }
 
   OnKeyDown(e: KeyboardEvent) {
-    if (!moduleModal.bAutoComplete) return;
+    if (!moduleModal.stateAutoComplete.bAutoComplete) return;
     if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
       if (e.code === 'ArrowUp') {
         e.preventDefault();
-        let index = moduleModal.indexAutoComplete - 1;
+        const { indexAutoComplete } = moduleModal.stateAutoComplete;
+        let index = indexAutoComplete - 1;
         if (index < 0) index = 0;
         else if (index >= this.users.length) index = this.users.length - 1;
-        moduleModal.SetIndexAutoComplete(moduleModal.indexAutoComplete - 1);
+        moduleModal.SetAutoComplete({ ...moduleModal.stateAutoComplete, indexAutoComplete: index });
       } else if (e.code === 'ArrowDown') {
         e.preventDefault();
-        let index = moduleModal.indexAutoComplete - 1;
+        const { indexAutoComplete } = moduleModal.stateAutoComplete;
+        let index = indexAutoComplete - 1;
         if (index < 0) index = 0;
         else if (index >= this.users.length) index = this.users.length - 1;
-        moduleModal.SetIndexAutoComplete(moduleModal.indexAutoComplete + 1);
+        moduleModal.SetAutoComplete({ ...moduleModal.stateAutoComplete, indexAutoComplete: index });
       }
     }
   }

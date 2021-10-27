@@ -166,14 +166,18 @@ class UtilStore extends VuexModule {
 
   @Action
   AutoCompleted(user: I.User | undefined) {
-    if (!moduleModal.bAutoComplete) return;
+    if (!moduleModal.stateAutoComplete.bAutoComplete) return;
     let text = moduleUI.stateInput.inputText;
-    const { autoCompleteWord, indexAutoComplete } = moduleModal;
+    const { autoCompleteWord, indexAutoComplete } = moduleModal.stateAutoComplete;
     if (!user) {
       user = moduleModal.users[indexAutoComplete];
     }
     text = text.replace(`@${autoCompleteWord}`, `@${user.screen_name} `);
-    moduleModal.SetAutoComplete({ bShow: false, word: '' });
+    moduleModal.SetAutoComplete({
+      ...moduleModal.stateAutoComplete,
+      bAutoComplete: false,
+      autoCompleteWord: ''
+    });
     moduleUI.SetInputText(text);
     eventBus.$emit('FocusInput');
   }

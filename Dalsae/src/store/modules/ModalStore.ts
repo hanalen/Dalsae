@@ -15,21 +15,30 @@ class MessageState {
   }
 }
 
+class StateAutoComplete {
+  bAutoComplete: boolean;
+  autoCompleteWord: string;
+  indexAutoComplete: number;
+  constructor() {
+    this.bAutoComplete = false;
+    this.autoCompleteWord = '';
+    this.indexAutoComplete = 0;
+  }
+}
+
 @Module({ dynamic: true, store, name: 'modal' })
 class ModalStore extends VuexModule {
   // states
   stateMessage = new MessageState();
+  stateAutoComplete = new StateAutoComplete();
   bPin = false;
   bOptionDetail = false;
   bOption = false;
-  bAutoComplete = false;
-  autoCompleteWord = '';
   message = '';
-  indexAutoComplete = 0;
 
   get users() {
-    if (!this.bAutoComplete) return [];
-    const word = this.autoCompleteWord.toUpperCase();
+    if (!this.stateAutoComplete.bAutoComplete) return [];
+    const word = this.stateAutoComplete.autoCompleteWord.toUpperCase();
     if (!word) return [];
     if (!moduleSwitter.listFollowing || !moduleSwitter.listFollower) return [];
     const following = moduleSwitter.listFollowing.filter(
@@ -86,25 +95,13 @@ class ModalStore extends VuexModule {
   }
 
   @Mutation
-  private setAutoComplete(changeEvent: A.ChangeAutoComplete) {
-    this.bAutoComplete = changeEvent.bShow;
-    this.autoCompleteWord = changeEvent.word;
-    this.indexAutoComplete = 0;
+  private setAutoComplete(state: StateAutoComplete) {
+    this.stateAutoComplete = state;
   }
 
   @Action
-  SetAutoComplete(changeEvent: A.ChangeAutoComplete) {
-    this.context.commit('setAutoComplete', changeEvent);
-  }
-
-  @Mutation
-  private setIndexAutoComplete(index: number) {
-    this.indexAutoComplete = index;
-  }
-
-  @Action
-  SetIndexAutoComplete(index: number) {
-    this.context.commit('setIndexAutoComplete', index);
+  SetAutoComplete(state: StateAutoComplete) {
+    this.context.commit('setAutoComplete', state);
   }
 
   @Action

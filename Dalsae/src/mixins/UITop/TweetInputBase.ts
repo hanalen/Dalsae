@@ -150,9 +150,17 @@ export class TweetInputBase extends Vue {
     }
     const word = this.inputText.substring(sIndex, eIndex);
     if (word[0] === '@') {
-      moduleModal.SetAutoComplete({ bShow: true, word: word.substring(1, word.length) });
+      moduleModal.SetAutoComplete({
+        ...moduleModal.stateAutoComplete,
+        bAutoComplete: true,
+        autoCompleteWord: word.substring(1, word.length)
+      });
     } else {
-      moduleModal.SetAutoComplete({ bShow: false, word: '' });
+      moduleModal.SetAutoComplete({
+        ...moduleModal.stateAutoComplete,
+        bAutoComplete: false,
+        autoCompleteWord: ''
+      });
     }
   }
   CheckLastLine(e: KeyboardEvent) {
