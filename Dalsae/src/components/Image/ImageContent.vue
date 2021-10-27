@@ -15,7 +15,7 @@
           :src="image.media_url_https"
           class="img-content"
           :class="{ zoom: state.isZoom }"
-          :style="{ imgStyle }"
+          :style="imgStyle"
           @mousedown="MouseDown"
           @mouseleave="MouseLeave"
           @mouseup="MouseUp"
@@ -32,10 +32,13 @@
 
 <style lang="scss" scoped>
 .image-content {
+  width: 100%;
+  height: 100%;
   overflow-y: scroll;
   overflow-x: scroll;
   overflow: hidden;
   margin: auto;
+  cursor: pointer;
 }
 .img-div {
   display: flex;
@@ -68,8 +71,15 @@
   top: 50%;
   color: white;
 }
+.right-button:hover,
+.left-button:hover {
+  background-color: rgba(100, 100, 100, 0.5);
+  border-radius: 20px;
+}
 .zoom {
-  object-fit: cover;
+  object-fit: cover !important;
+  max-width: none;
+  max-height: none;
 }
 </style>
 
