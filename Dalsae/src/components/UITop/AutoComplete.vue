@@ -1,5 +1,5 @@
 <template>
-  <div class="auto-complete" v-if="isShow">
+  <div class="auto-complete" v-if="isShow" :style="style">
     <user-small
       v-for="(user, i) in users"
       :key="i"
@@ -12,10 +12,8 @@
 <style lang="scss" scoped>
 .auto-complete {
   position: fixed;
-  left: 100px;
-  top: 300px;
   width: 300px;
-  height: 100px;
+  height: 200px;
   background-color: azure;
   overflow-y: scroll;
 }
@@ -30,6 +28,7 @@ import * as I from '@/Interfaces';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export default class AutoComplete extends Vue {
@@ -43,6 +42,28 @@ export default class AutoComplete extends Vue {
 
   get users() {
     return moduleModal.users;
+  }
+
+  get style() {
+    let left = 15;
+    let top = 0;
+    const { isBigPropic, isShowPropic, isSmallInput } = moduleOption.uiOption;
+    if (isSmallInput) {
+      top += 30;
+    } else {
+      top += 60;
+    }
+    if (isShowPropic) {
+      if (isBigPropic) {
+        left += 70;
+      } else {
+        left += 45;
+      }
+    }
+    return {
+      left: `${left}px`,
+      top: `${top}px`
+    };
   }
 
   async created() {
