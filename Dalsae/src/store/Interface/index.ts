@@ -7,3 +7,4 @@ export * from './ContextEvent';
 export * from './LoadEvent';
 export * from './ChangeAutoComplete';
 export * from './AddFollowList';
+export * from './ChangeProgress';

@@ -34,20 +34,27 @@ export class ImagePage extends Vue {
 
   OnKeyDown(e: KeyboardEvent) {
     const { ctrlKey, altKey, shiftKey, key } = e;
-
     if (ctrlKey && !altKey && !shiftKey && key === 's') {
-      console.log('save');
-      this.Save();
+      this.Save(this.index);
     } else if (ctrlKey && !altKey && !shiftKey && key === 'a') {
-      console.log('save all');
+      for (let i = 0; i < this.media.length; i++) {
+        this.Save(i);
+      }
     }
   }
 
-  Save() {
-    window.preload.image.DownloadImage(this.media[this.index], this.CallBack);
+  Save(index: number) {
+    moduleImage.ChangeProgress({
+      index: index,
+      progress: { bError: false, bStartDownload: true, percent: 0 }
+    });
+    window.preload.image.DownloadImage(this.media[index], index, this.CallBack);
   }
 
-  CallBack(percent: number) {
-    console.log('callback', percent);
+  CallBack(index: number, percent: number, bError: boolean) {
+    moduleImage.ChangeProgress({
+      index: index,
+      progress: { bError: bError, bStartDownload: true, percent: percent }
+    });
   }
 }

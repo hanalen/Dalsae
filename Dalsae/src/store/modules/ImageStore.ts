@@ -2,6 +2,7 @@
 import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import store from '@/store';
+import * as M from '@/store/Interface';
 
 class ImageViewState {
   isZoom: boolean;
@@ -31,10 +32,23 @@ class ImageViewState {
   }
 }
 
+class ProgressState {
+  listProgress: M.Progress[];
+  constructor() {
+    this.listProgress = [
+      { bError: false, bStartDownload: false, percent: 0 },
+      { bError: false, bStartDownload: false, percent: 0 },
+      { bError: false, bStartDownload: false, percent: 0 },
+      { bError: false, bStartDownload: false, percent: 0 }
+    ];
+  }
+}
+
 @Module({ dynamic: true, store, name: 'image' })
 class ImageStore extends VuexModule {
   // states
   stateImage = new ImageViewState();
+  stateProgress = new ProgressState();
   tweet = new I.Tweet();
   option: I.UIOption = {
     isBigPropic: true,
@@ -88,6 +102,17 @@ class ImageStore extends VuexModule {
   @Action
   SetOption(option: I.UIOption) {
     this.context.commit('setOption', option);
+  }
+
+  @Mutation
+  private changeProgress(change: M.ChangeProgress) {
+    if (change.index > 3) return;
+    this.stateProgress.listProgress[change.index] = change.progress;
+  }
+
+  @Action
+  ChangeProgress(change: M.ChangeProgress) {
+    this.context.commit('changeProgress', change);
   }
 }
 

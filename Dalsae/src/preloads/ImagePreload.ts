@@ -37,7 +37,11 @@ export default class ImagePreload {
     return option;
   }
 
-  DownloadImage(media: I.Media, callback: (percent: number) => void) {
+  DownloadImage(
+    media: I.Media,
+    index: number,
+    callback: (index: number, percent: number, bError: boolean) => void
+  ) {
     //progress show, hide 해야 함
     const url = media.media_url + ':orig';
     const fileName = media.media_url.substring(media.media_url.lastIndexOf('/'), 9999999999);
@@ -54,7 +58,7 @@ export default class ImagePreload {
           file.write(chunk);
           downloaded += chunk.length;
           const percent = parseFloat(((100.0 * downloaded) / len).toFixed(2));
-          callback(percent);
+          callback(index, percent, false);
         })
         .on('end', function() {
           file.end();
@@ -62,6 +66,7 @@ export default class ImagePreload {
         })
         .on('error', function(err) {
           file.end();
+          callback(index, 0, true);
           console.log('img down error!!!');
           console.log(err);
         });
