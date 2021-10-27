@@ -21,7 +21,13 @@
         </v-btn>
       </v-container>
       <v-container>
-        <image-content :tweet="tweet" :index="index" v-on:on-prev="OnPrev" v-on:on-next="OnNext">
+        <image-content
+          :style="styleContent"
+          :tweet="tweet"
+          :index="index"
+          v-on:on-prev="OnPrev"
+          v-on:on-next="OnNext"
+        >
         </image-content>
       </v-container>
     </v-main>
@@ -78,6 +84,11 @@ export default class ImageView extends Mixins(MIX.ImagePage) {
         overflow: 'hidden'
       };
     }
+  }
+  get styleContent() {
+    return {
+      height: 'calc(100vh - 300px)'
+    };
   }
   get isBigTweet() {
     if (!this.bMounted) return;
