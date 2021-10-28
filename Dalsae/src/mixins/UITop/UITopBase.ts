@@ -27,8 +27,8 @@ export class UITopBase extends Vue {
     if (!user) this.propicPath = '';
     else
       this.propicPath = this.option.isBigPropic
-        ? user.profile_image_url_https.replace('_normal', '_bigger')
-        : user.profile_image_url_https;
+        ? user.profile_image_url_https.replace('_normal', '')
+        : user.profile_image_url_https.replace('_normal', '_bigger');
   }
 
   get isShowPropic() {

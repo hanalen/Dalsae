@@ -51,8 +51,8 @@ export default class PropicImage extends Vue {
 
   get img() {
     return this.option.isBigPropic
-      ? this.user.profile_image_url_https.replace('_normal', '_bigger')
-      : this.user.profile_image_url_https;
+      ? this.user.profile_image_url_https.replace('_normal', '')
+      : this.user.profile_image_url_https.replace('_normal', '_bigger');
   }
 
   get imgClass() {
