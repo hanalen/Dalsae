@@ -202,6 +202,7 @@ tab-name {
   border-radius: 10px;
 }
 .scroll-panel {
+  padding: 4px;
   overflow-y: scroll;
 }
 </style>

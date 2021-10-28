@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-user" @click="OnClickUser">
+  <div class="profile-user" @click="OnClickUser" :class="{ selected: isSelected }">
     <v-badge :value="user.verified" avatar bottom overlap color="white" offset-x="20" offset-y="20">
       <template v-slot:badge>
         <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
@@ -15,20 +15,21 @@
       </v-avatar>
     </v-badge>
     <div class="profile-name">
-      <div class="top">
+      <div class="profile-top">
         <div class="top-left">
-          <span>{{ name }}</span>
+          <span class="name">{{ name }}</span
+          ><br />
           <span>{{ screenName }}</span>
         </div>
         <div class="top-right">
-          <v-btn outlined color="primary" text @click="OnClickFollow">
+          <v-btn height="30" outlined color="primary" text @click="OnClickFollow">
             {{ followText }}
           </v-btn>
-          <v-btn icon rounded @click="ClickMenu(item.value)">
+          <!-- <v-btn icon rounded @click="ClickMenu">
             <v-icon :color="'primary'">
               mdi-dots-horizontal
             </v-icon>
-          </v-btn>
+          </v-btn> -->
         </div>
       </div>
       <div class="bottom">
@@ -41,6 +42,33 @@
 <style lang="scss" scoped>
 .profile-user {
   display: flex;
+  border-bottom: dashed 1px rgba(0, 0, 0, 0.12);
+  padding: 4px;
+  width: 100%;
+}
+.selected {
+  background-color: rgb(231, 231, 231) !important;
+}
+.profile-user:hover {
+  background-color: rgb(218, 218, 218) !important;
+}
+.v-avatar {
+  border-radius: 10px;
+}
+.name {
+  font-weight: bold;
+}
+.profile-name {
+  margin-left: 4px;
+  width: 100%;
+}
+.profile-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.v-btn {
+  padding: 0 4px !important;
 }
 </style>
 
@@ -58,6 +86,10 @@ import { moduleSwitter } from '@/store/modules/SwitterStore';
 export default class ProfileUser extends Vue {
   @Prop()
   user!: I.User;
+
+  get isSelected() {
+    return moduleProfile.showUser.screen_name === this.user.screen_name;
+  }
 
   OnClickUser(e: MouseEvent) {
     console.log(e);
@@ -96,7 +128,14 @@ export default class ProfileUser extends Vue {
     moduleProfile.SetFollowRequest(isLoad);
   }
 
-  async OnClickFollow() {
+  ClickMenu(e: MouseEvent) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
+  async OnClickFollow(e: MouseEvent) {
+    e.stopPropagation();
+    e.preventDefault();
     moduleUtil.Follow(this.user);
   }
 
@@ -117,7 +156,7 @@ export default class ProfileUser extends Vue {
   }
 
   get propic() {
-    return this.user.profile_image_url_https;
+    return this.user.profile_image_url_https.replace('_normal', '');
   }
 
   get name() {
@@ -125,7 +164,7 @@ export default class ProfileUser extends Vue {
   }
 
   get screenName() {
-    return this.user.screen_name;
+    return `@${this.user.screen_name}`;
   }
 
   get userBio() {

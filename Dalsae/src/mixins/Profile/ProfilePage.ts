@@ -83,7 +83,7 @@ export class ProfilePage extends Vue {
   }
 
   get userPropic() {
-    return moduleProfile.showUser.profile_image_url_https.replace('_normal', '_bigger');
+    return moduleProfile.showUser.profile_image_url_https.replace('_normal', '');
   }
 
   get countTweet() {
