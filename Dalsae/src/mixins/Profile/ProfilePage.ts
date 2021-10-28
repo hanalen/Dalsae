@@ -15,6 +15,10 @@ export class ProfilePage extends Vue {
     moduleProfile.SetLoadUser(isLoad);
   }
 
+  get verified() {
+    return moduleProfile.selectUser.verified;
+  }
+
   async LoadUserInfo(screenName: string) {
     this.isLoadProfile = true;
     const resp = await moduleApi.users.Show({ screen_name: screenName });
@@ -94,12 +98,12 @@ export class ProfilePage extends Vue {
   }
 
   get name() {
-    return moduleProfile.showUser.protected
-      ? moduleProfile.showUser.name + '🔒'
-      : moduleProfile.showUser.name;
+    return moduleProfile.showUser.name;
   }
   get screenName() {
-    return moduleProfile.showUser.screen_name;
+    return moduleProfile.showUser.protected
+      ? `@${moduleProfile.showUser.screen_name} 🔒`
+      : `@${moduleProfile.showUser.screen_name}`;
   }
 
   get selectName() {

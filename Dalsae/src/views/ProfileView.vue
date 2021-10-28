@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div class="profile-view">
     <v-progress-circular
       v-if="isLoadProfile"
       :width="5"
       color="primary"
       indeterminate
     ></v-progress-circular>
-    <div v-else class="profile-view">
-      <div class="profile-header">
-        <v-img :src="userHeader">
+    <div v-else>
+      <div>
+        <v-img class="profile-header" :src="userHeader">
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
               <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -18,22 +18,41 @@
       </div>
       <div class="profile">
         <div class="profile-left">
-          <v-avatar class="img-propic" rounded :size="84">
-            <v-img :src="userPropic">
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                </v-row>
+          <div class="propic">
+            <v-badge
+              :value="verified"
+              avatar
+              bottom
+              overlap
+              color="white"
+              offset-x="20"
+              offset-y="20"
+            >
+              <template v-slot:badge>
+                <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
               </template>
-            </v-img>
-          </v-avatar>
+              <v-avatar rounded :size="84">
+                <v-img :src="userPropic">
+                  <template v-slot:placeholder>
+                    <v-row class="fill-height ma-0" align="center" justify="center">
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+                <!-- <img ref="refImg" :src="img" :class="imgClass" /> -->
+              </v-avatar>
+            </v-badge>
+          </div>
           <div class="profile-count">
             <div class="profile-count-left">
-              <span>트윗</span><br />
-              <span>팔로잉</span><br />
-              <span>팔로워</span><br />
+              <span>트윗</span>
+              <span>팔로잉</span>
+              <span>팔로워</span>
             </div>
-            <div class="profile-count-right">
+            <div class="profile-count-right color-gray">
               <span @click="ClickTweet">{{ countTweet }}</span>
               <span>{{ countFollowing }}</span>
               <span>{{ countFollower }}</span>
@@ -41,14 +60,18 @@
           </div>
         </div>
         <div class="profile-right">
-          <span class="user-name">{{ name }}</span>
-          <span class="user-screen-name">{{ screenName }}</span
+          <span class="user-name">{{ name }}</span
           ><br />
+          <span class="user-screen-name">{{ screenName }}</span>
+          <br />
+          <br />
           <span class="user-bio">{{ userBio }} </span>
-          <div class="user-place">
+          <div class="user-place color-gray">
+            <v-icon size="16">mdi-compass-outline </v-icon>
             <span>{{ place }}</span>
           </div>
-          <div class="user-url">
+          <div class="user-url url">
+            <v-icon size="16">mdi-link-variant</v-icon>
             <span>{{ url }}</span>
           </div>
         </div>
@@ -93,16 +116,69 @@
 
 <style lang="scss" scoped>
 .profile,
-.profile-left,
 .profile-count-left,
-profile-count-right,
-profile-count,
+.profile-count-right,
+.profile-count,
 tab-name {
   display: flex;
 }
 .profile-count-left,
-profile-count-right {
+.profile-count-right {
   flex-direction: column;
+}
+.profile-count-left {
+  width: 50px;
+}
+.profile-count-right {
+  width: 60px;
+}
+.color-gray {
+  color: rgb(156, 156, 156);
+}
+.color-gray:hover {
+  cursor: pointer;
+}
+.profile-count-left span,
+.profile-count-right span {
+  margin-bottom: 4px;
+}
+.count-text {
+  margin-bottom: 4px;
+}
+.profile-count-left {
+  text-align: right;
+  margin-right: 10px;
+}
+.profile-right span {
+  margin-bottom: 4px;
+}
+.profile-count {
+  padding: 4px;
+}
+.profile-view {
+  padding: 4px;
+  font-size: 14px;
+}
+.profile-header {
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+.propic {
+  margin-left: 20px;
+  width: 84px;
+  height: 84px;
+}
+.user-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+.url {
+  color: #1d9bf0;
+}
+.url:hover {
+  cursor: pointer;
+}
+.img-propic {
 }
 </style>
 
@@ -137,6 +213,17 @@ export default class ProfileView extends MIX.ProfilePage {
 
   */
   async created() {
+    const testFollowing = window.preload.LoadTestFriends();
+    console.log(testFollowing);
+    moduleSwitter.AddFollowingList({
+      followList: testFollowing,
+      selectId: moduleSwitter.selectID
+    });
+    const testSwitter = window.preload.LoadSwitter();
+    moduleSwitter.InitSwitter(testSwitter);
+    moduleProfile.ChangeShowUser(testSwitter.selectUser.user);
+    moduleProfile.ChangeSelectUser(testSwitter.selectUser.user);
+    return;
     console.log('profile window created');
     const id = this.$route.query.screenName.toString();
     console.log('id: ' + id);
