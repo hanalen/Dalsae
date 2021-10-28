@@ -76,40 +76,44 @@
           </div>
         </div>
       </div>
-      <v-tabs v-model="selectMenu">
-        <v-tab :key="0">
-          <div class="tab-name">
-            <div class="tab-name-left">
-              {{ selectScreenName }}
-              <br />
-              {{ selectName }}
+      <div>
+        <v-tabs v-model="selectMenu">
+          <v-tab :key="0">
+            <div class="tab-name">
+              <div class="tab-name-left">
+                {{ selectScreenName }}
+                <br />
+                {{ selectName }}
+              </div>
+              <div class="tab-name-right">
+                의 팔로잉
+              </div>
             </div>
-            <div class="tab-name-right">
-              의 팔로잉
+          </v-tab>
+          <v-tab :key="1">
+            <div class="tab-name">
+              <div class="tab-name-left">
+                {{ selectScreenName }}
+                <br />
+                {{ selectName }}
+              </div>
+              <div class="tab-name-right">
+                의 팔로워
+              </div>
             </div>
-          </div>
-        </v-tab>
-        <v-tab :key="1">
-          <div class="tab-name">
-            <div class="tab-name-left">
-              {{ selectScreenName }}
-              <br />
-              {{ selectName }}
-            </div>
-            <div class="tab-name-right">
-              의 팔로워
-            </div>
-          </div>
-        </v-tab>
-      </v-tabs>
-      <v-tabs-items v-model="selectMenu">
-        <v-tab-item :key="0">
-          <profile-user v-for="(user, i) in listFollowing" :user="user" :key="i" />
-        </v-tab-item>
-        <v-tab-item :key="1">
-          <profile-user v-for="(user, i) in listFollower" :user="user" :key="i" />
-        </v-tab-item>
-      </v-tabs-items>
+          </v-tab>
+        </v-tabs>
+        <div class="scroll-panel">
+          <v-tabs-items v-model="selectMenu">
+            <v-tab-item class="tab-item" :key="0">
+              <profile-user v-for="(user, i) in listFollowing" :user="user" :key="i" />
+            </v-tab-item>
+            <v-tab-item class="tab-item" :key="1">
+              <profile-user v-for="(user, i) in listFollower" :user="user" :key="i" />
+            </v-tab-item>
+          </v-tabs-items>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -162,6 +166,10 @@ tab-name {
 .profile-header {
   border-radius: 20px;
   margin-bottom: 8px;
+  height: 250px;
+}
+.profile {
+  height: 200px;
 }
 .propic {
   margin-left: 20px;
@@ -178,7 +186,23 @@ tab-name {
 .url:hover {
   cursor: pointer;
 }
-.img-propic {
+.v-tabs-bar {
+  height: auto !important;
+}
+.v-tab {
+  text-align: left !important;
+}
+.tab-item {
+  height: calc(100vh - 530px);
+}
+.v-tabs:not(.v-tabs--vertical) .v-tab {
+  white-space: none;
+}
+.v-avatar {
+  border-radius: 10px;
+}
+.scroll-panel {
+  overflow-y: scroll;
 }
 </style>
 
@@ -219,6 +243,7 @@ export default class ProfileView extends MIX.ProfilePage {
       followList: testFollowing,
       selectId: moduleSwitter.selectID
     });
+    moduleProfile.SetSelectUserFollowingList(testFollowing);
     const testSwitter = window.preload.LoadSwitter();
     moduleSwitter.InitSwitter(testSwitter);
     moduleProfile.ChangeShowUser(testSwitter.selectUser.user);

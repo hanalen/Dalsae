@@ -63,23 +63,23 @@ class ProfileStore extends VuexModule {
   }
 
   @Mutation
-  private addFollowerList(listUser: I.FollowerList) {
+  private setSelectUserFollowerList(listUser: I.FollowerList) {
     this.listFollower = listUser;
   }
 
   @Action
-  AddFollowerList(listUser: I.FollowerList) {
-    this.context.commit('addFollowerList', listUser);
+  SetSelectUserFollowerList(listUser: I.FollowerList) {
+    this.context.commit('setSelectUserFollowerList', listUser);
   }
 
   @Mutation
-  private addFollowingList(listUser: I.FollowerList) {
+  private setSelectUserFollowingList(listUser: I.FollowerList) {
     this.listFollowing = listUser;
   }
 
   @Action
-  AddFollowingList(listUser: I.FollowerList) {
-    this.context.commit('addFollowingList', listUser);
+  SetSelectUserFollowingList(listUser: I.FollowerList) {
+    this.context.commit('setSelectUserFollowingList', listUser);
   }
 
   @Mutation

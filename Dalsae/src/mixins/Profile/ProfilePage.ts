@@ -40,7 +40,7 @@ export class ProfilePage extends Vue {
       ''
     );
     if (resp.data) {
-      moduleProfile.AddFollowerList(resp.data);
+      moduleProfile.SetSelectUserFollowerList(resp.data);
     }
   }
 
@@ -53,7 +53,7 @@ export class ProfilePage extends Vue {
       ''
     );
     if (resp.data) {
-      moduleProfile.AddFollowingList(resp.data);
+      moduleProfile.SetSelectUserFollowingList(resp.data);
     }
   }
 
@@ -111,7 +111,7 @@ export class ProfilePage extends Vue {
   }
 
   get selectScreenName() {
-    return moduleProfile.selectUser.screen_name;
+    return `@${moduleProfile.selectUser.screen_name}`;
   }
 
   get userBio() {
