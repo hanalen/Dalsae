@@ -258,6 +258,17 @@ class Followers {
       );
     return result;
   }
+
+  async Ids(data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> {
+    const result = await twitterRequest.call.followers.Ids(data);
+    moduleProfile.AddFollowerIds(result.data);
+    if (result.data.next_cursor_str !== '0')
+      this.Ids({
+        cursor: result.data.next_cursor_str,
+        stringify_ids: true
+      });
+    return result;
+  }
 }
 
 class Friends {
@@ -275,6 +286,17 @@ class Friends {
         },
         selectId
       );
+    return result;
+  }
+
+  async Ids(data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> {
+    const result = await twitterRequest.call.friends.Ids(data);
+    moduleProfile.AddFollowingIds(result.data);
+    if (result.data.next_cursor_str !== '0')
+      this.Ids({
+        cursor: result.data.next_cursor_str,
+        stringify_ids: true
+      });
     return result;
   }
 }

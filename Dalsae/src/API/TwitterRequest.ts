@@ -389,11 +389,19 @@ export class TwitterRequest {
         List: (data: P.ReqList) =>
           this.get<P.ReqShow, I.FollowerList>(baseUrl + '/followers/list.json', {
             data
+          }),
+        Ids: (data: P.ReqBlockIds) =>
+          this.get<P.ReqBlockIds, I.BlockIds>(baseUrl + '/followers/ids.json', {
+            data
           })
       },
       friends: {
         List: (data: P.ReqList) =>
           this.get<P.ReqShow, I.FollowerList>(baseUrl + '/friends/list.json', {
+            data
+          }),
+        Ids: (data: P.ReqBlockIds) =>
+          this.get<P.ReqBlockIds, I.BlockIds>(baseUrl + '/friends/ids.json', {
             data
           })
       },
