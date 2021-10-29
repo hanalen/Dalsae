@@ -4,7 +4,7 @@
       <template v-slot:badge>
         <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
       </template>
-      <v-avatar rounded :size="maxWidth">
+      <v-avatar :size="maxWidth">
         <v-img :src="img">
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -19,11 +19,11 @@
 </template>
 
 <style lang="scss" scoped>
-.propic {
+.v-avatar {
   // margin-left: 4px;
   object-fit: contain;
-  border-radius: 12px;
-  margin-bottom: auto;
+  border-radius: 10px !important;
+  // margin-bottom: auto;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 .empty {
