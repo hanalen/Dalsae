@@ -97,7 +97,8 @@ export class ProfilePage extends Vue {
   }
 
   get userHeader() {
-    return moduleProfile.showUser.profile_banner_url;
+    console.log(moduleProfile.showUser);
+    return moduleProfile.showUser.profile_banner_url + '/1080x360';
   }
 
   get userPropic() {
