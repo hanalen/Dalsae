@@ -4,9 +4,14 @@ import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
 import { moduleApi } from '@/store/modules/APIStore';
 import { moduleProfile } from '@/store/modules/ProfileStore';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { moduleUtil } from '@/store/modules/UtilStore';
 
 @Component
 export class ProfilePage extends Vue {
+  get itsMe() {
+    return moduleProfile.showUser.id_str === moduleSwitter.selectID;
+  }
   get isLoadProfile() {
     return moduleProfile.isLoadProfile;
   }
@@ -63,6 +68,19 @@ export class ProfilePage extends Vue {
 
   get listFollowing() {
     return moduleProfile.listFollowing.users;
+
+  get followerText() {
+    const user = moduleProfile.showUser;
+    if (!user) return '';
+    if (moduleProfile.listFollowerIds.ids.findIndex(x => x === user.id_str) > -1) {
+      return ' 님은 나를 팔로우 하고 있습니다.';
+    } else {
+      return '';
+    }
+  }
+
+  get followText() {
+    return moduleProfile.showUser.following ? '언팔로우' : '팔로우';
   }
 
   get userText() {
@@ -101,9 +119,11 @@ export class ProfilePage extends Vue {
     return moduleProfile.showUser.name;
   }
   get screenName() {
-    return moduleProfile.showUser.protected
+    const ret = moduleProfile.showUser.protected
       ? `@${moduleProfile.showUser.screen_name} 🔒`
       : `@${moduleProfile.showUser.screen_name}`;
+
+    return ret;
   }
 
   get selectName() {
@@ -136,6 +156,22 @@ export class ProfilePage extends Vue {
     } else {
       return '';
     }
+  }
+
+  OnClickFollow(e: MouseEvent) {
+    moduleUtil.Follow(moduleProfile.showUser);
+  }
+  OnClickShowFollowing(e: MouseEvent) {
+    moduleProfile.Clear();
+    moduleProfile.ChangeSelectUser(moduleProfile.showUser);
+    this.LoadFollowingList();
+    this.LoadFollowerList();
+  }
+  OnClickShowFollower(e: MouseEvent) {
+    moduleProfile.Clear();
+    moduleProfile.ChangeSelectUser(moduleProfile.showUser);
+    this.LoadFollowingList();
+    this.LoadFollowerList();
   }
 
   ClickTweet() {

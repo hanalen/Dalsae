@@ -1,10 +1,10 @@
 <template>
   <div class="profile-user" @click="OnClickUser" :class="{ selected: isSelected }">
-    <v-badge :value="user.verified" avatar bottom overlap color="white" offset-x="20" offset-y="20">
+    <v-badge :value="user.verified" avatar color="white" offset-x="20" offset-y="50">
       <template v-slot:badge>
         <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
       </template>
-      <v-avatar rounded>
+      <v-avatar height="48" rounded>
         <v-img :src="propic">
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -69,6 +69,9 @@
 }
 .v-btn {
   padding: 0 4px !important;
+}
+.v-badge__badge:after {
+  transform: none !important;
 }
 </style>
 

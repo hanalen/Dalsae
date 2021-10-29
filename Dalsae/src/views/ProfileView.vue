@@ -54,17 +54,35 @@
             </div>
             <div class="profile-count-right color-gray">
               <span @click="ClickTweet">{{ countTweet }}</span>
-              <span>{{ countFollowing }}</span>
-              <span>{{ countFollower }}</span>
+              <span @click="OnClickShowFollowing">{{ countFollowing }}</span>
+              <span @click="OnClickShowFollower">{{ countFollower }}</span>
             </div>
           </div>
         </div>
         <div class="profile-right">
-          <span class="user-name">{{ name }}</span
-          ><br />
-          <span class="user-screen-name">{{ screenName }}</span>
-          <br />
-          <br />
+          <div class="profile-right-top">
+            <div>
+              <span class="user-name">{{ name }}</span
+              ><br />
+              <span class="user-screen-name">{{ screenName }}</span>
+              <span class="follow-text">
+                {{ followerText }}
+              </span>
+              <br />
+              <br />
+            </div>
+            <v-btn
+              v-if="!itsMe"
+              class="btn-follow"
+              height="30"
+              outlined
+              color="primary"
+              text
+              @click="OnClickFollow"
+            >
+              {{ followText }}
+            </v-btn>
+          </div>
           <span class="user-bio">{{ userBio }} </span>
           <div class="user-place color-gray">
             <v-icon size="16">mdi-compass-outline </v-icon>
@@ -93,9 +111,12 @@
           <v-tab :key="1">
             <div class="tab-name">
               <div class="tab-name-left">
-                {{ selectScreenName }}
-                <br />
-                {{ selectName }}
+                <div>
+                  {{ selectScreenName }}
+
+                  <br />
+                  {{ selectName }}
+                </div>
               </div>
               <div class="tab-name-right">
                 의 팔로워
@@ -136,8 +157,17 @@ tab-name {
 .profile-count-right {
   width: 60px;
 }
-.color-gray {
+.color-gray,
+.follow-text {
   color: rgb(156, 156, 156);
+}
+.profile-right-top {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.profile-right {
+  width: 100%;
 }
 .color-gray:hover {
   cursor: pointer;
@@ -180,6 +210,11 @@ tab-name {
   font-weight: bold;
   font-size: 16px;
 }
+.btn-follow {
+  position: relative;
+  right: 10px;
+  top: 10px;
+}
 .url {
   color: #1d9bf0;
 }
@@ -208,11 +243,13 @@ tab-name {
 </style>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/camelcase */
 import { Vue, Component, Mixins } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleProfile } from '@/store/modules/ProfileStore';
+import { moduleApi } from '@/store/modules/APIStore';
 
 @Component
 export default class ProfileView extends MIX.ProfilePage {
@@ -249,17 +286,18 @@ export default class ProfileView extends MIX.ProfilePage {
     moduleSwitter.InitSwitter(testSwitter);
     moduleProfile.ChangeShowUser(testSwitter.selectUser.user);
     moduleProfile.ChangeSelectUser(testSwitter.selectUser.user);
+    moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
     return;
-    console.log('profile window created');
-    const id = this.$route.query.screenName.toString();
-    console.log('id: ' + id);
-    const switter = window.preload.profile.GetSwitter(id);
-    moduleSwitter.InitSwitter(switter);
-    await this.LoadUserInfo(id);
-    this.LoadFollowerList();
-    this.LoadFollowingList();
-    moduleSwitter.initFollowDatas(window.preload.profile.GetFollowDatas(id));
-    moduleSwitter.InitBlockIds(window.preload.profile.GetBlockIds(id));
+    // console.log('profile window created');
+    // const id = this.$route.query.screenName.toString();
+    // console.log('id: ' + id);
+    // const switter = window.preload.profile.GetSwitter(id);
+    // moduleSwitter.InitSwitter(switter);
+    // await this.LoadUserInfo(id);
+    // this.LoadFollowerList();
+    // this.LoadFollowingList();
+    // moduleSwitter.initFollowDatas(window.preload.profile.GetFollowDatas(id));
+    // moduleSwitter.InitBlockIds(window.preload.profile.GetBlockIds(id));
   }
 }
 </script>

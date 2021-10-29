@@ -20,6 +20,11 @@ class ProfileStore extends VuexModule {
   selectMenu = 0;
   listFollower: I.FollowerList = { next_cursor_str: '', users: [], previous_cursor_str: '' };
   listFollowing: I.FollowerList = { next_cursor_str: '', users: [], previous_cursor_str: '' };
+  listFollowerIds: I.BlockIds = {
+    next_cursor_str: '',
+    previous_cursor_str: '',
+    ids: []
+  };
 
   @Mutation
   private changeShowUser(user: I.User) {
@@ -142,6 +147,27 @@ class ProfileStore extends VuexModule {
   UpdateFollowUserInfo(user: I.User) {
     this.context.commit('updateFollowUserInfo', user);
     this.context.commit('updateFollowInfo', user);
+  }
+
+  @Mutation
+  private addFollowerIds(ids: I.BlockIds) {
+    if (!ids) return;
+    this.listFollowerIds = ids;
+  }
+
+  @Action
+  AddFollowerIds(ids: I.BlockIds) {
+    this.context.commit('addFollowerIds', ids);
+  }
+
+  @Mutation
+  private addFollowingIds(ids: I.BlockIds) {
+    console.log(ids);
+  }
+
+  @Action
+  AddFollowingIds(ids: I.BlockIds) {
+    this.context.commit('addFollowingIds', ids);
   }
 }
 
