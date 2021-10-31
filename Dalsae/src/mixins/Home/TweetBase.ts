@@ -13,6 +13,14 @@ export class TweetBase extends Vue {
   @Prop()
   selected = false;
 
+  get isRetweet() {
+    return this.tweet.retweeted_status !== undefined;
+  }
+
+  get retweetText() {
+    return `${this.tweet.user.screen_name} / ${this.tweet.user.name}`;
+  }
+
   get isConv() {
     return this.orgTweet.in_reply_to_status_id_str ? true : false;
   }

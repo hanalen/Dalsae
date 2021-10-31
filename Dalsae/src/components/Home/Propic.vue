@@ -4,7 +4,7 @@
       <template v-slot:badge>
         <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
       </template>
-      <v-avatar :size="maxWidth">
+      <v-avatar rounded :size="maxWidth">
         <v-img :src="img">
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -52,12 +52,16 @@ export default class Propic extends Vue {
   @Prop()
   user!: I.User;
 
+  @Prop()
+  size!: number;
+
   get uiOption() {
     return moduleOption.uiOption;
   }
 
   get maxWidth() {
-    return this.uiOption.isBigPropic ? 73 : 48;
+    if (this.size) return this.size;
+    else return this.uiOption.isBigPropic ? 73 : 48;
   }
 
   get img() {
@@ -68,6 +72,7 @@ export default class Propic extends Vue {
 
   get imgClass() {
     if (!this.uiOption.isShowPropic) return 'empty';
+    else if (this.size) return '';
     else if (this.uiOption.isBigPropic) return 'big';
     else return 'normal';
   }

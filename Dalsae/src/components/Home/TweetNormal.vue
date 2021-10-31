@@ -10,6 +10,10 @@
       <span class="user-name">{{ name }}</span>
       <div v-html="tweetText"></div>
       <span class="tweet-date">{{ date }}{{ via }}</span>
+      <div class="retweet-info" v-if="isRetweet">
+        <propic :size="20" :user="tweet.user" :option="uiOption"></propic>
+        <span>{{ retweetText }}</span>
+      </div>
     </div>
     <div class="img-preview">
       <image-preview :media="media" :tweet="tweet"></image-preview>
@@ -51,6 +55,12 @@
 }
 .tweet-date {
   color: hsla(0, 0, 20, 1);
+}
+.retweet-info {
+  display: flex;
+}
+.retweet-info span {
+  margin-left: 8px;
 }
 </style>
 
