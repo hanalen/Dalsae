@@ -41,6 +41,10 @@ function CreateHeader(authorization: string, contentType?: string) {
 }
 
 export class TwitterRequest {
+  CheckAPIError(e: any) {
+    if (e.errors) return true;
+    else return false;
+  }
   GetApiError(e: I.ResponseTwitterError): string {
     console.log(e);
     let message = '';
@@ -136,6 +140,7 @@ export class TwitterRequest {
       if (error.response) {
         const errorMsg = this.GetApiError(error.response.data);
         moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: errorMsg });
+        return error.response;
       } else {
         moduleModal.AddMessage({
           errorType: M.Messagetype.E_ERROR,
@@ -205,6 +210,7 @@ export class TwitterRequest {
       if (error.response) {
         const errorMsg = this.GetApiError(error.response.data);
         moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: errorMsg });
+        return error.response;
       } else {
         moduleModal.AddMessage({
           errorType: M.Messagetype.E_ERROR,
@@ -257,6 +263,7 @@ export class TwitterRequest {
       if (error.response) {
         const errorMsg = this.GetApiError(error.response.data);
         moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: errorMsg });
+        return error.response;
       } else {
         moduleModal.AddMessage({
           errorType: M.Messagetype.E_ERROR,
