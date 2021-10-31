@@ -34,6 +34,10 @@ export class ProfilePage extends Vue {
     return moduleProfile.stateProfile.isLoadFollowerIds;
   }
 
+  get isLoadFollowingIds() {
+    return moduleProfile.stateProfile.isLoadFollowingIds;
+  }
+
   get selectAccount() {
     return moduleSwitter.selectUser;
   }
@@ -59,6 +63,7 @@ export class ProfilePage extends Vue {
       onClick: this.OnClickSelectAccount
     });
     moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
+    moduleApi.friends.Ids({ stringify_ids: true, cursor: '-1' });
   }
 
   @Watch('isLoadFollwerIds', { immediate: true, deep: true })
@@ -72,6 +77,20 @@ export class ProfilePage extends Vue {
       });
     } else {
       moduleSysbar.RemoveSystemBar(A.ESystemBar.EFOLLOWERIDS);
+    }
+  }
+
+  @Watch('isLoadFollowingIds', { immediate: true, deep: true })
+  OnChangeLoadFollwingIds(newVal: I.DalsaeUser) {
+    if (newVal) {
+      moduleSysbar.AddSystemBar({
+        type: A.ESystemBar.EERROR_FOLLOWINGIDS,
+        icon: 'mdi-download',
+        text: '',
+        toolTip: '팔로잉 불러오는 중...'
+      });
+    } else {
+      moduleSysbar.RemoveSystemBar(A.ESystemBar.EERROR_FOLLOWINGIDS);
     }
   }
 

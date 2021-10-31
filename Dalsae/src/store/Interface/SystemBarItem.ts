@@ -9,5 +9,7 @@ export interface SystemBarItem {
 export enum ESystemBar {
   EACCOUNT,
   EFOLLOWERIDS,
-  EERROR_FOLLOWERIDS
+  EFOLLOWINGIDS,
+  EERROR_FOLLOWERIDS,
+  EERROR_FOLLOWINGIDS
 }

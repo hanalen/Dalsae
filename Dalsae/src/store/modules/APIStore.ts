@@ -314,13 +314,26 @@ class Friends {
   }
 
   async Ids(data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> {
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadFollowingIds: true });
     const result = await twitterRequest.call.friends.Ids(data);
-    moduleProfile.AddFollowingIds(result.data);
-    if (result.data.next_cursor_str !== '0')
-      this.Ids({
-        cursor: result.data.next_cursor_str,
-        stringify_ids: true
+    if (twitterRequest.CheckAPIError(result.data)) {
+      const error = twitterRequest.GetApiError(result.data as I.ResponseTwitterError);
+      moduleSysbar.AddSystemBar({
+        type: S.ESystemBar.EERROR_FOLLOWERIDS,
+        icon: 'mdi-alert-circle-outline',
+        text: `팔로잉 목록 에러`,
+        toolTip: error
       });
+    } else {
+      moduleProfile.AddFollowingIds(result.data);
+      if (result.data.next_cursor_str !== '0') {
+        this.Ids({
+          cursor: result.data.next_cursor_str,
+          stringify_ids: true
+        });
+      }
+    }
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadFollowingIds: false });
     return result;
   }
 }
