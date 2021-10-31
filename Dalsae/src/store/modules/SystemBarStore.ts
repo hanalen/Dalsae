@@ -42,13 +42,13 @@ class SystemBarStore extends VuexModule {
   }
 
   @Mutation
-  private clear() {
+  private clearSystamBar() {
     this.stateSystemBar.listSystemBarItem = [];
   }
 
   @Action
-  Clear() {
-    this.context.commit('clear');
+  ClearSystamBar() {
+    this.context.commit('ClearSystamBar');
   }
 }
 

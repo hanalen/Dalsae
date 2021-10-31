@@ -74,15 +74,15 @@ class ProfileStore extends VuexModule {
   }
 
   @Mutation
-  private clear() {
+  private clearProfileState() {
     this.listFollower = { previous_cursor_str: '', users: [], next_cursor_str: '' };
     this.listFollowing = { previous_cursor_str: '', users: [], next_cursor_str: '' };
     this.stateProfile = new StateProfile();
   }
 
   @Action
-  Clear() {
-    this.context.commit('clear');
+  ClearProfileState() {
+    this.context.commit('ClearProfileState');
   }
 
   @Mutation
