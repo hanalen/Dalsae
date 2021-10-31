@@ -30,7 +30,7 @@ export class ProfilePage extends Vue {
     return moduleProfile.selectUser.verified;
   }
 
-  get isLoadFollwerIds() {
+  get isLoadFollowerIds() {
     return moduleProfile.stateProfile.isLoadFollowerIds;
   }
 
@@ -66,7 +66,7 @@ export class ProfilePage extends Vue {
     moduleApi.friends.Ids({ stringify_ids: true, cursor: '-1' });
   }
 
-  @Watch('isLoadFollwerIds', { immediate: true, deep: true })
+  @Watch('isLoadFollowerIds', { immediate: true, deep: true })
   OnChangeLoadFollwerIds(newVal: I.DalsaeUser) {
     if (newVal) {
       moduleSysbar.AddSystemBar({
@@ -84,13 +84,13 @@ export class ProfilePage extends Vue {
   OnChangeLoadFollwingIds(newVal: I.DalsaeUser) {
     if (newVal) {
       moduleSysbar.AddSystemBar({
-        type: A.ESystemBar.EERROR_FOLLOWINGIDS,
+        type: A.ESystemBar.EFOLLOWINGIDS,
         icon: 'mdi-download',
         text: '',
         toolTip: '팔로잉 불러오는 중...'
       });
     } else {
-      moduleSysbar.RemoveSystemBar(A.ESystemBar.EERROR_FOLLOWINGIDS);
+      moduleSysbar.RemoveSystemBar(A.ESystemBar.EFOLLOWINGIDS);
     }
   }
 
@@ -157,7 +157,13 @@ export class ProfilePage extends Vue {
   }
 
   get followText() {
-    return this.showUser.following ? '언팔로우' : '팔로우';
+    const user = this.showUser;
+    if (!user) return '';
+    if (moduleProfile.listFollowingIds.ids.findIndex(x => x === user.id_str) > -1) {
+      return '언팔로우';
+    } else {
+      return '팔로잉';
+    }
   }
 
   get userText() {

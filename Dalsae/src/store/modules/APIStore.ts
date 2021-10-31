@@ -319,7 +319,7 @@ class Friends {
     if (twitterRequest.CheckAPIError(result.data)) {
       const error = twitterRequest.GetApiError(result.data as I.ResponseTwitterError);
       moduleSysbar.AddSystemBar({
-        type: S.ESystemBar.EERROR_FOLLOWERIDS,
+        type: S.ESystemBar.EERROR_FOLLOWINGIDS,
         icon: 'mdi-alert-circle-outline',
         text: `팔로잉 목록 에러`,
         toolTip: error

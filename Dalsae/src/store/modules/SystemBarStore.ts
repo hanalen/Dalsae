@@ -20,7 +20,9 @@ class SystemBarStore extends VuexModule {
 
   @Mutation
   private addSystemBar(item: A.SystemBarItem) {
-    this.stateSystemBar.listSystemBarItem.push(item);
+    if (!this.stateSystemBar.listSystemBarItem.find(x => x.type === item.type)) {
+      this.stateSystemBar.listSystemBarItem.push(item);
+    }
   }
 
   @Action
