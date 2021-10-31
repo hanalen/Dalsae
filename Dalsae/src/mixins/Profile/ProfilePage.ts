@@ -42,9 +42,7 @@ export class ProfilePage extends Vue {
   OnChangeSelectAccount(newVal: I.DalsaeUser) {
     if (!newVal) return;
     moduleProfile.ClearIds();
-    moduleSysbar.RemoveSystemBar(A.ESystemBar.EACCOUNT);
-    moduleSysbar.RemoveSystemBar(A.ESystemBar.EFOLLOWERIDS);
-    moduleSysbar.RemoveSystemBar(A.ESystemBar.EERROR_FOLLOWERIDS);
+    moduleSysbar.Clear();
     moduleSysbar.AddSystemBar({
       type: A.ESystemBar.EACCOUNT,
       icon: 'mdi-account',

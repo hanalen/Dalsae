@@ -40,6 +40,16 @@ class SystemBarStore extends VuexModule {
   RemoveSystemBar(type: A.ESystemBar) {
     this.context.commit('removeSystemBar', type);
   }
+
+  @Mutation
+  private clear() {
+    this.stateSystemBar.listSystemBarItem = [];
+  }
+
+  @Action
+  Clear() {
+    this.context.commit('clear');
+  }
 }
 
 export const moduleSysbar = getModule(SystemBarStore);
