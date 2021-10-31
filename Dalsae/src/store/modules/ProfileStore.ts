@@ -17,6 +17,7 @@ class StateProfile {
 
   isLoadFollowerIds = false;
   isLoadFollowingIds = false;
+  isLoadRequestIds = false;
   selectMenu = 0;
 }
 
@@ -33,6 +34,11 @@ class ProfileStore extends VuexModule {
     ids: []
   };
   listFollowingIds: I.BlockIds = {
+    next_cursor_str: '',
+    previous_cursor_str: '',
+    ids: []
+  };
+  listRequestIds: I.BlockIds = {
     next_cursor_str: '',
     previous_cursor_str: '',
     ids: []
@@ -134,6 +140,19 @@ class ProfileStore extends VuexModule {
   @Action
   AddFollowingIds(ids: I.BlockIds) {
     this.context.commit('addFollowingIds', ids);
+  }
+
+  @Mutation
+  private addRequestIds(ids: I.BlockIds) {
+    if (!ids) return;
+    this.listRequestIds.ids = this.listRequestIds.ids.concat(ids.ids);
+    this.listRequestIds.next_cursor_str = ids.next_cursor_str;
+    this.listRequestIds.previous_cursor_str = ids.previous_cursor_str;
+  }
+
+  @Action
+  AddRequestIds(ids: I.BlockIds) {
+    this.context.commit('addRequestIds', ids);
   }
 
   @Mutation

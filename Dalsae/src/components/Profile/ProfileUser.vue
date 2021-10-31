@@ -158,7 +158,9 @@ export default class ProfileUser extends Vue {
     const user = this.user;
     const ids = moduleProfile.listFollowingIds.ids;
     if (!user) return '';
-    if (ids.findIndex(x => x === user.id_str) > -1) {
+    if (moduleProfile.listRequestIds.ids.findIndex(x => x === user.id_str) > -1) {
+      return '팔로우 요청 중';
+    } else if (ids.findIndex(x => x === user.id_str) > -1) {
       return '언팔로우';
     } else {
       return '팔로잉';

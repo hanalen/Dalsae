@@ -356,9 +356,16 @@ class Friendships {
   async Create(data: P.ReqFollowCreate): Promise<P.APIResp<I.User>> {
     const result = await twitterRequest.call.friendships.Create(data);
     if (result.data) {
-      result.data.following = true;
-      moduleProfile.UpdateFollowUserInfo(result.data);
-      // window.preload.profile.UpdateFollow(result.data);
+      if (result.data.protected) {
+        moduleProfile.AddRequestIds({
+          ids: [result.data.id_str],
+          next_cursor_str: '',
+          previous_cursor_str: ''
+        });
+      } else {
+        result.data.following = true;
+        moduleProfile.UpdateFollowUserInfo(result.data);
+      }
     }
     return result;
   }
@@ -372,10 +379,26 @@ class Friendships {
     return result;
   }
   async Outgoing(data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> {
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadRequestIds: true });
     const result = await twitterRequest.call.friendships.Outgoing(data);
-    if (result.data) {
-      // window.preload.profile.UpdateFollow(result.data);
+    if (twitterRequest.CheckAPIError(result.data)) {
+      const error = twitterRequest.GetApiError(result.data as I.ResponseTwitterError);
+      moduleSysbar.AddSystemBar({
+        type: S.ESystemBar.EERROR_FOLLOW_REQUEST_IDS,
+        icon: 'mdi-alert-circle-outline',
+        text: `팔로우 요청 목록 에러`,
+        toolTip: error
+      });
+    } else {
+      moduleProfile.AddRequestIds(result.data);
+      if (result.data.next_cursor_str !== '0') {
+        this.Outgoing({
+          cursor: result.data.next_cursor_str,
+          stringify_ids: true
+        });
+      }
     }
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadRequestIds: false });
     return result;
   }
 }

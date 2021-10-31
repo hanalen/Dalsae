@@ -26,6 +26,10 @@ export class ProfilePage extends Vue {
     moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadProfile: isLoad });
   }
 
+  get isLoadRequest() {
+    return moduleProfile.stateProfile.isLoadRequestIds;
+  }
+
   get verified() {
     return moduleProfile.selectUser.verified;
   }
@@ -95,6 +99,20 @@ export class ProfilePage extends Vue {
     }
   }
 
+  @Watch('isLoadRequest', { immediate: true, deep: true })
+  OnChangeLoadRequestIds(newVal: I.DalsaeUser) {
+    if (newVal) {
+      moduleSysbar.AddSystemBar({
+        type: A.ESystemBar.EFOLLOW_REQUEST_IDS,
+        icon: 'mdi-download',
+        text: '',
+        toolTip: '팔로우 요청 불러오는 중...'
+      });
+    } else {
+      moduleSysbar.RemoveSystemBar(A.ESystemBar.EFOLLOW_REQUEST_IDS);
+    }
+  }
+
   get listUser() {
     return moduleSwitter.switter.listUser;
   }
@@ -160,7 +178,9 @@ export class ProfilePage extends Vue {
   get followText() {
     const user = this.showUser;
     if (!user) return '';
-    if (moduleProfile.listFollowingIds.ids.findIndex(x => x === user.id_str) > -1) {
+    if (moduleProfile.listRequestIds.ids.findIndex(x => x === user.id_str) > -1) {
+      return '팔로우 요청 중';
+    } else if (moduleProfile.listFollowingIds.ids.findIndex(x => x === user.id_str) > -1) {
       return '언팔로우';
     } else {
       return '팔로잉';
