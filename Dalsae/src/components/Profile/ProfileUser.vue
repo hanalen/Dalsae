@@ -155,7 +155,14 @@ export default class ProfileUser extends Vue {
   }
 
   get followText() {
-    return this.user.following ? '언팔로우' : '팔로잉';
+    const user = this.user;
+    const ids = moduleProfile.listFollowingIds.ids;
+    if (!user) return '';
+    if (ids.findIndex(x => x === user.id_str) > -1) {
+      return '언팔로우';
+    } else {
+      return '팔로잉';
+    }
   }
 
   get propic() {

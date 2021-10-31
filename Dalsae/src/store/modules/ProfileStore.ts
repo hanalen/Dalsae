@@ -93,13 +93,13 @@ class ProfileStore extends VuexModule {
 
   @Mutation
   private updateFollowUserInfo(user: I.User) {
-    const idx = this.listFollower.users.findIndex(x => x.id_str === user.id_str);
-    if (idx > -1) {
-      this.listFollower.users.splice(idx, 1, user);
-    }
-    const idx2 = this.listFollowing.users.findIndex(x => x.id_str === user.id_str);
-    if (idx2 > -1) {
-      this.listFollowing.users.splice(idx2, 1, user);
+    if (user.following) {
+      this.listFollowingIds.ids.push(user.id_str);
+    } else {
+      const idx = this.listFollowingIds.ids.indexOf(user.id_str);
+      if (idx > -1) {
+        this.listFollowingIds.ids.splice(idx, 1);
+      }
     }
     //TODO 메인 윈도우store에 데이터 넘겨야 함
   }
@@ -147,6 +147,7 @@ class ProfileStore extends VuexModule {
   @Mutation
   private clearIds() {
     this.listFollowerIds = { ids: [], previous_cursor_str: '', next_cursor_str: '' };
+    this.listFollowingIds = { ids: [], previous_cursor_str: '', next_cursor_str: '' };
   }
 
   @Action

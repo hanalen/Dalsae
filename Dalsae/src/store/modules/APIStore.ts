@@ -356,7 +356,7 @@ class Friendships {
   async Create(data: P.ReqFollowCreate): Promise<P.APIResp<I.User>> {
     const result = await twitterRequest.call.friendships.Create(data);
     if (result.data) {
-      result.data.following = !result.data.following;
+      result.data.following = true;
       moduleProfile.UpdateFollowUserInfo(result.data);
       // window.preload.profile.UpdateFollow(result.data);
     }
@@ -365,7 +365,7 @@ class Friendships {
   async Destroy(data: P.ReqFollowDestroy): Promise<P.APIResp<I.User>> {
     const result = await twitterRequest.call.friendships.Destroy(data);
     if (result.data) {
-      result.data.following = !result.data.following;
+      result.data.following = false;
       moduleProfile.UpdateFollowUserInfo(result.data);
       // window.preload.profile.UpdateFollow(result.data);
     }

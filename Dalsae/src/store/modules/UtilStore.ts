@@ -157,8 +157,9 @@ class UtilStore extends VuexModule {
   Follow(user: I.User) {
     if (!user) return;
     if (moduleProfile.stateProfile.isFollwRequest) return; //글로벌로 요청 중
+    const isFollowing = moduleProfile.listFollowingIds.ids.findIndex(x => x === user.id_str) > -1;
     moduleProfile.SetState({ ...moduleProfile.stateProfile, isFollwRequest: true });
-    if (user.following) {
+    if (isFollowing) {
       moduleApi.friendships.Destroy({ screen_name: user.screen_name });
     } else {
       moduleApi.friendships.Create({ screen_name: user.screen_name });
