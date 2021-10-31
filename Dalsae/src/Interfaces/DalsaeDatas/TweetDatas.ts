@@ -327,15 +327,17 @@ export class TweetDatas {
     switch (tweetType) {
       case ETweetType.E_HOME:
         tweets.homes = [];
+        tweets.homes.splice(0, tweets.conv.length);
         break;
       case ETweetType.E_MENTION:
-        tweets.mentions = [];
+        tweets.mentions.splice(0, tweets.conv.length);
         break;
       case ETweetType.E_FAVORITE:
-        tweets.favorites = [];
+        tweets.favorites.splice(0, tweets.conv.length);
         break;
       case ETweetType.E_CONV:
         tweets.conv = [];
+        tweets.conv.splice(0, tweets.conv.length);
         break;
     }
   }

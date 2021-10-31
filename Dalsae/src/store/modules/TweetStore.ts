@@ -155,7 +155,6 @@ class TweetStore extends VuexModule {
 
   @Mutation
   private addConv(addTweet: A.AddTweet) {
-    console.log(addTweet);
     if (addTweet.tweet) this.tweetDatas.AddConv(addTweet.tweet, addTweet.user_id_str);
   }
 

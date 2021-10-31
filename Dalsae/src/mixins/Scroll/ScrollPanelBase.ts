@@ -79,9 +79,6 @@ export class ScrollPanelBase extends Vue {
     const selectTweet = this.listData[newVal];
     const idx = this.state.listVisible.findIndex(x => x.key === selectTweet.key);
     if (idx === -1) {
-      console.log('panel index idx is -1');
-      console.log('selecttweet', selectTweet);
-      console.log(this.state.listVisible);
       return;
     }
     const component = this.scrollItem[idx];
@@ -113,6 +110,11 @@ export class ScrollPanelBase extends Vue {
     }
     this.state.startIndex = startIndex;
     this.state.endIndex = startIndex + Math.floor(this.$el.clientHeight / this.state.minHeight);
+    if (this.$el.clientHeight === 0) {
+      setTimeout(() => {
+        this.SetIndex();
+      }, 100);
+    }
     this.SetVisibleData();
   }
 
