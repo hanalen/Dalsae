@@ -17,6 +17,14 @@ export class TweetBase extends Vue {
     return this.tweet.retweeted_status !== undefined;
   }
 
+  get isQT() {
+    return this.tweet.is_quote_status;
+  }
+
+  get qtTweet() {
+    return new I.Tweet(this.orgTweet.quoted_status);
+  }
+
   get retweetText() {
     return `${this.tweet.user.screen_name} / ${this.tweet.user.name}`;
   }

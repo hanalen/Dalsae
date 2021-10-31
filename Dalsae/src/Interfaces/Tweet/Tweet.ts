@@ -10,6 +10,7 @@ export class Tweet {
   in_reply_to_status_id_str!: string;
   in_reply_to_user_id_str!: string;
   in_reply_to_screen_name!: string;
+  quoted_status!: Tweet;
   user!: I.User;
   place!: string;
   is_quote_status: boolean;
@@ -35,6 +36,8 @@ export class Tweet {
       this.retweet_count = tweet.retweet_count;
       this.favorite_count = tweet.favorite_count;
       this.place = tweet.place;
+      this.is_quote_status = tweet.is_quote_status;
+      this.quoted_status = tweet.quoted_status;
       this.in_reply_to_status_id_str = tweet.in_reply_to_status_id_str;
     } else {
       this.created_at = '';
