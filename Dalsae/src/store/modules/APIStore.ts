@@ -371,6 +371,13 @@ class Friendships {
     }
     return result;
   }
+  async Outgoing(data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> {
+    const result = await twitterRequest.call.friendships.Outgoing(data);
+    if (result.data) {
+      // window.preload.profile.UpdateFollow(result.data);
+    }
+    return result;
+  }
 }
 
 class OAuth {

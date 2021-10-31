@@ -420,6 +420,10 @@ export class TwitterRequest {
         Destroy: (data: P.ReqFollowDestroy) =>
           this.post<P.ReqShow, I.User>(baseUrl + '/friendships/destroy.json', {
             data
+          }),
+        Outgoing: (data: P.ReqBlockIds) =>
+          this.get<P.ReqBlockIds, I.BlockIds>(baseUrl + '/friendships/outgoing.json', {
+            data
           })
       },
       mutes: {

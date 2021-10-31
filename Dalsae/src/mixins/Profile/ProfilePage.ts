@@ -64,6 +64,7 @@ export class ProfilePage extends Vue {
     });
     moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
     moduleApi.friends.Ids({ stringify_ids: true, cursor: '-1' });
+    moduleApi.friendships.Outgoing({ stringify_ids: true, cursor: '-1' });
   }
 
   @Watch('isLoadFollowerIds', { immediate: true, deep: true })
