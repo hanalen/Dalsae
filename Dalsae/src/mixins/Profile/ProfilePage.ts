@@ -34,6 +34,10 @@ export class ProfilePage extends Vue {
     return moduleSwitter.selectUser;
   }
 
+  get showUser() {
+    return moduleProfile.showUser;
+  }
+
   isShowContext = false;
   x = 0;
   y = 0;
@@ -50,7 +54,7 @@ export class ProfilePage extends Vue {
       toolTip: '계정 선택',
       onClick: this.OnClickSelectAccount
     });
-    moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
+    // moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
   }
 
   @Watch('isLoadFollwerIds', { immediate: true, deep: true })
@@ -120,7 +124,7 @@ export class ProfilePage extends Vue {
   }
 
   get followerText() {
-    const user = moduleProfile.showUser;
+    const user = this.showUser;
     if (!user) return '';
     if (moduleProfile.listFollowerIds.ids.findIndex(x => x === user.id_str) > -1) {
       return ' 님은 나를 팔로우 하고 있습니다.';
@@ -130,11 +134,11 @@ export class ProfilePage extends Vue {
   }
 
   get followText() {
-    return moduleProfile.showUser.following ? '언팔로우' : '팔로우';
+    return this.showUser.following ? '언팔로우' : '팔로우';
   }
 
   get userText() {
-    const { name, screen_name } = moduleProfile.showUser;
+    const { name, screen_name } = this.showUser;
     return name + '<br />' + screen_name;
   }
 
@@ -147,32 +151,31 @@ export class ProfilePage extends Vue {
   }
 
   get userHeader() {
-    console.log(moduleProfile.showUser);
-    return moduleProfile.showUser.profile_banner_url + '/1080x360';
+    return this.showUser.profile_banner_url + '/1080x360';
   }
 
   get userPropic() {
-    return moduleProfile.showUser.profile_image_url_https.replace('_normal', '');
+    return this.showUser.profile_image_url_https.replace('_normal', '');
   }
 
   get countTweet() {
-    if (!moduleProfile.showUser) return '';
-    return moduleProfile.showUser.statuses_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    if (!this.showUser) return '';
+    return this.showUser.statuses_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
   get countFollowing() {
-    return moduleProfile.showUser.friends_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return this.showUser.friends_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
   get countFollower() {
-    return moduleProfile.showUser.followers_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return this.showUser.followers_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   get name() {
-    return moduleProfile.showUser.name;
+    return this.showUser.name;
   }
   get screenName() {
-    const ret = moduleProfile.showUser.protected
-      ? `@${moduleProfile.showUser.screen_name} 🔒`
-      : `@${moduleProfile.showUser.screen_name}`;
+    const ret = this.showUser.protected
+      ? `@${this.showUser.screen_name} 🔒`
+      : `@${this.showUser.screen_name}`;
 
     return ret;
   }
@@ -186,7 +189,7 @@ export class ProfilePage extends Vue {
   }
 
   get userBio() {
-    let text = moduleProfile.showUser.description;
+    let text = this.showUser.description;
     const { entities } = moduleProfile.showUser;
     if (!entities) return text;
     const { url, description } = entities;
@@ -204,11 +207,11 @@ export class ProfilePage extends Vue {
   }
 
   get place() {
-    return moduleProfile.showUser.location;
+    return this.showUser.location;
   }
 
   get url() {
-    const entities = moduleProfile.showUser.entities;
+    const entities = this.showUser.entities;
     if (!entities) return '';
     if (entities.url?.urls?.length > 0) {
       return entities.url.urls[0].expanded_url;
@@ -218,17 +221,17 @@ export class ProfilePage extends Vue {
   }
 
   OnClickFollow(e: MouseEvent) {
-    moduleUtil.Follow(moduleProfile.showUser);
+    moduleUtil.Follow(this.showUser);
   }
   OnClickShowFollowing(e: MouseEvent) {
     moduleProfile.ClearProfileState();
-    moduleProfile.ChangeSelectUser(moduleProfile.showUser);
+    moduleProfile.ChangeSelectUser(this.showUser);
     this.LoadFollowingList();
     this.LoadFollowerList();
   }
   OnClickShowFollower(e: MouseEvent) {
     moduleProfile.ClearProfileState();
-    moduleProfile.ChangeSelectUser(moduleProfile.showUser);
+    moduleProfile.ChangeSelectUser(this.showUser);
     this.LoadFollowingList();
     this.LoadFollowerList();
   }
@@ -244,5 +247,11 @@ export class ProfilePage extends Vue {
 
   ClickTweet() {
     console.log('click tweet');
+  }
+  OnClickProfileURL() {
+    if (!this.showUser.url) return;
+    const url = this.showUser.entities.url.urls.find(x => x.url === this.showUser.url);
+    if (!url) return;
+    window.preload.OpenBrowser(url?.expanded_url);
   }
 }

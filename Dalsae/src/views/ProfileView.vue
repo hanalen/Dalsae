@@ -88,9 +88,9 @@
             <v-icon size="16">mdi-compass-outline </v-icon>
             <span>{{ place }}</span>
           </div>
-          <div class="user-url url">
+          <div class="user-url">
             <v-icon size="16">mdi-link-variant</v-icon>
-            <span>{{ url }}</span>
+            <span class="url" @click="OnClickProfileURL">{{ url }}</span>
           </div>
         </div>
       </div>

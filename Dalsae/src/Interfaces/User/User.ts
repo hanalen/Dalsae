@@ -7,7 +7,7 @@ export class User {
   screen_name: string;
   location: string;
   description: string;
-  url?: I.Url;
+  url?: string;
   entities: I.UserEntitie;
   protected: boolean;
   followers_count: number; //팔로워 수
