@@ -3,7 +3,7 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import * as M from '@/mixins';
 import store from '@/store';
-import { ETweetType, ChangeIndex, ContextEvent, LoadEvent } from '@/store/Interface';
+import { ETweetType } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
@@ -16,278 +16,131 @@ export interface IPanelState {
   isLoad: boolean;
 }
 
-interface StateContext {
-  tweet: I.Tweet;
+class StateContext {
+  tweet: I.Tweet | undefined;
   index: number;
   maxIndex: number;
   isShow: boolean;
   x: number;
   y: number;
   listContext: ContextItem[];
+  constructor() {
+    this.tweet = undefined;
+    this.index = 0;
+    this.maxIndex = 0;
+    this.isShow = false;
+    this.x = 0;
+    this.y = 0;
+    this.listContext = [];
+  }
 }
 
-interface StateInput {
-  replyTweet: I.Tweet;
+class StateInput {
+  replyTweet: I.Tweet | undefined;
   inputText: string;
   listImage: string[];
+  constructor() {
+    this.replyTweet = undefined;
+    this.inputText = '';
+    this.listImage = [];
+  }
+}
+
+class StatePanel {
+  panels: IPanelState[];
+  constructor() {
+    this.panels = [];
+  }
+  get home() {
+    return this.panels.find(x => x.tweetType === ETweetType.E_HOME);
+  }
+  get mention() {
+    return this.panels.find(x => x.tweetType === ETweetType.E_MENTION);
+  }
+  get conv() {
+    return this.panels.find(x => x.tweetType === ETweetType.E_CONV);
+  }
+}
+
+interface StateUI {
+  selectMenu: number;
 }
 
 @Module({ dynamic: true, store, name: 'ui' })
 class UIStore extends VuexModule {
   // states
-  selectMenu = 0;
-  selectionStart = 0; //textarea 커서 위치... 이게 있어야 emit 안하고 멘션 자동완성 할 수 있음
-  panelHome: IPanelState = {
-    tweetType: ETweetType.E_HOME,
-    index: -1,
-    selectedId: '',
-    isLoad: false
-  };
-  panelMention: IPanelState = {
-    tweetType: ETweetType.E_MENTION,
-    index: -1,
-    selectedId: '',
-    isLoad: false
-  };
-  panelDm: IPanelState = { tweetType: ETweetType.E_DM, index: -1, selectedId: '', isLoad: false };
-  panelFavorite: IPanelState = {
-    tweetType: ETweetType.E_FAVORITE,
-    index: -1,
-    selectedId: '',
-    isLoad: false
-  };
-  panelOpen: IPanelState = {
-    tweetType: ETweetType.E_OPEN,
-    index: -1,
-    selectedId: '',
-    isLoad: false
-  };
-  panelConv: IPanelState = {
-    tweetType: ETweetType.E_CONV,
-    index: -1,
-    selectedId: '',
-    isLoad: false
-  };
+  constructor(modules: any) {
+    super(modules);
+    for (const value in ETweetType) {
+      this.statePanel.panels.push({
+        tweetType: Number.parseInt(value) as ETweetType,
+        index: -1,
+        selectedId: '',
+        isLoad: false
+      });
+    }
+  }
+  stateUI: StateUI = { selectMenu: 0 };
+  statePanel: StatePanel = new StatePanel();
+  stateContext: StateContext = new StateContext();
 
-  stateContext: StateContext = {
-    tweet: new I.Tweet(),
-    index: 0,
-    maxIndex: 0,
-    isShow: false,
-    x: 0,
-    y: 0,
-    listContext: []
-  };
-
-  stateInput: StateInput = {
-    inputText: '',
-    listImage: [],
-    replyTweet: new I.Tweet()
-  };
+  stateInput: StateInput = new StateInput();
 
   get selectTweet() {
-    let state: IPanelState;
+    const statePanel = this.statePanel.panels.find(x => x.tweetType === this.stateUI.selectMenu);
+    if (!statePanel) return undefined;
     let listTweet: M.ScrollItem<I.Tweet>[] = [];
-    switch (this.selectMenu) {
+    switch (this.stateUI.selectMenu) {
       case 0:
-        state = this.panelHome;
         listTweet = moduleTweet.homes;
         break;
       case 1:
-        state = this.panelMention;
         listTweet = moduleTweet.mentions;
         break;
-      case 2:
-        state = this.panelDm;
-        break;
       case 3:
-        state = this.panelFavorite;
         listTweet = moduleTweet.favorites;
         break;
       case 4:
-        state = this.panelOpen;
         listTweet = moduleTweet.opens;
         break;
       case 5:
-        state = this.panelConv;
-        listTweet = moduleTweet.convs;
-        break;
-      default:
-        state = this.panelHome;
-        listTweet = moduleTweet.homes;
-        break;
-    }
-    return listTweet[state.index];
-  }
-
-  @Mutation
-  private changeMenu(menu: number) {
-    this.selectMenu = menu;
-  }
-  @Action
-  ChangeMenu(menu: number) {
-    this.context.commit('changeMenu', menu);
-  }
-
-  @Mutation
-  private changeIndex(change: ChangeIndex) {
-    if (change.index < 0) {
-      change.index = 0;
-    }
-    switch (change.tweetType) {
-      case ETweetType.E_HOME:
-        this.panelHome.index = change.index;
-        this.panelHome.selectedId = change.selectedId;
-        break;
-      case ETweetType.E_MENTION:
-        this.panelMention.index = change.index;
-        this.panelMention.selectedId = change.selectedId;
-        break;
-      case ETweetType.E_DM:
-        this.panelDm.index = change.index;
-        break;
-      case ETweetType.E_FAVORITE:
-        this.panelFavorite.index = change.index;
-        this.panelFavorite.selectedId = change.selectedId;
-        break;
-      case ETweetType.E_OPEN:
-        this.panelOpen.index = change.index;
-        this.panelOpen.selectedId = change.selectedId;
-        break;
-      case ETweetType.E_CONV:
-        this.panelConv.index = change.index;
-        this.panelConv.selectedId = change.selectedId;
-        break;
-    }
-  }
-
-  @Action
-  ChangeIndex(change: ChangeIndex) {
-    this.context.commit('changeIndex', change);
-  }
-
-  @Action
-  ChangeSelectTweet(change: ChangeIndex) {
-    let listTweet: M.ScrollItem<I.Tweet>[] = [];
-    switch (change.tweetType) {
-      case ETweetType.E_HOME:
-        listTweet = moduleTweet.homes;
-        break;
-      case ETweetType.E_MENTION:
-        listTweet = moduleTweet.mentions;
-        break;
-      case ETweetType.E_DM:
-        break;
-      case ETweetType.E_FAVORITE:
-        listTweet = moduleTweet.favorites;
-        break;
-      case ETweetType.E_OPEN:
-        listTweet = moduleTweet.opens;
-        break;
-      case ETweetType.E_CONV:
         listTweet = moduleTweet.convs;
         break;
       default:
         listTweet = moduleTweet.homes;
         break;
     }
-    change.index = listTweet.findIndex(x => x.key === change.selectedId);
-    if (change.index === -1) return;
-    this.context.commit('changeIndex', change);
+    return listTweet[statePanel.index];
   }
 
   @Mutation
-  private onContext(contextEvent: ContextEvent) {
-    this.stateContext.index = 0;
-    this.stateContext.isShow = contextEvent.isShow;
-    if (contextEvent.tweet) {
-      this.stateContext.tweet = contextEvent.tweet;
-    }
-    this.stateContext.x = contextEvent.x;
-    this.stateContext.y = contextEvent.y;
-    this.stateContext.maxIndex = contextEvent.maxIndex;
-    this.stateContext.listContext = contextEvent.listContext;
+  private setStateUI(state: StateUI) {
+    this.stateUI = state;
   }
 
   @Action
-  OnContext(contextEvent: ContextEvent) {
-    this.context.commit('onContext', contextEvent);
+  SetStateUI(state: StateUI) {
+    this.context.commit('setStateUI', state);
   }
 
   @Mutation
-  private changeContextIndex(index: number) {
-    if (index < 0) index = 0;
-    else if (index > this.stateContext.maxIndex) index = this.stateContext.maxIndex;
-
-    this.stateContext.index = index;
+  private setStatePanel(state: StatePanel) {
+    this.statePanel = state;
   }
 
   @Action
-  ChageContextIndex(index: number) {
-    this.context.commit('changeContextIndex', index);
+  SetStatePanel(state: StatePanel) {
+    this.context.commit('setStatePanel', state);
   }
 
   @Mutation
-  private changeReplyTweet(tweet: I.Tweet) {
-    this.stateInput.replyTweet = tweet;
+  private setStateContext(state: StateContext) {
+    this.stateContext = state;
   }
 
   @Action
-  ChangeReplyTweet(tweet: I.Tweet) {
-    this.context.commit('changeReplyTweet', tweet);
-  }
-
-  @Mutation
-  private setInputText(text: string) {
-    this.stateInput.inputText = text;
-  }
-
-  @Action
-  SetInputText(text: string) {
-    this.context.commit('setInputText', text);
-  }
-
-  @Mutation
-  private setImage(listImage: string[]) {
-    this.stateInput.listImage = listImage;
-  }
-
-  @Action
-  SetImage(listImage: string[]) {
-    this.context.commit('setImage', listImage);
-  }
-
-  @Mutation
-  private setLoad(event: LoadEvent) {
-    switch (event.tweetType) {
-      case ETweetType.E_HOME:
-        this.panelHome.isLoad = event.isLoad;
-        break;
-      case ETweetType.E_MENTION:
-        this.panelMention.isLoad = event.isLoad;
-        break;
-      case ETweetType.E_FAVORITE:
-        this.panelFavorite.isLoad = event.isLoad;
-        break;
-      case ETweetType.E_CONV:
-        this.panelConv.isLoad = event.isLoad;
-        break;
-    }
-  }
-
-  @Action
-  SetLoad(event: LoadEvent) {
-    this.context.commit('setLoad', event);
-  }
-
-  @Mutation
-  private setSelectionStart(position: number) {
-    this.selectionStart = position;
-  }
-
-  @Action
-  SetSelectionStart(position: number) {
-    this.context.commit('setSelectionStart', position);
+  SetStateContext(state: StateContext) {
+    this.context.commit('setStateContext', state);
   }
 }
 
