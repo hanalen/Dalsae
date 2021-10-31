@@ -41,6 +41,7 @@ export class ProfilePage extends Vue {
   @Watch('selectAccount', { immediate: true, deep: true })
   OnChangeSelectAccount(newVal: I.DalsaeUser) {
     if (!newVal) return;
+    moduleProfile.ClearIds();
     moduleSysbar.RemoveSystemBar(A.ESystemBar.EACCOUNT);
     moduleSysbar.RemoveSystemBar(A.ESystemBar.EFOLLOWERIDS);
     moduleSysbar.RemoveSystemBar(A.ESystemBar.EERROR_FOLLOWERIDS);

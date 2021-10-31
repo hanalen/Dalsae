@@ -107,7 +107,7 @@ class ProfileStore extends VuexModule {
   @Mutation
   private addFollowerIds(ids: I.BlockIds) {
     if (!ids) return;
-    this.listFollowerIds.ids.concat(ids.ids);
+    this.listFollowerIds.ids = this.listFollowerIds.ids.concat(ids.ids);
     this.listFollowerIds.next_cursor_str = ids.next_cursor_str;
     this.listFollowerIds.previous_cursor_str = ids.previous_cursor_str;
   }
@@ -134,6 +134,15 @@ class ProfileStore extends VuexModule {
   @Action
   SetState(state: StateProfile) {
     this.context.commit('setState', state);
+  }
+  @Mutation
+  private clearIds() {
+    this.listFollowerIds = { ids: [], previous_cursor_str: '', next_cursor_str: '' };
+  }
+
+  @Action
+  ClearIds() {
+    this.context.commit('clearIds');
   }
 }
 
