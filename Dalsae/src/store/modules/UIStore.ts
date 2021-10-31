@@ -156,6 +156,39 @@ class UIStore extends VuexModule {
       this.context.commit('setStatePanel', state);
     }
   }
+
+  @Action
+  End(tweetType: ETweetType) {
+    if (tweetType === ETweetType.E_HOME) {
+      const tweets = moduleTweet.homes;
+      const home: IStatePanel = {
+        ...this.statePanel.home,
+        index: tweets.length - 1,
+        selectedId: tweets[tweets.length - 1].key
+      };
+      const state: StatePanel = { ...this.statePanel, home: home };
+      this.context.commit('setStatePanel', state);
+    }
+  }
+
+  @Action
+  ChangeSelectTweet(idStr: string) {
+    let panel: IStatePanel | undefined = undefined;
+    let listTweet: M.ScrollItem<I.Tweet>[] | undefined = undefined;
+    if (this.stateUI.selectMenu === 0) {
+      panel = this.statePanel.home;
+      listTweet = moduleTweet.homes;
+      if (!panel || !listTweet) return;
+      const idx = listTweet.findIndex(x => x.key === idStr);
+      const home: IStatePanel = {
+        ...this.statePanel.home,
+        index: idx,
+        selectedId: idStr
+      };
+      const state: StatePanel = { ...this.statePanel, home: home };
+      this.context.commit('setStatePanel', state);
+    }
+  }
 }
 
 export const moduleUI = getModule(UIStore);

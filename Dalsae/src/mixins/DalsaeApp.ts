@@ -85,19 +85,19 @@ export class DalsaeApp extends Vue {
     if (moduleUI.selectTweet) selectTweet = moduleUI.selectTweet.data;
     switch (hotKeyType) {
       case I.E_HOTKEY.SHOWTL:
-        moduleUI.ChangeMenu(0);
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 0 });
         break;
       case I.E_HOTKEY.SHOWMENTION:
-        moduleUI.ChangeMenu(1);
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 1 });
         break;
       case I.E_HOTKEY.SHOWDM:
-        moduleUI.ChangeMenu(2);
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 2 });
         break;
       case I.E_HOTKEY.SHOWFAVORITE:
-        moduleUI.ChangeMenu(3);
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 3 });
         break;
       case I.E_HOTKEY.SHOWURL:
-        moduleUI.ChangeMenu(4);
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 4 });
         break;
       case I.E_HOTKEY.SENDDM:
         break;
@@ -108,10 +108,9 @@ export class DalsaeApp extends Vue {
         if (selectTweet) moduleUtil.CopyTweet(selectTweet);
         break;
       case I.E_HOTKEY.LOADCONV:
-        console.log('conv');
         if (selectTweet) {
           moduleUtil.LoadConv(selectTweet);
-          moduleUI.ChangeMenu(5);
+          moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 5 });
         }
         break;
       case I.E_HOTKEY.SHOWQT:
@@ -121,7 +120,7 @@ export class DalsaeApp extends Vue {
           user_id_str: moduleSwitter.selectID,
           type: ETweetType.E_CONV
         });
-        moduleUI.ChangeMenu(5);
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 5 });
         break;
       case I.E_HOTKEY.SENDQT:
         if (selectTweet) moduleUtil.OnClickQt(selectTweet);

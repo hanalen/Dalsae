@@ -36,7 +36,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickTweet(e: MouseEvent) {
     e.preventDefault();
-    eventBus.$emit('OnClickTweet', this.tweet.id_str);
+    moduleUI.ChangeSelectTweet(this.tweet.id_str);
   }
 
   get x() {
@@ -47,10 +47,12 @@ export class TweetSelectorBase extends Vue {
   }
 
   get isShowContext() {
-    return moduleUI.stateContext.isShow && moduleUI.stateContext.tweet.id_str === this.tweet.id_str;
+    return (
+      moduleUI.stateContext.isShow && moduleUI.stateContext.tweet?.id_str === this.tweet.id_str
+    );
   }
   set isShowContext(isShow: boolean) {
-    if (isShow) eventBus.$emit('OnClickTweet', this.tweet.id_str);
+    if (isShow) moduleUI.ChangeSelectTweet(this.tweet.id_str);
     const { x, y } = moduleUI.stateContext;
     moduleUI.OnContext({ x: x, y: y, isShow: isShow, maxIndex: 0, listContext: this.listContext });
   }

@@ -85,7 +85,7 @@ export default class QtTweet extends M.TweetBase {
       user_id_str: moduleSwitter.selectID,
       type: ETweetType.E_CONV
     });
-    moduleUI.ChangeMenu(5);
+    moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 5 });
   }
 }
 </script>
