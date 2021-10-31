@@ -9,7 +9,7 @@ import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
 import { ContextItem } from '@/mixins';
 
-export interface IPanelState {
+export interface IStatePanel {
   tweetType: ETweetType;
   index: number;
   selectedId: string;
@@ -47,18 +47,21 @@ class StateInput {
 }
 
 class StatePanel {
-  panels: IPanelState[];
+  home: IStatePanel;
+  mention: IStatePanel;
   constructor() {
-    this.panels = [];
-  }
-  get home() {
-    return this.panels.find(x => x.tweetType === ETweetType.E_HOME);
-  }
-  get mention() {
-    return this.panels.find(x => x.tweetType === ETweetType.E_MENTION);
-  }
-  get conv() {
-    return this.panels.find(x => x.tweetType === ETweetType.E_CONV);
+    this.home = {
+      tweetType: ETweetType.E_HOME,
+      index: -1,
+      selectedId: '',
+      isLoad: false
+    };
+    this.mention = {
+      tweetType: ETweetType.E_MENTION,
+      index: -1,
+      selectedId: '',
+      isLoad: false
+    };
   }
 }
 
@@ -69,17 +72,6 @@ interface StateUI {
 @Module({ dynamic: true, store, name: 'ui' })
 class UIStore extends VuexModule {
   // states
-  constructor(modules: any) {
-    super(modules);
-    for (const value in ETweetType) {
-      this.statePanel.panels.push({
-        tweetType: Number.parseInt(value) as ETweetType,
-        index: -1,
-        selectedId: '',
-        isLoad: false
-      });
-    }
-  }
   stateUI: StateUI = { selectMenu: 0 };
   statePanel: StatePanel = new StatePanel();
   stateContext: StateContext = new StateContext();
@@ -87,11 +79,11 @@ class UIStore extends VuexModule {
   stateInput: StateInput = new StateInput();
 
   get selectTweet() {
-    const statePanel = this.statePanel.panels.find(x => x.tweetType === this.stateUI.selectMenu);
-    if (!statePanel) return undefined;
+    let state: IStatePanel | undefined = undefined;
     let listTweet: M.ScrollItem<I.Tweet>[] = [];
     switch (this.stateUI.selectMenu) {
       case 0:
+        state = this.statePanel.home;
         listTweet = moduleTweet.homes;
         break;
       case 1:
@@ -110,7 +102,8 @@ class UIStore extends VuexModule {
         listTweet = moduleTweet.homes;
         break;
     }
-    return listTweet[statePanel.index];
+    if (!state) return undefined;
+    else return listTweet[state.index];
   }
 
   @Mutation
@@ -141,6 +134,27 @@ class UIStore extends VuexModule {
   @Action
   SetStateContext(state: StateContext) {
     this.context.commit('setStateContext', state);
+  }
+
+  @Action
+  Home(tweetType: ETweetType) {
+    if (tweetType === ETweetType.E_HOME) {
+      const home: IStatePanel = {
+        ...this.statePanel.home,
+        index: 0,
+        selectedId: moduleTweet.homes[0].key
+      };
+      const state: StatePanel = { ...this.statePanel, home: home };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_MENTION) {
+      const mention: IStatePanel = {
+        ...this.statePanel.mention,
+        index: 0,
+        selectedId: moduleTweet.homes[0].key
+      };
+      const state: StatePanel = { ...this.statePanel, mention: mention };
+      this.context.commit('setStatePanel', state);
+    }
   }
 }
 
