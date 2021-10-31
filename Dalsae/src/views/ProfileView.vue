@@ -267,7 +267,7 @@ tab-name {
   text-align: left !important;
 }
 .tab-item {
-  height: calc(100vh - 530px);
+  height: calc(100vh - 552px);
 }
 .v-tabs:not(.v-tabs--vertical) .v-tab {
   white-space: none;
@@ -327,23 +327,22 @@ export default class ProfileView extends MIX.ProfilePage {
 
   */
   async created() {
-    const testFollowing = window.preload.LoadTestFriends();
-    console.log(testFollowing);
-    moduleSwitter.AddFollowingList({
-      followList: testFollowing,
-      selectId: moduleSwitter.selectID
-    });
-    moduleProfile.SetSelectUserFollowingList(testFollowing);
-    const testSwitter = window.preload.LoadSwitter();
-    moduleSwitter.InitSwitter(testSwitter);
-    moduleProfile.ChangeShowUser(testSwitter.selectUser.user);
+    // const testFollowing = window.preload.LoadTestFriends();
+    // console.log(testFollowing);
+    // moduleSwitter.AddFollowingList({
+    //   followList: testFollowing,
+    //   selectId: moduleSwitter.selectID
+    // });
+    // moduleProfile.SetSelectUserFollowingList(testFollowing);
+    // const testSwitter = window.preload.LoadSwitter();
+    // moduleSwitter.InitSwitter(testSwitter);
+    // if (testSwitter.listUser) {
+    //   moduleProfile.ChangeShowUser(testSwitter.listUser[1].user);
+    // }
+    // moduleProfile.ChangeSelectUser(testSwitter.selectUser.user);
 
-    moduleProfile.ChangeSelectUser(testSwitter.selectUser.user);
-
-    return;
-    console.log('profile window created');
+    // return;
     const id = this.$route.query.screenName.toString();
-    console.log('id: ' + id);
     const switter = window.preload.profile.GetSwitter(id);
     moduleSwitter.InitSwitter(switter);
     await this.LoadUserInfo(id);

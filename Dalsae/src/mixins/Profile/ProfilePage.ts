@@ -31,7 +31,7 @@ export class ProfilePage extends Vue {
   }
 
   get verified() {
-    return moduleProfile.selectUser.verified;
+    return moduleProfile.showUser.verified;
   }
 
   get isLoadFollowerIds() {
@@ -162,7 +162,7 @@ export class ProfilePage extends Vue {
   }
 
   get listFollowing() {
-    return moduleProfile.listFollowing.users.slice(0, 10);
+    return moduleProfile.listFollowing.users;
   }
 
   get followerText() {
