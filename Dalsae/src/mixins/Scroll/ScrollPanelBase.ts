@@ -42,34 +42,34 @@ export class ScrollPanelBase extends Vue {
   get panelIndex() {
     switch (this.tweetType) {
       case ETweetType.E_HOME:
-        return moduleUI.panelHome.index;
+        return moduleUI.statePanel.home.index;
       case ETweetType.E_MENTION:
-        return moduleUI.panelMention.index;
+        return moduleUI.statePanel.mention.index;
       case ETweetType.E_FAVORITE:
-        return moduleUI.panelFavorite.index;
+        return moduleUI.statePanel.favorite.index;
       case ETweetType.E_OPEN:
-        return moduleUI.panelOpen.index;
+        return moduleUI.statePanel.open.index;
       case ETweetType.E_CONV:
-        return moduleUI.panelConv.index;
+        return moduleUI.statePanel.conv.index;
       default:
-        return moduleUI.panelHome.index;
+        return moduleUI.statePanel.home.index;
     }
   }
 
   get selectedId() {
     switch (this.tweetType) {
       case ETweetType.E_HOME:
-        return moduleUI.panelHome.selectedId;
+        return moduleUI.statePanel.home.selectedId;
       case ETweetType.E_MENTION:
-        return moduleUI.panelMention.selectedId;
+        return moduleUI.statePanel.mention.selectedId;
       case ETweetType.E_FAVORITE:
-        return moduleUI.panelFavorite.selectedId;
+        return moduleUI.statePanel.favorite.selectedId;
       case ETweetType.E_OPEN:
-        return moduleUI.panelOpen.selectedId;
+        return moduleUI.statePanel.open.selectedId;
       case ETweetType.E_CONV:
-        return moduleUI.panelConv.selectedId;
+        return moduleUI.statePanel.conv.selectedId;
       default:
-        return moduleUI.panelHome.selectedId;
+        return moduleUI.statePanel.home.selectedId;
     }
   }
 

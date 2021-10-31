@@ -72,6 +72,7 @@ class StatePanel {
   home: IStatePanel;
   mention: IStatePanel;
   favorite: IStatePanel;
+  open: IStatePanel;
   conv: IStatePanel;
   constructor() {
     this.home = {
@@ -88,6 +89,12 @@ class StatePanel {
     };
     this.favorite = {
       tweetType: ETweetType.E_FAVORITE,
+      index: -1,
+      selectedId: '',
+      isLoad: false
+    };
+    this.open = {
+      tweetType: ETweetType.E_OPEN,
       index: -1,
       selectedId: '',
       isLoad: false
