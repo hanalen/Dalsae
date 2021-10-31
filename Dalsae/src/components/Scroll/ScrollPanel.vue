@@ -64,22 +64,12 @@ export default class ScrollPanel extends M.ScrollPanelBase {
       if (this.listData.length === 0) return;
       const first = this.listData[0];
       this.scrollPanel.scrollTo({ top: first.scrollTop });
-      moduleUI.ChangeIndex({
-        tweetType: tweetType,
-        index: 0,
-        selectedId: first.key
-      });
     });
     eventBus.$on('PanelEnd', (tweetType: ETweetType) => {
       if (this.tweetType !== tweetType) return;
       if (this.listData.length === 0) return;
       const last = this.listData[this.listData.length - 1];
       this.scrollPanel.scrollTo({ top: last.scrollTop });
-      moduleUI.ChangeIndex({
-        tweetType: tweetType,
-        index: this.listData.length - 1,
-        selectedId: last.key
-      });
     });
 
     eventBus.$on('FocusPanel', (tweetType: ETweetType) => {
