@@ -1,5 +1,17 @@
 <template>
-  <div class="profile-view" data-app>
+  <v-app class="profile-view">
+    <div class="app-alert">
+      <v-alert
+        dense
+        text
+        :type="item.errorType"
+        v-for="(item, i) in listMsg"
+        :key="i"
+        transition="scale-transition"
+      >
+        {{ item.message }}
+      </v-alert>
+    </div>
     <v-progress-circular
       v-if="isLoadProfile"
       :width="5"
@@ -150,7 +162,7 @@
         </v-list>
       </v-menu>
     </div>
-  </div>
+  </v-app>
 </template>
 
 <style lang="scss" scoped>
@@ -160,6 +172,19 @@
 .profile-count,
 tab-name {
   display: flex;
+}
+.v-application {
+  line-height: normal !important;
+}
+.app-alert {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  align-items: center;
+  width: 100vw;
 }
 .profile-count-left,
 .profile-count-right {
@@ -248,7 +273,7 @@ tab-name {
   white-space: none;
 }
 .v-avatar {
-  border-radius: 10px;
+  border-radius: 10px !important;
 }
 .scroll-panel {
   padding: 4px;

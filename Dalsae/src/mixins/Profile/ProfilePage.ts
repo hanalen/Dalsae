@@ -8,9 +8,13 @@ import { moduleProfile } from '@/store/modules/ProfileStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
 import { moduleSysbar } from '@/store/modules/SystemBarStore';
+import { moduleModal } from '@/store/modules/ModalStore';
 
 @Component
 export class ProfilePage extends Vue {
+  get listMsg() {
+    return moduleModal.stateMessage.listMessage;
+  }
   get itsMe() {
     return moduleProfile.showUser.id_str === moduleSwitter.selectID;
   }
