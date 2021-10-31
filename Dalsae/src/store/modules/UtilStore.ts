@@ -3,7 +3,7 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import * as M from '@/mixins';
 import store from '@/store';
-import { ETweetType, ChangeIndex, ContextEvent } from '@/store/Interface';
+import { ETweetType } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
@@ -32,7 +32,14 @@ class UtilStore extends VuexModule {
     const { index, listContext } = moduleUI.stateContext;
     const context = listContext.find(x => x.value === index);
     context?.onClick(index);
-    moduleUI.OnContext({ isShow: false, x: 0, y: 0, listContext: [], maxIndex: 0 });
+    moduleUI.SetStateContext({
+      ...moduleUI.stateContext,
+      isShow: false,
+      x: 0,
+      y: 0,
+      listContext: [],
+      maxIndex: 0
+    });
   }
   @Action
   OpenLink(tweet: I.Tweet, title: string) {
@@ -48,15 +55,13 @@ class UtilStore extends VuexModule {
   @Action
   OnClickQt(tweet: I.Tweet) {
     const str = `https://twitter.com/${tweet.orgUser.screen_name}/status/${tweet.orgTweet.id_str}`;
-    moduleUI.SetInputText(str);
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: str });
   }
 
   @Action
   Reply(tweet: I.Tweet) {
     const mentions = `@${tweet.orgUser.screen_name} `;
-    console.log(moduleUI);
-    moduleUI.ChangeReplyTweet(tweet);
-    moduleUI.SetInputText(mentions);
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, replyTweet: tweet, inputText: mentions });
   }
 
   @Action
@@ -73,13 +78,12 @@ class UtilStore extends VuexModule {
     set.forEach(user => {
       mentions += `@${user} `;
     });
-    moduleUI.ChangeReplyTweet(tweet);
-    moduleUI.SetInputText(mentions);
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, replyTweet: tweet, inputText: mentions });
   }
   @Action
   LoadTweets() {
     let id_str = '';
-    switch (moduleUI.selectMenu) {
+    switch (moduleUI.stateUI.selectMenu) {
       case 0:
         if (moduleTweet.homes.length > 0) id_str = moduleTweet.homes[0].data.id_str;
         moduleApi.statuses.TimeLine('', id_str);
@@ -144,13 +148,13 @@ class UtilStore extends VuexModule {
     tweet.entities.hashtags.forEach(hash => {
       text += `#${hash.text} `;
     });
-    moduleUI.SetInputText(text);
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: text });
   }
 
   @Action
   AddHash(hash: I.Hashtag) {
     if (!hash) return;
-    moduleUI.SetInputText(`#${hash.text}`);
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: `#${hash.text}` });
   }
 
   @Action
@@ -181,7 +185,7 @@ class UtilStore extends VuexModule {
       bAutoComplete: false,
       autoCompleteWord: ''
     });
-    moduleUI.SetInputText(text);
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: text });
     eventBus.$emit('FocusInput');
   }
 }
