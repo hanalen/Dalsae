@@ -48,7 +48,7 @@ class SystemBarStore extends VuexModule {
 
   @Action
   ClearSystamBar() {
-    this.context.commit('ClearSystamBar');
+    this.context.commit('clearSystamBar');
   }
 }
 
