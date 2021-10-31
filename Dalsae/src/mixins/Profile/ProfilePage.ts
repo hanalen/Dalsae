@@ -42,7 +42,7 @@ export class ProfilePage extends Vue {
   OnChangeSelectAccount(newVal: I.DalsaeUser) {
     if (!newVal) return;
     moduleProfile.ClearIds();
-    moduleSysbar.Clear();
+    moduleSysbar.ClearSystamBar();
     moduleSysbar.AddSystemBar({
       type: A.ESystemBar.EACCOUNT,
       icon: 'mdi-account',
@@ -50,7 +50,7 @@ export class ProfilePage extends Vue {
       toolTip: '계정 선택',
       onClick: this.OnClickSelectAccount
     });
-    moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
+    // moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
   }
 
   @Watch('isLoadFollwerIds', { immediate: true, deep: true })
@@ -186,13 +186,21 @@ export class ProfilePage extends Vue {
   }
 
   get userBio() {
-    const text = moduleProfile.showUser.description;
-    if (moduleProfile.showUser.entities?.description.length > 0) {
-      moduleProfile.showUser.entities?.description.forEach(url => {
-        text.replace(url.display_url, url.expanded_url);
+    let text = moduleProfile.showUser.description;
+    const { entities } = moduleProfile.showUser;
+    if (!entities) return text;
+    const { url, description } = entities;
+    if (url) {
+      url.urls.forEach(url => {
+        text = text.replace(url.url, url.display_url);
       });
     }
-    return moduleProfile.showUser.description;
+    if (description) {
+      description.urls.forEach(url => {
+        text = text.replace(url.url, url.display_url);
+      });
+    }
+    return text;
   }
 
   get place() {
@@ -213,13 +221,13 @@ export class ProfilePage extends Vue {
     moduleUtil.Follow(moduleProfile.showUser);
   }
   OnClickShowFollowing(e: MouseEvent) {
-    moduleProfile.Clear();
+    moduleProfile.ClearProfileState();
     moduleProfile.ChangeSelectUser(moduleProfile.showUser);
     this.LoadFollowingList();
     this.LoadFollowerList();
   }
   OnClickShowFollower(e: MouseEvent) {
-    moduleProfile.Clear();
+    moduleProfile.ClearProfileState();
     moduleProfile.ChangeSelectUser(moduleProfile.showUser);
     this.LoadFollowingList();
     this.LoadFollowerList();

@@ -5,3 +5,4 @@ export * from './UserMention';
 export * from './Description';
 export * from './UserEntitie';
 export * from './UserUrl';
+export * from './Urls';
