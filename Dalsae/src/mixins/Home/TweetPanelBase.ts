@@ -4,7 +4,7 @@ import * as I from '@/Interfaces';
 import { mixins } from 'vue-class-component';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { ETweetType } from '@/store/Interface';
-import { IPanelState, moduleUI } from '@/store/modules/UIStore';
+import { moduleUI } from '@/store/modules/UIStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { eventBus } from '@/plugins';
 import { moduleUtil } from '@/store/modules/UtilStore';
@@ -12,10 +12,10 @@ import { moduleUtil } from '@/store/modules/UtilStore';
 @Component
 export class TweetPanelBase extends Vue {
   get selectMenu() {
-    return moduleUI.selectMenu;
+    return moduleUI.stateUI.selectMenu;
   }
   set selectMenu(menu: number) {
-    moduleUI.ChangeMenu(menu);
+    moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: menu });
   }
 
   @Watch('selectMenu', { immediate: true, deep: true })
@@ -62,15 +62,15 @@ export class TweetPanelBase extends Vue {
   }
 
   get isLoadHome() {
-    return moduleUI.panelHome.isLoad;
+    return moduleUI.statePanel.home.isLoad;
   }
 
   get isLoadMention() {
-    return moduleUI.panelMention.isLoad;
+    return moduleUI.statePanel.mention.isLoad;
   }
 
   get isLoadFavorite() {
-    return moduleUI.panelFavorite.isLoad;
+    return moduleUI.statePanel.favorite.isLoad;
   }
 
   KeyDown(e: KeyboardEvent) {
@@ -79,44 +79,24 @@ export class TweetPanelBase extends Vue {
       if (e.code === 'ArrowUp') {
         e.preventDefault();
         if (moduleUI.stateContext.isShow) {
-          moduleUI.ChageContextIndex(moduleUI.stateContext.index - 1);
+          let index = moduleUI.stateContext.index - 1;
+          if (index < 0) index = 0;
+          moduleUI.SetStateContext({ ...moduleUI.stateContext, index: index });
         } else {
           this.ArrowUp();
         }
       } else if (e.code === 'ArrowDown') {
         e.preventDefault();
         if (moduleUI.stateContext.isShow) {
-          moduleUI.ChageContextIndex(moduleUI.stateContext.index + 1);
+          let index = moduleUI.stateContext.index + 1;
+          const maxLen = moduleUI.stateContext.listContext.length;
+          if (index >= maxLen) index = maxLen - 1;
+          moduleUI.SetStateContext({ ...moduleUI.stateContext, index: index });
         } else {
           this.ArrowDown();
         }
       }
     }
-  }
-
-  get state() {
-    let state!: IPanelState;
-    switch (this.selectMenu) {
-      case 0:
-        state = moduleUI.panelHome;
-        break;
-      case 1:
-        state = moduleUI.panelMention;
-        break;
-      case 2:
-        state = moduleUI.panelDm;
-        break;
-      case 3:
-        state = moduleUI.panelFavorite;
-        break;
-      case 4:
-        state = moduleUI.panelOpen;
-        break;
-      default:
-        state = moduleUI.panelHome;
-        break;
-    }
-    return state;
   }
 
   get listTweet() {
@@ -144,40 +124,17 @@ export class TweetPanelBase extends Vue {
   }
 
   ArrowUp() {
-    console.log(document?.activeElement?.tagName);
     if (this.listTweet.length === 0) {
       eventBus.$emit('FocusInput');
       return;
     }
-    const state = this.state;
-    const listTweet = this.listTweet;
-    let index = state.index - 1;
-
-    if (index >= listTweet.length) {
-      index = listTweet.length - 1;
-    } else if (index < 0) {
+    if (moduleUI.Up()) {
       eventBus.$emit('FocusInput');
-      index = 0;
     }
-    moduleUI.ChangeIndex({
-      tweetType: state.tweetType,
-      index: index,
-      selectedId: listTweet[index].key
-    });
   }
 
   ArrowDown() {
     if (this.listTweet.length === 0) return;
-    const state = this.state;
-    const listTweet = this.listTweet;
-    let index = state.index + 1;
-
-    if (index >= listTweet.length) index = listTweet.length - 1;
-    else if (index < 0) index = 0;
-    moduleUI.ChangeIndex({
-      tweetType: state.tweetType,
-      index: index,
-      selectedId: listTweet[index].key
-    });
+    moduleUI.Down();
   }
 }

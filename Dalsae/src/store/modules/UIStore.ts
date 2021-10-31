@@ -242,6 +242,49 @@ class UIStore extends VuexModule {
       this.context.commit('setStatePanel', state);
     }
   }
+
+  @Action
+  Up(): boolean {
+    let panel: IStatePanel | undefined = undefined;
+    let listTweet: M.ScrollItem<I.Tweet>[] | undefined = undefined;
+    if (this.stateUI.selectMenu === ETweetType.E_HOME) {
+      panel = this.statePanel.home;
+      listTweet = moduleTweet.homes;
+      if (!panel || !listTweet) return true;
+      const index = panel.index - 1;
+      if (index < 0) return true; //focus input
+      const home: IStatePanel = {
+        ...this.statePanel.home,
+        index: index,
+        selectedId: listTweet[index].key
+      };
+      const state: StatePanel = { ...this.statePanel, home: home };
+      this.context.commit('setStatePanel', state);
+    }
+    return false;
+  }
+
+  @Action
+  Down(): boolean {
+    let panel: IStatePanel | undefined = undefined;
+    let listTweet: M.ScrollItem<I.Tweet>[] | undefined = undefined;
+    if (this.stateUI.selectMenu === ETweetType.E_HOME) {
+      panel = this.statePanel.home;
+      listTweet = moduleTweet.homes;
+      if (!panel || !listTweet) return true;
+      const index = panel.index + 1;
+      const len = listTweet.length;
+      if (index >= len) return true; //end
+      const home: IStatePanel = {
+        ...this.statePanel.home,
+        index: index,
+        selectedId: listTweet[index].key
+      };
+      const state: StatePanel = { ...this.statePanel, home: home };
+      this.context.commit('setStatePanel', state);
+    }
+    return false;
+  }
 }
 
 export const moduleUI = getModule(UIStore);
