@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Ref } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
@@ -20,7 +21,7 @@ export class TweetInputBase extends Vue {
   }
 
   set inputText(text: string) {
-    moduleUI.SetInputText(text);
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: text });
   }
 
   get listImage() {
@@ -28,7 +29,7 @@ export class TweetInputBase extends Vue {
   }
 
   set listImage(listImage: string[]) {
-    moduleUI.SetImage(listImage);
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, listImage: listImage });
   }
 
   get isAddedMedia() {
@@ -125,14 +126,13 @@ export class TweetInputBase extends Vue {
   OnEsc(e: Event) {
     this.inputText = '';
     this.listImage = [];
-    moduleUI.ChangeReplyTweet(new I.Tweet());
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, replyTweet: new I.Tweet() });
   }
 
   selectionChange(e: Event) {
     if (e.type === 'focus') return; //focus일 경우 selection위치가 변경되지 않음, 자동 완성에 필요한 예외 처리
     const position = (e.target as HTMLInputElement).selectionStart;
     if (position === null) return;
-    moduleUI.SetSelectionStart(position);
     let sIndex = 0; //word로 끊을 시작 index
     let eIndex = 0; //word로 끊을 끝 index
     for (let i = position; i > -1; i--) {
@@ -186,7 +186,7 @@ export class TweetInputBase extends Vue {
       if (moduleUtil.isFocusPanel) {
         e.stopPropagation();
         e.preventDefault();
-        eventBus.$emit('FocusPanel', moduleUI.selectMenu);
+        eventBus.$emit('FocusPanel', moduleUI.stateUI.selectMenu);
       }
     }
   }
@@ -209,10 +209,10 @@ export class TweetInputBase extends Vue {
 
   SendTweet() {
     const { inputText, listImage, replyTweet } = moduleUI.stateInput;
-    moduleApi.statuses.Update(inputText, listImage, replyTweet.id_str);
+    moduleApi.statuses.Update(inputText, listImage, replyTweet?.id_str);
     this.inputText = '';
     this.listImage = [];
-    moduleUI.ChangeReplyTweet(new I.Tweet());
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, replyTweet: new I.Tweet() });
   }
 
   ClearInput(e: Event) {

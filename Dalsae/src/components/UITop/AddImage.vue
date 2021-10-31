@@ -43,7 +43,7 @@ export default class TopSmall extends Vue {
   OnClickRemove() {
     const listImage = moduleUI.stateInput.listImage.concat();
     listImage.splice(this.index, 1);
-    moduleUI.SetImage(listImage);
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, listImage: listImage });
   }
 }
 </script>

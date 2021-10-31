@@ -163,6 +163,16 @@ class UIStore extends VuexModule {
   }
 
   @Mutation
+  private setStateInput(state: StateInput) {
+    this.stateInput = state;
+  }
+
+  @Action
+  SetStateInput(state: StateInput) {
+    this.context.commit('setStateInput', state);
+  }
+
+  @Mutation
   private setStateContext(state: StateContext) {
     this.stateContext = state;
   }
