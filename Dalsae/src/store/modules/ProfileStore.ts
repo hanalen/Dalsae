@@ -3,7 +3,7 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import * as M from '@/mixins';
 import store from '@/store';
-import { ETweetType, ChangeIndex, ContextEvent, LoadEvent } from '@/store/Interface';
+import { ETweetType } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
