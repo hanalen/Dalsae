@@ -113,7 +113,8 @@ export default class Home extends Mixins(DalsaeApp) {
     } else if (e.key === 'Escape') {
       if (moduleUI.stateContext.isShow) {
         const { x, y, maxIndex, listContext } = moduleUI.stateContext;
-        moduleUI.OnContext({
+        moduleUI.SetStateContext({
+          ...moduleUI.stateContext,
           isShow: false,
           x: x,
           y: y,
