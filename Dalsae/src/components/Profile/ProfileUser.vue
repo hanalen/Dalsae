@@ -171,13 +171,21 @@ export default class ProfileUser extends Vue {
   }
 
   get userBio() {
-    const text = this.user.description;
-    if (this.user.entities?.description.length > 0) {
-      this.user.entities?.description.forEach(url => {
-        text.replace(url.display_url, url.expanded_url);
+    let text = this.user.description;
+    const { entities } = this.user;
+    if (!entities) return text;
+    const { url, description } = entities;
+    if (url) {
+      url.urls.forEach(url => {
+        text = text.replace(url.url, url.display_url);
       });
     }
-    return this.user.description;
+    if (description) {
+      description.urls.forEach(url => {
+        text = text.replace(url.url, url.display_url);
+      });
+    }
+    return text;
   }
 }
 </script>
