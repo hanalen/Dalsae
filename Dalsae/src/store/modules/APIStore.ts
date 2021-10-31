@@ -100,11 +100,16 @@ class Statuses {
     }
   }
   async Show(id_str: string) {
-    moduleUI.SetLoad({ tweetType: ETweetType.E_CONV, isLoad: true });
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      conv: { ...moduleUI.statePanel.conv, isLoad: true }
+    });
     const result = await twitterRequest.call.statuses.Show({ id: id_str, tweet_mode: 'extended' });
-    moduleUI.SetLoad({ tweetType: ETweetType.E_CONV, isLoad: false });
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      conv: { ...moduleUI.statePanel.conv, isLoad: false }
+    });
     if (result.data) {
-      console.log('result data', result.data);
       moduleTweet.AddConv({
         tweet: result.data,
         type: ETweetType.E_CONV,
@@ -136,7 +141,10 @@ class Statuses {
     }
   }
   async TimeLine(maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> {
-    moduleUI.SetLoad({ isLoad: true, tweetType: ETweetType.E_HOME });
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      home: { ...moduleUI.statePanel.home, isLoad: true }
+    });
     const id = moduleSwitter.selectID;
     const result = await twitterRequest.call.statuses.TimeLine({
       count: 200,
@@ -144,7 +152,10 @@ class Statuses {
       max_id: maxId,
       since_id: sinceId
     });
-    moduleUI.SetLoad({ isLoad: false, tweetType: ETweetType.E_HOME });
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      home: { ...moduleUI.statePanel.home, isLoad: false }
+    });
     if (result.data) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_HOME,
@@ -155,7 +166,10 @@ class Statuses {
     return result;
   }
   async Mention(maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> {
-    moduleUI.SetLoad({ isLoad: true, tweetType: ETweetType.E_MENTION });
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      mention: { ...moduleUI.statePanel.mention, isLoad: true }
+    });
     const id = store.getters.selectID;
     const result = await twitterRequest.call.statuses.Mention({
       count: 200,
@@ -163,7 +177,10 @@ class Statuses {
       max_id: maxId,
       since_id: sinceId
     });
-    moduleUI.SetLoad({ isLoad: false, tweetType: ETweetType.E_MENTION });
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      mention: { ...moduleUI.statePanel.mention, isLoad: false }
+    });
     if (result.data) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_MENTION,
@@ -197,7 +214,10 @@ class Favorites {
     }
   }
   async List(max_id?: string, since_id?: string) {
-    moduleUI.SetLoad({ isLoad: true, tweetType: ETweetType.E_FAVORITE });
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      favorite: { ...moduleUI.statePanel.favorite, isLoad: true }
+    });
     const id = moduleSwitter.selectID;
     const result = await twitterRequest.call.favorites.List({
       count: 200,
@@ -205,7 +225,10 @@ class Favorites {
       max_id: max_id,
       since_id: since_id
     });
-    moduleUI.SetLoad({ isLoad: false, tweetType: ETweetType.E_FAVORITE });
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      favorite: { ...moduleUI.statePanel.favorite, isLoad: false }
+    });
     if (result.data) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_FAVORITE,
