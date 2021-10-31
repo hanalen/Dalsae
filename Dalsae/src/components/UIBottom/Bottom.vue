@@ -3,7 +3,7 @@
     <v-btn icon rounded @click="ClickOption">
       <v-icon>mdi-menu</v-icon>
     </v-btn>
-    <v-btn icon rounded v-for="(item, i) in listIcons" :key="i" @click="ClickMenu(item.value)">
+    <v-btn icon rounded v-for="(item, i) in listIcon" :key="i" @click="ClickMenu(item.value)">
       <v-icon :color="item.value === selectMenu ? 'primary' : 'secondary'">{{ item.name }}</v-icon>
 
       <!-- <v-progress-circular
