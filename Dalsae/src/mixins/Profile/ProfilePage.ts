@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { Vue, Mixins, Component, Inject, Emit, Prop, Provide } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Inject, Emit, Prop, Provide, Watch } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
+import * as A from '@/store/Interface';
 import { moduleApi } from '@/store/modules/APIStore';
 import { moduleProfile } from '@/store/modules/ProfileStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
+import { moduleSysbar } from '@/store/modules/SystemBarStore';
 
 @Component
 export class ProfilePage extends Vue {
@@ -13,15 +15,61 @@ export class ProfilePage extends Vue {
     return moduleProfile.showUser.id_str === moduleSwitter.selectID;
   }
   get isLoadProfile() {
-    return moduleProfile.isLoadProfile;
+    return moduleProfile.stateProfile.isLoadProfile;
   }
 
   set isLoadProfile(isLoad: boolean) {
-    moduleProfile.SetLoadUser(isLoad);
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadProfile: isLoad });
   }
 
   get verified() {
     return moduleProfile.selectUser.verified;
+  }
+
+  get isLoadFollwerIds() {
+    return moduleProfile.stateProfile.isLoadFollowerIds;
+  }
+
+  get selectAccount() {
+    return moduleSwitter.selectUser;
+  }
+
+  isShowContext = false;
+  x = 0;
+  y = 0;
+
+  @Watch('selectAccount', { immediate: true, deep: true })
+  OnChangeSelectAccount(newVal: I.DalsaeUser) {
+    if (!newVal) return;
+    moduleSysbar.RemoveSystemBar(A.ESystemBar.EACCOUNT);
+    moduleSysbar.RemoveSystemBar(A.ESystemBar.EFOLLOWERIDS);
+    moduleSysbar.RemoveSystemBar(A.ESystemBar.EERROR_FOLLOWERIDS);
+    moduleSysbar.AddSystemBar({
+      type: A.ESystemBar.EACCOUNT,
+      icon: 'mdi-account',
+      text: `@${newVal.screen_name}`,
+      toolTip: '계정 선택',
+      onClick: this.OnClickSelectAccount
+    });
+    moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
+  }
+
+  @Watch('isLoadFollwerIds', { immediate: true, deep: true })
+  OnChangeLoadFollwerIds(newVal: I.DalsaeUser) {
+    if (newVal) {
+      moduleSysbar.AddSystemBar({
+        type: A.ESystemBar.EFOLLOWERIDS,
+        icon: 'mdi-download',
+        text: '',
+        toolTip: '팔로워 불러오는 중...'
+      });
+    } else {
+      moduleSysbar.RemoveSystemBar(A.ESystemBar.EFOLLOWERIDS);
+    }
+  }
+
+  get listUser() {
+    return moduleSwitter.switter.listUser;
   }
 
   async LoadUserInfo(screenName: string) {
@@ -42,7 +90,8 @@ export class ProfilePage extends Vue {
         screen_name: moduleProfile.selectUser.screen_name,
         count: 200
       },
-      ''
+      '',
+      false
     );
     if (resp.data) {
       moduleProfile.SetSelectUserFollowerList(resp.data);
@@ -55,7 +104,8 @@ export class ProfilePage extends Vue {
         screen_name: moduleProfile.selectUser.screen_name,
         count: 200
       },
-      ''
+      '',
+      false
     );
     if (resp.data) {
       moduleProfile.SetSelectUserFollowingList(resp.data);
@@ -67,7 +117,8 @@ export class ProfilePage extends Vue {
   }
 
   get listFollowing() {
-    return moduleProfile.listFollowing.users;
+    return moduleProfile.listFollowing.users.slice(0, 10);
+  }
 
   get followerText() {
     const user = moduleProfile.showUser;
@@ -89,11 +140,11 @@ export class ProfilePage extends Vue {
   }
 
   get selectMenu() {
-    return moduleProfile.selectMenu;
+    return moduleProfile.stateProfile.selectMenu;
   }
 
   set selectMenu(menu: number) {
-    moduleProfile.ChangeSelectMenu(menu);
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, selectMenu: menu });
   }
 
   get userHeader() {
@@ -173,6 +224,15 @@ export class ProfilePage extends Vue {
     moduleProfile.ChangeSelectUser(moduleProfile.showUser);
     this.LoadFollowingList();
     this.LoadFollowerList();
+  }
+
+  OnClickSelectAccount(e: MouseEvent) {
+    this.isShowContext = true;
+    this.x = e.pageX;
+    this.y = e.pageY;
+  }
+  OnClickAccount(user: I.DalsaeUser) {
+    moduleSwitter.ChangeAccount(user);
   }
 
   ClickTweet() {

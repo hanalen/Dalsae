@@ -9,15 +9,21 @@ import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
 import { ContextItem } from '@/mixins';
 
-@Module({ dynamic: true, store, name: 'profile' })
-class ProfileStore extends VuexModule {
-  showUser: I.User = new I.User(); //상단에 보이는 유저
-  selectUser: I.User = new I.User(); //하단 목록에 사용되는 유저
+class StateProfile {
   isLoadProfile = false;
   isLoadFollowing = false;
   isLoadFollower = false;
   isFollwRequest = false;
+
+  isLoadFollowerIds = false;
   selectMenu = 0;
+}
+
+@Module({ dynamic: true, store, name: 'profile' })
+class ProfileStore extends VuexModule {
+  showUser: I.User = new I.User(); //상단에 보이는 유저
+  selectUser: I.User = new I.User(); //하단 목록에 사용되는 유저
+  stateProfile = new StateProfile();
   listFollower: I.FollowerList = { next_cursor_str: '', users: [], previous_cursor_str: '' };
   listFollowing: I.FollowerList = { next_cursor_str: '', users: [], previous_cursor_str: '' };
   listFollowerIds: I.BlockIds = {
@@ -48,26 +54,6 @@ class ProfileStore extends VuexModule {
   }
 
   @Mutation
-  private setLoadUser(isLoad: boolean) {
-    this.isLoadProfile = isLoad;
-  }
-
-  @Action
-  SetLoadUser(isLoad: boolean) {
-    this.context.commit('setLoadUser', isLoad);
-  }
-
-  @Mutation
-  private changeSelectMenu(menu: number) {
-    this.selectMenu = menu;
-  }
-
-  @Action
-  ChangeSelectMenu(menu: number) {
-    this.context.commit('changeSelectMenu', menu);
-  }
-
-  @Mutation
   private setSelectUserFollowerList(listUser: I.FollowerList) {
     this.listFollower = listUser;
   }
@@ -88,46 +74,15 @@ class ProfileStore extends VuexModule {
   }
 
   @Mutation
-  private setLoadFollowing(isLoad: boolean) {
-    this.isLoadFollowing = isLoad;
-  }
-
-  @Action
-  SetLoadFollowing(isLoad: boolean) {
-    this.context.commit('setLoadFollowing', isLoad);
-  }
-
-  @Mutation
-  private setLoadFollower(isLoad: boolean) {
-    this.isLoadFollower = isLoad;
-  }
-
-  @Action
-  SetLoadFollower(isLoad: boolean) {
-    this.context.commit('setLoadFollower', isLoad);
-  }
-
-  @Mutation
   private clear() {
     this.listFollower = { previous_cursor_str: '', users: [], next_cursor_str: '' };
     this.listFollowing = { previous_cursor_str: '', users: [], next_cursor_str: '' };
-    this.isLoadFollower = false;
-    this.isLoadFollowing = false;
+    this.stateProfile = new StateProfile();
   }
 
   @Action
   Clear() {
     this.context.commit('clear');
-  }
-
-  @Mutation
-  private setFollowRequest(isLoad: boolean) {
-    this.isFollwRequest = isLoad;
-  }
-
-  @Action
-  SetFollowRequest(isLoad: boolean) {
-    this.context.commit('setFollowRequest', isLoad);
   }
 
   @Mutation
@@ -152,7 +107,9 @@ class ProfileStore extends VuexModule {
   @Mutation
   private addFollowerIds(ids: I.BlockIds) {
     if (!ids) return;
-    this.listFollowerIds = ids;
+    this.listFollowerIds.ids.concat(ids.ids);
+    this.listFollowerIds.next_cursor_str = ids.next_cursor_str;
+    this.listFollowerIds.previous_cursor_str = ids.previous_cursor_str;
   }
 
   @Action
@@ -168,6 +125,15 @@ class ProfileStore extends VuexModule {
   @Action
   AddFollowingIds(ids: I.BlockIds) {
     this.context.commit('addFollowingIds', ids);
+  }
+
+  @Mutation
+  private setState(state: StateProfile) {
+    this.stateProfile = state;
+  }
+  @Action
+  SetState(state: StateProfile) {
+    this.context.commit('setState', state);
   }
 }
 

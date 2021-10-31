@@ -4,6 +4,8 @@
     v-if="item"
     @mouseenter="isHover = true"
     @mouseleave="isHover = false"
+    :style="styleItem"
+    @click="OnClick"
   >
     <v-icon size="20">
       {{ item.icon }}
@@ -11,8 +13,8 @@
     <span>
       {{ item.text }}
     </span>
-    <div class="tooltip">
-      <span v-if="!isHover">
+    <div class="tooltip" v-if="isHover">
+      <span>
         {{ item.toolTip }}
       </span>
     </div>
@@ -42,7 +44,8 @@ span {
   border-radius: 4px;
   height: 30px;
   line-height: 30px;
-  background-color: rgba(160, 160, 160, 0.281);
+  padding: 0px 8px;
+  background-color: rgba(160, 160, 160, 0.9);
 }
 .tooltip span {
   // text-align: center;
@@ -63,5 +66,18 @@ export default class SystemBarItem extends Vue {
   item!: A.SystemBarItem;
 
   isHover = false;
+
+  get styleItem() {
+    if (!this.item.onClick) {
+      return '';
+    } else {
+      return {
+        cursor: 'pointer'
+      };
+    }
+  }
+  OnClick(e: MouseEvent) {
+    if (this.item.onClick) this.item.onClick(e);
+  }
 }
 </script>

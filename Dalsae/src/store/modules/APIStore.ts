@@ -11,6 +11,7 @@ import { moduleTweet } from './TweetStore';
 import { moduleUI } from './UIStore';
 import { ETweetType } from '@/store/Interface';
 import { moduleProfile } from './ProfileStore';
+import { moduleSysbar } from './SystemBarStore';
 
 class Account {
   async VerifyCredentials(): Promise<P.APIResp<I.User>> {
@@ -242,49 +243,72 @@ class Users {
 }
 
 class Followers {
-  async List(data: P.ReqList, selectId: string): Promise<P.APIResp<I.FollowerList>> {
+  async List(
+    data: P.ReqList,
+    selectId: string,
+    isLoadFull: boolean
+  ): Promise<P.APIResp<I.FollowerList>> {
     const result = await twitterRequest.call.followers.List(data);
     if (result.data && selectId && data.screen_name === '') {
       moduleSwitter.AddFollowerList({ followList: result.data, selectId: selectId });
     }
-    if (result.data.next_cursor_str !== '0')
+    if (result.data.next_cursor_str !== '0' && isLoadFull)
       this.List(
         {
           screen_name: '',
           count: 200,
           cursor: result.data.next_cursor_str
         },
-        selectId
+        selectId,
+        isLoadFull
       );
     return result;
   }
 
   async Ids(data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> {
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadFollowerIds: true });
     const result = await twitterRequest.call.followers.Ids(data);
-    moduleProfile.AddFollowerIds(result.data);
-    if (result.data.next_cursor_str !== '0')
-      this.Ids({
-        cursor: result.data.next_cursor_str,
-        stringify_ids: true
+    if (twitterRequest.CheckAPIError(result.data)) {
+      const error = twitterRequest.GetApiError(result.data as I.ResponseTwitterError);
+      moduleSysbar.AddSystemBar({
+        type: S.ESystemBar.EERROR_FOLLOWERIDS,
+        icon: 'mdi-alert-circle-outline',
+        text: `팔로워 목록 에러`,
+        toolTip: error
       });
+    } else {
+      moduleProfile.AddFollowerIds(result.data);
+      if (result.data.next_cursor_str !== '0') {
+        this.Ids({
+          cursor: result.data.next_cursor_str,
+          stringify_ids: true
+        });
+      }
+    }
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadFollowerIds: false });
     return result;
   }
 }
 
 class Friends {
-  async List(data: P.ReqList, selectId: string): Promise<P.APIResp<I.FollowerList>> {
+  async List(
+    data: P.ReqList,
+    selectId: string,
+    isLoadFull: boolean
+  ): Promise<P.APIResp<I.FollowerList>> {
     const result = await twitterRequest.call.friends.List(data);
     if (result.data && selectId && data.screen_name === '') {
       moduleSwitter.AddFollowingList({ followList: result.data, selectId: selectId });
     }
-    if (result.data.next_cursor_str !== '0')
+    if (result.data.next_cursor_str !== '0' && isLoadFull)
       this.List(
         {
           screen_name: '',
           count: 200,
           cursor: result.data.next_cursor_str
         },
-        selectId
+        selectId,
+        isLoadFull
       );
     return result;
   }

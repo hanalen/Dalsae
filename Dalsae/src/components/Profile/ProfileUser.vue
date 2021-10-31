@@ -124,11 +124,11 @@ export default class ProfileUser extends Vue {
   }
 
   get isLoad() {
-    return moduleProfile.isFollwRequest;
+    return moduleProfile.stateProfile.isFollwRequest;
   }
 
   set isLoad(isLoad: boolean) {
-    moduleProfile.SetFollowRequest(isLoad);
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isFollwRequest: isLoad });
   }
 
   ClickMenu(e: MouseEvent) {

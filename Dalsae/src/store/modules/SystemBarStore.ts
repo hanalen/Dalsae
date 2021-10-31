@@ -27,6 +27,19 @@ class SystemBarStore extends VuexModule {
   AddSystemBar(item: A.SystemBarItem) {
     this.context.commit('addSystemBar', item);
   }
+
+  @Mutation
+  private removeSystemBar(type: A.ESystemBar) {
+    const idx = this.stateSystemBar.listSystemBarItem.findIndex(x => x.type === type);
+    if (idx > -1) {
+      this.stateSystemBar.listSystemBarItem.splice(idx, 1);
+    }
+  }
+
+  @Action
+  RemoveSystemBar(type: A.ESystemBar) {
+    this.context.commit('removeSystemBar', type);
+  }
 }
 
 export const moduleSysbar = getModule(SystemBarStore);

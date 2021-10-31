@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-view">
+  <div class="profile-view" data-app>
     <v-progress-circular
       v-if="isLoadProfile"
       :width="5"
@@ -135,6 +135,20 @@
           </v-tabs-items>
         </div>
       </div>
+      <system-bar></system-bar>
+      <v-menu v-model="isShowContext" :position-x="x" :position-y="y" absolute offset-y>
+        <v-list>
+          <v-list-item-group>
+            <v-list-item v-for="(user, i) in listUser" :key="i" @click="OnClickAccount(user)">
+              <template>
+                <div class="context-item">
+                  <span> @{{ user.screen_name }} </span>
+                </div>
+              </template>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-menu>
     </div>
   </div>
 </template>
@@ -240,6 +254,17 @@ tab-name {
   padding: 4px;
   overflow-y: scroll;
 }
+
+.v-list-item {
+  min-height: 24px !important;
+  max-width: 300px !important;
+  font-size: 14px !important;
+}
+.context-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
 </style>
 
 <script lang="ts">
@@ -250,6 +275,8 @@ import * as MIX from '@/mixins';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleProfile } from '@/store/modules/ProfileStore';
 import { moduleApi } from '@/store/modules/APIStore';
+import { moduleSysbar } from '@/store/modules/SystemBarStore';
+import { ESystemBar } from '@/store/Interface';
 
 @Component
 export default class ProfileView extends MIX.ProfilePage {
@@ -285,19 +312,20 @@ export default class ProfileView extends MIX.ProfilePage {
     const testSwitter = window.preload.LoadSwitter();
     moduleSwitter.InitSwitter(testSwitter);
     moduleProfile.ChangeShowUser(testSwitter.selectUser.user);
+
     moduleProfile.ChangeSelectUser(testSwitter.selectUser.user);
-    moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
+
     return;
-    // console.log('profile window created');
-    // const id = this.$route.query.screenName.toString();
-    // console.log('id: ' + id);
-    // const switter = window.preload.profile.GetSwitter(id);
-    // moduleSwitter.InitSwitter(switter);
-    // await this.LoadUserInfo(id);
-    // this.LoadFollowerList();
-    // this.LoadFollowingList();
-    // moduleSwitter.initFollowDatas(window.preload.profile.GetFollowDatas(id));
-    // moduleSwitter.InitBlockIds(window.preload.profile.GetBlockIds(id));
+    console.log('profile window created');
+    const id = this.$route.query.screenName.toString();
+    console.log('id: ' + id);
+    const switter = window.preload.profile.GetSwitter(id);
+    moduleSwitter.InitSwitter(switter);
+    await this.LoadUserInfo(id);
+    this.LoadFollowerList();
+    this.LoadFollowingList();
+    moduleSwitter.initFollowDatas(window.preload.profile.GetFollowDatas(id));
+    moduleSwitter.InitBlockIds(window.preload.profile.GetBlockIds(id));
   }
 }
 </script>
