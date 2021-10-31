@@ -91,6 +91,9 @@ export class TwitterRequest {
       case 151:
         message = '메시지를 보내는 중 에러가 발생했습니다';
         break;
+      case 160:
+        message = '이미 팔로우 요청을 보냈습니다.\r\n 요청 취소는 트위터에서 가능합니다.';
+        break;
       case 179:
         message = '대화 트윗을 쓴 유저가 잠금 계정입니다.';
         break;
