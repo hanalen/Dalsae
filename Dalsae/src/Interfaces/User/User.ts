@@ -61,6 +61,6 @@ export class User {
     this.screen_name = '';
     this.statuses_count = 0;
     this.verified = false;
-    this.entities = { description: [], url: { urls: [] } };
+    this.entities = { description: { urls: [] }, url: { urls: [] } };
   }
 }
