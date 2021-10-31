@@ -47,8 +47,32 @@ class StateInput {
 }
 
 class StatePanel {
+  listIcon = [
+    {
+      name: 'mdi-home',
+      value: 0
+    },
+    {
+      name: 'mdi-bell-outline',
+      value: 1
+    },
+    {
+      name: 'mdi-email-outline',
+      value: 2
+    },
+    {
+      name: 'mdi-heart-outline',
+      value: 3
+    },
+    {
+      name: 'mdi-link',
+      value: 4
+    }
+  ];
   home: IStatePanel;
   mention: IStatePanel;
+  favorite: IStatePanel;
+  conv: IStatePanel;
   constructor() {
     this.home = {
       tweetType: ETweetType.E_HOME,
@@ -58,6 +82,18 @@ class StatePanel {
     };
     this.mention = {
       tweetType: ETweetType.E_MENTION,
+      index: -1,
+      selectedId: '',
+      isLoad: false
+    };
+    this.favorite = {
+      tweetType: ETweetType.E_FAVORITE,
+      index: -1,
+      selectedId: '',
+      isLoad: false
+    };
+    this.conv = {
+      tweetType: ETweetType.E_CONV,
       index: -1,
       selectedId: '',
       isLoad: false

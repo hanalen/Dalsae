@@ -34,38 +34,18 @@ import { moduleUI } from '@/store/modules/UIStore';
 @Component
 export default class Bottom extends Vue {
   get selectMenu() {
-    return moduleUI.selectMenu;
+    return moduleUI.stateUI.selectMenu;
   }
-  listIcons = [
-    {
-      name: 'mdi-home',
-      value: 0
-    },
-    {
-      name: 'mdi-bell-outline',
-      value: 1
-    },
-    {
-      name: 'mdi-email-outline',
-      value: 2
-    },
-    {
-      name: 'mdi-heart-outline',
-      value: 3
-    },
-    {
-      name: 'mdi-link',
-      value: 4
-    }
-  ];
+  get listIcon() {
+    return moduleUI.statePanel.listIcon;
+  }
 
   async ClickOption() {
-    console.log('click option');
     moduleModal.ShowOptionModal(true);
   }
 
   async ClickMenu(menu: number) {
-    moduleUI.ChangeMenu(menu);
+    moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: menu });
   }
 
   isShowLoad(menu: number) {
@@ -79,15 +59,15 @@ export default class Bottom extends Vue {
   }
 
   get isLoadHome() {
-    return moduleUI.panelHome.isLoad;
+    return moduleUI.statePanel.home.isLoad;
   }
 
   get isLoadMention() {
-    return moduleUI.panelMention.isLoad;
+    return moduleUI.statePanel.mention.isLoad;
   }
 
   get isLoadFavorite() {
-    return moduleUI.panelFavorite.isLoad;
+    return moduleUI.statePanel.favorite.isLoad;
   }
 }
 </script>
