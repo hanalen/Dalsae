@@ -167,6 +167,7 @@ class ProfileStore extends VuexModule {
   private clearIds() {
     this.listFollowerIds = { ids: [], previous_cursor_str: '', next_cursor_str: '' };
     this.listFollowingIds = { ids: [], previous_cursor_str: '', next_cursor_str: '' };
+    this.listRequestIds = { ids: [], previous_cursor_str: '', next_cursor_str: '' };
   }
 
   @Action
