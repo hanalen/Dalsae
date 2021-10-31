@@ -79,10 +79,6 @@ export default class ScrollPanel extends M.ScrollPanelBase {
       this.scrollPanel.focus();
     });
 
-    eventBus.$on('OnClickTweet', (tweetId: string) => {
-      moduleUI.ChangeSelectTweet({ tweetType: this.tweetType, selectedId: tweetId, index: -1 });
-    });
-
     this.$nextTick(() => {
       window.addEventListener('resize', this.OnResizeWindow);
       this.SetIndex();
