@@ -50,7 +50,7 @@ export class ProfilePage extends Vue {
       toolTip: '계정 선택',
       onClick: this.OnClickSelectAccount
     });
-    // moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
+    moduleApi.followers.Ids({ stringify_ids: true, cursor: '-1' });
   }
 
   @Watch('isLoadFollwerIds', { immediate: true, deep: true })
