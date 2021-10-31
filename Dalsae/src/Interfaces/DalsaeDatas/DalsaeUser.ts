@@ -43,7 +43,7 @@ export class DalsaeUser {
       screen_name: '',
       statuses_count: 0,
       verified: false,
-      entities: { url: { urls: [] }, description: [] }
+      entities: { url: { urls: [] }, description: { urls: [] } }
     };
   }
 }
