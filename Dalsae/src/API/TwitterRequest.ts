@@ -115,6 +115,9 @@ export class TwitterRequest {
       case 386:
         message = '트윗이 280자를 넘어 전송할 수 없습니다.';
         break;
+      default:
+        message = e.errors[0].message;
+        break;
     }
     return message;
   }
