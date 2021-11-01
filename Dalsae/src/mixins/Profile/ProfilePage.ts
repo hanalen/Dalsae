@@ -114,7 +114,7 @@ export class ProfilePage extends Vue {
   }
 
   get listUser() {
-    return moduleSwitter.switter.listUser;
+    return moduleSwitter.stateSwitter.switter.listUser;
   }
 
   async LoadUserInfo(screenName: string) {
@@ -292,7 +292,10 @@ export class ProfilePage extends Vue {
     this.y = e.pageY;
   }
   OnClickAccount(user: I.DalsaeUser) {
-    moduleSwitter.ChangeAccount(user);
+    moduleSwitter.SetStateSwitter({
+      ...moduleSwitter.stateSwitter,
+      switter: { ...moduleSwitter.stateSwitter.switter, selectUser: user }
+    });
   }
 
   ClickTweet() {

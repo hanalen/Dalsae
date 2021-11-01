@@ -56,7 +56,7 @@ export class PinModalBase extends Vue {
   async GetAccessToken(pin: string) {
     const result = await moduleApi.oauth.ReqAccessToken({ oauth_verifier: pin });
     if (result.data) {
-      window.preload.SaveSwitter(store.state.switter.switter);
+      window.preload.SaveSwitter(moduleSwitter.stateSwitter.switter);
       this.CloseModal();
     }
   }

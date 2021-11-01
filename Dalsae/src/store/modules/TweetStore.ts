@@ -63,7 +63,7 @@ class TweetStore extends VuexModule {
             tweet,
             user_id_str,
             moduleOption.muteOption,
-            moduleSwitter.listBlockIds,
+            moduleSwitter.stateIds.listBlockIds,
             moduleSwitter.listMuteIds
           );
         else
@@ -71,7 +71,7 @@ class TweetStore extends VuexModule {
             listTweet,
             user_id_str,
             moduleOption.muteOption,
-            moduleSwitter.listBlockIds,
+            moduleSwitter.stateIds.listBlockIds,
             moduleSwitter.listMuteIds
           );
         break;
@@ -81,7 +81,7 @@ class TweetStore extends VuexModule {
             tweet,
             user_id_str,
             moduleOption.muteOption,
-            moduleSwitter.listBlockIds,
+            moduleSwitter.stateIds.listBlockIds,
             moduleSwitter.listMuteIds
           );
         else
@@ -89,7 +89,7 @@ class TweetStore extends VuexModule {
             listTweet,
             user_id_str,
             moduleOption.muteOption,
-            moduleSwitter.listBlockIds,
+            moduleSwitter.stateIds.listBlockIds,
             moduleSwitter.listMuteIds
           );
         break;

@@ -26,11 +26,18 @@ export class OptionModalBase extends Vue {
 
   OnClickAccount(account: I.DalsaeUser) {
     moduleModal.ShowOptionModal(false);
-    moduleSwitter.ChangeAccount(account);
+    moduleSwitter.SetStateSwitter({
+      ...moduleSwitter.stateSwitter,
+      switter: { ...moduleSwitter.stateSwitter.switter, selectUser: account }
+    });
   }
 
   OnClickOptionDetail() {
     moduleModal.ShowOptionModal(false);
     moduleModal.ShowOptionDetailModal(true);
+  }
+
+  get listUser() {
+    return moduleSwitter.stateSwitter.switter.listUser;
   }
 }

@@ -2,10 +2,10 @@
   <div>
     <v-list>
       <v-list-item>
-        <div v-if="this.$store.state.switter.switter != undefined">
+        <div>
           <v-avatar
             class="click-able"
-            v-for="(item, i) in this.$store.state.switter.switter.listUser"
+            v-for="(item, i) in listUser"
             :key="i"
             :size="40"
             @click="OnClickAccount(item)"

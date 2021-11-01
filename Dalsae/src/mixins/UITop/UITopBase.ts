@@ -4,6 +4,7 @@ import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import store from '@/store';
 import { moduleOption } from '@/store/modules/OptionStore';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
 
 class State {
   tweet: string;
@@ -17,18 +18,18 @@ class State {
 @Component
 export class UITopBase extends Vue {
   state = new State();
-  user = store.state.switter.switter;
+  get selectUser() {
+    return moduleSwitter.stateSwitter.switter.selectUser;
+  }
   propicPath = '';
   option = moduleOption.uiOption;
 
-  @Watch('user', { immediate: true, deep: true })
-  OnUserChanged(switter: I.Switter) {
-    const user = switter?.selectUser?.user;
-    if (!user) this.propicPath = '';
-    else
-      this.propicPath = this.option.isBigPropic
-        ? user.profile_image_url_https.replace('_normal', '')
-        : user.profile_image_url_https.replace('_normal', '_bigger');
+  @Watch('selectUser', { immediate: true, deep: true })
+  OnUserChanged(dalsaeUser: I.DalsaeUser) {
+    const user = dalsaeUser.user;
+    this.propicPath = this.option.isBigPropic
+      ? user.profile_image_url_https.replace('_normal', '')
+      : user.profile_image_url_https.replace('_normal', '_bigger');
   }
 
   get isShowPropic() {
