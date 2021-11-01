@@ -5,91 +5,94 @@ import * as A from '@/store/Interface';
 import store from '@/store';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { FollowDatas } from '@/Interfaces/DalsaeDatas/FollowDatas';
-export interface ISwitterState {
+class StateSwitter {
   switter: I.Switter;
   tempUser: I.DalsaeUser;
+  constructor() {
+    this.switter = { selectUser: new I.DalsaeUser(), listUser: [] };
+    this.tempUser = new I.DalsaeUser();
+  }
+}
+
+class StateIds {
+  listBlockIds: string[] = [];
+  dicMuteIds: Map<string, string[]> = new Map();
+
+  followDatas = new FollowDatas();
 }
 
 @Module({ dynamic: true, store, name: 'switter' })
 class SwitterStore extends VuexModule {
   // states
-  switter: I.Switter = { selectUser: new I.DalsaeUser(), listUser: [] };
-  tempUser: I.DalsaeUser = new I.DalsaeUser();
-  listBlockIds: string[] = [];
-  dicMuteIds: Map<string, string[]> = new Map();
-
-  followDatas = new FollowDatas();
+  stateSwitter: StateSwitter = new StateSwitter();
+  stateIds = new StateIds();
 
   get listFollower() {
-    const selectId = this.switter.selectUser.user_id;
-    const datas = this.followDatas.dicUsers.get(selectId);
+    const { user_id } = this.stateSwitter.switter.selectUser;
+    const datas = this.stateIds.followDatas.dicUsers.get(user_id);
     return datas ? datas.listFollower : [];
   }
   get listFollowing() {
-    const selectId = this.switter.selectUser.user_id;
-    const datas = this.followDatas.dicUsers.get(selectId);
+    const { user_id } = this.stateSwitter.switter.selectUser;
+    const datas = this.stateIds.followDatas.dicUsers.get(user_id);
     return datas ? datas.listFollowing : [];
   }
 
   get listMuteIds() {
-    const ret = this.dicMuteIds.get(this.switter.selectUser.user_id);
-    return ret ? ret : [];
+    const { user_id } = this.stateSwitter.switter.selectUser;
+    const datas = this.stateIds.dicMuteIds.get(user_id);
+    return datas ? datas : [];
   }
 
   // getters
   get selectID() {
-    let id = this.switter.selectUser.user_id;
-    id = id ? id : '';
-    return id;
+    const id = this.stateSwitter.switter.selectUser.user_id;
+    return id ? id : '';
   }
 
   get selectUser() {
-    if (this.switter?.selectUser.user_id) {
-      return this.switter.selectUser;
-    } else {
-      return null;
-    }
+    return this.stateSwitter.switter.selectUser;
   }
 
   get publicKey() {
-    return this.switter ? this.switter?.selectUser?.oauth_token : '';
+    const { switter } = this.stateSwitter;
+    return switter.selectUser.oauth_token;
   }
 
   get secretKey() {
-    return this.switter ? this.switter?.selectUser?.oauth_token_secret : '';
+    const { switter } = this.stateSwitter;
+    return switter.selectUser.oauth_token_secret;
   }
 
-  // mutations
   @Mutation
-  private setKey(setkey: A.SetKey) {
-    this.tempUser = new I.DalsaeUser();
-    this.tempUser.oauth_token = setkey.publicKey;
-    this.tempUser.oauth_token_secret = setkey.secretKey;
+  private setStateSwitter(state: StateSwitter) {
+    this.stateSwitter = state;
   }
 
   @Action
-  public SetKey(setKey: A.SetKey) {
-    this.context.commit('setKey', setKey);
+  SetStateSwitter(state: StateSwitter) {
+    this.context.commit('setStateSwitter', state);
   }
 
   @Mutation
   private addUser(addUser: A.AddUser) {
     const { name, screenName, secretKey, userId, publicKey } = { ...addUser };
-    const user = this.switter.listUser?.find(x => x.user_id === userId);
+    const { switter, tempUser } = this.stateSwitter;
+    const user = switter.listUser.find(x => x.user_id === userId);
     if (user) {
-      this.switter.selectUser = user;
+      switter.selectUser = user;
     } else {
-      const selUser = this.tempUser;
+      const selUser = tempUser;
       selUser.oauth_token = publicKey;
       selUser.oauth_token_secret = secretKey;
       selUser.name = name;
       selUser.screen_name = screenName;
       selUser.user_id = userId;
-      this.switter.selectUser = this.tempUser;
-      this.tempUser = new I.DalsaeUser();
-      this.switter.listUser?.push(JSON.parse(JSON.stringify(selUser)));
+      switter.selectUser = tempUser;
+      this.stateSwitter.tempUser = new I.DalsaeUser();
+      switter.listUser.push(JSON.parse(JSON.stringify(selUser)));
       moduleTweet.Init(userId);
-      this.followDatas.dicUsers.set(userId, { listFollower: [], listFollowing: [] });
+      this.stateIds.followDatas.dicUsers.set(userId, { listFollower: [], listFollowing: [] });
     }
   }
 
@@ -100,7 +103,7 @@ class SwitterStore extends VuexModule {
 
   @Mutation
   private initSwitter(switter: I.Switter) {
-    this.switter = switter;
+    this.stateSwitter.switter = switter;
   }
 
   @Action
@@ -109,127 +112,42 @@ class SwitterStore extends VuexModule {
     if (switter) {
       switter.listUser?.forEach(user => {
         moduleTweet.Init(user.user_id);
-        this.followDatas.dicUsers.set(user.user_id, { listFollower: [], listFollowing: [] });
-        this.dicMuteIds.set(user.user_id, []);
+        this.stateIds.followDatas.dicUsers.set(user.user_id, {
+          listFollower: [],
+          listFollowing: []
+        });
+        this.stateIds.dicMuteIds.set(user.user_id, []);
       });
     }
   }
 
   @Mutation
-  private reset() {
-    this.tempUser = new I.DalsaeUser();
-  }
-
-  @Action
-  public Reset() {
-    this.context.commit('reset');
-  }
-
-  @Mutation
-  private updateUserInfo(user: I.User) {
-    const updateUser = this.switter.listUser?.find(x => x.user_id === user.id_str);
-    if (updateUser) {
-      updateUser.user = user;
-      updateUser.name = user.name;
-      updateUser.screen_name = user.screen_name;
+  private updateSwitterUser(user: I.User) {
+    const { switter } = this.stateSwitter;
+    const find = switter.listUser.find(x => x.user_id === user.id_str);
+    if (find) {
+      find.user = user;
+      find.name = user.name;
+      find.screen_name = user.screen_name;
     }
-    if (this.switter.selectUser.user_id === user.id_str) {
-      this.switter.selectUser.user = user;
-    }
-  }
-
-  @Mutation
-  private changeAccount(user: I.DalsaeUser) {
-    this.switter.selectUser = user;
-  }
-
-  @Action
-  public UpdateUserInfo(user: I.User) {
-    this.context.commit('updateUserInfo', user);
-  }
-
-  @Mutation
-  private blockIds(ids: string[]) {
-    this.listBlockIds = this.listBlockIds.concat(ids);
-  }
-
-  @Action
-  public BlockIds(ids: string[]) {
-    this.context.commit('blockIds', ids);
-  }
-
-  @Mutation
-  private muteIds(ids: string[]) {
-    const selectId = this.switter.selectUser.user_id;
-    const list = this.dicMuteIds.get(selectId);
-    if (!list) {
-      if (selectId) this.dicMuteIds.set(selectId, ids);
-    } else {
-      list.push(...ids);
+    if (switter.selectUser.user_id === user.id_str) {
+      switter.selectUser.user = user;
     }
   }
 
   @Action
-  MuteIds(ids: string[]) {
-    this.context.commit('muteIds', ids);
-  }
-
-  @Action
-  public ChangeAccount(user: I.DalsaeUser) {
-    this.context.commit('changeAccount', user);
+  public UpdateSwitterUser(user: I.User) {
+    this.context.commit('updateSwitterUser', user);
   }
 
   @Mutation
-  initFollowDatas(datas: FollowDatas) {
-    this.followDatas.dicUsers = datas.dicUsers;
+  private setStateIds(state: StateIds) {
+    this.stateIds = state;
   }
 
   @Action
-  InitFollowDatas(datas: FollowDatas) {
-    this.context.commit('initFollowDatas', datas);
-  }
-
-  @Mutation
-  private addFollowingList(listUser: A.AddFollowList) {
-    const selectId = this.switter.selectUser.user_id;
-    this.followDatas.AddFollowing(listUser.followList.users, selectId);
-  }
-
-  @Action
-  AddFollowingList(listUser: A.AddFollowList) {
-    this.context.commit('addFollowingList', listUser);
-  }
-
-  @Mutation
-  private addFollowerList(listUser: A.AddFollowList) {
-    const selectId = this.switter.selectUser.user_id;
-    this.followDatas.AddFollower(listUser.followList.users, selectId);
-  }
-
-  @Action
-  AddFollowerList(listUser: A.AddFollowList) {
-    this.context.commit('addFollowerList', listUser);
-  }
-
-  @Mutation
-  private initBlockIds(ids: string[]) {
-    this.listBlockIds = ids;
-  }
-
-  @Action
-  InitBlockIds(ids: string[]) {
-    this.context.commit('initBlockIds', ids);
-  }
-
-  @Mutation
-  private updateFollowInfo(user: I.User) {
-    const selectId = this.switter.selectUser.user_id;
-    this.followDatas.UpdateUserInfo(user, selectId);
-  }
-
-  @Action
-  UpdateFollowInfo(user: I.User) {
-    this.context.commit('updateFollowInfo', user);
+  SetStateIds(state: StateIds) {
+    this.context.commit('setStateIds', state);
   }
 }
 
