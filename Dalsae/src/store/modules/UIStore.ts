@@ -228,7 +228,7 @@ class UIStore extends VuexModule {
   ChangeSelectTweet(idStr: string) {
     let panel: IStatePanel | undefined = undefined;
     let listTweet: M.ScrollItem<I.Tweet>[] | undefined = undefined;
-    if (this.stateUI.selectMenu === 0) {
+    if (this.stateUI.selectMenu === ETweetType.E_HOME) {
       panel = this.statePanel.home;
       listTweet = moduleTweet.homes;
       if (!panel || !listTweet) return;
@@ -239,6 +239,54 @@ class UIStore extends VuexModule {
         selectedId: idStr
       };
       const state: StatePanel = { ...this.statePanel, home: home };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_MENTION) {
+      panel = this.statePanel.mention;
+      listTweet = moduleTweet.mentions;
+      if (!panel || !listTweet) return;
+      const idx = listTweet.findIndex(x => x.key === idStr);
+      const mention: IStatePanel = {
+        ...this.statePanel.mention,
+        index: idx,
+        selectedId: idStr
+      };
+      const state: StatePanel = { ...this.statePanel, mention: mention };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_FAVORITE) {
+      panel = this.statePanel.favorite;
+      listTweet = moduleTweet.favorites;
+      if (!panel || !listTweet) return;
+      const idx = listTweet.findIndex(x => x.key === idStr);
+      const favorite: IStatePanel = {
+        ...this.statePanel.home,
+        index: idx,
+        selectedId: idStr
+      };
+      const state: StatePanel = { ...this.statePanel, favorite: favorite };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_CONV) {
+      panel = this.statePanel.conv;
+      listTweet = moduleTweet.convs;
+      if (!panel || !listTweet) return;
+      const idx = listTweet.findIndex(x => x.key === idStr);
+      const conv: IStatePanel = {
+        ...this.statePanel.conv,
+        index: idx,
+        selectedId: idStr
+      };
+      const state: StatePanel = { ...this.statePanel, conv: conv };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_OPEN) {
+      panel = this.statePanel.open;
+      listTweet = moduleTweet.opens;
+      if (!panel || !listTweet) return;
+      const idx = listTweet.findIndex(x => x.key === idStr);
+      const open: IStatePanel = {
+        ...this.statePanel.open,
+        index: idx,
+        selectedId: idStr
+      };
+      const state: StatePanel = { ...this.statePanel, open: open };
       this.context.commit('setStatePanel', state);
     }
   }
@@ -259,6 +307,58 @@ class UIStore extends VuexModule {
         selectedId: listTweet[index].key
       };
       const state: StatePanel = { ...this.statePanel, home: home };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_MENTION) {
+      panel = this.statePanel.mention;
+      listTweet = moduleTweet.mentions;
+      if (!panel || !listTweet) return true;
+      const index = panel.index - 1;
+      if (index < 0) return true; //focus input
+      const mention: IStatePanel = {
+        ...this.statePanel.mention,
+        index: index,
+        selectedId: listTweet[index].key
+      };
+      const state: StatePanel = { ...this.statePanel, mention: mention };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_FAVORITE) {
+      panel = this.statePanel.favorite;
+      listTweet = moduleTweet.favorites;
+      if (!panel || !listTweet) return true;
+      const index = panel.index - 1;
+      if (index < 0) return true; //focus input
+      const favorite: IStatePanel = {
+        ...this.statePanel.favorite,
+        index: index,
+        selectedId: listTweet[index].key
+      };
+      const state: StatePanel = { ...this.statePanel, favorite: favorite };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_CONV) {
+      panel = this.statePanel.conv;
+      listTweet = moduleTweet.convs;
+      if (!panel || !listTweet) return true;
+      const index = panel.index - 1;
+      if (index < 0) return true; //focus input
+      const conv: IStatePanel = {
+        ...this.statePanel.conv,
+        index: index,
+        selectedId: listTweet[index].key
+      };
+      const state: StatePanel = { ...this.statePanel, conv: conv };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_OPEN) {
+      panel = this.statePanel.open;
+      listTweet = moduleTweet.opens;
+      if (!panel || !listTweet) return true;
+      const index = panel.index - 1;
+      if (index < 0) return true; //focus input
+      const opens: IStatePanel = {
+        ...this.statePanel.open,
+        index: index,
+        selectedId: listTweet[index].key
+      };
+      const state: StatePanel = { ...this.statePanel, open: opens };
       this.context.commit('setStatePanel', state);
     }
     return false;
@@ -281,6 +381,62 @@ class UIStore extends VuexModule {
         selectedId: listTweet[index].key
       };
       const state: StatePanel = { ...this.statePanel, home: home };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_MENTION) {
+      panel = this.statePanel.mention;
+      listTweet = moduleTweet.mentions;
+      if (!panel || !listTweet) return true;
+      const index = panel.index + 1;
+      const len = listTweet.length;
+      if (index >= len) return true; //end
+      const mention: IStatePanel = {
+        ...this.statePanel.mention,
+        index: index,
+        selectedId: listTweet[index].key
+      };
+      const state: StatePanel = { ...this.statePanel, mention: mention };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_FAVORITE) {
+      panel = this.statePanel.favorite;
+      listTweet = moduleTweet.favorites;
+      if (!panel || !listTweet) return true;
+      const index = panel.index + 1;
+      const len = listTweet.length;
+      if (index >= len) return true; //end
+      const favorite: IStatePanel = {
+        ...this.statePanel.favorite,
+        index: index,
+        selectedId: listTweet[index].key
+      };
+      const state: StatePanel = { ...this.statePanel, favorite: favorite };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_CONV) {
+      panel = this.statePanel.conv;
+      listTweet = moduleTweet.convs;
+      if (!panel || !listTweet) return true;
+      const index = panel.index + 1;
+      const len = listTweet.length;
+      if (index >= len) return true; //end
+      const convs: IStatePanel = {
+        ...this.statePanel.conv,
+        index: index,
+        selectedId: listTweet[index].key
+      };
+      const state: StatePanel = { ...this.statePanel, conv: convs };
+      this.context.commit('setStatePanel', state);
+    } else if (this.stateUI.selectMenu === ETweetType.E_OPEN) {
+      panel = this.statePanel.open;
+      listTweet = moduleTweet.opens;
+      if (!panel || !listTweet) return true;
+      const index = panel.index + 1;
+      const len = listTweet.length;
+      if (index >= len) return true; //end
+      const open: IStatePanel = {
+        ...this.statePanel.open,
+        index: index,
+        selectedId: listTweet[index].key
+      };
+      const state: StatePanel = { ...this.statePanel, conv: open };
       this.context.commit('setStatePanel', state);
     }
     return false;
