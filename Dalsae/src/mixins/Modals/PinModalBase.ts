@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Watch } from 'vue-property-decorator';
 import store from '@/store';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleApi } from '@/store/modules/APIStore';
+import * as I from '@/Interfaces';
 
 class State {
   pin: string;
@@ -31,9 +33,8 @@ export class PinModalBase extends Vue {
   }
 
   async ShowModal() {
-    moduleSwitter.Reset();
+    moduleSwitter.SetStateSwitter({ ...moduleSwitter.stateSwitter, tempUser: new I.DalsaeUser() });
     this.state.pin = '';
-    // eslint-disable-next-line @typescript-eslint/camelcase
     const result = await moduleApi.oauth.ReqToken({ oauth_callback: 'oob' });
     if (!result.data) return;
     result.data.oauth_token_secret;
@@ -41,10 +42,10 @@ export class PinModalBase extends Vue {
     window.preload.OpenBrowser(
       `https://api.twitter.com/oauth/authorize?oauth_token=${result.data.oauth_token}`
     );
-    moduleSwitter.SetKey({
-      publicKey: result.data.oauth_token,
-      secretKey: result.data.oauth_token_secret
-    });
+    const user = new I.DalsaeUser();
+    user.oauth_token = result.data.oauth_token;
+    user.oauth_token_secret = result.data.oauth_token_secret;
+    moduleSwitter.SetStateSwitter({ ...moduleSwitter.stateSwitter, tempUser: user });
     //아래 방법도 사용 가능
     // store.dispatch('SetKey', {
     //   publicKey: result.data.oauth_token,
@@ -53,7 +54,6 @@ export class PinModalBase extends Vue {
   }
 
   async GetAccessToken(pin: string) {
-    // eslint-disable-next-line @typescript-eslint/camelcase
     const result = await moduleApi.oauth.ReqAccessToken({ oauth_verifier: pin });
     if (result.data) {
       window.preload.SaveSwitter(store.state.switter.switter);

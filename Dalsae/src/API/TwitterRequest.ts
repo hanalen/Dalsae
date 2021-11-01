@@ -158,7 +158,10 @@ export class TwitterRequest {
   async requestOAuth<TReq>(url: string, params?: P.APIReq<TReq>): Promise<P.APIResp<P.OAuthRes>> {
     try {
       const oauth: I.OAuth = new I.OAuth();
-      oauth.SetKey(moduleSwitter.tempUser.oauth_token, moduleSwitter.tempUser.oauth_token_secret);
+      oauth.SetKey(
+        moduleSwitter.stateSwitter.tempUser.oauth_token,
+        moduleSwitter.stateSwitter.tempUser.oauth_token_secret
+      );
 
       const body = params && params.data ? oauth.CreateBody(params) : '';
       const reqUrl = oauth.GetUrl(params, url, false);
