@@ -278,9 +278,11 @@ class Followers {
     const result = await twitterRequest.call.followers.List(data);
     if (!twitterRequest.CheckAPIError(result.data)) {
       if (result.data && selectId && data.screen_name === '') {
-        const datas = moduleSwitter.stateIds.followDatas.dicUsers.get(selectId);
+        const { followDatas } = moduleSwitter.stateIds;
+        const datas = followDatas.dicUsers.get(selectId);
         if (datas) {
-          datas.listFollower.concat(result.data.users);
+          datas.listFollower = datas.listFollower.concat(result.data.users);
+          moduleSwitter.SetStateIds({ ...moduleSwitter.stateIds, followDatas: followDatas });
         }
       }
       if (result.data.next_cursor_str !== '0' && isLoadFull) {
@@ -332,9 +334,11 @@ class Friends {
     const result = await twitterRequest.call.friends.List(data);
     if (!twitterRequest.CheckAPIError(result.data)) {
       if (result.data && selectId && data.screen_name === '') {
-        const datas = moduleSwitter.stateIds.followDatas.dicUsers.get(selectId);
+        const { followDatas } = moduleSwitter.stateIds;
+        const datas = followDatas.dicUsers.get(selectId);
         if (datas) {
-          datas.listFollowing.concat(result.data.users);
+          datas.listFollowing = datas.listFollowing.concat(result.data.users);
+          moduleSwitter.SetStateIds({ ...moduleSwitter.stateIds, followDatas: followDatas });
         }
       }
       if (result.data.next_cursor_str !== '0' && isLoadFull) {
@@ -381,9 +385,11 @@ class Mutes {
   async Ids(data: P.ReqMuteIds, userId: string): Promise<P.APIResp<I.BlockIds>> {
     const result = await twitterRequest.call.mutes.Ids(data);
     if (result.data) {
-      const datas = moduleSwitter.stateIds.dicMuteIds.get(userId);
+      const { dicMuteIds } = moduleSwitter.stateIds;
+      const datas = dicMuteIds.get(userId);
       if (datas) {
-        datas.concat(result.data.ids);
+        dicMuteIds.set(userId, datas.concat(result.data.ids));
+        moduleSwitter.SetStateIds({ ...moduleSwitter.stateIds, dicMuteIds: dicMuteIds });
       }
     }
     return result;
