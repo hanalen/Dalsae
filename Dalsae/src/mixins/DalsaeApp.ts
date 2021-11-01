@@ -99,7 +99,7 @@ export class DalsaeApp extends Vue {
   async OnKeyDownHotKey(hotKeyType: I.E_HOTKEY) {
     console.log('hotkey', hotKeyType);
     let selectTweet: I.Tweet | undefined = undefined;
-    if (moduleUI.selectTweet) selectTweet = moduleUI.selectTweet.data;
+    if (moduleUI.selectTweet) selectTweet = moduleUI.selectTweet;
     switch (hotKeyType) {
       case I.E_HOTKEY.SHOWTL:
         moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_HOME });

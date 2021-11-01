@@ -85,15 +85,15 @@ class UtilStore extends VuexModule {
     let id_str = '';
     switch (moduleUI.stateUI.selectMenu) {
       case 0:
-        if (moduleTweet.homes.length > 0) id_str = moduleTweet.homes[0].data.id_str;
+        if (moduleTweet.homes.length > 0) id_str = moduleTweet.homes[0].id_str;
         moduleApi.statuses.TimeLine('', id_str);
         break;
       case 1:
-        if (moduleTweet.mentions.length > 0) id_str = moduleTweet.mentions[0].data.id_str;
+        if (moduleTweet.mentions.length > 0) id_str = moduleTweet.mentions[0].id_str;
         moduleApi.statuses.Mention('', id_str);
         break;
       case 3:
-        if (moduleTweet.favorites.length > 0) id_str = moduleTweet.favorites[0].data.id_str;
+        if (moduleTweet.favorites.length > 0) id_str = moduleTweet.favorites[0].id_str;
         moduleApi.favorites.List('', id_str);
         break;
     }

@@ -123,7 +123,7 @@ class UIStore extends VuexModule {
 
   get selectTweet() {
     let state: IStatePanel | undefined = undefined;
-    let listTweet: M.ScrollItem<I.Tweet>[] = [];
+    let listTweet: I.Tweet[] = [];
     switch (this.stateUI.selectMenu) {
       case ETweetType.E_HOME:
         state = this.statePanel.home;
@@ -199,7 +199,7 @@ class UIStore extends VuexModule {
       const home: IStatePanel = {
         ...this.statePanel.home,
         index: 0,
-        selectedId: moduleTweet.homes[0].key
+        selectedId: moduleTweet.homes[0].id_str
       };
       const state: StatePanel = { ...this.statePanel, home: home };
       this.context.commit('setStatePanel', state);
@@ -207,7 +207,7 @@ class UIStore extends VuexModule {
       const mention: IStatePanel = {
         ...this.statePanel.mention,
         index: 0,
-        selectedId: moduleTweet.homes[0].key
+        selectedId: moduleTweet.homes[0].id_str
       };
       const state: StatePanel = { ...this.statePanel, mention: mention };
       this.context.commit('setStatePanel', state);
@@ -221,7 +221,7 @@ class UIStore extends VuexModule {
       const home: IStatePanel = {
         ...this.statePanel.home,
         index: tweets.length - 1,
-        selectedId: tweets[tweets.length - 1].key
+        selectedId: tweets[tweets.length - 1].id_str
       };
       const state: StatePanel = { ...this.statePanel, home: home };
       this.context.commit('setStatePanel', state);
@@ -231,12 +231,12 @@ class UIStore extends VuexModule {
   @Action
   ChangeSelectTweet(idStr: string) {
     let panel: IStatePanel | undefined = undefined;
-    let listTweet: M.ScrollItem<I.Tweet>[] | undefined = undefined;
+    let listTweet: I.Tweet[] | undefined = undefined;
     if (this.stateUI.selectMenu === ETweetType.E_HOME) {
       panel = this.statePanel.home;
       listTweet = moduleTweet.homes;
       if (!panel || !listTweet) return;
-      const idx = listTweet.findIndex(x => x.key === idStr);
+      const idx = listTweet.findIndex(x => x.id_str === idStr);
       const home: IStatePanel = {
         ...this.statePanel.home,
         index: idx,
@@ -248,7 +248,7 @@ class UIStore extends VuexModule {
       panel = this.statePanel.mention;
       listTweet = moduleTweet.mentions;
       if (!panel || !listTweet) return;
-      const idx = listTweet.findIndex(x => x.key === idStr);
+      const idx = listTweet.findIndex(x => x.id_str === idStr);
       const mention: IStatePanel = {
         ...this.statePanel.mention,
         index: idx,
@@ -260,7 +260,7 @@ class UIStore extends VuexModule {
       panel = this.statePanel.favorite;
       listTweet = moduleTweet.favorites;
       if (!panel || !listTweet) return;
-      const idx = listTweet.findIndex(x => x.key === idStr);
+      const idx = listTweet.findIndex(x => x.id_str === idStr);
       const favorite: IStatePanel = {
         ...this.statePanel.home,
         index: idx,
@@ -272,7 +272,7 @@ class UIStore extends VuexModule {
       panel = this.statePanel.conv;
       listTweet = moduleTweet.convs;
       if (!panel || !listTweet) return;
-      const idx = listTweet.findIndex(x => x.key === idStr);
+      const idx = listTweet.findIndex(x => x.id_str === idStr);
       const conv: IStatePanel = {
         ...this.statePanel.conv,
         index: idx,
@@ -284,7 +284,7 @@ class UIStore extends VuexModule {
       panel = this.statePanel.open;
       listTweet = moduleTweet.opens;
       if (!panel || !listTweet) return;
-      const idx = listTweet.findIndex(x => x.key === idStr);
+      const idx = listTweet.findIndex(x => x.id_str === idStr);
       const open: IStatePanel = {
         ...this.statePanel.open,
         index: idx,
@@ -298,7 +298,7 @@ class UIStore extends VuexModule {
   @Action
   Up(): boolean {
     let panel: IStatePanel | undefined = undefined;
-    let listTweet: M.ScrollItem<I.Tweet>[] | undefined = undefined;
+    let listTweet: I.Tweet[] | undefined = undefined;
     if (this.stateUI.selectMenu === ETweetType.E_HOME) {
       panel = this.statePanel.home;
       listTweet = moduleTweet.homes;
@@ -308,7 +308,7 @@ class UIStore extends VuexModule {
       const home: IStatePanel = {
         ...this.statePanel.home,
         index: index,
-        selectedId: listTweet[index].key
+        selectedId: listTweet[index].id_str
       };
       const state: StatePanel = { ...this.statePanel, home: home };
       this.context.commit('setStatePanel', state);
@@ -321,7 +321,7 @@ class UIStore extends VuexModule {
       const mention: IStatePanel = {
         ...this.statePanel.mention,
         index: index,
-        selectedId: listTweet[index].key
+        selectedId: listTweet[index].id_str
       };
       const state: StatePanel = { ...this.statePanel, mention: mention };
       this.context.commit('setStatePanel', state);
@@ -334,7 +334,7 @@ class UIStore extends VuexModule {
       const favorite: IStatePanel = {
         ...this.statePanel.favorite,
         index: index,
-        selectedId: listTweet[index].key
+        selectedId: listTweet[index].id_str
       };
       const state: StatePanel = { ...this.statePanel, favorite: favorite };
       this.context.commit('setStatePanel', state);
@@ -347,7 +347,7 @@ class UIStore extends VuexModule {
       const conv: IStatePanel = {
         ...this.statePanel.conv,
         index: index,
-        selectedId: listTweet[index].key
+        selectedId: listTweet[index].id_str
       };
       const state: StatePanel = { ...this.statePanel, conv: conv };
       this.context.commit('setStatePanel', state);
@@ -360,7 +360,7 @@ class UIStore extends VuexModule {
       const opens: IStatePanel = {
         ...this.statePanel.open,
         index: index,
-        selectedId: listTweet[index].key
+        selectedId: listTweet[index].id_str
       };
       const state: StatePanel = { ...this.statePanel, open: opens };
       this.context.commit('setStatePanel', state);
@@ -371,7 +371,7 @@ class UIStore extends VuexModule {
   @Action
   Down(): boolean {
     let panel: IStatePanel | undefined = undefined;
-    let listTweet: M.ScrollItem<I.Tweet>[] | undefined = undefined;
+    let listTweet: I.Tweet[] | undefined = undefined;
     if (this.stateUI.selectMenu === ETweetType.E_HOME) {
       panel = this.statePanel.home;
       listTweet = moduleTweet.homes;
@@ -382,7 +382,7 @@ class UIStore extends VuexModule {
       const home: IStatePanel = {
         ...this.statePanel.home,
         index: index,
-        selectedId: listTweet[index].key
+        selectedId: listTweet[index].id_str
       };
       const state: StatePanel = { ...this.statePanel, home: home };
       this.context.commit('setStatePanel', state);
@@ -396,7 +396,7 @@ class UIStore extends VuexModule {
       const mention: IStatePanel = {
         ...this.statePanel.mention,
         index: index,
-        selectedId: listTweet[index].key
+        selectedId: listTweet[index].id_str
       };
       const state: StatePanel = { ...this.statePanel, mention: mention };
       this.context.commit('setStatePanel', state);
@@ -410,7 +410,7 @@ class UIStore extends VuexModule {
       const favorite: IStatePanel = {
         ...this.statePanel.favorite,
         index: index,
-        selectedId: listTweet[index].key
+        selectedId: listTweet[index].id_str
       };
       const state: StatePanel = { ...this.statePanel, favorite: favorite };
       this.context.commit('setStatePanel', state);
@@ -424,7 +424,7 @@ class UIStore extends VuexModule {
       const convs: IStatePanel = {
         ...this.statePanel.conv,
         index: index,
-        selectedId: listTweet[index].key
+        selectedId: listTweet[index].id_str
       };
       const state: StatePanel = { ...this.statePanel, conv: convs };
       this.context.commit('setStatePanel', state);
@@ -438,7 +438,7 @@ class UIStore extends VuexModule {
       const open: IStatePanel = {
         ...this.statePanel.open,
         index: index,
-        selectedId: listTweet[index].key
+        selectedId: listTweet[index].id_str
       };
       const state: StatePanel = { ...this.statePanel, conv: open };
       this.context.commit('setStatePanel', state);

@@ -100,7 +100,7 @@ export class TweetPanelBase extends Vue {
   }
 
   get listTweet() {
-    let listTweet!: MIX.ScrollItem<I.Tweet>[];
+    let listTweet!: I.Tweet[];
     switch (this.selectMenu) {
       case 0:
         listTweet = this.tweetHome;

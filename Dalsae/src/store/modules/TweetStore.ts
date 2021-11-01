@@ -131,9 +131,9 @@ class TweetStore extends VuexModule {
   @Mutation
   private updateRTandFav(tweet: I.Tweet) {
     this.homes.forEach(item => {
-      if (item.data.orgTweet.id_str === tweet.orgTweet.id_str) {
-        item.data.orgTweet.retweeted = tweet.orgTweet.retweeted;
-        item.data.orgTweet.favorited = tweet.orgTweet.favorited;
+      if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+        item.orgTweet.retweeted = tweet.orgTweet.retweeted;
+        item.orgTweet.favorited = tweet.orgTweet.favorited;
       }
     });
   }

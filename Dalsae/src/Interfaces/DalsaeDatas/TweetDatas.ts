@@ -4,11 +4,11 @@ import * as M from '@/mixins';
 import { eventBus } from '@/plugins';
 import { ETweetType } from '@/store/Interface';
 export class Tweets {
-  homes: M.ScrollItem<I.Tweet>[];
-  mentions: M.ScrollItem<I.Tweet>[];
-  favorites: M.ScrollItem<I.Tweet>[];
-  opens: M.ScrollItem<I.Tweet>[];
-  conv: M.ScrollItem<I.Tweet>[];
+  homes: I.Tweet[];
+  mentions: I.Tweet[];
+  favorites: I.Tweet[];
+  opens: I.Tweet[];
+  conv: I.Tweet[];
   constructor() {
     this.homes = [];
     this.mentions = [];
@@ -125,18 +125,18 @@ export class TweetDatas {
     const homes = this.dicTweets.get(userIdStr)?.homes;
     const mentions = this.dicTweets.get(userIdStr)?.mentions;
     if (!homes || !mentions) return;
-    const findA = homes.find(x => x.data.id_str === tweetIdStr);
-    if (findA) return findA?.data;
-    const findB = mentions.find(x => x.data.id_str === tweetIdStr);
-    if (findB) return findB?.data;
+    const findA = homes.find(x => x.id_str === tweetIdStr);
+    if (findA) return findA;
+    const findB = mentions.find(x => x.id_str === tweetIdStr);
+    if (findB) return findB;
     return null;
   }
 
-  FindIndex(tweet: I.Tweet, list: M.ScrollItem<I.Tweet>[]) {
+  FindIndex(tweet: I.Tweet, list: I.Tweet[]) {
     const date = new Date(tweet.created_at).getTime();
     let idx = 0;
     for (let i = 0, len = list.length; i < len; i++) {
-      const next = new Date(list[i].data.created_at).getTime();
+      const next = new Date(list[i].created_at).getTime();
       if (date > next) {
         break;
       }
@@ -157,7 +157,7 @@ export class TweetDatas {
     const tweets = this.dicTweets.get(user_id_str)?.homes;
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
-    if (tweets.find(x => x.key === tweet.id_str)) return; //exists
+    if (tweets.find(x => x.id_str === tweet.id_str)) return; //exists
     if (!this.CheckShowHomeTweet(tweet, user_id_str, muteOption, blockIds, muteIds)) return; //muted
     //체크순서
     //멘션 -> 멘션으로 처리 넘김
@@ -169,14 +169,8 @@ export class TweetDatas {
     }
     const idx = this.FindIndex(tweet, tweets);
     const prevTweet = tweets[idx - 1];
-    const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
-    tweets.splice(idx, 0, {
-      data: new I.Tweet(tweet),
-      height: minHeight,
-      isResized: true,
-      key: tweet.id_str,
-      scrollTop: scrollTop
-    });
+    // const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
+    tweets.splice(idx, 0, new I.Tweet(tweet));
     eventBus.$emit('AddedTweet', ETweetType.E_HOME);
   }
 
@@ -192,18 +186,12 @@ export class TweetDatas {
     const tweets = this.dicTweets.get(user_id_str)?.mentions;
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
-    if (tweets.find(x => x.key === tweet.id_str)) return; //exists
+    if (tweets.find(x => x.id_str === tweet.id_str)) return; //exists
     if (!this.CheckShowMentionTweet(tweet, user_id_str, muteOption, blockIds, muteIds)) return; //muted
     const idx = this.FindIndex(tweet, tweets);
-    const prevTweet = tweets[idx - 1];
-    const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
-    tweets.splice(idx, 0, {
-      data: new I.Tweet(tweet),
-      height: minHeight,
-      isResized: true,
-      key: tweet.id_str,
-      scrollTop: scrollTop
-    });
+    // const prevTweet = tweets[idx - 1];
+    // const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
+    tweets.splice(idx, 0, new I.Tweet(tweet));
     eventBus.$emit('AddedTweet', ETweetType.E_MENTION);
   }
 
@@ -220,7 +208,7 @@ export class TweetDatas {
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
-      if (!tweets.find(x => x.key === tweet.id_str)) {
+      if (!tweets.find(x => x.id_str === tweet.id_str)) {
         if (!this.CheckShowHomeTweet(tweet, user_id_str, muteOption, blockIds, muteIds))
           return true; //muted
         if (this.CheckMention(tweet, user_id_str, muteOption)) {
@@ -230,15 +218,9 @@ export class TweetDatas {
             return true;
         }
         const idx = this.FindIndex(tweet, tweets);
-        const prevTweet = tweets[idx - 1];
-        const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
-        tweets.splice(idx, 0, {
-          data: new I.Tweet(tweet),
-          height: minHeight,
-          isResized: true,
-          key: tweet.id_str,
-          scrollTop: scrollTop
-        });
+        // const prevTweet = tweets[idx - 1];
+        // const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
+        tweets.splice(idx, 0, new I.Tweet(tweet));
       }
     });
     eventBus.$emit('AddedTweet', ETweetType.E_HOME);
@@ -257,18 +239,12 @@ export class TweetDatas {
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
-      if (!tweets.find(x => x.key === tweet.id_str)) {
+      if (!tweets.find(x => x.id_str === tweet.id_str)) {
         if (!this.CheckShowMentionTweet(tweet, user_id_str, muteOption, blockIds, muteIds)) return; //muted
         const idx = this.FindIndex(tweet, tweets);
-        const prevTweet = tweets[idx - 1];
-        const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
-        tweets.splice(idx, 0, {
-          data: new I.Tweet(tweet),
-          height: minHeight,
-          isResized: true,
-          key: tweet.id_str,
-          scrollTop: scrollTop
-        });
+        // const prevTweet = tweets[idx - 1];
+        // const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
+        tweets.splice(idx, 0, new I.Tweet(tweet));
       }
     });
     eventBus.$emit('AddedTweet', ETweetType.E_MENTION);
@@ -281,17 +257,11 @@ export class TweetDatas {
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
-      if (!tweets.find(x => x.key === tweet.id_str)) {
+      if (!tweets.find(x => x.id_str === tweet.id_str)) {
         const idx = this.FindIndex(tweet, tweets);
-        const prevTweet = tweets[idx - 1];
-        const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
-        tweets.splice(idx, 0, {
-          data: new I.Tweet(tweet),
-          height: minHeight,
-          isResized: true,
-          key: tweet.id_str,
-          scrollTop: scrollTop
-        });
+        // const prevTweet = tweets[idx - 1];
+        // const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
+        tweets.splice(idx, 0, new I.Tweet(tweet));
       }
     });
     eventBus.$emit('AddedTweet', ETweetType.E_FAVORITE);
@@ -303,17 +273,11 @@ export class TweetDatas {
     const tweets = this.dicTweets.get(user_id_str)?.conv;
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
-    if (!tweets.find(x => x.key === tweet.id_str)) {
+    if (!tweets.find(x => x.id_str === tweet.id_str)) {
       const idx = this.FindIndex(tweet, tweets);
-      const prevTweet = tweets[idx - 1];
-      const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
-      tweets.splice(idx, 0, {
-        data: new I.Tweet(tweet),
-        height: minHeight,
-        isResized: true,
-        key: tweet.id_str,
-        scrollTop: scrollTop
-      });
+      // const prevTweet = tweets[idx - 1];
+      // const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
+      tweets.splice(idx, 0, new I.Tweet(tweet));
     } else {
       console.log('key exists');
     }
@@ -340,23 +304,23 @@ export class TweetDatas {
     }
   }
   OnResized() {
-    this.dicTweets.forEach(item => {
-      for (let i = 0, len = item.homes.length; i < len; i++) {
-        item.homes[i].isResized = true;
-      }
-      for (let i = 0, len = item.mentions.length; i < len; i++) {
-        item.mentions[i].isResized = true;
-      }
-      for (let i = 0, len = item.favorites.length; i < len; i++) {
-        item.favorites[i].isResized = true;
-      }
-      for (let i = 0, len = item.opens.length; i < len; i++) {
-        item.opens[i].isResized = true;
-      }
-      for (let i = 0, len = item.conv.length; i < len; i++) {
-        item.conv[i].isResized = true;
-      }
-    });
+    // this.dicTweets.forEach(item => {
+    //   for (let i = 0, len = item.homes.length; i < len; i++) {
+    //     item.homes[i].isResized = true;
+    //   }
+    //   for (let i = 0, len = item.mentions.length; i < len; i++) {
+    //     item.mentions[i].isResized = true;
+    //   }
+    //   for (let i = 0, len = item.favorites.length; i < len; i++) {
+    //     item.favorites[i].isResized = true;
+    //   }
+    //   for (let i = 0, len = item.opens.length; i < len; i++) {
+    //     item.opens[i].isResized = true;
+    //   }
+    //   for (let i = 0, len = item.conv.length; i < len; i++) {
+    //     item.conv[i].isResized = true;
+    //   }
+    // });
   }
   MoveScroll(listTweet: M.ScrollItem<I.Tweet>[], idxFrom: number, height: number) {
     listTweet[idxFrom].height = height;
