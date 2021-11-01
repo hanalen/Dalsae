@@ -123,18 +123,18 @@ export class TweetPanelBase extends Vue {
     return listTweet;
   }
 
-  ArrowUp() {
+  async ArrowUp() {
     if (this.listTweet.length === 0) {
       eventBus.$emit('FocusInput');
       return;
     }
-    if (moduleUI.Up()) {
+    if (await moduleUI.Up()) {
       eventBus.$emit('FocusInput');
     }
   }
 
-  ArrowDown() {
+  async ArrowDown() {
     if (this.listTweet.length === 0) return;
-    moduleUI.Down();
+    await moduleUI.Down();
   }
 }
