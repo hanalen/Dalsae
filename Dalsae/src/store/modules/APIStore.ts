@@ -16,8 +16,8 @@ import { moduleSysbar } from './SystemBarStore';
 class Account {
   async VerifyCredentials(): Promise<P.APIResp<I.User>> {
     const result = await twitterRequest.call.account.VerifyCredentials();
-    if (result.data) {
-      moduleSwitter.UpdateUserInfo(result.data);
+    if (!twitterRequest.CheckAPIError(result.data)) {
+      moduleSwitter.UpdateSwitterUser(result.data);
     }
     return result;
   }
@@ -242,14 +242,18 @@ class Favorites {
 class Block {
   async Ids(data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> {
     const result = await twitterRequest.call.block.Ids(data);
-    moduleSwitter.BlockIds(result.data.ids);
-    console.log('--------------block------------');
-    console.log(result);
-    if (result.data.next_cursor_str !== '0')
-      this.Ids({
-        cursor: result.data.next_cursor_str,
-        stringify_ids: true
+    if (!twitterRequest.CheckAPIError(result.data)) {
+      moduleSwitter.SetStateIds({
+        ...moduleSwitter.stateIds,
+        listBlockIds: moduleSwitter.stateIds.listBlockIds.concat(result.data.ids)
       });
+      if (result.data.next_cursor_str !== '0') {
+        this.Ids({
+          cursor: result.data.next_cursor_str,
+          stringify_ids: true
+        });
+      }
+    }
     return result;
   }
   async Destroy(data: P.ReqBlockDestroy): Promise<P.APIResp<I.BlockDestroy>> {
@@ -272,19 +276,25 @@ class Followers {
     isLoadFull: boolean
   ): Promise<P.APIResp<I.FollowerList>> {
     const result = await twitterRequest.call.followers.List(data);
-    if (result.data && selectId && data.screen_name === '') {
-      moduleSwitter.AddFollowerList({ followList: result.data, selectId: selectId });
+    if (!twitterRequest.CheckAPIError(result.data)) {
+      if (result.data && selectId && data.screen_name === '') {
+        const datas = moduleSwitter.stateIds.followDatas.dicUsers.get(selectId);
+        if (datas) {
+          datas.listFollower.concat(result.data.users);
+        }
+      }
+      if (result.data.next_cursor_str !== '0' && isLoadFull) {
+        this.List(
+          {
+            screen_name: '',
+            count: 200,
+            cursor: result.data.next_cursor_str
+          },
+          selectId,
+          isLoadFull
+        );
+      }
     }
-    if (result.data.next_cursor_str !== '0' && isLoadFull)
-      this.List(
-        {
-          screen_name: '',
-          count: 200,
-          cursor: result.data.next_cursor_str
-        },
-        selectId,
-        isLoadFull
-      );
     return result;
   }
 
@@ -320,19 +330,25 @@ class Friends {
     isLoadFull: boolean
   ): Promise<P.APIResp<I.FollowerList>> {
     const result = await twitterRequest.call.friends.List(data);
-    if (result.data && selectId && data.screen_name === '') {
-      moduleSwitter.AddFollowingList({ followList: result.data, selectId: selectId });
+    if (!twitterRequest.CheckAPIError(result.data)) {
+      if (result.data && selectId && data.screen_name === '') {
+        const datas = moduleSwitter.stateIds.followDatas.dicUsers.get(selectId);
+        if (datas) {
+          datas.listFollowing.concat(result.data.users);
+        }
+      }
+      if (result.data.next_cursor_str !== '0' && isLoadFull) {
+        this.List(
+          {
+            screen_name: '',
+            count: 200,
+            cursor: result.data.next_cursor_str
+          },
+          selectId,
+          isLoadFull
+        );
+      }
     }
-    if (result.data.next_cursor_str !== '0' && isLoadFull)
-      this.List(
-        {
-          screen_name: '',
-          count: 200,
-          cursor: result.data.next_cursor_str
-        },
-        selectId,
-        isLoadFull
-      );
     return result;
   }
 
@@ -362,10 +378,13 @@ class Friends {
 }
 
 class Mutes {
-  async Ids(data: P.ReqMuteIds): Promise<P.APIResp<I.BlockIds>> {
+  async Ids(data: P.ReqMuteIds, userId: string): Promise<P.APIResp<I.BlockIds>> {
     const result = await twitterRequest.call.mutes.Ids(data);
     if (result.data) {
-      moduleSwitter.MuteIds(result.data.ids);
+      const datas = moduleSwitter.stateIds.dicMuteIds.get(userId);
+      if (datas) {
+        datas.concat(result.data.ids);
+      }
     }
     return result;
   }

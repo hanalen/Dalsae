@@ -348,8 +348,13 @@ export default class ProfileView extends MIX.ProfilePage {
     await this.LoadUserInfo(id);
     this.LoadFollowerList();
     this.LoadFollowingList();
-    moduleSwitter.initFollowDatas(window.preload.profile.GetFollowDatas(id));
-    moduleSwitter.InitBlockIds(window.preload.profile.GetBlockIds(id));
+    const follow = window.preload.profile.GetFollowDatas(id);
+    const blockId = window.preload.profile.GetBlockIds(id);
+    moduleSwitter.SetStateIds({
+      ...moduleSwitter.stateIds,
+      followDatas: follow,
+      listBlockIds: blockId
+    });
   }
 }
 </script>
