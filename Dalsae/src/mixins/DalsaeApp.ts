@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
-import * as M from '@/Managers';
 import { Vue, Component, Provide, Ref, Watch } from 'vue-property-decorator';
 import store from '@/store/index';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
@@ -65,17 +64,35 @@ export class DalsaeApp extends Vue {
 
   async StartDalsae() {
     if (moduleSwitter.selectUser) {
+      const testTweets = window.preload.LoadTestTweet();
+      store.dispatch('AddTweet', {
+        type: ETweetType.E_HOME,
+        user_id_str: moduleSwitter.selectID,
+        listTweet: testTweets
+      });
+      const testFollowing = window.preload.LoadTestFriends();
+      console.log(testFollowing);
+      const { followDatas } = moduleSwitter.stateIds;
+      const datas = followDatas.dicUsers.get(moduleSwitter.selectID);
+      if (datas) {
+        datas.listFollowing = testFollowing.users;
+        moduleSwitter.SetStateIds({ ...moduleSwitter.stateIds, followDatas: followDatas });
+      }
+      // moduleSwitter.AddFollowingList({
+      //   followList: testFollowing,
+      //   selectId: moduleSwitter.selectID
+      // });
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
-      await moduleApi.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
-      window.preload.SaveSwitter(store.state.switter.switter);
-      moduleApi.friends.List({ screen_name: '', count: 200 }, moduleSwitter.selectID);
-      moduleApi.followers.List({ screen_name: '', count: 200 }, moduleSwitter.selectID);
-      moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true });
-      moduleApi.block.Ids({ cursor: '-1', stringify_ids: true });
-      moduleApi.statuses.TimeLine();
-      moduleApi.statuses.Mention();
+      // await moduleApi.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
+      // window.preload.SaveSwitter(moduleSwitter.stateSwitter.switter);
+      // moduleApi.friends.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
+      // moduleApi.followers.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
+      // moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true }, moduleSwitter.selectID);
+      // moduleApi.block.Ids({ cursor: '-1', stringify_ids: true });
+      // // moduleApi.statuses.TimeLine();
+      // moduleApi.statuses.Mention();
     }
   }
 
@@ -85,19 +102,19 @@ export class DalsaeApp extends Vue {
     if (moduleUI.selectTweet) selectTweet = moduleUI.selectTweet.data;
     switch (hotKeyType) {
       case I.E_HOTKEY.SHOWTL:
-        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 0 });
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_HOME });
         break;
       case I.E_HOTKEY.SHOWMENTION:
-        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 1 });
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_MENTION });
         break;
       case I.E_HOTKEY.SHOWDM:
-        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 2 });
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_DM });
         break;
       case I.E_HOTKEY.SHOWFAVORITE:
-        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 3 });
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_FAVORITE });
         break;
       case I.E_HOTKEY.SHOWURL:
-        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 4 });
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_OPEN });
         break;
       case I.E_HOTKEY.SENDDM:
         break;
@@ -110,7 +127,7 @@ export class DalsaeApp extends Vue {
       case I.E_HOTKEY.LOADCONV:
         if (selectTweet) {
           moduleUtil.LoadConv(selectTweet);
-          moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 5 });
+          moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_CONV });
         }
         break;
       case I.E_HOTKEY.SHOWQT:
@@ -120,7 +137,7 @@ export class DalsaeApp extends Vue {
           user_id_str: moduleSwitter.selectID,
           type: ETweetType.E_CONV
         });
-        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 5 });
+        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_CONV });
         break;
       case I.E_HOTKEY.SENDQT:
         if (selectTweet) moduleUtil.OnClickQt(selectTweet);

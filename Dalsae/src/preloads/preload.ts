@@ -101,8 +101,18 @@ export default class Preload {
     fs.writeJSONSync(path, data);
   }
 
-  LoadTestTweet() {
-    const ret = fs.readJsonSync('src/Managers/favorite_tweet.json');
+  LoadTestTweet(): I.Tweet[] {
+    const ret = fs.readJsonSync('Data/testqt.json');
+    return ret;
+  }
+
+  LoadTestFriends(): I.FollowerList {
+    const ret = fs.readJSONSync('Data/friends.json');
+    return ret;
+  }
+
+  LoadTestImageTweet(): I.Tweet {
+    const ret = fs.readJsonSync('Data/imagetest.json');
     return ret;
   }
 }
