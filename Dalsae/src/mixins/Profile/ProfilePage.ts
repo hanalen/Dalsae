@@ -57,6 +57,7 @@ export class ProfilePage extends Vue {
   @Watch('selectAccount', { immediate: true, deep: true })
   OnChangeSelectAccount(newVal: I.DalsaeUser) {
     if (!newVal) return;
+    if (!newVal.oauth_token) return;
     moduleProfile.ClearIds();
     moduleSysbar.ClearSystamBar();
     moduleSysbar.AddSystemBar({
