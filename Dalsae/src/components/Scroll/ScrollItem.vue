@@ -17,10 +17,13 @@ import * as I from '@/mixins';
 @Component
 export default class ScrollItem extends Vue {
   @Prop()
-  data!: I.ScrollItem<I.ScrollData>;
+  data!: I.ScrollItem<any>;
+
+  @Prop()
+  itemType!: string;
 
   @Watch('data', { immediate: true, deep: true })
-  OnChangeData(newVal: I.ScrollItem<I.ScrollData>, oldVal: I.ScrollItem<I.ScrollData>) {
+  OnChangeData(newVal: I.ScrollItem<any>, oldVal: I.ScrollItem<any>) {
     this.$nextTick(() => {
       this.SetHeight();
     });
