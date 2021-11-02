@@ -1,6 +1,8 @@
 <template>
   <div class="scroll-item" :style="itemStyle">
-    <slot></slot>
+    <div v-if="itemType === 'tweet'">
+      <tweet-selector :tweet="data.data" :selected="false"></tweet-selector>
+    </div>
   </div>
 </template>
 
