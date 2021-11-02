@@ -79,7 +79,7 @@ export default class QtTweet extends M.TweetBase {
   OnClickQT(e: MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    moduleTweet.ShowQt({
+    moduleTweet.AddTweet({
       tweet: this.tweet,
       listTweet: undefined,
       user_id_str: moduleSwitter.selectID,

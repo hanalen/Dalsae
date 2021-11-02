@@ -32,7 +32,7 @@ export class DalsaeApp extends Vue {
   }
 
   async created() {
-    moduleTweet.Init(moduleSwitter.selectID);
+    // moduleTweet.Init(moduleSwitter.selectID);
     this.LoadConfig();
     this.$nextTick(() => {
       this.StartDalsae();
@@ -131,7 +131,7 @@ export class DalsaeApp extends Vue {
         }
         break;
       case I.E_HOTKEY.SHOWQT:
-        moduleTweet.ShowQt({
+        moduleTweet.AddTweet({
           tweet: selectTweet,
           listTweet: undefined,
           user_id_str: moduleSwitter.selectID,

@@ -7,155 +7,164 @@ import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { eventBus } from '@/plugins';
 import { ETweetType } from '@/store/Interface';
 import { moduleOption } from './OptionStore';
+import {
+  CheckMention,
+  CheckShowHomeTweet,
+  CheckShowMentionTweet,
+  FindTweetIndex
+} from '@/Interfaces';
 export interface ITweetStore {
   tweetDatas: I.TweetDatas;
+}
+
+interface TweetPair {
+  key: string;
+  tweets: I.Tweets;
+}
+
+class StateTweet {
+  tweets: TweetPair[];
+  constructor() {
+    this.tweets = [];
+  }
 }
 
 @Module({ dynamic: true, store, name: 'tweet' })
 class TweetStore extends VuexModule {
   // states
-  tweetDatas: I.TweetDatas = new I.TweetDatas();
-
-  // getters
+  stateTweet = new StateTweet();
 
   get homes() {
-    const tweets = this.tweetDatas.dicTweets.get(moduleSwitter.selectID);
-    return tweets ? tweets.homes : [];
+    return this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID)?.tweets.homes;
   }
 
   get mentions() {
-    const tweets = this.tweetDatas.dicTweets.get(moduleSwitter.selectID);
-    return tweets ? tweets.mentions : [];
+    return this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID)?.tweets.mentions;
   }
 
   get favorites() {
-    const tweets = this.tweetDatas.dicTweets.get(moduleSwitter.selectID);
-    return tweets ? tweets.favorites : [];
+    return this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID)?.tweets.favorites;
   }
 
   get opens() {
-    const tweets = this.tweetDatas.dicTweets.get(moduleSwitter.selectID);
-    return tweets ? tweets.opens : [];
+    return this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID)?.tweets.opens;
   }
 
   get convs() {
-    const tweets = this.tweetDatas.dicTweets.get(moduleSwitter.selectID);
-    return tweets ? tweets.conv : [];
+    return this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID)?.tweets.conv;
   }
 
   @Mutation
-  private init(userId: string) {
-    this.tweetDatas.dicTweets.set(userId, new I.Tweets());
-  }
-
-  @Action
-  Init(userId: string) {
-    this.context.commit('init', userId);
-  }
-
-  @Mutation
-  private addTweet(addTweet: A.AddTweet) {
-    const { type, tweet, listTweet, user_id_str } = { ...addTweet };
-    switch (type) {
-      case A.ETweetType.E_HOME:
-        if (tweet)
-          this.tweetDatas.AddHome(
-            tweet,
-            user_id_str,
-            moduleOption.muteOption,
-            moduleSwitter.stateIds.listBlockIds,
-            moduleSwitter.listMuteIds
-          );
-        else
-          this.tweetDatas.AddHomeList(
-            listTweet,
-            user_id_str,
-            moduleOption.muteOption,
-            moduleSwitter.stateIds.listBlockIds,
-            moduleSwitter.listMuteIds
-          );
-        break;
-      case A.ETweetType.E_MENTION:
-        if (tweet)
-          this.tweetDatas.AddMention(
-            tweet,
-            user_id_str,
-            moduleOption.muteOption,
-            moduleSwitter.stateIds.listBlockIds,
-            moduleSwitter.listMuteIds
-          );
-        else
-          this.tweetDatas.AddMentionList(
-            listTweet,
-            user_id_str,
-            moduleOption.muteOption,
-            moduleSwitter.stateIds.listBlockIds,
-            moduleSwitter.listMuteIds
-          );
-        break;
-      case A.ETweetType.E_FAVORITE:
-        break;
-      case A.ETweetType.E_OPEN:
-        break;
-      case A.ETweetType.E_CONV:
-        break;
+  private addHome(addTweet: A.AddTweet) {
+    let tweets = this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID);
+    if (!tweets) {
+      tweets = { key: moduleSwitter.selectID, tweets: new I.Tweets() };
+      this.stateTweet.tweets.push(tweets);
     }
+    const { tweet, listTweet, user_id_str } = addTweet;
+    const { dicMuteIds, listBlockIds } = moduleSwitter.stateIds;
+    const { muteOption } = moduleOption;
+    const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
+
+    const orgTweets = tweets.tweets.homes;
+    let listConcatTweets: I.Tweet[] = [];
+    listConcatTweets = listTweet ? listConcatTweets.concat(listTweet) : [];
+    listConcatTweets = tweet ? [tweet] : [];
+
+    console.log('concat tweets', listConcatTweets);
+
+    listConcatTweets.forEach(item => {
+      if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) return; //exists
+      if (!CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
+      if (CheckMention(item, user_id_str, muteOption)) {
+        this.context.commit('addMention', addTweet);
+      } else {
+        if (!CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return;
+      }
+      const idx = FindTweetIndex(item, orgTweets);
+      console.log('idx', idx);
+      orgTweets.splice(idx, 0, new I.Tweet(tweet));
+    });
+  }
+
+  @Mutation
+  private addMention(addTweet: A.AddTweet) {
+    console.log(addTweet);
+  }
+
+  @Mutation
+  private addFavorite(addTweet: A.AddTweet) {
+    console.log(addTweet);
+  }
+  @Mutation
+  private addOpen(addTweet: A.AddTweet) {
+    console.log(addTweet);
+  }
+  @Mutation
+  private addConv(addTweet: A.AddTweet) {
+    console.log(addTweet);
   }
 
   @Action
   AddTweet(addTweet: A.AddTweet) {
     this.context.commit('addTweet', addTweet);
+    const { type } = { ...addTweet };
+    switch (type) {
+      case A.ETweetType.E_HOME:
+        this.context.commit('addHome', addTweet);
+        break;
+      case A.ETweetType.E_MENTION:
+        this.context.commit('addMention', addTweet);
+        break;
+      case A.ETweetType.E_FAVORITE:
+        this.context.commit('addFavorite', addTweet);
+        break;
+      case A.ETweetType.E_OPEN:
+        this.context.commit('addOpen', addTweet);
+        break;
+      case A.ETweetType.E_CONV:
+        this.context.commit('addConv', addTweet);
+        break;
+    }
     eventBus.$emit('AddTweetHome');
   }
 
-  @Mutation
-  private resized() {
-    this.tweetDatas.OnResized();
-  }
+  // @Mutation
+  // private resized() {
+  //   this.tweetDatas.OnResized();
+  // }
 
-  @Action
-  Resized() {
-    this.context.commit('resized');
-  }
+  // @Action
+  // Resized() {
+  //   this.context.commit('resized');
+  // }
 
-  @Mutation
-  private moveScroll(move: A.MoveScroll) {
-    this.tweetDatas.MoveScroll(move.listTweet, move.idxFrom, move.height);
-  }
+  // @Mutation
+  // private moveScroll(move: A.MoveScroll) {
+  //   this.tweetDatas.MoveScroll(move.listTweet, move.idxFrom, move.height);
+  // }
 
-  @Action
-  MoveScroll(move: A.MoveScroll) {
-    this.context.commit('moveScroll', move);
-  }
+  // @Action
+  // MoveScroll(move: A.MoveScroll) {
+  //   this.context.commit('moveScroll', move);
+  // }
 
   @Mutation
   private updateRTandFav(tweet: I.Tweet) {
-    this.homes.forEach(item => {
-      if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
-        item.orgTweet.retweeted = tweet.orgTweet.retweeted;
-        item.orgTweet.favorited = tweet.orgTweet.favorited;
-      }
-    });
+    const homes = this.homes;
+    if (homes) {
+      homes.forEach(item => {
+        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+          item.orgTweet.retweeted = tweet.orgTweet.retweeted;
+          item.orgTweet.favorited = tweet.orgTweet.favorited;
+        }
+      });
+    }
   }
 
   @Action
   UpdateRTandFav(tweet: I.Tweet) {
     this.context.commit('updateRTandFav', tweet);
-  }
-
-  @Mutation
-  private showQt(addTweet: A.AddTweet) {
-    if (addTweet.tweet) this.tweetDatas.AddConv(addTweet.tweet, addTweet.user_id_str);
-  }
-
-  @Action
-  ShowQt(addTweet: A.AddTweet) {
-    this.context.commit('showQt', addTweet);
-  }
-
-  @Mutation
-  private addConv(addTweet: A.AddTweet) {
-    if (addTweet.tweet) this.tweetDatas.AddConv(addTweet.tweet, addTweet.user_id_str);
   }
 
   @Action
@@ -165,7 +174,10 @@ class TweetStore extends VuexModule {
 
   @Mutation
   private clearConv(user_id_str: string) {
-    this.tweetDatas.ClearTweet(ETweetType.E_CONV, user_id_str);
+    const find = this.stateTweet.tweets.find(x => x.key === user_id_str);
+    if (find) {
+      find.tweets.conv = [];
+    }
   }
 
   @Action

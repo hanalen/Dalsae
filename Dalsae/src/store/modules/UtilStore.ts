@@ -14,6 +14,7 @@ import copy from 'copy-to-clipboard';
 import { moduleProfile } from './ProfileStore';
 import { moduleModal } from './ModalStore';
 import { eventBus } from '@/plugins';
+import { FindTweet } from '@/Interfaces';
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
   get isFocusPanel() {
@@ -85,15 +86,17 @@ class UtilStore extends VuexModule {
     let id_str = '';
     switch (moduleUI.stateUI.selectMenu) {
       case 0:
-        if (moduleTweet.homes.length > 0) id_str = moduleTweet.homes[0].id_str;
+        if (moduleTweet.homes && moduleTweet.homes.length > 0) id_str = moduleTweet.homes[0].id_str;
         moduleApi.statuses.TimeLine('', id_str);
         break;
       case 1:
-        if (moduleTweet.mentions.length > 0) id_str = moduleTweet.mentions[0].id_str;
+        if (moduleTweet.mentions && moduleTweet.mentions.length > 0)
+          id_str = moduleTweet.mentions[0].id_str;
         moduleApi.statuses.Mention('', id_str);
         break;
       case 3:
-        if (moduleTweet.favorites.length > 0) id_str = moduleTweet.favorites[0].id_str;
+        if (moduleTweet.favorites && moduleTweet.favorites.length > 0)
+          id_str = moduleTweet.favorites[0].id_str;
         moduleApi.favorites.List('', id_str);
         break;
     }
@@ -110,7 +113,7 @@ class UtilStore extends VuexModule {
     });
     let id_str = tweet.orgTweet.in_reply_to_status_id_str;
     if (!id_str) return;
-    let find = moduleTweet.tweetDatas.FindTweet(id_str, moduleSwitter.selectID);
+    let find = FindTweet(id_str, moduleSwitter.selectID, moduleTweet.homes, moduleTweet.mentions);
     while (find) {
       moduleTweet.AddConv({
         listTweet: undefined,
@@ -119,7 +122,7 @@ class UtilStore extends VuexModule {
         user_id_str: moduleSwitter.selectID
       });
       id_str = find.in_reply_to_status_id_str;
-      find = moduleTweet.tweetDatas.FindTweet(id_str, moduleSwitter.selectID);
+      find = FindTweet(id_str, moduleSwitter.selectID, moduleTweet.homes, moduleTweet.mentions);
     }
     if (id_str && !find) {
       moduleApi.statuses.Show(id_str);

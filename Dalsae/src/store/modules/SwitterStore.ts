@@ -91,7 +91,7 @@ class SwitterStore extends VuexModule {
       switter.selectUser = tempUser;
       this.stateSwitter.tempUser = new I.DalsaeUser();
       switter.listUser.push(JSON.parse(JSON.stringify(selUser)));
-      moduleTweet.Init(userId);
+      // moduleTweet.Init(userId);
       this.stateIds.followDatas.dicUsers.set(userId, { listFollower: [], listFollowing: [] });
     }
   }
@@ -111,7 +111,7 @@ class SwitterStore extends VuexModule {
     this.context.commit('initSwitter', switter);
     if (switter) {
       switter.listUser?.forEach(user => {
-        moduleTweet.Init(user.user_id);
+        // moduleTweet.Init(user.user_id);
         this.stateIds.followDatas.dicUsers.set(user.user_id, {
           listFollower: [],
           listFollowing: []

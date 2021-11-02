@@ -13,7 +13,7 @@
           color="primary"
           indeterminate
         ></v-progress-circular>
-        <scroll-panel :listData="tweetHome" :tweetType="home" />
+        <scroll-panel-two :listData="tweetHome" :tweetType="home" />
       </v-tab-item>
       <v-tab-item :key="1">
         <v-progress-circular
@@ -58,6 +58,7 @@ import { TweetPanelBase } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 import TweetSelector from '@/components/Home/TweetSelector.vue';
 import { Component as Compo } from 'vue';
+import { moduleTweet } from '@/store/modules/TweetStore';
 @Component
 export default class TweetPanel extends TweetPanelBase {
   listMenu = [

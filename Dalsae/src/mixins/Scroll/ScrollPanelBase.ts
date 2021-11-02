@@ -180,9 +180,9 @@ export class ScrollPanelBase extends Vue {
   timer!: NodeJS.Timeout;
   OnResizeWindow() {
     clearTimeout(this.timer);
-    this.timer = setTimeout(() => {
-      moduleTweet.Resized();
-    }, 100);
+    // this.timer = setTimeout(() => {
+    //   moduleTweet.Resized();
+    // }, 100);
   }
 
   get Total() {

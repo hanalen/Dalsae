@@ -95,7 +95,7 @@ export default class ScrollPanel extends M.ScrollPanelBase {
     if (tweet.isResized && idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
       this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop + moveY + 40 });
     }
-    moduleTweet.MoveScroll({ height: data.newVal, idxFrom: idx, listTweet: this.listData });
+    // moduleTweet.MoveScroll({ height: data.newVal, idxFrom: idx, listTweet: this.listData });
   }
 
   OnScroll() {

@@ -123,7 +123,7 @@ class UIStore extends VuexModule {
 
   get selectTweet() {
     let state: IStatePanel | undefined = undefined;
-    let listTweet: I.Tweet[] = [];
+    let listTweet: I.Tweet[] | undefined = [];
     switch (this.stateUI.selectMenu) {
       case ETweetType.E_HOME:
         state = this.statePanel.home;
@@ -149,7 +149,7 @@ class UIStore extends VuexModule {
         listTweet = moduleTweet.homes;
         break;
     }
-    if (!state) return undefined;
+    if (!state || !listTweet) return undefined;
     else return listTweet[state.index];
   }
 
@@ -199,7 +199,7 @@ class UIStore extends VuexModule {
       const home: IStatePanel = {
         ...this.statePanel.home,
         index: 0,
-        selectedId: moduleTweet.homes[0].id_str
+        selectedId: moduleTweet.homes ? moduleTweet.homes[0].id_str : ''
       };
       const state: StatePanel = { ...this.statePanel, home: home };
       this.context.commit('setStatePanel', state);
@@ -207,7 +207,7 @@ class UIStore extends VuexModule {
       const mention: IStatePanel = {
         ...this.statePanel.mention,
         index: 0,
-        selectedId: moduleTweet.homes[0].id_str
+        selectedId: moduleTweet.mentions ? moduleTweet.mentions[0].id_str : ''
       };
       const state: StatePanel = { ...this.statePanel, mention: mention };
       this.context.commit('setStatePanel', state);
@@ -218,6 +218,7 @@ class UIStore extends VuexModule {
   End(tweetType: ETweetType) {
     if (tweetType === ETweetType.E_HOME) {
       const tweets = moduleTweet.homes;
+      if (!tweets) return;
       const home: IStatePanel = {
         ...this.statePanel.home,
         index: tweets.length - 1,

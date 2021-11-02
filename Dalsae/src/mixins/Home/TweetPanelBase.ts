@@ -100,7 +100,7 @@ export class TweetPanelBase extends Vue {
   }
 
   get listTweet() {
-    let listTweet!: I.Tweet[];
+    let listTweet!: I.Tweet[] | undefined;
     switch (this.selectMenu) {
       case 0:
         listTweet = this.tweetHome;
@@ -120,7 +120,7 @@ export class TweetPanelBase extends Vue {
         listTweet = this.tweetHome;
         break;
     }
-    return listTweet;
+    return listTweet !== undefined ? listTweet : [];
   }
 
   async ArrowUp() {

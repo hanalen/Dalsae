@@ -17,8 +17,116 @@ export class Tweets {
     this.conv = [];
   }
 }
+export function FindTweet(
+  tweetIdStr: string,
+  userIdStr: string,
+  homes: I.Tweet[] | undefined,
+  mentions: I.Tweet[] | undefined
+) {
+  if (!homes || !mentions) return;
+  const findA = homes.find(x => x.id_str === tweetIdStr);
+  if (findA) return findA;
+  const findB = mentions.find(x => x.id_str === tweetIdStr);
+  if (findB) return findB;
+  return undefined;
+}
+export function FindTweetIndex(tweet: I.Tweet, list: I.Tweet[]) {
+  const date = new Date(tweet.created_at).getTime();
+  let idx = 0;
+  for (let i = 0, len = list.length; i < len; i++) {
+    const next = new Date(list[i].created_at).getTime();
+    if (date > next) {
+      break;
+    }
+    idx = i + 1;
+  }
+  return idx;
+}
+export function CheckMention(tweet: I.Tweet, userIdStr: string, muteOption: I.MuteOption): boolean {
+  if (tweet.entities.user_mentions.map(x => x.id_str).includes(userIdStr)) return true;
 
-const minHeight = 40;
+  const { highlight } = muteOption;
+  for (let i = 0; i < highlight.length; i++) {
+    if (tweet.full_text.indexOf(highlight[i]) > -1) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function CheckBlock(tweet: I.Tweet, blockIds: string[]): boolean {
+  const ids: string[] = [];
+  if (tweet.retweeted_status) ids.push(tweet.retweeted_status.user.id_str);
+  ids.push(tweet.user.id_str);
+  ids.concat(tweet.entities.user_mentions.map(x => x.id_str));
+  for (let i = 0; i < ids.length; i++) {
+    if (blockIds.includes(ids[i])) return true;
+  }
+  return false;
+}
+
+export function CheckMute(
+  tweet: I.Tweet,
+  userIdStr: string,
+  muteOption: I.MuteOption,
+  muteIds: string[] | undefined
+): boolean {
+  const { client, keyword } = muteOption;
+  const orgTweet = tweet.retweeted_status ? tweet.retweeted_status : tweet;
+  let source = orgTweet.source;
+  source = source.substring(source.indexOf('>') + 1, 999);
+  source = source.substring(0, source.indexOf('<'));
+  for (let i = 0; i < client.length; i++) {
+    if (client.includes(source)) {
+      return true;
+    }
+  }
+
+  for (let i = 0; i < keyword.length; i++) {
+    if (tweet.full_text.toUpperCase().indexOf(keyword[i].toUpperCase()) > -1) {
+      return true;
+    }
+  }
+
+  const tweetIds = muteOption.tweet.map(x => x.id_str);
+
+  for (let i = 0; i < tweetIds.length; i++) {
+    if (tweetIds.includes(orgTweet.id_str)) return true;
+  }
+  //TODO 공홈에서 땡겨온 유저 뮤트 목록이랑 연동 필요
+  if (muteIds) {
+    for (let i = 0; i < muteIds.length; i++) {
+      if (muteIds.includes(orgTweet.user.id_str)) return true;
+      else if (muteIds.includes(tweet.user.id_str)) return true;
+    }
+  }
+  return false;
+}
+
+export function CheckShowHomeTweet(
+  tweet: I.Tweet,
+  userIdStr: string,
+  muteOption: I.MuteOption,
+  blockIds: string[],
+  muteIds: string[] | undefined
+): boolean {
+  if (CheckBlock(tweet, blockIds)) return false;
+  if (CheckMute(tweet, userIdStr, muteOption, muteIds)) return false;
+  return true;
+}
+
+export function CheckShowMentionTweet(
+  tweet: I.Tweet,
+  userIdStr: string,
+  muteOption: I.MuteOption,
+  blockIds: string[],
+  muteIds: string[]
+): boolean {
+  if (CheckBlock(tweet, blockIds)) return false;
+  if (CheckMute(tweet, userIdStr, muteOption, muteIds) && muteOption.isMuteMention) return false;
+  return true;
+}
 
 export class TweetDatas {
   listTweet: I.Tweet[] | unknown; //테스트용
