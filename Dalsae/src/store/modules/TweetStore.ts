@@ -68,22 +68,28 @@ class TweetStore extends VuexModule {
 
     const orgTweets = tweets.tweets.homes;
     let listConcatTweets: I.Tweet[] = [];
-    listConcatTweets = listTweet ? listConcatTweets.concat(listTweet) : [];
     listConcatTweets = tweet ? [tweet] : [];
 
-    console.log('concat tweets', listConcatTweets);
-
+    if (listTweet) {
+      listConcatTweets = listConcatTweets.concat(listTweet);
+    }
+    if (tweet) {
+      listConcatTweets = [tweet];
+    }
     listConcatTweets.forEach(item => {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) return; //exists
       if (!CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
       if (CheckMention(item, user_id_str, muteOption)) {
-        this.context.commit('addMention', addTweet);
+        const mentions = tweets?.tweets.mentions;
+        if (mentions) {
+          const idx = FindTweetIndex(item, mentions);
+          mentions.splice(idx, 0, new I.Tweet(item));
+        }
       } else {
         if (!CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return;
       }
       const idx = FindTweetIndex(item, orgTweets);
-      console.log('idx', idx);
-      orgTweets.splice(idx, 0, new I.Tweet(tweet));
+      orgTweets.splice(idx, 0, new I.Tweet(item));
     });
   }
 
@@ -107,7 +113,6 @@ class TweetStore extends VuexModule {
 
   @Action
   AddTweet(addTweet: A.AddTweet) {
-    this.context.commit('addTweet', addTweet);
     const { type } = { ...addTweet };
     switch (type) {
       case A.ETweetType.E_HOME:
