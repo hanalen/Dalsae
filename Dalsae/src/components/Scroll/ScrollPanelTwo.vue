@@ -52,31 +52,11 @@ export default class ScrollPanelTwo extends M.ScrollPanelBaseTwo {
   scrollPort!: HTMLElement;
 
   async created() {
-    // eventBus.$on('AddedTweet', (tweetType: ETweetType) => {
-    //   if (this.tweetType === tweetType) this.SetIndex();
-    // });
-    // eventBus.$on('PanelHome', (tweetType: ETweetType) => {
-    //   if (this.tweetType !== tweetType) return;
-    //   if (this.listData.length === 0) return;
-    //   const first = this.listData[0];
-    //   this.scrollPanel.scrollTo({ top: first.scrollTop });
-    // });
-    // eventBus.$on('PanelEnd', (tweetType: ETweetType) => {
-    //   if (this.tweetType !== tweetType) return;
-    //   if (this.listData.length === 0) return;
-    //   const last = this.listData[this.listData.length - 1];
-    //   this.scrollPanel.scrollTo({ top: last.scrollTop });
-    // });
-    // eventBus.$on('FocusPanel', (tweetType: ETweetType) => {
-    //   if (this.tweetType !== tweetType) return;
-    //   if (!moduleUtil.isFocusPanel) return;
-    //   console.log('focus panel');
-    //   this.scrollPanel.focus();
-    // });
-    // this.$nextTick(() => {
-    //   window.addEventListener('resize', this.OnResizeWindow);
-    //   this.SetIndex();
-    // });
+    this.$nextTick(() => {
+      window.addEventListener('resize', (e: Event) => {
+        console.log('resize', e);
+      });
+    });
   }
 
   //TODO 호출이 너무 많이 됨
