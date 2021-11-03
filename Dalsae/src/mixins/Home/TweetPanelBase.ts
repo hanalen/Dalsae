@@ -33,6 +33,14 @@ export class TweetPanelBase extends Vue {
     return ETweetType.E_MENTION;
   }
 
+  get open() {
+    return ETweetType.E_OPEN;
+  }
+
+  get favorite() {
+    return ETweetType.E_FAVORITE;
+  }
+
   get conv() {
     return ETweetType.E_CONV;
   }
@@ -57,7 +65,7 @@ export class TweetPanelBase extends Vue {
     return moduleTweet.convs;
   }
 
-  get tweetOpens() {
+  get tweetOpen() {
     return moduleTweet.opens;
   }
 
@@ -71,6 +79,21 @@ export class TweetPanelBase extends Vue {
 
   get isLoadFavorite() {
     return moduleUI.statePanel.favorite.isLoad;
+  }
+  get indexHome() {
+    return moduleUI.statePanel.home.index;
+  }
+  get indexMention() {
+    return moduleUI.statePanel.mention.index;
+  }
+  get indexFavorite() {
+    return moduleUI.statePanel.favorite.index;
+  }
+  get indexOpen() {
+    return moduleUI.statePanel.open.index;
+  }
+  get indexConv() {
+    return moduleUI.statePanel.conv.index;
   }
 
   KeyDown(e: KeyboardEvent) {
@@ -114,7 +137,7 @@ export class TweetPanelBase extends Vue {
         listTweet = this.tweetFavorite;
         break;
       case 4:
-        listTweet = this.tweetOpens;
+        listTweet = this.tweetOpen;
         break;
       default:
         listTweet = this.tweetHome;
