@@ -46,7 +46,9 @@ export default class ScrollPanelTwo extends M.ScrollPanelBaseTwo {
   async created() {
     this.$nextTick(() => {
       window.addEventListener('resize', (e: Event) => {
-        console.log('resize', e);
+        for (let i = 0, len = this.stateData.listData.length; i < len; i++) {
+          this.stateData.listData[i].isResized = true;
+        }
       });
     });
   }
