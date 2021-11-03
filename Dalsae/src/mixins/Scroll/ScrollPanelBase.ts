@@ -15,6 +15,7 @@ class State {
   startIndex = 0;
   endIndex = 50;
   translateY = 0;
+  selectKey = '';
 }
 
 class StateData<T> {
@@ -67,6 +68,9 @@ export class ScrollPanelBase extends Vue {
 
   @Prop()
   listData!: I.Tweet[];
+
+  @Prop()
+  indexPanel!: number;
 
   @Prop()
   tweetType!: ETweetType;
@@ -127,6 +131,31 @@ export class ScrollPanelBase extends Vue {
     //   const item = new ScrollItem({ propsData: { data: data, itemType: 'tweet' } });
     //   item.$vuetify = this.$vuetify;
     // }
+  }
+
+  @Watch('indexPanel')
+  OnChangePanelIndex(newVal: number) {
+    if (!this.scrollItem) return;
+    const selectData = this.stateData.listData[newVal];
+    this.state.selectKey = selectData.key;
+    const idx = this.stateData.listVisible.findIndex(x => x.key === selectData.key);
+    if (idx === -1) {
+      return;
+    }
+    const component = this.scrollItem.find(x => x.$props.data.key === selectData.key);
+    if (!component) return;
+    const tweetPos = component.$el.getBoundingClientRect();
+    const panelPos = this.scrollPanel.getBoundingClientRect();
+    const tweetBottom = tweetPos.y + tweetPos.height;
+    const panelBottom = panelPos.y + panelPos.height;
+    if (tweetBottom > panelBottom) {
+      //내려가는 로직
+      const top = tweetBottom - panelBottom;
+      this.scrollPanel.scrollTo({ top: this.state.scrollTop + top });
+    } else if (tweetPos.top < panelPos.y) {
+      //올라가는 로직
+      this.scrollPanel.scrollTo({ top: selectData.scrollTop });
+    }
   }
 
   @Watch('listData', { immediate: true, deep: true })

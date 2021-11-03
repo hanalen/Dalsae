@@ -3,10 +3,12 @@
   <div ref="scrollPanel" tabindex="-1" class="scroll-panel" @scroll="OnScroll">
     <div ref="scrollPort" class="scroll-area" :style="viewportStyle">
       <scroll-item
+        ref="scrollItem"
         v-for="(item, i) in listComponent"
         :data="item"
         :itemType="'tweet'"
         :key="i"
+        :selected="item.key === state.selectKey"
         v-on:on-resize="OnResizeTweet"
       />
     </div>
