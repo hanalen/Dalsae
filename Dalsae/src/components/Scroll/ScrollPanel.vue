@@ -1,22 +1,14 @@
 <template>
   <!-- <div> -->
-  <div
-    ref="scrollPanel"
-    tabindex="-1"
-    class="scroll-panel"
-    @scroll="OnScroll"
-    v-if="state != undefined"
-  >
+  <div ref="scrollPanel" tabindex="-1" class="scroll-panel" @scroll="OnScroll">
     <div ref="scrollPort" class="scroll-area" :style="viewportStyle">
       <scroll-item
-        ref="scrollItem"
-        v-for="(item, i) in this.state.listVisible"
-        :key="i"
+        v-for="(item, i) in listComponent"
         :data="item"
+        :itemType="'tweet'"
+        :key="i"
         v-on:on-resize="OnResizeTweet"
-      >
-        <tweet-selector :tweet="item.data" :selected="selectedId === item.key"></tweet-selector>
-      </scroll-item>
+      />
     </div>
   </div>
 </template>
@@ -51,52 +43,28 @@ import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
 @Component
 export default class ScrollPanel extends M.ScrollPanelBase {
-  @Ref()
-  scrollPort!: HTMLElement;
-
   async created() {
-    eventBus.$on('AddedTweet', (tweetType: ETweetType) => {
-      if (this.tweetType === tweetType) this.SetIndex();
-    });
-
-    eventBus.$on('PanelHome', (tweetType: ETweetType) => {
-      if (this.tweetType !== tweetType) return;
-      if (this.listData.length === 0) return;
-      const first = this.listData[0];
-      this.scrollPanel.scrollTo({ top: first.scrollTop });
-    });
-    eventBus.$on('PanelEnd', (tweetType: ETweetType) => {
-      if (this.tweetType !== tweetType) return;
-      if (this.listData.length === 0) return;
-      const last = this.listData[this.listData.length - 1];
-      this.scrollPanel.scrollTo({ top: last.scrollTop });
-    });
-
-    eventBus.$on('FocusPanel', (tweetType: ETweetType) => {
-      if (this.tweetType !== tweetType) return;
-      if (!moduleUtil.isFocusPanel) return;
-      console.log('focus panel');
-      this.scrollPanel.focus();
-    });
-
     this.$nextTick(() => {
-      window.addEventListener('resize', this.OnResizeWindow);
-      this.SetIndex();
+      window.addEventListener('resize', (e: Event) => {
+        for (let i = 0, len = this.stateData.listData.length; i < len; i++) {
+          this.stateData.listData[i].isResized = true;
+        }
+      });
     });
   }
 
   //TODO 호출이 너무 많이 됨
-  OnResizeTweet(data: M.ResizeEvent) {
-    const moveY = data.newVal - data.oldVal;
-    this.state.totalHeight += moveY;
-    const idx = this.listData.findIndex(x => x.key == data.key);
-    const tweet = this.listData[idx];
-    if (!tweet) return;
-    if (tweet.isResized && idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
-      this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop + moveY + 40 });
-    }
-    // moduleTweet.MoveScroll({ height: data.newVal, idxFrom: idx, listTweet: this.listData });
-  }
+  // OnResizeTweet(data: M.ResizeEvent) {
+  //   const moveY = data.newVal - data.oldVal;
+  //   this.state.totalHeight += moveY;
+  //   const idx = this.listData.findIndex(x => x.key == data.key);
+  //   const tweet = this.listData[idx];
+  //   if (!tweet) return;
+  //   if (tweet.isResized && idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
+  //     this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop + moveY + 40 });
+  //   }
+  //   moduleTweet.MoveScroll({ height: data.newVal, idxFrom: idx, listTweet: this.listData });
+  // }
 
   OnScroll() {
     this.state.scrollTop = this.scrollPanel.scrollTop;

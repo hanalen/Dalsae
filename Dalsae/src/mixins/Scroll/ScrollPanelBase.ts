@@ -2,30 +2,58 @@
 import { mixins } from 'vue-class-component';
 import { Vue, Component, Inject, Emit, Watch, Prop, Ref } from 'vue-property-decorator';
 import * as M from '@/mixins';
-import * as E from '@/mixins';
 import * as I from '@/Interfaces';
 import faker from 'faker';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { TweetSelectorBase } from '../Home';
 import { ETweetType } from '@/store/Interface';
 import { moduleUI } from '@/store/modules/UIStore';
+import ScrollItem from '@/components/Scroll/ScrollItem.vue';
 class State {
   scrollTop = 0;
   totalHeight = 0;
-  listVisible: M.ScrollItem<I.Tweet>[] = [];
   startIndex = 0;
   endIndex = 50;
   translateY = 0;
-  minHeight = 40;
-  isScrollLock = false;
-  listAddedKey: string[] = [];
+}
+
+class StateData<T> {
+  setKey: Set<string>;
+  listData: M.ScrollItem<T>[];
+  listVisible: M.ScrollItem<any>[] = [];
   constructor() {
+    this.setKey = new Set();
+    this.listData = [];
+  }
+}
+
+class StatePool {
+  listBench: M.ScrollItem<any>[] = [];
+  listVisible: M.ScrollItem<any>[] = [];
+  constructor() {
+    this.listBench = [];
     this.listVisible = [];
   }
 }
 
+@Component
 export class ScrollPanelBase extends Vue {
+  // 오브젝트 풀
+  // v-for 렌더링은 오브젝트풀 땡겨다 쓴 목록
+  // 오브젝트가 화면 밖으로 나간 거 체크(scrolltop)
+  // 체크해서 나가면 오브젝트 풀로 반환
+  // 오브젝트 풀 사이즈는 height/minheight
+  // index 범위는 기존 로직 쓰면 됨
+  // 문제는 데이터 갱신 되면 체크를 어떻게 할지임
+
+  //scrollitem에서 template, 자식 그리게 하는 건
+  //slot type같은 거 줘서 컴포넌트를 고르게 할까?
+
+  //동적 추가 코드
+  //https://codesandbox.io/embed/4l3w20zomw
   state = new State();
+  stateData = new StateData();
+  statePool = new StatePool();
 
   @Ref()
   scrollPanel!: HTMLElement;
@@ -33,66 +61,131 @@ export class ScrollPanelBase extends Vue {
   @Ref()
   scrollItem!: Vue[];
 
-  @Prop({ default: [] })
-  listData!: M.ScrollItem<I.Tweet>[];
+  @Ref()
+  scrollPort!: HTMLElement;
+
+  @Prop()
+  listData!: I.Tweet[];
 
   @Prop()
   tweetType!: ETweetType;
 
-  get panelIndex() {
-    switch (this.tweetType) {
-      case ETweetType.E_HOME:
-        return moduleUI.statePanel.home.index;
-      case ETweetType.E_MENTION:
-        return moduleUI.statePanel.mention.index;
-      case ETweetType.E_FAVORITE:
-        return moduleUI.statePanel.favorite.index;
-      case ETweetType.E_OPEN:
-        return moduleUI.statePanel.open.index;
-      case ETweetType.E_CONV:
-        return moduleUI.statePanel.conv.index;
-      default:
-        return moduleUI.statePanel.home.index;
+  get listComponent() {
+    return this.statePool.listBench;
+  }
+
+  get viewportStyle() {
+    const { listData } = this.stateData;
+    const last = listData[listData.length - 1];
+    if (last) {
+      const top = last.scrollTop + last.height;
+      return {
+        height: top + 'px'
+      };
+    } else {
+      return {
+        height: 0 + 'px'
+      };
     }
   }
 
-  get selectedId() {
-    switch (this.tweetType) {
-      case ETweetType.E_HOME:
-        return moduleUI.statePanel.home.selectedId;
-      case ETweetType.E_MENTION:
-        return moduleUI.statePanel.mention.selectedId;
-      case ETweetType.E_FAVORITE:
-        return moduleUI.statePanel.favorite.selectedId;
-      case ETweetType.E_OPEN:
-        return moduleUI.statePanel.open.selectedId;
-      case ETweetType.E_CONV:
-        return moduleUI.statePanel.conv.selectedId;
-      default:
-        return moduleUI.statePanel.home.selectedId;
+  async created() {
+    return;
+    const testTweets = window.preload.LoadTestTweet();
+    const data: M.ScrollItem<I.Tweet> = {
+      data: new I.Tweet(testTweets[0]),
+      height: 40,
+      isResized: false,
+      key: testTweets[0].id_str,
+      scrollTop: 100
+    };
+    const item = new ScrollItem({ propsData: { data: data, itemType: 'tweet' } });
+    item.$vuetify = this.$vuetify;
+    this.$nextTick(() => {
+      console.log(this.scrollPanel.clientHeight);
+      item.$mount(this.scrollPanel);
+    });
+    setTimeout(() => {
+      console.log(Object.keys(item.$props));
+      console.log(item.$props.data);
+    }, 1500);
+    // this.statePool.listBench.push(item);
+  }
+
+  CreateObjectPool() {
+    // const size = Math.ceil(this.scrollPanel.clientHeight / moduleUI.minHeight)
+    // console.log('size: ',size)
+    // for(let i=0;i<size;i++){
+    //   const data: M.ScrollItem<I.Tweet> = {
+    //     data: new I.Tweet(testTweets[0]),
+    //     height: 40,
+    //     isResized: false,
+    //     key: testTweets[0].id_str,
+    //     scrollTop: 100
+    //   };
+    //   const item = new ScrollItem({ propsData: { data: data, itemType: 'tweet' } });
+    //   item.$vuetify = this.$vuetify;
+    // }
+  }
+
+  @Watch('listData', { immediate: true, deep: true })
+  OnChangeListData(newVal: I.Tweet[]) {
+    console.log('on watch listData', newVal);
+    if (!newVal) return;
+    this.CreateScrollData();
+    this.SetIndex();
+    this.CreateComponent();
+  }
+  @Watch('state.scrollTop')
+  OnWatchScrollTop(newVal: number, oldVal: number) {
+    this.SetIndex();
+    this.CreateComponent();
+  }
+
+  CreateScrollData() {
+    //props listData가 갱신 될 때만 호출
+    const list = (this.listData as unknown) as any;
+    if (!list) return;
+    const minHeight = moduleUI.minHeight;
+    for (let i = 0, len = list.length; i < len; i++) {
+      const current = list[i];
+      if (!this.stateData.setKey.has(current.id_str)) {
+        this.stateData.setKey.add(current.id_str);
+        const prev = this.stateData.listData[i - 1];
+        const scrollTop = prev ? prev.scrollTop + prev.height : i * minHeight;
+        const item: M.ScrollItem<I.Tweet> = {
+          data: new I.Tweet(current),
+          key: current.id_str,
+          height: minHeight,
+          isResized: true,
+          scrollTop: scrollTop
+        };
+        this.stateData.listData.splice(i, 0, item);
+      }
     }
   }
 
-  @Watch('panelIndex')
-  OnChangePanelIndex(newVal: number) {
-    if (!this.scrollItem) return;
-    const selectTweet = this.listData[newVal];
-    const idx = this.state.listVisible.findIndex(x => x.key === selectTweet.key);
-    if (idx === -1) {
-      return;
-    }
-    const component = this.scrollItem[idx];
-    const tweetPos = component.$el.getBoundingClientRect();
-    const panelPos = this.scrollPanel.getBoundingClientRect();
-    const tweetBottom = tweetPos.y + tweetPos.height;
-    const panelBottom = panelPos.y + panelPos.height;
-    if (tweetBottom > panelBottom) {
-      //내려가는 로직
-      const top = tweetBottom - panelBottom;
-      this.scrollPanel.scrollTo({ top: this.state.scrollTop + top });
-    } else if (tweetPos.top < panelPos.y) {
-      //올라가는 로직
-      this.scrollPanel.scrollTo({ top: selectTweet.scrollTop });
+  CreateComponent() {
+    if (this.stateData.listVisible.length === 0) return;
+
+    //렌더링용 데이터 추가
+    const keysBench = this.statePool.listBench.map(x => x.key);
+    this.stateData.listVisible.forEach(item => {
+      if (keysBench.includes(item.key)) return true;
+      this.statePool.listBench.push(item);
+      // const component = new ScrollItem({ propsData: { data: item, itemType: 'tweet' } });
+      // component.$vuetify = this.$vuetify;
+      // component.$mount(this.scrollPort);
+      // this.statePool.listBench.push(component);
+    });
+    //렌더링에서 뺴야 될 데이터 체크
+    const keysVisible = this.stateData.listVisible.map(x => x.key);
+    for (let i = 0; i < this.statePool.listBench.length; ) {
+      if (keysVisible.includes(this.statePool.listBench[i].key)) {
+        i++;
+      } else {
+        this.statePool.listBench.splice(i, 1);
+      }
     }
   }
 
@@ -102,14 +195,14 @@ export class ScrollPanelBase extends Vue {
     if (scrollTop < 0) {
       scrollTop = 0;
     }
-    let startIndex = this.BinarySearch(this.listData, scrollTop);
+    let startIndex = this.BinarySearch(this.stateData.listData, scrollTop);
     startIndex -= 5; //버퍼
     if (startIndex < 0) startIndex = 0;
     if (this.scrollPanel.scrollTop === 0) {
       startIndex = 0;
     }
     this.state.startIndex = startIndex;
-    this.state.endIndex = startIndex + Math.floor(this.$el.clientHeight / this.state.minHeight);
+    this.state.endIndex = startIndex + Math.floor(this.$el.clientHeight / moduleUI.minHeight);
     if (this.$el.clientHeight === 0) {
       setTimeout(() => {
         this.SetIndex();
@@ -118,18 +211,7 @@ export class ScrollPanelBase extends Vue {
     this.SetVisibleData();
   }
 
-  @Watch('state.scrollTop')
-  OnWatchScrollTop(newVal: number, oldVal: number) {
-    if (newVal === 0) {
-      this.state.listAddedKey = [];
-    }
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => {
-      this.SetIndex();
-    }, 50);
-  }
-
-  BinarySearch(list: M.ScrollItem<I.Tweet>[], scrollTop: number) {
+  BinarySearch(list: M.ScrollItem<any>[], scrollTop: number) {
     let low = 0;
     let high = list.length - 1;
     let mid;
@@ -157,46 +239,34 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
-  isBetween(start: number, end: number, value: number) {
-    if (start <= value && value <= end) return true;
-    else return false;
-  }
-
-  get viewportStyle() {
-    const last = this.listData[this.listData.length - 1];
-    if (last) {
-      const top = last.scrollTop + last.height;
-      return {
-        height: top + 'px'
-      };
-    } else {
-      return {
-        height: 0 + 'px'
-      };
-    }
-  }
-
-  key = 0;
-  timer!: NodeJS.Timeout;
-  OnResizeWindow() {
-    clearTimeout(this.timer);
-    // this.timer = setTimeout(() => {
-    //   moduleTweet.Resized();
-    // }, 100);
-  }
-
-  get Total() {
-    let sum = 0;
-    this.listData.forEach(item => {
-      sum += item.scrollTop;
-    });
-    return sum;
-  }
-
   async SetVisibleData() {
-    //중복 렌더링일 경우 로직 개선 필요
     if (this.listData.length === 0) return;
 
-    this.state.listVisible = this.listData.slice(this.state.startIndex, this.state.endIndex);
+    this.stateData.listVisible = this.stateData.listData.slice(
+      this.state.startIndex,
+      this.state.endIndex
+    );
+  }
+
+  OnResizeTweet(resizeEvent: M.ResizeEvent) {
+    const moveY = resizeEvent.newVal - resizeEvent.oldVal;
+    this.state.totalHeight += moveY;
+    const idx = this.stateData.listData.findIndex(x => x.key == resizeEvent.key);
+    const data = this.stateData.listData[idx];
+    if (!data) return;
+    if (data.isResized && idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
+      this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop + moveY + moduleUI.minHeight });
+    }
+    this.MoveScroll(this.stateData.listData, idx, resizeEvent.newVal);
+  }
+
+  MoveScroll(listTweet: M.ScrollItem<any>[], idxFrom: number, height: number) {
+    listTweet[idxFrom].height = height;
+    listTweet[idxFrom].isResized = false;
+    let total = listTweet[idxFrom].scrollTop + listTweet[idxFrom].height;
+    for (let i = idxFrom + 1, len = listTweet.length; i < len; i++) {
+      listTweet[i].scrollTop = total;
+      total += listTweet[i].height;
+    }
   }
 }

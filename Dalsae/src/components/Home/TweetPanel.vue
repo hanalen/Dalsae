@@ -13,7 +13,7 @@
           color="primary"
           indeterminate
         ></v-progress-circular>
-        <scroll-panel-two :listData="tweetHome" :tweetType="home" />
+        <scroll-panel :listData="tweetHome" :tweetType="home" />
       </v-tab-item>
       <v-tab-item :key="1">
         <v-progress-circular
