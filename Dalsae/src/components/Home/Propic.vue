@@ -1,6 +1,7 @@
 <template>
-  <div :class="imgClass">
-    <img :src="img" :style="imgSize" />
+  <div class="propic" :class="imgClass">
+    <img :src="img" :style="styleImg" />
+    <v-icon v-if="verified" color="primary">mdi-check-decagram-outline </v-icon>
   </div>
 </template>
 
@@ -12,10 +13,20 @@
   // margin-bottom: auto;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
+.propic {
+  position: relative;
+}
+.v-icon {
+  position: absolute !important;
+  right: 0px;
+  bottom: 0px;
+  background-color: white !important;
+  border-radius: 50%;
+}
 img {
   width: 100%;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius: 15%;
 }
 .empty {
   display: none !important;
@@ -46,7 +57,15 @@ export default class Propic extends Vue {
   @Prop()
   size!: number;
 
-  get imgSize() {
+  get verified() {
+    if (this.size > 40) {
+      return this.user.verified;
+    } else {
+      return false;
+    }
+  }
+
+  get styleImg() {
     return {
       width: this.maxWidth + 'px'
     };
