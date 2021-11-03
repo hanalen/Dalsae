@@ -186,7 +186,7 @@ export class TweetInputBase extends Vue {
       if (moduleUtil.isFocusPanel) {
         e.stopPropagation();
         e.preventDefault();
-        eventBus.$emit('FocusPanel', moduleUI.stateUI.selectMenu);
+        eventBus.$emit('FocusPanel');
       }
     }
   }

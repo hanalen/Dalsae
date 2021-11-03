@@ -54,6 +54,11 @@ export default class ScrollPanel extends M.ScrollPanelBase {
         }
       });
     });
+    eventBus.$on('FocusPanel', () => {
+      if (this.scrollPanel) {
+        this.scrollPanel.focus();
+      }
+    });
   }
 
   //TODO 호출이 너무 많이 됨
