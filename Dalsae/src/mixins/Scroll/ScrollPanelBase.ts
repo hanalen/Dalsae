@@ -51,6 +51,7 @@ export class ScrollPanelBase extends Vue {
 
   //동적 추가 코드
   //https://codesandbox.io/embed/4l3w20zomw
+  isMounted = false;
   state = new State();
   stateData = new StateData();
   statePool = new StatePool();
@@ -130,16 +131,31 @@ export class ScrollPanelBase extends Vue {
 
   @Watch('listData', { immediate: true, deep: true })
   OnChangeListData(newVal: I.Tweet[]) {
-    console.log('on watch listData', newVal);
     if (!newVal) return;
+    if (newVal.length === 0) return;
     this.CreateScrollData();
-    this.SetIndex();
-    this.CreateComponent();
+    if (this.isMounted) {
+      this.SetIndex();
+      this.CreateComponent();
+    } else {
+      this.WaitTime();
+    }
   }
   @Watch('state.scrollTop')
   OnWatchScrollTop(newVal: number, oldVal: number) {
+    if (this.listData.length === 0) return;
     this.SetIndex();
     this.CreateComponent();
+  }
+  WaitTime() {
+    setTimeout(() => {
+      if (!this.isMounted) {
+        this.WaitTime();
+      } else {
+        this.SetIndex();
+        this.CreateComponent();
+      }
+    }, 100);
   }
 
   CreateScrollData() {
@@ -190,6 +206,12 @@ export class ScrollPanelBase extends Vue {
   }
 
   SetIndex() {
+    if (!this.isMounted) {
+      setTimeout(() => {
+        this.SetIndex();
+      }, 100);
+      return;
+    }
     this.state.scrollTop = this.scrollPanel.scrollTop;
     let scrollTop = this.state.scrollTop;
     if (scrollTop < 0) {
@@ -241,7 +263,6 @@ export class ScrollPanelBase extends Vue {
 
   async SetVisibleData() {
     if (this.listData.length === 0) return;
-
     this.stateData.listVisible = this.stateData.listData.slice(
       this.state.startIndex,
       this.state.endIndex

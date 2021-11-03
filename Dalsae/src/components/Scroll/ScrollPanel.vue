@@ -45,6 +45,7 @@ import { moduleUtil } from '@/store/modules/UtilStore';
 export default class ScrollPanel extends M.ScrollPanelBase {
   async created() {
     this.$nextTick(() => {
+      this.isMounted = true;
       window.addEventListener('resize', (e: Event) => {
         for (let i = 0, len = this.stateData.listData.length; i < len; i++) {
           this.stateData.listData[i].isResized = true;
