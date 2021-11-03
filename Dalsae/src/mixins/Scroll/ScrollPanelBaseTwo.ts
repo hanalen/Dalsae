@@ -136,7 +136,7 @@ export class ScrollPanelBaseTwo extends Vue {
           data: new I.Tweet(current),
           key: current.id_str,
           height: minHeight,
-          isResized: false,
+          isResized: true,
           scrollTop: scrollTop
         };
         this.stateData.listData.splice(i, 0, item);
@@ -219,12 +219,33 @@ export class ScrollPanelBaseTwo extends Vue {
   }
 
   async SetVisibleData() {
-    //중복 렌더링일 경우 로직 개선 필요
     if (this.listData.length === 0) return;
 
     this.stateData.listVisible = this.stateData.listData.slice(
       this.state.startIndex,
       this.state.endIndex
     );
+  }
+
+  OnResizeTweet(resizeEvent: M.ResizeEvent) {
+    const moveY = resizeEvent.newVal - resizeEvent.oldVal;
+    this.state.totalHeight += moveY;
+    const idx = this.stateData.listData.findIndex(x => x.key == resizeEvent.key);
+    const data = this.stateData.listData[idx];
+    if (!data) return;
+    if (data.isResized && idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
+      this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop + moveY + moduleUI.minHeight });
+    }
+    this.MoveScroll(this.stateData.listData, idx, resizeEvent.newVal);
+  }
+
+  MoveScroll(listTweet: M.ScrollItem<any>[], idxFrom: number, height: number) {
+    listTweet[idxFrom].height = height;
+    listTweet[idxFrom].isResized = false;
+    let total = listTweet[idxFrom].scrollTop + listTweet[idxFrom].height;
+    for (let i = idxFrom + 1, len = listTweet.length; i < len; i++) {
+      listTweet[i].scrollTop = total;
+      total += listTweet[i].height;
+    }
   }
 }
