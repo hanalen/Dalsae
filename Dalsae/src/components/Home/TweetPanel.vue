@@ -24,9 +24,9 @@
         ></v-progress-circular>
         <scroll-panel :listData="tweetMention" :tweetType="mention" :indexPanel="indexMention" />
       </v-tab-item>
-      <!-- <v-tab-item eager :key="2">
-        <tweet-selector v-for="(item, i) in dm" :key="i" :tweet="item"></tweet-selector>
-      </v-tab-item> -->
+      <v-tab-item :key="2">
+        <span>dm</span>
+      </v-tab-item>
       <v-tab-item :key="3">
         <v-progress-circular
           v-if="isLoadFavorite"
