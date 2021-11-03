@@ -14,7 +14,7 @@
         <propic :size="20" :user="tweet.user" :option="uiOption"></propic>
         <span>{{ retweetText }}</span>
       </div>
-      <!-- <qt-tweet v-if="isQT" :tweet="qtTweet" :selected="false"> </qt-tweet> -->
+      <qt-tweet v-if="isQT" :tweet="qtTweet" :selected="false"> </qt-tweet>
     </div>
     <div class="img-preview">
       <image-preview :media="media" :tweet="tweet"></image-preview>
