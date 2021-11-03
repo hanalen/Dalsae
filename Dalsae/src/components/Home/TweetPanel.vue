@@ -13,7 +13,12 @@
           color="primary"
           indeterminate
         ></v-progress-circular>
-        <scroll-panel :listData="tweetHome" :tweetType="home" :indexPanel="indexHome" />
+        <scroll-panel
+          :listData="tweetHome"
+          :itemType="'tweet'"
+          :tweetType="home"
+          :indexPanel="indexHome"
+        />
       </v-tab-item>
       <v-tab-item :key="1">
         <v-progress-circular
@@ -22,7 +27,12 @@
           color="primary"
           indeterminate
         ></v-progress-circular>
-        <scroll-panel :listData="tweetMention" :tweetType="mention" :indexPanel="indexMention" />
+        <scroll-panel
+          :listData="tweetMention"
+          :itemType="'tweet'"
+          :tweetType="mention"
+          :indexPanel="indexMention"
+        />
       </v-tab-item>
       <v-tab-item :key="2">
         <span>dm</span>
@@ -34,13 +44,28 @@
           color="primary"
           indeterminate
         ></v-progress-circular>
-        <scroll-panel :listData="tweetFavorite" :tweetType="favorite" :indexPanel="indexFavorite" />
+        <scroll-panel
+          :listData="tweetFavorite"
+          :itemType="'tweet'"
+          :tweetType="favorite"
+          :indexPanel="indexFavorite"
+        />
       </v-tab-item>
       <v-tab-item :key="4">
-        <scroll-panel :listData="tweetOpen" :tweetType="open" :indexPanel="indexOpen" />
+        <scroll-panel
+          :listData="tweetOpen"
+          :itemType="'tweet'"
+          :tweetType="open"
+          :indexPanel="indexOpen"
+        />
       </v-tab-item>
       <v-tab-item :key="5">
-        <scroll-panel :listData="tweetConv" :tweetType="conv" :indexPanel="indexConv" />
+        <scroll-panel
+          :listData="tweetConv"
+          :itemType="'tweet'"
+          :tweetType="conv"
+          :indexPanel="indexConv"
+        />
       </v-tab-item>
     </v-tabs-items>
   </div>

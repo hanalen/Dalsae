@@ -67,7 +67,10 @@ export class ScrollPanelBase extends Vue {
   scrollPort!: HTMLElement;
 
   @Prop()
-  listData!: I.Tweet[];
+  listData!: any[];
+
+  @Prop()
+  itemType!: string;
 
   @Prop()
   indexPanel!: number;
@@ -177,7 +180,7 @@ export class ScrollPanelBase extends Vue {
   }
 
   @Watch('listData', { immediate: true, deep: true })
-  OnChangeListData(newVal: I.Tweet[]) {
+  OnChangeListData(newVal: any[]) {
     if (!newVal) return;
     if (newVal.length === 0) {
       this.Clear();
@@ -219,8 +222,8 @@ export class ScrollPanelBase extends Vue {
         this.stateData.setKey.add(current.id_str);
         const prev = this.stateData.listData[i - 1];
         const scrollTop = prev ? prev.scrollTop + prev.height : i * minHeight;
-        const item: M.ScrollItem<I.Tweet> = {
-          data: new I.Tweet(current),
+        const item: M.ScrollItem<any> = {
+          data: this.CreateData(current),
           key: current.id_str,
           height: minHeight,
           isResized: true,
@@ -228,6 +231,14 @@ export class ScrollPanelBase extends Vue {
         };
         this.stateData.listData.splice(i, 0, item);
       }
+    }
+  }
+
+  CreateData(current: any) {
+    if (this.itemType === 'tweet') {
+      return new I.Tweet(current);
+    } else if (this.itemType === 'user') {
+      return current;
     }
   }
 

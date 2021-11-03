@@ -3,6 +3,9 @@
     <div v-if="itemType === 'tweet'">
       <tweet-selector :tweet="data.data" :selected="selected"></tweet-selector>
     </div>
+    <div v-if="itemType === 'user'">
+      <profile-user :user="data.data" :selected="selected" />
+    </div>
   </div>
 </template>
 

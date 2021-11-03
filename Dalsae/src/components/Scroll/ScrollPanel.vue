@@ -6,7 +6,7 @@
         ref="scrollItem"
         v-for="(item, i) in listComponent"
         :data="item"
-        :itemType="'tweet'"
+        :itemType="itemType"
         :key="i"
         :selected="item.key === state.selectKey"
         v-on:on-resize="OnResizeTweet"
