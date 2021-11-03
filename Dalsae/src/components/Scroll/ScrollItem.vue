@@ -1,7 +1,7 @@
 <template>
   <div class="scroll-item" :style="itemStyle">
     <div v-if="itemType === 'tweet'">
-      <tweet-selector :tweet="data.data" :selected="false"></tweet-selector>
+      <tweet-selector :tweet="data.data" :selected="selected"></tweet-selector>
     </div>
   </div>
 </template>
@@ -23,6 +23,9 @@ export default class ScrollItem extends Vue {
 
   @Prop()
   itemType!: string;
+
+  @Prop()
+  selected!: boolean;
 
   @Watch('data', { immediate: true, deep: true })
   OnChangeData(newVal: I.ScrollItem<any>, oldVal: I.ScrollItem<any>) {

@@ -32,7 +32,7 @@ export class TweetSelectorBase extends Vue {
   tweet!: I.Tweet;
 
   @Prop()
-  selected = false;
+  selected!: boolean;
 
   OnClickTweet(e: MouseEvent) {
     e.preventDefault();

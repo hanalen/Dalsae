@@ -11,7 +11,7 @@ export class TweetBase extends Vue {
   tweet!: I.Tweet;
 
   @Prop()
-  selected = false;
+  selected!: boolean;
 
   get isRetweet() {
     return this.tweet.retweeted_status !== undefined;
