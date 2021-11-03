@@ -95,7 +95,35 @@ class TweetStore extends VuexModule {
 
   @Mutation
   private addMention(addTweet: A.AddTweet) {
-    console.log(addTweet);
+    let tweets = this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID);
+    if (!tweets) {
+      tweets = { key: moduleSwitter.selectID, tweets: new I.Tweets() };
+      this.stateTweet.tweets.push(tweets);
+    }
+    const { tweet, listTweet, user_id_str } = addTweet;
+    const { dicMuteIds, listBlockIds } = moduleSwitter.stateIds;
+    const { muteOption } = moduleOption;
+    const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
+
+    const orgTweets = tweets.tweets.mentions;
+    let listConcatTweets: I.Tweet[] = [];
+    listConcatTweets = tweet ? [tweet] : [];
+
+    if (listTweet) {
+      listConcatTweets = listConcatTweets.concat(listTweet);
+    }
+    if (tweet) {
+      listConcatTweets = [tweet];
+    }
+    listConcatTweets.forEach(item => {
+      if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
+        console.log('exists');
+        return; //exists
+      }
+      if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
+      const idx = FindTweetIndex(item, orgTweets);
+      orgTweets.splice(idx, 0, new I.Tweet(item));
+    });
   }
 
   @Mutation
