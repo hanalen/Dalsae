@@ -121,6 +121,10 @@ class UIStore extends VuexModule {
 
   stateInput: StateInput = new StateInput();
 
+  get minHeight() {
+    return 60;
+  }
+
   get selectTweet() {
     let state: IStatePanel | undefined = undefined;
     let listTweet: I.Tweet[] | undefined = [];
