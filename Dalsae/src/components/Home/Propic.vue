@@ -1,20 +1,6 @@
 <template>
   <div :class="imgClass">
-    <v-badge :value="user.verified" avatar bottom overlap color="white" offset-x="20" offset-y="20">
-      <template v-slot:badge>
-        <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
-      </template>
-      <v-avatar rounded :size="maxWidth">
-        <v-img :src="img">
-          <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" align="center" justify="center">
-              <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-            </v-row>
-          </template>
-        </v-img>
-        <!-- <img ref="refImg" :src="img" :class="imgClass" /> -->
-      </v-avatar>
-    </v-badge>
+    <img :src="img" :style="imgSize" />
   </div>
 </template>
 
@@ -25,6 +11,11 @@
   border-radius: 10px !important;
   // margin-bottom: auto;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+img {
+  width: 100%;
+  object-fit: contain;
+  border-radius: 10px;
 }
 .empty {
   display: none !important;
@@ -54,6 +45,12 @@ export default class Propic extends Vue {
 
   @Prop()
   size!: number;
+
+  get imgSize() {
+    return {
+      width: this.maxWidth + 'px'
+    };
+  }
 
   get uiOption() {
     return moduleOption.uiOption;
