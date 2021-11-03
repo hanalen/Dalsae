@@ -63,6 +63,8 @@ export function CheckBlock(tweet: I.Tweet, blockIds: string[]): boolean {
   for (let i = 0; i < ids.length; i++) {
     if (blockIds.includes(ids[i])) return true;
   }
+  const orgTweet = tweet.retweeted_status ? tweet.retweeted_status : tweet;
+  if (orgTweet.is_quote_status && !orgTweet.quoted_status) return true; //인용트윗이 차단한 유저일 경우
   return false;
 }
 
