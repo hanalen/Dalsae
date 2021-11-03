@@ -74,6 +74,21 @@ export class ScrollPanelBaseTwo extends Vue {
     return this.statePool.listBench;
   }
 
+  get viewportStyle() {
+    const { listData } = this.stateData;
+    const last = listData[listData.length - 1];
+    if (last) {
+      const top = last.scrollTop + last.height;
+      return {
+        height: top + 'px'
+      };
+    } else {
+      return {
+        height: 0 + 'px'
+      };
+    }
+  }
+
   async created() {
     return;
     const testTweets = window.preload.LoadTestTweet();
@@ -121,8 +136,14 @@ export class ScrollPanelBaseTwo extends Vue {
     this.SetIndex();
     this.CreateComponent();
   }
+  @Watch('state.scrollTop')
+  OnWatchScrollTop(newVal: number, oldVal: number) {
+    this.SetIndex();
+    this.CreateComponent();
+  }
 
   CreateScrollData() {
+    //props listData가 갱신 될 때만 호출
     const list = (this.listData as unknown) as any;
     if (!list) return;
     const minHeight = moduleUI.minHeight;

@@ -1,7 +1,7 @@
 <template>
   <!-- <div> -->
   <div ref="scrollPanel" tabindex="-1" class="scroll-panel" @scroll="OnScroll">
-    <div ref="scrollPort" class="scroll-area">
+    <div ref="scrollPort" class="scroll-area" :style="viewportStyle">
       <scroll-item
         v-for="(item, i) in listComponent"
         :data="item"
