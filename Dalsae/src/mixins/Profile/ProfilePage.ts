@@ -50,6 +50,14 @@ export class ProfilePage extends Vue {
     return moduleProfile.showUser;
   }
 
+  get indexFollowing() {
+    return moduleProfile.stateProfile.indexFollowing;
+  }
+
+  get indexFollower() {
+    return moduleProfile.stateProfile.indexFollower;
+  }
+
   isShowContext = false;
   x = 0;
   y = 0;

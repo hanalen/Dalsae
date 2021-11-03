@@ -19,6 +19,9 @@ class StateProfile {
   isLoadFollowingIds = false;
   isLoadRequestIds = false;
   selectMenu = 0;
+
+  indexFollowing = 0;
+  indexFollower = 0;
 }
 
 @Module({ dynamic: true, store, name: 'profile' })

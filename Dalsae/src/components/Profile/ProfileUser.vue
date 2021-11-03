@@ -1,11 +1,6 @@
 <template>
   <div class="profile-user" @click="OnClickUser" :class="{ selected: isSelected }">
-    <v-badge :value="user.verified" avatar color="white" offset-x="20" offset-y="50">
-      <template v-slot:badge>
-        <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
-      </template>
-      <propic :user="user" :option="uiOption"></propic>
-    </v-badge>
+    <propic :user="user" :option="uiOption"></propic>
     <div class="profile-name">
       <div class="profile-top">
         <div class="top-left">
@@ -93,8 +88,16 @@ export default class ProfileUser extends Vue {
   }
 
   OnClickUser(e: MouseEvent) {
-    console.log(e);
     moduleProfile.ChangeShowUser(this.user);
+    if (moduleProfile.stateProfile.selectMenu === 0) {
+      const idx = moduleProfile.listFollowing.users.findIndex(x => x.id_str === this.user.id_str);
+      if (idx === -1) return;
+      moduleProfile.SetState({ ...moduleProfile.stateProfile, indexFollowing: idx });
+    } else {
+      const idx = moduleProfile.listFollower.users.findIndex(x => x.id_str === this.user.id_str);
+      if (idx === -1) return;
+      moduleProfile.SetState({ ...moduleProfile.stateProfile, indexFollower: idx });
+    }
   }
 
   get listContext() {

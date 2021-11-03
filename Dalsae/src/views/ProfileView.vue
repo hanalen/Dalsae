@@ -139,10 +139,14 @@
         <div class="scroll-panel">
           <v-tabs-items v-model="selectMenu">
             <v-tab-item class="tab-item" :key="0">
-              <profile-user v-for="(user, i) in listFollowing" :user="user" :key="i" />
+              <scroll-panel
+                :listData="listFollowing"
+                :itemType="'user'"
+                :indexPanel="indexFollowing"
+              />
             </v-tab-item>
             <v-tab-item class="tab-item" :key="1">
-              <profile-user v-for="(user, i) in listFollower" :user="user" :key="i" />
+              <scroll-panel :listData="listFollower" :indexPanel="indexFollower" />
             </v-tab-item>
           </v-tabs-items>
         </div>
@@ -277,7 +281,7 @@ tab-name {
 }
 .scroll-panel {
   padding: 4px;
-  overflow-y: scroll;
+  // overflow-y: scroll;
 }
 
 .v-list-item {
