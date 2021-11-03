@@ -2,19 +2,8 @@
   <!-- <div> -->
   <div ref="scrollPanel" tabindex="-1" class="scroll-panel" @scroll="OnScroll">
     <div ref="scrollPort" class="scroll-area">
-      <scroll-item ref="scrollItem" v-for="(item, i) in datas" :key="i" :data="item">
-        <tweet-selector :tweet="item.data" :selected="false" :index="i"></tweet-selector>
-      </scroll-item>
+      <scroll-item v-for="(item, i) in listComponent" :data="item" :itemType="'tweet'" :key="i" />
     </div>
-    <!-- <scroll-item
-      ref="scrollItem"
-      v-for="(item, i) in datas"
-      :key="i"
-      :data="item"
-      v-on:on-resize="OnResizeTweet"
-    >
-      <tweet-selector :tweet="item.data" :selected="selectedId === item.key"></tweet-selector>
-    </scroll-item> -->
   </div>
 </template>
 
@@ -48,9 +37,6 @@ import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
 @Component
 export default class ScrollPanelTwo extends M.ScrollPanelBaseTwo {
-  @Ref()
-  scrollPort!: HTMLElement;
-
   async created() {
     this.$nextTick(() => {
       window.addEventListener('resize', (e: Event) => {

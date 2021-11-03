@@ -12,21 +12,15 @@ import ScrollItem from '@/components/Scroll/ScrollItem.vue';
 class State {
   scrollTop = 0;
   totalHeight = 0;
-  listVisible: M.ScrollItem<I.Tweet>[] = [];
   startIndex = 0;
   endIndex = 50;
   translateY = 0;
-  minHeight = 40;
-  isScrollLock = false;
-  listAddedKey: string[] = [];
-  constructor() {
-    this.listVisible = [];
-  }
 }
 
 class StateData<T> {
   setKey: Set<string>;
   listData: M.ScrollItem<T>[];
+  listVisible: M.ScrollItem<any>[] = [];
   constructor() {
     this.setKey = new Set();
     this.listData = [];
@@ -34,8 +28,8 @@ class StateData<T> {
 }
 
 class StatePool {
-  listBench: ScrollItem[];
-  listVisible: ScrollItem[];
+  listBench: M.ScrollItem<any>[] = [];
+  listVisible: M.ScrollItem<any>[] = [];
   constructor() {
     this.listBench = [];
     this.listVisible = [];
@@ -67,13 +61,21 @@ export class ScrollPanelBaseTwo extends Vue {
   @Ref()
   scrollItem!: Vue[];
 
+  @Ref()
+  scrollPort!: HTMLElement;
+
   @Prop()
   listData!: I.Tweet[];
 
   @Prop()
   tweetType!: ETweetType;
 
+  get listComponent() {
+    return this.statePool.listBench;
+  }
+
   async created() {
+    return;
     const testTweets = window.preload.LoadTestTweet();
     const data: M.ScrollItem<I.Tweet> = {
       data: new I.Tweet(testTweets[0]),
@@ -85,49 +87,144 @@ export class ScrollPanelBaseTwo extends Vue {
     const item = new ScrollItem({ propsData: { data: data, itemType: 'tweet' } });
     item.$vuetify = this.$vuetify;
     this.$nextTick(() => {
+      console.log(this.scrollPanel.clientHeight);
       item.$mount(this.scrollPanel);
     });
-    this.statePool.listBench.push(item);
+    setTimeout(() => {
+      console.log(Object.keys(item.$props));
+      console.log(item.$props.data);
+    }, 1500);
+    // this.statePool.listBench.push(item);
+  }
+
+  CreateObjectPool() {
+    // const size = Math.ceil(this.scrollPanel.clientHeight / moduleUI.minHeight)
+    // console.log('size: ',size)
+    // for(let i=0;i<size;i++){
+    //   const data: M.ScrollItem<I.Tweet> = {
+    //     data: new I.Tweet(testTweets[0]),
+    //     height: 40,
+    //     isResized: false,
+    //     key: testTweets[0].id_str,
+    //     scrollTop: 100
+    //   };
+    //   const item = new ScrollItem({ propsData: { data: data, itemType: 'tweet' } });
+    //   item.$vuetify = this.$vuetify;
+    // }
   }
 
   @Watch('listData', { immediate: true, deep: true })
   OnChangeListData(newVal: I.Tweet[]) {
-    // console.log('on watch listData', newVal);
+    console.log('on watch listData', newVal);
+    if (!newVal) return;
+    this.CreateScrollData();
+    this.SetIndex();
+    this.CreateComponent();
   }
-  // @Watch('length', { immediate: true, deep: true })
-  // OnChangelength(newVal: number) {
-  // console.log('on watch length', newVal);
-  // }
 
-  // get length() {
-  //   return this.listData.length;
-  // }
-
-  get datas() {
-    const list = (this.listData as unknown) as I.Tweet[];
-    // console.log('list', list.length);
+  CreateScrollData() {
+    const list = (this.listData as unknown) as any;
     if (!list) return;
-    for (let i = 0; i < list.length; i++) {
+    const minHeight = moduleUI.minHeight;
+    for (let i = 0, len = list.length; i < len; i++) {
       const current = list[i];
       if (!this.stateData.setKey.has(current.id_str)) {
         this.stateData.setKey.add(current.id_str);
+        const prev = this.stateData.listData[i - 1];
+        const scrollTop = prev ? prev.scrollTop + prev.height : i * minHeight;
         const item: M.ScrollItem<I.Tweet> = {
           data: new I.Tweet(current),
           key: current.id_str,
-          height: 40,
+          height: minHeight,
           isResized: false,
-          scrollTop: 0
+          scrollTop: scrollTop
         };
-        if (new I.Tweet(current).orgUser === undefined) {
-          console.log('unde!!!! i', i);
-        }
         this.stateData.listData.splice(i, 0, item);
-      } else {
-        // console.log('exists');
       }
     }
-    console.log('datas!!!!!!!');
-    console.log(this.stateData.listData, this.listData);
-    return this.stateData.listData;
+  }
+
+  CreateComponent() {
+    if (this.stateData.listVisible.length === 0) return;
+
+    //렌더링용 데이터 추가
+    const keysBench = this.statePool.listBench.map(x => x.key);
+    this.stateData.listVisible.forEach(item => {
+      if (keysBench.includes(item.key)) return true;
+      this.statePool.listBench.push(item);
+      // const component = new ScrollItem({ propsData: { data: item, itemType: 'tweet' } });
+      // component.$vuetify = this.$vuetify;
+      // component.$mount(this.scrollPort);
+      // this.statePool.listBench.push(component);
+    });
+    //렌더링에서 뺴야 될 데이터 체크
+    const keysVisible = this.stateData.listVisible.map(x => x.key);
+    for (let i = 0; i < this.statePool.listBench.length; ) {
+      if (keysVisible.includes(this.statePool.listBench[i].key)) {
+        i++;
+      } else {
+        this.statePool.listBench.splice(i, 1);
+      }
+    }
+  }
+
+  SetIndex() {
+    this.state.scrollTop = this.scrollPanel.scrollTop;
+    let scrollTop = this.state.scrollTop;
+    if (scrollTop < 0) {
+      scrollTop = 0;
+    }
+    let startIndex = this.BinarySearch(this.stateData.listData, scrollTop);
+    startIndex -= 5; //버퍼
+    if (startIndex < 0) startIndex = 0;
+    if (this.scrollPanel.scrollTop === 0) {
+      startIndex = 0;
+    }
+    this.state.startIndex = startIndex;
+    this.state.endIndex = startIndex + Math.floor(this.$el.clientHeight / moduleUI.minHeight);
+    if (this.$el.clientHeight === 0) {
+      setTimeout(() => {
+        this.SetIndex();
+      }, 100);
+    }
+    this.SetVisibleData();
+  }
+
+  BinarySearch(list: M.ScrollItem<any>[], scrollTop: number) {
+    let low = 0;
+    let high = list.length - 1;
+    let mid;
+    while (low < high) {
+      mid = Math.floor((high + low) / 2);
+      const item = list[mid];
+      if (item.scrollTop <= scrollTop && scrollTop <= item.scrollTop + item.height) {
+        return mid;
+      } else if (list[mid].scrollTop > scrollTop) {
+        high = mid - 1;
+      } else {
+        low = mid + 1;
+      }
+    }
+    mid = Math.floor((high + low) / 2);
+    if (mid === -1) mid = 0;
+    const item = list[mid];
+    if (item === undefined) {
+      return -1;
+    }
+    if (item.scrollTop <= scrollTop && scrollTop <= item.scrollTop + item.height) {
+      return mid;
+    } else {
+      return mid - 1;
+    }
+  }
+
+  async SetVisibleData() {
+    //중복 렌더링일 경우 로직 개선 필요
+    if (this.listData.length === 0) return;
+
+    this.stateData.listVisible = this.stateData.listData.slice(
+      this.state.startIndex,
+      this.state.endIndex
+    );
   }
 }
