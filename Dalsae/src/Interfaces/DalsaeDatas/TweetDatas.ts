@@ -123,7 +123,7 @@ export function CheckShowMentionTweet(
   userIdStr: string,
   muteOption: I.MuteOption,
   blockIds: string[],
-  muteIds: string[]
+  muteIds: string[] | undefined
 ): boolean {
   if (CheckBlock(tweet, blockIds)) return false;
   if (CheckMute(tweet, userIdStr, muteOption, muteIds) && muteOption.isMuteMention) return false;
