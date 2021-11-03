@@ -215,6 +215,30 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, mention: mention };
       this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_FAVORITE) {
+      const favorite: IStatePanel = {
+        ...this.statePanel.favorite,
+        index: 0,
+        selectedId: moduleTweet.favorites ? moduleTweet.favorites[0].id_str : ''
+      };
+      const state: StatePanel = { ...this.statePanel, favorite: favorite };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_OPEN) {
+      const open: IStatePanel = {
+        ...this.statePanel.open,
+        index: 0,
+        selectedId: moduleTweet.opens ? moduleTweet.opens[0].id_str : ''
+      };
+      const state: StatePanel = { ...this.statePanel, open: open };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_CONV) {
+      const conv: IStatePanel = {
+        ...this.statePanel.conv,
+        index: 0,
+        selectedId: moduleTweet.convs ? moduleTweet.convs[0].id_str : ''
+      };
+      const state: StatePanel = { ...this.statePanel, conv: conv };
+      this.context.commit('setStatePanel', state);
     }
   }
 
@@ -229,6 +253,46 @@ class UIStore extends VuexModule {
         selectedId: tweets[tweets.length - 1].id_str
       };
       const state: StatePanel = { ...this.statePanel, home: home };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_MENTION) {
+      const tweets = moduleTweet.mentions;
+      if (!tweets) return;
+      const mention: IStatePanel = {
+        ...this.statePanel.mention,
+        index: tweets.length - 1,
+        selectedId: tweets[tweets.length - 1].id_str
+      };
+      const state: StatePanel = { ...this.statePanel, mention: mention };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_FAVORITE) {
+      const tweets = moduleTweet.favorites;
+      if (!tweets) return;
+      const favorite: IStatePanel = {
+        ...this.statePanel.favorite,
+        index: tweets.length - 1,
+        selectedId: tweets[tweets.length - 1].id_str
+      };
+      const state: StatePanel = { ...this.statePanel, favorite: favorite };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_OPEN) {
+      const tweets = moduleTweet.opens;
+      if (!tweets) return;
+      const open: IStatePanel = {
+        ...this.statePanel.open,
+        index: tweets.length - 1,
+        selectedId: tweets[tweets.length - 1].id_str
+      };
+      const state: StatePanel = { ...this.statePanel, open: open };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_CONV) {
+      const tweets = moduleTweet.convs;
+      if (!tweets) return;
+      const conv: IStatePanel = {
+        ...this.statePanel.conv,
+        index: tweets.length - 1,
+        selectedId: tweets[tweets.length - 1].id_str
+      };
+      const state: StatePanel = { ...this.statePanel, conv: conv };
       this.context.commit('setStatePanel', state);
     }
   }

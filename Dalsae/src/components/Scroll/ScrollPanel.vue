@@ -59,6 +59,20 @@ export default class ScrollPanel extends M.ScrollPanelBase {
         this.scrollPanel.focus();
       }
     });
+    eventBus.$on('PanelHome', (tweetType: ETweetType) => {
+      if (this.tweetType !== tweetType) return;
+      if (this.listData.length === 0) return;
+      const { listData } = this.stateData;
+      const first = listData[0];
+      this.scrollPanel.scrollTo({ top: first.scrollTop });
+    });
+    eventBus.$on('PanelEnd', (tweetType: ETweetType) => {
+      if (this.tweetType !== tweetType) return;
+      if (this.listData.length === 0) return;
+      const { listData } = this.stateData;
+      const last = listData[listData.length - 1];
+      this.scrollPanel.scrollTo({ top: last.scrollTop });
+    });
   }
 
   //TODO 호출이 너무 많이 됨
