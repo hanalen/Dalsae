@@ -21,7 +21,7 @@ class State {
 class StateData<T> {
   setKey: Set<string>;
   listData: M.ScrollItem<T>[];
-  listVisible: M.ScrollItem<any>[] = [];
+  // listVisible: M.ScrollItem<any>[] = [];
   constructor() {
     this.setKey = new Set();
     this.listData = [];
@@ -94,6 +94,16 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
+  get isRendered() {
+    if (!this.isMounted) return false;
+    else if (this.$el.clientHeight === 0) return false;
+    else return true;
+  }
+
+  get listVisible() {
+    return this.stateData.listData.slice(this.state.startIndex, this.state.endIndex);
+  }
+
   async created() {
     return;
     const testTweets = window.preload.LoadTestTweet();
@@ -135,10 +145,11 @@ export class ScrollPanelBase extends Vue {
 
   @Watch('indexPanel')
   OnChangePanelIndex(newVal: number) {
+    console.log('index panel', newVal);
     if (!this.scrollItem) return;
     const selectData = this.stateData.listData[newVal];
     this.state.selectKey = selectData.key;
-    const idx = this.stateData.listVisible.findIndex(x => x.key === selectData.key);
+    const idx = this.listVisible.findIndex(x => x.key === selectData.key);
     if (idx === -1) {
       return;
     }
@@ -158,15 +169,25 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
+  Clear() {
+    this.stateData.listData = [];
+    this.stateData.setKey.clear();
+    // this.stateData.listVisible = [];
+    this.statePool.listBench = [];
+  }
+
   @Watch('listData', { immediate: true, deep: true })
   OnChangeListData(newVal: I.Tweet[]) {
     if (!newVal) return;
-    if (newVal.length === 0) return;
+    if (newVal.length === 0) {
+      this.Clear();
+    }
     this.CreateScrollData();
-    if (this.isMounted) {
+    if (this.isRendered) {
       this.SetIndex();
-      this.CreateComponent();
+      // this.CreateComponent();
     } else {
+      console.log('not render');
       this.WaitTime();
     }
   }
@@ -174,15 +195,15 @@ export class ScrollPanelBase extends Vue {
   OnWatchScrollTop(newVal: number, oldVal: number) {
     if (this.listData.length === 0) return;
     this.SetIndex();
-    this.CreateComponent();
+    // this.CreateComponent();
   }
   WaitTime() {
     setTimeout(() => {
-      if (!this.isMounted) {
+      if (!this.isRendered) {
         this.WaitTime();
       } else {
         this.SetIndex();
-        this.CreateComponent();
+        // this.CreateComponent();
       }
     }, 100);
   }
@@ -211,12 +232,16 @@ export class ScrollPanelBase extends Vue {
   }
 
   CreateComponent() {
-    if (this.stateData.listVisible.length === 0) return;
+    if (this.listVisible.length === 0) {
+      return;
+    }
 
     //렌더링용 데이터 추가
     const keysBench = this.statePool.listBench.map(x => x.key);
-    this.stateData.listVisible.forEach(item => {
-      if (keysBench.includes(item.key)) return true;
+    this.listVisible.forEach(item => {
+      if (keysBench.includes(item.key)) {
+        return true;
+      }
       this.statePool.listBench.push(item);
       // const component = new ScrollItem({ propsData: { data: item, itemType: 'tweet' } });
       // component.$vuetify = this.$vuetify;
@@ -224,7 +249,7 @@ export class ScrollPanelBase extends Vue {
       // this.statePool.listBench.push(component);
     });
     //렌더링에서 뺴야 될 데이터 체크
-    const keysVisible = this.stateData.listVisible.map(x => x.key);
+    const keysVisible = this.listVisible.map(x => x.key);
     for (let i = 0; i < this.statePool.listBench.length; ) {
       if (keysVisible.includes(this.statePool.listBench[i].key)) {
         i++;
@@ -235,31 +260,32 @@ export class ScrollPanelBase extends Vue {
   }
 
   SetIndex() {
-    if (!this.isMounted) {
+    if (!this.isRendered) {
       setTimeout(() => {
         this.SetIndex();
       }, 100);
       return;
+    } else {
+      this.state.scrollTop = this.scrollPanel.scrollTop;
+      let scrollTop = this.state.scrollTop;
+      if (scrollTop < 0) {
+        scrollTop = 0;
+      }
+      let startIndex = this.BinarySearch(this.stateData.listData, scrollTop);
+      startIndex -= 5; //버퍼
+      if (startIndex < 0) startIndex = 0;
+      if (this.scrollPanel.scrollTop === 0) {
+        startIndex = 0;
+      }
+      this.state.startIndex = startIndex;
+      this.state.endIndex = startIndex + Math.floor(this.$el.clientHeight / moduleUI.minHeight);
+      if (this.$el.clientHeight === 0) {
+        setTimeout(() => {
+          this.SetIndex();
+        }, 100);
+      }
+      this.CreateComponent();
     }
-    this.state.scrollTop = this.scrollPanel.scrollTop;
-    let scrollTop = this.state.scrollTop;
-    if (scrollTop < 0) {
-      scrollTop = 0;
-    }
-    let startIndex = this.BinarySearch(this.stateData.listData, scrollTop);
-    startIndex -= 5; //버퍼
-    if (startIndex < 0) startIndex = 0;
-    if (this.scrollPanel.scrollTop === 0) {
-      startIndex = 0;
-    }
-    this.state.startIndex = startIndex;
-    this.state.endIndex = startIndex + Math.floor(this.$el.clientHeight / moduleUI.minHeight);
-    if (this.$el.clientHeight === 0) {
-      setTimeout(() => {
-        this.SetIndex();
-      }, 100);
-    }
-    this.SetVisibleData();
   }
 
   BinarySearch(list: M.ScrollItem<any>[], scrollTop: number) {
@@ -290,13 +316,13 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
-  async SetVisibleData() {
-    if (this.listData.length === 0) return;
-    this.stateData.listVisible = this.stateData.listData.slice(
-      this.state.startIndex,
-      this.state.endIndex
-    );
-  }
+  // async SetVisibleData() {
+  //   if (this.listData.length === 0) return;
+  //   this.listVisible = this.stateData.listData.slice(
+  //     this.state.startIndex,
+  //     this.state.endIndex
+  //   );
+  // }
 
   OnResizeTweet(resizeEvent: M.ResizeEvent) {
     const moveY = resizeEvent.newVal - resizeEvent.oldVal;
