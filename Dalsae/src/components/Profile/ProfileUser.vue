@@ -4,15 +4,7 @@
       <template v-slot:badge>
         <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
       </template>
-      <v-avatar height="48" rounded>
-        <v-img :src="propic">
-          <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" align="center" justify="center">
-              <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-            </v-row>
-          </template>
-        </v-img>
-      </v-avatar>
+      <propic :user="user" :option="uiOption"></propic>
     </v-badge>
     <div class="profile-name">
       <div class="profile-top">
@@ -84,11 +76,17 @@ import { moduleApi } from '@/store/modules/APIStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
 import { ContextItem } from '@/mixins';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { moduleUI } from '@/store/modules/UIStore';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export default class ProfileUser extends Vue {
   @Prop()
   user!: I.User;
+
+  get uiOption() {
+    return moduleOption.uiOption;
+  }
 
   get isSelected() {
     return moduleProfile.showUser.screen_name === this.user.screen_name;

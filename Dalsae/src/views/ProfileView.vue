@@ -302,6 +302,7 @@ import { moduleProfile } from '@/store/modules/ProfileStore';
 import { moduleApi } from '@/store/modules/APIStore';
 import { moduleSysbar } from '@/store/modules/SystemBarStore';
 import { ESystemBar } from '@/store/Interface';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export default class ProfileView extends MIX.ProfilePage {
@@ -350,6 +351,7 @@ export default class ProfileView extends MIX.ProfilePage {
     this.LoadFollowingList();
     const follow = window.preload.profile.GetFollowDatas(id);
     const blockId = window.preload.profile.GetBlockIds(id);
+    moduleOption.ChangeOption({ ...moduleOption.uiOption, isBigPropic: false });
     moduleSwitter.SetStateIds({
       ...moduleSwitter.stateIds,
       followDatas: follow,
