@@ -91,7 +91,7 @@ export class DalsaeApp extends Vue {
       // moduleApi.followers.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
       // moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true }, moduleSwitter.selectID);
       // moduleApi.block.Ids({ cursor: '-1', stringify_ids: true });
-      // // moduleApi.statuses.TimeLine();
+      // moduleApi.statuses.TimeLine();
       // moduleApi.statuses.Mention();
     }
   }
@@ -100,6 +100,7 @@ export class DalsaeApp extends Vue {
     console.log('hotkey', hotKeyType);
     let selectTweet: I.Tweet | undefined = undefined;
     if (moduleUI.selectTweet) selectTweet = moduleUI.selectTweet;
+    const { isSendRTCheck } = moduleOption.uiOption;
     switch (hotKeyType) {
       case I.E_HOTKEY.SHOWTL:
         moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_HOME });
@@ -165,7 +166,13 @@ export class DalsaeApp extends Vue {
         if (selectTweet) moduleUtil.OpenImage(selectTweet);
         break;
       case I.E_HOTKEY.RETWEET:
-        if (selectTweet) moduleApi.statuses.Retweet(selectTweet);
+        if (selectTweet) {
+          if (isSendRTCheck) {
+            this.CheckRetweet(selectTweet);
+          } else {
+            moduleApi.statuses.Retweet(selectTweet);
+          }
+        }
         break;
       case I.E_HOTKEY.SENDFAVORITE:
         if (selectTweet) moduleApi.favorites.Create(selectTweet);
@@ -177,5 +184,29 @@ export class DalsaeApp extends Vue {
         if (selectTweet) moduleUtil.ReplyAll(selectTweet);
         break;
     }
+  }
+
+  CheckRetweet(selectTweet: I.Tweet) {
+    const { full_text } = selectTweet.orgTweet;
+    let message = full_text.substring(0, 20);
+    if (full_text.length > 20) {
+      message += '...';
+    }
+    if (selectTweet.orgTweet.retweeted) {
+      message = `${message} 를 리트윗 취소 하시겠습니까?`;
+    } else {
+      message = `${message} 를 리트윗 하시겠습니까?`;
+    }
+    moduleModal.SetStateAlert({
+      isShow: true,
+      isYesNo: true,
+      title: '리트윗 확인',
+      message: message,
+      callback: (b: boolean) => {
+        if (b) {
+          moduleApi.statuses.Retweet(selectTweet);
+        }
+      }
+    });
   }
 }
