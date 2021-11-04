@@ -26,11 +26,23 @@ class StateAutoComplete {
   }
 }
 
+class StateAlert {
+  isShow: boolean;
+  title: string;
+  message: string;
+  constructor() {
+    this.isShow = false;
+    this.title = '';
+    this.message = '';
+  }
+}
+
 @Module({ dynamic: true, store, name: 'modal' })
 class ModalStore extends VuexModule {
   // states
   stateMessage = new MessageState();
   stateAutoComplete = new StateAutoComplete();
+  stateAlert = new StateAlert();
   bPin = false;
   bOptionDetail = false;
   bOption = false;
@@ -129,6 +141,16 @@ class ModalStore extends VuexModule {
         this.context.commit('removeMessage', msg);
       }, msg.time * 1000);
     }
+  }
+
+  @Mutation
+  private setStateAlert(state: StateAlert) {
+    this.stateAlert = state;
+  }
+
+  @Action
+  SetStateAlert(state: StateAlert) {
+    this.context.commit('setStateAlert', state);
   }
 }
 
