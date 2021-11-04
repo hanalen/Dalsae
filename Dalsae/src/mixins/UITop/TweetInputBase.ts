@@ -193,18 +193,40 @@ export class TweetInputBase extends Vue {
 
   EnterDown(e: KeyboardEvent) {
     const { ctrlKey, shiftKey, altKey } = e;
-    const { isSendEnter } = moduleOption.uiOption;
+    const { isSendEnter, isSendCheck } = moduleOption.uiOption;
     if (ctrlKey && !shiftKey && !altKey) {
       e.preventDefault();
-      this.SendTweet();
+      if (isSendCheck) {
+        this.CheckSendTweet();
+      } else {
+        this.SendTweet();
+      }
     } else if (isSendEnter && !ctrlKey && !shiftKey && !altKey) {
       e.preventDefault();
-      this.SendTweet();
+      if (isSendCheck) {
+        this.CheckSendTweet();
+      } else {
+        this.SendTweet();
+      }
     }
   }
 
   OnClickTweet(e: Event) {
     this.SendTweet();
+  }
+
+  CheckSendTweet() {
+    moduleModal.SetStateAlert({
+      isShow: true,
+      title: '트윗 전송 확인',
+      message: '트윗을 보내시겠습니까?',
+      isYesNo: true,
+      callback: (b: boolean) => {
+        if (b) {
+          this.SendTweet();
+        }
+      }
+    });
   }
 
   SendTweet() {

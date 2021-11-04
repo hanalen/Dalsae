@@ -71,7 +71,6 @@ export default class MessageModal extends Vue {
     }
   }
   OnKeyDown(e: KeyboardEvent) {
-    console.log(e);
     if (e.code === 'ArrowLeft') {
       const el = this.refYes.$el as HTMLElement;
       el.focus();
