@@ -16,7 +16,7 @@
       </div>
       <qt-tweet v-if="isQT" :tweet="qtTweet" :selected="false"> </qt-tweet>
     </div>
-    <div class="img-preview">
+    <div class="img-preview" v-if="isShowPreview">
       <image-preview :media="media" :tweet="tweet"></image-preview>
     </div>
   </div>

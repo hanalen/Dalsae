@@ -79,4 +79,8 @@ export class TweetBase extends Vue {
     text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return text;
   }
+
+  get isShowPreview() {
+    return moduleOption.uiOption.isShowPreview;
+  }
 }

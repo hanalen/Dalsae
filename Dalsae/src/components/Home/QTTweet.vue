@@ -15,7 +15,7 @@
         <span>{{ retweetText }}</span>
       </div>
     </div>
-    <div class="img-preview">
+    <div class="img-preview" v-if="isShowPreview">
       <image-preview :media="media" :tweet="tweet"></image-preview>
     </div>
   </div>
