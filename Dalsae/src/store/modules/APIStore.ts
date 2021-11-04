@@ -9,7 +9,7 @@ import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-dec
 import twitterRequest from '@/API/TwitterRequest';
 import { moduleTweet } from './TweetStore';
 import { moduleUI } from './UIStore';
-import { ETweetType } from '@/store/Interface';
+import { ESystemBar, ETweetType } from '@/store/Interface';
 import { moduleProfile } from './ProfileStore';
 import { moduleSysbar } from './SystemBarStore';
 
@@ -241,6 +241,13 @@ class Favorites {
 
 class Block {
   async Ids(data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> {
+    moduleSysbar.RemoveSystemBar(S.ESystemBar.EErrorBlockIds);
+    moduleSysbar.AddSystemBar({
+      type: S.ESystemBar.EBolckIds,
+      icon: 'mdi-user-cancel-outline',
+      text: '',
+      toolTip: '차단 목록 불러오는 중'
+    });
     const result = await twitterRequest.call.block.Ids(data);
     if (!twitterRequest.CheckAPIError(result.data)) {
       moduleSwitter.SetStateIds({
@@ -253,7 +260,19 @@ class Block {
           stringify_ids: true
         });
       }
+    } else {
+      const error = twitterRequest.GetApiError(result.data as I.ResponseTwitterError);
+      moduleSysbar.AddSystemBar({
+        type: S.ESystemBar.EErrorBlockIds,
+        icon: 'mdi-alert-circle-outline',
+        text: '차단 목록 에러',
+        toolTip: error
+      });
+      setTimeout(() => {
+        this.Ids(data);
+      }, 600000);
     }
+    moduleSysbar.RemoveSystemBar(ESystemBar.EBolckIds);
     return result;
   }
   async Destroy(data: P.ReqBlockDestroy): Promise<P.APIResp<I.BlockDestroy>> {
@@ -275,6 +294,13 @@ class Followers {
     selectId: string,
     isLoadFull: boolean
   ): Promise<P.APIResp<I.FollowerList>> {
+    moduleSysbar.RemoveSystemBar(S.ESystemBar.EErrorFollower);
+    moduleSysbar.AddSystemBar({
+      type: S.ESystemBar.EFollower,
+      icon: 'mdi-download',
+      text: '',
+      toolTip: '팔로워 불러오는 중...'
+    });
     const result = await twitterRequest.call.followers.List(data);
     if (!twitterRequest.CheckAPIError(result.data)) {
       if (result.data && selectId && data.screen_name === '') {
@@ -296,7 +322,20 @@ class Followers {
           isLoadFull
         );
       }
+    } else {
+      const error = twitterRequest.GetApiError(result.data as I.ResponseTwitterError);
+      moduleSysbar.AddSystemBar({
+        type: S.ESystemBar.EErrorFollower,
+        icon: 'mdi-alert-circle-outline',
+        text: '팔로워 목록 에러',
+        toolTip: error
+      });
+      setTimeout(() => {
+        this.List(data, selectId, isLoadFull);
+      }, 60000);
     }
+    moduleSysbar.RemoveSystemBar(S.ESystemBar.EFollower);
+
     return result;
   }
 
@@ -331,6 +370,13 @@ class Friends {
     selectId: string,
     isLoadFull: boolean
   ): Promise<P.APIResp<I.FollowerList>> {
+    moduleSysbar.RemoveSystemBar(S.ESystemBar.EErrorFollowing);
+    moduleSysbar.AddSystemBar({
+      type: ESystemBar.EFollwing,
+      icon: 'mdi-download',
+      text: '',
+      toolTip: '팔로잉 불러오는 중...'
+    });
     const result = await twitterRequest.call.friends.List(data);
     if (!twitterRequest.CheckAPIError(result.data)) {
       if (result.data && selectId && data.screen_name === '') {
@@ -352,7 +398,20 @@ class Friends {
           isLoadFull
         );
       }
+    } else {
+      const error = twitterRequest.GetApiError(result.data as I.ResponseTwitterError);
+      console.log('following error', error);
+      moduleSysbar.AddSystemBar({
+        type: S.ESystemBar.EErrorFollowing,
+        icon: 'mdi-alert-circle-outline',
+        text: '팔로잉 목록 에러',
+        toolTip: error
+      });
+      setTimeout(() => {
+        this.List(data, selectId, isLoadFull);
+      }, 60000);
     }
+    moduleSysbar.RemoveSystemBar(S.ESystemBar.EFollwing);
     return result;
   }
 

@@ -29,6 +29,9 @@
 .system-bar-item:hover {
   background-color: #008ae6 !important;
 }
+.system-bar-item span {
+  font-size: 14px !important;
+}
 .v-icon {
   color: white !important;
 }

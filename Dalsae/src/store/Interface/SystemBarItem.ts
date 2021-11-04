@@ -13,5 +13,11 @@ export enum ESystemBar {
   EFOLLOW_REQUEST_IDS,
   EERROR_FOLLOWERIDS,
   EERROR_FOLLOWINGIDS,
-  EERROR_FOLLOW_REQUEST_IDS
+  EERROR_FOLLOW_REQUEST_IDS,
+  EFollower,
+  EErrorFollower,
+  EFollwing,
+  EErrorFollowing,
+  EBolckIds,
+  EErrorBlockIds
 }
