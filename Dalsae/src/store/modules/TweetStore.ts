@@ -13,6 +13,7 @@ import {
   CheckShowMentionTweet,
   FindTweetIndex
 } from '@/Interfaces';
+import { moduleUI } from './UIStore';
 export interface ITweetStore {
   tweetDatas: I.TweetDatas;
 }
@@ -84,12 +85,24 @@ class TweetStore extends VuexModule {
         if (mentions) {
           const idx = FindTweetIndex(item, mentions);
           mentions.splice(idx, 0, new I.Tweet(item));
+          const { mention } = moduleUI.statePanel;
+          const idx2 = mentions.findIndex(x => x.id_str === mention.selectedId);
+          moduleUI.SetStatePanel({
+            ...moduleUI.statePanel,
+            mention: { ...mention, index: idx2 }
+          });
         }
       } else {
         if (!CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return;
       }
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
+    });
+    const { home } = moduleUI.statePanel;
+    const idx = tweets.tweets.homes.findIndex(x => x.id_str === home.selectedId);
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      home: { ...home, index: idx }
     });
   }
 
@@ -124,6 +137,12 @@ class TweetStore extends VuexModule {
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
     });
+    const { mention } = moduleUI.statePanel;
+    const idx = tweets.tweets.mentions.findIndex(x => x.id_str === mention.selectedId);
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      mention: { ...mention, index: idx }
+    });
   }
 
   @Mutation
@@ -157,6 +176,12 @@ class TweetStore extends VuexModule {
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
     });
+    const { favorite } = moduleUI.statePanel;
+    const idx = tweets.tweets.mentions.findIndex(x => x.id_str === favorite.selectedId);
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      favorite: { ...favorite, index: idx }
+    });
   }
   @Mutation
   private addOpen(addTweet: A.AddTweet) {
@@ -175,6 +200,12 @@ class TweetStore extends VuexModule {
     }
     const idx = FindTweetIndex(tweet, orgTweets);
     orgTweets.splice(idx, 0, new I.Tweet(tweet));
+    const { open } = moduleUI.statePanel;
+    const idx2 = tweets.tweets.mentions.findIndex(x => x.id_str === open.selectedId);
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      open: { ...open, index: idx2 }
+    });
   }
   @Mutation
   private addConv(addTweet: A.AddTweet) {
@@ -198,6 +229,12 @@ class TweetStore extends VuexModule {
 
     const idx = FindTweetIndex(tweet, orgTweets);
     orgTweets.splice(idx, 0, new I.Tweet(tweet));
+    const { conv } = moduleUI.statePanel;
+    const idx2 = tweets.tweets.mentions.findIndex(x => x.id_str === conv.selectedId);
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      conv: { ...conv, index: idx2 }
+    });
   }
 
   @Action

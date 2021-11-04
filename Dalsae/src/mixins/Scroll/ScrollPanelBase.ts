@@ -150,10 +150,13 @@ export class ScrollPanelBase extends Vue {
   OnChangePanelIndex(newVal: number) {
     console.log('index panel', newVal);
     if (!this.scrollItem) return;
+    if (newVal === -1) return;
     const selectData = this.stateData.listData[newVal];
+    if (!selectData) return;
     this.state.selectKey = selectData.key;
     const idx = this.listVisible.findIndex(x => x.key === selectData.key);
     if (idx === -1) {
+      this.scrollPanel.scrollTo({ top: selectData.scrollTop });
       return;
     }
     const component = this.scrollItem.find(x => x.$props.data.key === selectData.key);
