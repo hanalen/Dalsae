@@ -126,7 +126,9 @@ class Statuses {
     } else {
       const { id_str } = tweet.orgTweet;
       const result = await twitterRequest.call.statuses.Retweet({ id_str: id_str });
-      moduleTweet.UpdateRTandFav(result.data);
+      if (!twitterRequest.CheckAPIError(result.data)) {
+        moduleTweet.UpdateRTandFav(result.data);
+      }
       return result;
     }
   }
@@ -136,7 +138,9 @@ class Statuses {
     } else {
       const { id_str } = tweet.orgTweet;
       const result = await twitterRequest.call.statuses.UnRetweet({ id_str: id_str });
-      moduleTweet.UpdateRTandFav(result.data);
+      if (!twitterRequest.CheckAPIError(result.data)) {
+        moduleTweet.UpdateRTandFav(result.data);
+      }
       return result;
     }
   }
@@ -199,7 +203,9 @@ class Favorites {
     } else {
       const { id_str } = tweet.orgTweet;
       const result = await twitterRequest.call.favorites.Create({ id: id_str });
-      moduleTweet.UpdateRTandFav(result.data);
+      if (!twitterRequest.CheckAPIError(result.data)) {
+        moduleTweet.UpdateRTandFav(result.data);
+      }
       return result;
     }
   }
@@ -209,7 +215,9 @@ class Favorites {
     } else {
       const { id_str } = tweet.orgTweet;
       const result = await twitterRequest.call.favorites.Destroy({ id: id_str });
-      moduleTweet.UpdateRTandFav(result.data);
+      if (!twitterRequest.CheckAPIError(result.data)) {
+        moduleTweet.UpdateRTandFav(result.data);
+      }
       return result;
     }
   }
@@ -400,7 +408,6 @@ class Friends {
       }
     } else {
       const error = twitterRequest.GetApiError(result.data as I.ResponseTwitterError);
-      console.log('following error', error);
       moduleSysbar.AddSystemBar({
         type: S.ESystemBar.EErrorFollowing,
         icon: 'mdi-alert-circle-outline',
@@ -443,7 +450,7 @@ class Friends {
 class Mutes {
   async Ids(data: P.ReqMuteIds, userId: string): Promise<P.APIResp<I.BlockIds>> {
     const result = await twitterRequest.call.mutes.Ids(data);
-    if (result.data) {
+    if (!twitterRequest.CheckAPIError(result.data)) {
       const { dicMuteIds } = moduleSwitter.stateIds;
       const datas = dicMuteIds.get(userId);
       if (datas) {
@@ -462,7 +469,7 @@ class Mutes {
 class Friendships {
   async Create(data: P.ReqFollowCreate): Promise<P.APIResp<I.User>> {
     const result = await twitterRequest.call.friendships.Create(data);
-    if (result.data) {
+    if (!twitterRequest.CheckAPIError(result.data)) {
       if (result.data.protected) {
         moduleProfile.AddRequestIds({
           ids: [result.data.id_str],
@@ -478,7 +485,7 @@ class Friendships {
   }
   async Destroy(data: P.ReqFollowDestroy): Promise<P.APIResp<I.User>> {
     const result = await twitterRequest.call.friendships.Destroy(data);
-    if (result.data) {
+    if (!twitterRequest.CheckAPIError(result.data)) {
       result.data.following = false;
       moduleProfile.UpdateFollowUserInfo(result.data);
       // window.preload.profile.UpdateFollow(result.data);
