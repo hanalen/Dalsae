@@ -18,6 +18,7 @@
           :itemType="'tweet'"
           :tweetType="home"
           :indexPanel="indexHome"
+          :style="stylePanel"
         />
       </v-tab-item>
       <v-tab-item :key="1">
@@ -32,6 +33,7 @@
           :itemType="'tweet'"
           :tweetType="mention"
           :indexPanel="indexMention"
+          :style="stylePanel"
         />
       </v-tab-item>
       <v-tab-item :key="2">
@@ -49,6 +51,7 @@
           :itemType="'tweet'"
           :tweetType="favorite"
           :indexPanel="indexFavorite"
+          :style="stylePanel"
         />
       </v-tab-item>
       <v-tab-item :key="4">
@@ -57,6 +60,7 @@
           :itemType="'tweet'"
           :tweetType="open"
           :indexPanel="indexOpen"
+          :style="stylePanel"
         />
       </v-tab-item>
       <v-tab-item :key="5">
@@ -65,6 +69,7 @@
           :itemType="'tweet'"
           :tweetType="conv"
           :indexPanel="indexConv"
+          :style="stylePanel"
         />
       </v-tab-item>
     </v-tabs-items>

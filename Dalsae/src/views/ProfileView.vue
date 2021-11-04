@@ -143,10 +143,16 @@
                 :listData="listFollowing"
                 :itemType="'user'"
                 :indexPanel="indexFollowing"
+                :style="styleScroll"
               />
             </v-tab-item>
             <v-tab-item class="tab-item" :key="1">
-              <scroll-panel :listData="listFollower" :indexPanel="indexFollower" />
+              <scroll-panel
+                :listData="listFollower"
+                :itemType="'user'"
+                :indexPanel="indexFollower"
+                :style="styleScroll"
+              />
             </v-tab-item>
           </v-tabs-items>
         </div>

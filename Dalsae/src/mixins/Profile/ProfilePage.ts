@@ -58,6 +58,12 @@ export class ProfilePage extends Vue {
     return moduleProfile.stateProfile.indexFollower;
   }
 
+  get styleScroll() {
+    return {
+      height: 'calc(100vh - 552px)'
+    };
+  }
+
   isShowContext = false;
   x = 0;
   y = 0;

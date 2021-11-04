@@ -96,6 +96,12 @@ export class TweetPanelBase extends Vue {
     return moduleUI.statePanel.conv.index;
   }
 
+  get stylePanel() {
+    return {
+      height: 'calc(100vh - 134px)'
+    };
+  }
+
   KeyDown(e: KeyboardEvent) {
     if (!moduleUtil.isFocusPanel || document?.activeElement?.tagName === 'TEXTAREA') return;
     if (!e.ctrlKey && !e.altKey && !e.shiftKey) {

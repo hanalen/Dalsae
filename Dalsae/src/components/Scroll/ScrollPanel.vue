@@ -17,7 +17,6 @@
 
 <style lang="scss" scoped>
 .scroll-panel {
-  height: calc(100vh - 134px);
   overflow-y: scroll;
   outline: none !important;
 }
