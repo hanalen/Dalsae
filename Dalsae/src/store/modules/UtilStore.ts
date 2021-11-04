@@ -7,7 +7,7 @@ import { ETweetType } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
-import { ContextItem } from '@/mixins';
+import { ContextItem, Messagetype } from '@/mixins';
 import { moduleUI } from './UIStore';
 import { moduleApi } from './APIStore';
 import copy from 'copy-to-clipboard';
@@ -151,6 +151,11 @@ class UtilStore extends VuexModule {
       });
     }
     copy(text);
+    moduleModal.AddMessage({
+      message: '트윗이 복사되었습니다',
+      time: 1,
+      errorType: Messagetype.E_INFO
+    });
   }
 
   @Action
