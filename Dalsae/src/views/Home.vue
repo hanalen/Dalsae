@@ -40,19 +40,7 @@
   </v-app>
 </template>
 
-<style lang="scss" scoped>
-.app-alert {
-  // background-color: rgba(0, 1, 1, 0.137);
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  z-index: 10;
-  align-items: center;
-  width: 100vw;
-}
-</style>
+<style lang="scss" scoped></style>
 
 <script lang="ts">
 import { Vue, Component, Mixins } from 'vue-property-decorator';

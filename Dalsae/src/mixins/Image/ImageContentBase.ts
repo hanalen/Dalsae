@@ -3,6 +3,9 @@ import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
 import moment from 'moment';
 import { moduleImage } from '@/store/modules/ImageStore';
+import { copyImageToClipboard } from 'copy-image-clipboard';
+import { moduleModal } from '@/store/modules/ModalStore';
+import { Messagetype } from '@/mixins';
 
 @Component
 export class ImageContentBase extends Mixins(Vue) {
@@ -177,6 +180,25 @@ export class ImageContentBase extends Mixins(Vue) {
       });
     }
   }
+  async CopyImage(index: number) {
+    const url = this.media[index].media_url_https;
+    copyImageToClipboard(url)
+      .then(() => {
+        console.log('Image Copied');
+        moduleModal.AddMessage({
+          errorType: Messagetype.E_INFO,
+          message: '이미지가 복사 되었습니다',
+          time: 1
+        });
+      })
+      .catch((e: Error) => {
+        moduleModal.AddMessage({
+          errorType: Messagetype.E_INFO,
+          message: `이미지가 복사에 실패했습니다. ${e.message}`,
+          time: 1
+        });
+      });
+  }
   OnKeyDown(e: KeyboardEvent) {
     const { isZoom, top, left } = moduleImage.stateImage;
     if (e.key === '1') {
@@ -219,6 +241,8 @@ export class ImageContentBase extends Mixins(Vue) {
         });
         this.ZoomReset();
       }
+    } else if (e.key === 'c' && e.ctrlKey && !e.shiftKey && !e.altKey) {
+      this.CopyImage(this.index);
     }
   }
 }

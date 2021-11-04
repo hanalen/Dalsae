@@ -1,6 +1,18 @@
 <template>
   <!-- v-app으로 변경 v-app으로 바꾸면 트윗,이미지,보톰 사이즈 알아서 계산 해줌 -->
   <v-app>
+    <div class="app-alert">
+      <v-alert
+        dense
+        text
+        :type="item.errorType"
+        v-for="(item, i) in listMsg"
+        :key="i"
+        transition="scale-transition"
+      >
+        {{ item.message }}
+      </v-alert>
+    </div>
     <v-main app>
       <v-container fluid :style="styleTop">
         <div :style="styleTweet" ref="refTweet">

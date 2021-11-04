@@ -2,10 +2,15 @@ import { Vue, Mixins, Component, Inject, Emit, Prop, Provide } from 'vue-propert
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
 import { moduleImage } from '@/store/modules/ImageStore';
+import { moduleModal } from '@/store/modules/ModalStore';
 
 @Component
 export class ImagePage extends Vue {
   indexContext = 0;
+
+  get listMsg() {
+    return moduleModal.stateMessage.listMessage;
+  }
   get tweet() {
     return moduleImage.tweet;
   }

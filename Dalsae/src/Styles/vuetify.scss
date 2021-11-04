@@ -64,3 +64,15 @@
   padding: 0px !important;
   align-items: baseline !important;
 }
+
+.app-alert {
+  // background-color: rgba(0, 1, 1, 0.137);
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  align-items: center;
+  width: 100vw;
+}
