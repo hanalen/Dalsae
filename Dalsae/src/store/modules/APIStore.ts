@@ -156,7 +156,7 @@ class Statuses {
       ...moduleUI.statePanel,
       home: { ...moduleUI.statePanel.home, isLoad: false }
     });
-    if (result.data) {
+    if (!twitterRequest.CheckAPIError(result.data)) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_HOME,
         user_id_str: id,
@@ -181,7 +181,7 @@ class Statuses {
       ...moduleUI.statePanel,
       mention: { ...moduleUI.statePanel.mention, isLoad: false }
     });
-    if (result.data) {
+    if (!twitterRequest.CheckAPIError(result.data)) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_MENTION,
         user_id_str: id,
@@ -229,7 +229,7 @@ class Favorites {
       ...moduleUI.statePanel,
       favorite: { ...moduleUI.statePanel.favorite, isLoad: false }
     });
-    if (result.data) {
+    if (!twitterRequest.CheckAPIError(result.data)) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_FAVORITE,
         user_id_str: id,
