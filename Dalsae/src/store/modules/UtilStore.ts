@@ -20,7 +20,16 @@ class UtilStore extends VuexModule {
   get isFocusPanel() {
     const { bOption, stateMessage, bOptionDetail, bPin } = moduleModal;
     const { bAutoComplete } = moduleModal.stateAutoComplete;
-    if (bOption || bAutoComplete || stateMessage.bMessage || bOption || bOptionDetail || bPin)
+    const { isShow } = moduleModal.stateAlert;
+    if (
+      bOption ||
+      bAutoComplete ||
+      stateMessage.bMessage ||
+      bOption ||
+      bOptionDetail ||
+      bPin ||
+      isShow
+    )
       return false;
     return true;
   }

@@ -30,10 +30,13 @@ class StateAlert {
   isShow: boolean;
   title: string;
   message: string;
+  isYesNo: boolean;
+  callback?: (ret: boolean) => void;
   constructor() {
     this.isShow = false;
     this.title = '';
     this.message = '';
+    this.isYesNo = false;
   }
 }
 
