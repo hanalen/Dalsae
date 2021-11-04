@@ -33,8 +33,9 @@
         <tweet-panel></tweet-panel>
       </v-container>
     </v-main>
-    <v-footer app fixed height="44" color="gray">
+    <v-footer app fixed height="66" color="gray">
       <bottom></bottom>
+      <system-bar />
     </v-footer>
   </v-app>
 </template>

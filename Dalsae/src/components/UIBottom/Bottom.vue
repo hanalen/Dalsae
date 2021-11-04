@@ -22,7 +22,8 @@
 <style lang="scss" scoped>
 .ui-bottom {
   display: flex;
-  place-items: 2px;
+  padding: 5px 4px 5px 4px;
+  align-content: center;
 }
 </style>
 

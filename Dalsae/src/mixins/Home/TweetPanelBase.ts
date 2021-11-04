@@ -98,7 +98,7 @@ export class TweetPanelBase extends Vue {
 
   get stylePanel() {
     return {
-      height: 'calc(100vh - 134px)'
+      height: 'calc(100vh - 156px)'
     };
   }
 
