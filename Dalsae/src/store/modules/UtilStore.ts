@@ -15,6 +15,7 @@ import { moduleProfile } from './ProfileStore';
 import { moduleModal } from './ModalStore';
 import { eventBus } from '@/plugins';
 import { FindTweet } from '@/Interfaces';
+import axios from 'axios';
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
   get isFocusPanel() {
@@ -204,6 +205,97 @@ class UtilStore extends VuexModule {
     });
     moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: text });
     eventBus.$emit('FocusInput');
+  }
+  @Action
+  Retweet(tweet: I.Tweet | undefined) {
+    if (!tweet) return;
+    const { isSendRTCheck, isSendRTProtected } = moduleOption.uiOption;
+    if (!isSendRTProtected && tweet.orgUser.protected) {
+      moduleModal.AddMessage({
+        errorType: Messagetype.E_WARNING,
+        message: '잠금 사용자의 트윗은 리트윗 할 수 없습니다.',
+        time: 2
+      });
+    } else if (isSendRTProtected && tweet.orgUser.protected) {
+      this.CheckProtectRetweet(tweet);
+    } else if (isSendRTCheck) {
+      this.CheckRetweet(tweet);
+    } else {
+      moduleApi.statuses.Retweet(tweet);
+    }
+  }
+
+  @Action
+  CheckProtectRetweet(tweet: I.Tweet) {
+    moduleModal.SetStateAlert({
+      isShow: true,
+      isYesNo: true,
+      message: '잠금 사용자의 트윗을 복사하여 트윗 하시겠습니까?',
+      title: '잠금 사용자의 트윗 리트윗',
+      callback: (b: boolean) => {
+        if (b) {
+          this.RetweetProtected(tweet);
+        }
+      }
+    });
+  }
+
+  @Action
+  async RetweetProtected(tweet: I.Tweet) {
+    let text = `@**: ${tweet.orgTweet.full_text}`;
+    text = text;
+    tweet.entities.urls.forEach(url => {
+      text = text.replace(url.url, url.expanded_url);
+    });
+    if (tweet.media) {
+      tweet.media.forEach(media => {
+        text = text.replace(media.url, '');
+      });
+    }
+    const listMedia: string[] = [];
+    if (tweet.media) {
+      for (let i = 0; i < tweet.media.length; i++) {
+        const url = tweet.media[i].media_url_https;
+        const result = await axios.get(url, { responseType: 'blob' });
+        const base64 = (await this.readFileAsync(result.data)) as string;
+        listMedia.push(base64);
+      }
+    }
+    moduleApi.statuses.Update(text, listMedia);
+  }
+
+  @Action
+  private readFileAsync(data: Blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(data);
+    });
+  }
+
+  @Action
+  CheckRetweet(tweet: I.Tweet) {
+    const { full_text } = tweet.orgTweet;
+    let message = full_text.substring(0, 20);
+    if (full_text.length > 20) {
+      message += '...';
+    }
+    if (tweet.orgTweet.retweeted) {
+      message = `${message} 를 리트윗 취소 하시겠습니까?`;
+    } else {
+      message = `${message} 를 리트윗 하시겠습니까?`;
+    }
+    moduleModal.SetStateAlert({
+      isShow: true,
+      isYesNo: true,
+      title: '리트윗 확인',
+      message: message,
+      callback: (b: boolean) => {
+        if (b) {
+          moduleApi.statuses.Retweet(tweet);
+        }
+      }
+    });
   }
 }
 export const moduleUtil = getModule(UtilStore);

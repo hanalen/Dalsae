@@ -254,7 +254,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickRetweet(value: number) {
     console.log('retweet');
-    moduleApi.statuses.Retweet(this.tweet);
+    moduleUtil.Retweet(this.tweet);
   }
 
   OnClickQT(value: number) {

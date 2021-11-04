@@ -166,13 +166,7 @@ export class DalsaeApp extends Vue {
         if (selectTweet) moduleUtil.OpenImage(selectTweet);
         break;
       case I.E_HOTKEY.RETWEET:
-        if (selectTweet) {
-          if (isSendRTCheck) {
-            this.CheckRetweet(selectTweet);
-          } else {
-            moduleApi.statuses.Retweet(selectTweet);
-          }
-        }
+        moduleUtil.Retweet(selectTweet);
         break;
       case I.E_HOTKEY.SENDFAVORITE:
         if (selectTweet) moduleApi.favorites.Create(selectTweet);
@@ -184,29 +178,5 @@ export class DalsaeApp extends Vue {
         if (selectTweet) moduleUtil.ReplyAll(selectTweet);
         break;
     }
-  }
-
-  CheckRetweet(selectTweet: I.Tweet) {
-    const { full_text } = selectTweet.orgTweet;
-    let message = full_text.substring(0, 20);
-    if (full_text.length > 20) {
-      message += '...';
-    }
-    if (selectTweet.orgTweet.retweeted) {
-      message = `${message} 를 리트윗 취소 하시겠습니까?`;
-    } else {
-      message = `${message} 를 리트윗 하시겠습니까?`;
-    }
-    moduleModal.SetStateAlert({
-      isShow: true,
-      isYesNo: true,
-      title: '리트윗 확인',
-      message: message,
-      callback: (b: boolean) => {
-        if (b) {
-          moduleApi.statuses.Retweet(selectTweet);
-        }
-      }
-    });
   }
 }
