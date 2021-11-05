@@ -4,7 +4,7 @@
       <img class="propic" :src="propicPath" :class="propicClass" />
     </div>
     <div class="ui-top-right">
-      <tweet-input></tweet-input>
+      <tweet-input-big />
     </div>
   </div>
 </template>

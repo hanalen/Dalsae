@@ -1,10 +1,15 @@
 <template>
   <div class="ui-top-small">
-    small-pie
+    <tweet-input-small />
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.ui-top-small {
+  height: 30;
+  padding: 4px;
+}
+</style>
 
 <script lang="ts">
 import { DalsaeApp } from '@/mixins';

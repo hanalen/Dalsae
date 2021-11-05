@@ -8,6 +8,7 @@ import { moduleUI } from '@/store/modules/UIStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { eventBus } from '@/plugins';
 import { moduleUtil } from '@/store/modules/UtilStore';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export class TweetPanelBase extends Vue {
@@ -97,9 +98,15 @@ export class TweetPanelBase extends Vue {
   }
 
   get stylePanel() {
-    return {
-      height: 'calc(100vh - 156px)'
-    };
+    if (moduleOption.uiOption.isSmallInput) {
+      return {
+        height: 'calc(100vh - 99px)'
+      };
+    } else {
+      return {
+        height: 'calc(100vh - 156px)'
+      };
+    }
   }
 
   KeyDown(e: KeyboardEvent) {
