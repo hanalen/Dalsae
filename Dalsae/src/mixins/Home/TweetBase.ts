@@ -83,4 +83,16 @@ export class TweetBase extends Vue {
   get isShowPreview() {
     return moduleOption.uiOption.isShowPreview;
   }
+
+  get styleTweetText() {
+    if (moduleOption.uiOption.isUseRead && !this.tweet.isRead) {
+      return {
+        'font-weight': 'bold'
+      };
+    } else {
+      return {
+        'font-weight': 'normal'
+      };
+    }
+  }
 }

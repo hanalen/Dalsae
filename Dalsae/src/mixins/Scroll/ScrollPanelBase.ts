@@ -153,6 +153,7 @@ export class ScrollPanelBase extends Vue {
     if (newVal === -1) return;
     const selectData = this.stateData.listData[newVal];
     if (!selectData) return;
+    (selectData.data as any).isRead = true;
     this.state.selectKey = selectData.key;
     const idx = this.listVisible.findIndex(x => x.key === selectData.key);
     if (idx === -1) {

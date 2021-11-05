@@ -8,7 +8,7 @@
     </div>
     <div class="tweet-text" style="margin-left:4px;">
       <span class="user-name">{{ name }}</span>
-      <div v-html="tweetText"></div>
+      <div v-html="tweetText" :style="styleTweetText"></div>
       <span class="tweet-date">{{ date }}{{ via }}</span>
       <div class="retweet-info" v-if="isRetweet">
         <propic :size="20" :user="tweet.user" :option="uiOption"></propic>

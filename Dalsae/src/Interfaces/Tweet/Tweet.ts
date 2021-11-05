@@ -19,6 +19,7 @@ export class Tweet {
   favorited: boolean;
   retweeted: boolean;
   source: string;
+  isRead: boolean;
 
   constructor(tweet?: Tweet) {
     if (tweet) {
@@ -39,6 +40,7 @@ export class Tweet {
       this.is_quote_status = tweet.is_quote_status;
       this.quoted_status = tweet.quoted_status;
       this.in_reply_to_status_id_str = tweet.in_reply_to_status_id_str;
+      this.isRead = false;
     } else {
       this.created_at = '';
       this.id_str = '';
@@ -64,6 +66,7 @@ export class Tweet {
         ]
       };
       this.extended_entities = { media: [] };
+      this.isRead = false;
     }
   }
 
