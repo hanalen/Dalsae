@@ -14,6 +14,10 @@
         <propic :size="20" :user="tweet.user" :option="uiOption"></propic>
         <span>{{ retweetText }}</span>
       </div>
+      <div class="tweet-status">
+        <v-icon size="20px" color="primary" v-if="retweeted">mdi-repeat</v-icon>
+        <v-icon size="20px" color="error" v-if="favorited">mdi-heart</v-icon>
+      </div>
       <qt-tweet v-if="isQT" :tweet="qtTweet" :selected="false"> </qt-tweet>
     </div>
     <div class="img-preview" v-if="isShowPreview">
@@ -40,7 +44,6 @@
 .tweet-text {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
 }
 .selected {
   background-color: #e7f5fe;
@@ -70,5 +73,12 @@ import { DalsaeApp, TweetBase } from '@/mixins';
 import { Vue, Mixins, Component, Ref, Provide, Inject, Prop } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 @Component
-export default class TweetNormal extends TweetBase {}
+export default class TweetNormal extends TweetBase {
+  get retweeted() {
+    return this.orgTweet.retweeted;
+  }
+  get favorited() {
+    return this.orgTweet.favorited;
+  }
+}
 </script>
