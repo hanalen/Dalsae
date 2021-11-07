@@ -317,12 +317,15 @@ export class TweetSelectorBase extends Vue {
   }
 
   get isSmall() {
-    return false;
-    // const option = store.state.option.uiOption;
-    // return option.isSmallTweet && !this.state.isFocus && !this.state.isSelected;
+    return moduleOption.uiOption.isSmallTweet && !this.selected;
   }
 
   get isNormal() {
+    if (!moduleOption.uiOption.isSmallTweet) {
+      return true;
+    } else {
+      return this.selected;
+    }
     return true;
     // const option = store.state.option.uiOption;
     // return (

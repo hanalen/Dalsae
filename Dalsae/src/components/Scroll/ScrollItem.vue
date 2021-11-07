@@ -19,6 +19,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import * as I from '@/mixins';
+import { moduleOption } from '@/store/modules/OptionStore';
 @Component
 export default class ScrollItem extends Vue {
   @Prop()
@@ -31,15 +32,20 @@ export default class ScrollItem extends Vue {
   selected!: boolean;
 
   @Watch('data', { immediate: true, deep: true })
-  OnChangeData(newVal: I.ScrollItem<any>, oldVal: I.ScrollItem<any>) {
+  OnChangeData() {
     this.$nextTick(() => {
       this.SetHeight();
     });
   }
+  obs!: ResizeObserver;
 
   async created() {
     this.$nextTick(() => {
       this.SetHeight();
+      this.obs = new ResizeObserver(() => {
+        this.SetHeight();
+      });
+      this.obs.observe(this.$el);
     });
   }
 
@@ -50,7 +56,7 @@ export default class ScrollItem extends Vue {
   }
 
   SetHeight() {
-    if (!this.data || !this.data.isResized) return;
+    if (!this.data || (!this.data.isResized && !moduleOption.uiOption.isSmallTweet)) return;
 
     const oldVal = this.data.height;
     const newVal = this.$el.clientHeight;
@@ -64,7 +70,8 @@ export default class ScrollItem extends Vue {
   }
 
   async destroyed() {
-    // this.observer?.disconnect();
+    this.obs.unobserve(this.$el);
+    this.obs.disconnect();
   }
 }
 </script>

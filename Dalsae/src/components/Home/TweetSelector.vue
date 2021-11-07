@@ -1,4 +1,3 @@
-/* eslint-disable vue/no-unused-vars */
 <template>
   <div class="tweet-selector" @click="OnClickTweet" @contextmenu="OnContext">
     <tweet-small :tweet="tweet" :selected="selected" v-if="isSmall"> </tweet-small>
