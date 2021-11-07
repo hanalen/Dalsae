@@ -67,8 +67,6 @@
           <v-switch v-model="option.isShowTweet" label="트윗 표시"></v-switch>
           <v-switch v-model="option.isShowBottomPreview" label="하단 미리보기 표시"></v-switch>
           <v-switch v-model="option.isLoadOrgImg" label="이미지 원본 불러오기"></v-switch>
-          <!--마지막거 스크롤 밖으로 나감-->
-          <v-switch v-model="option.isBigPropic" label="작게 표시"></v-switch>
         </v-list-item-content>
       </v-list-item>
       <!-- <v-divider></v-divider> -->
