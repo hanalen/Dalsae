@@ -95,7 +95,7 @@
               {{ followText }}
             </v-btn>
           </div>
-          <span class="user-bio">{{ userBio }} </span>
+          <div v-html="userBio" @click="OnClickLink"></div>
           <div class="user-place color-gray">
             <v-icon size="16">mdi-compass-outline </v-icon>
             <span>{{ place }}</span>
@@ -264,12 +264,6 @@ tab-name {
   right: 10px;
   top: 10px;
 }
-.url {
-  color: #1d9bf0;
-}
-.url:hover {
-  cursor: pointer;
-}
 .v-tabs-bar {
   height: auto !important;
 }
@@ -316,27 +310,6 @@ import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export default class ProfileView extends MIX.ProfilePage {
-  /*
-    헤더 이미지
-
-    프사 영역		프로필 이름 영역				     버튼 영역
-    트윗	    	이름					              더보기	언팔로우/팔로우
-    팔로잉	   	x 님은 나를 팔로우 하고 있습니다.
-    팔로워	  	한줄띄고
-                계정 만든날짜
-                생일
-                바이오
-                위치
-                링크
-
-    목록 영역
-    프로필 이름
-    screnn_name
-                님의팔로잉	xx님의팔로워  <- 탭으로
-    name
-    하단 햄버거버튼
-
-  */
   async created() {
     // const testFollowing = window.preload.LoadTestFriends();
     // console.log(testFollowing);
@@ -351,7 +324,6 @@ export default class ProfileView extends MIX.ProfilePage {
     //   moduleProfile.ChangeShowUser(testSwitter.listUser[1].user);
     // }
     // moduleProfile.ChangeSelectUser(testSwitter.selectUser.user);
-
     // return;
     const id = this.$route.query.screenName.toString();
     const switter = window.preload.profile.GetSwitter(id);

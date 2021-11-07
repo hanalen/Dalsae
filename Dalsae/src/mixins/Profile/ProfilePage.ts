@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { Vue, Mixins, Component, Inject, Emit, Prop, Provide, Watch } from 'vue-property-decorator';
+import { Vue, Component, Provide, Watch, Ref } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
 import * as A from '@/store/Interface';
@@ -260,15 +260,27 @@ export class ProfilePage extends Vue {
     const { url, description } = entities;
     if (url) {
       url.urls.forEach(url => {
-        text = text.replace(url.url, url.display_url);
+        text = text.replace(url.url, `<span class="url" ref="refUrl">${url.display_url}</span>`);
       });
     }
     if (description) {
       description.urls.forEach(url => {
-        text = text.replace(url.url, url.display_url);
+        text = text.replace(url.url, `<span class="url" ref="refUrl">${url.display_url}</span>`);
       });
     }
     return text;
+  }
+
+  OnClickLink(e: MouseEvent) {
+    const el = e.target as Element;
+    if (el.tagName === 'SPAN' && el.className === 'url') {
+      const { entities } = moduleProfile.showUser;
+      const { description } = entities;
+      const find = description.urls.find(x => x.display_url === el.innerHTML);
+      if (find) {
+        window.preload.OpenBrowser(find.expanded_url);
+      }
+    }
   }
 
   get place() {
