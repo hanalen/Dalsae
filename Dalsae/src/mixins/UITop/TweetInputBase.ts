@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { mixins } from 'vue-class-component';
-import { Vue, Component, Inject, Emit, Ref } from 'vue-property-decorator';
+import { Vue, Component, Inject, Emit, Ref, Watch } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import * as M from '@/mixins';
 import { moduleApi } from '@/store/modules/APIStore';
@@ -43,6 +43,11 @@ export class TweetInputBase extends Vue {
   regex = new RegExp(
     /[(http|ftp|https):\/\/]*[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/gi
   );
+
+  @Watch('inputText')
+  OnWatchInputText(newVal: string) {
+    this.textArea.value = newVal;
+  }
 
   OnClickAddImage(e: MouseEvent) {
     this.refFile.click();
@@ -192,6 +197,12 @@ export class TweetInputBase extends Vue {
   }
 
   EnterDown(e: KeyboardEvent) {
+    if (moduleModal.stateAutoComplete.bAutoComplete) {
+      e.preventDefault();
+      e.stopPropagation();
+      moduleUtil.AutoCompleted(moduleModal.users[moduleModal.stateAutoComplete.indexAutoComplete]);
+      return;
+    }
     const { ctrlKey, shiftKey, altKey } = e;
     const { isSendEnter, isSendCheck } = moduleOption.uiOption;
     if (ctrlKey && !shiftKey && !altKey) {
