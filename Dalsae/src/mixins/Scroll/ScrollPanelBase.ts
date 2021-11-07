@@ -250,13 +250,10 @@ export class ScrollPanelBase extends Vue {
       if (keysVisible.includes(this.statePool.listBench[i].$props['data'].key)) {
         i++;
       } else {
-        const start = Date.now();
         const destroy = this.statePool.listBench[i];
         this.statePool.listBench.splice(i, 1);
         destroy.$el.remove();
         destroy.$destroy();
-        const end = Date.now();
-        console.log(end - start);
       }
     }
   }
