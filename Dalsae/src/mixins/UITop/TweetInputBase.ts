@@ -271,4 +271,10 @@ export class TweetInputBase extends Vue {
     }
     return count;
   }
+  OnChange(e: InputEvent) {
+    const el = e.target as HTMLTextAreaElement;
+    if (el) {
+      this.inputText = el.value;
+    }
+  }
 }

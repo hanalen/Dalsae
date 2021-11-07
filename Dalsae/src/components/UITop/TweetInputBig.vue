@@ -18,7 +18,7 @@
       :spellcheck="false"
       height="44"
       v-on:paste="Paste"
-      v-model="inputText"
+      @input="OnChange"
       @keyup.esc="OnEsc"
       @dragenter="OnDragEnter"
       @keyup="selectionChange"
