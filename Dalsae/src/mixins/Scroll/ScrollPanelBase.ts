@@ -9,6 +9,7 @@ import { TweetSelectorBase } from '../Home';
 import { ETweetType } from '@/store/Interface';
 import { moduleUI } from '@/store/modules/UIStore';
 import ScrollItem from '@/components/Scroll/ScrollItem.vue';
+import TestItem from '@/components/Scroll/TestItem.vue';
 import { moduleOption } from '@/store/modules/OptionStore';
 class State {
   scrollTop = 0;
@@ -30,11 +31,9 @@ class StateData<T> {
 }
 
 class StatePool {
-  listBench: M.ScrollItem<any>[] = [];
-  listVisible: M.ScrollItem<any>[] = [];
+  listBench: Vue[] = [];
   constructor() {
     this.listBench = [];
-    this.listVisible = [];
   }
 }
 
@@ -67,6 +66,9 @@ export class ScrollPanelBase extends Vue {
   @Ref()
   scrollPort!: HTMLElement;
 
+  @Ref()
+  refScrollArea!: Vue;
+
   @Prop()
   listData!: any[];
 
@@ -81,10 +83,6 @@ export class ScrollPanelBase extends Vue {
 
   get isSmallTweet() {
     return moduleOption.uiOption.isSmallTweet;
-  }
-
-  get listComponent() {
-    return this.statePool.listBench;
   }
 
   get viewportStyle() {
@@ -110,45 +108,6 @@ export class ScrollPanelBase extends Vue {
 
   get listVisible() {
     return this.stateData.listData.slice(this.state.startIndex, this.state.endIndex);
-  }
-
-  async created() {
-    return;
-    const testTweets = window.preload.LoadTestTweet();
-    const data: M.ScrollItem<I.Tweet> = {
-      data: new I.Tweet(testTweets[0]),
-      height: 40,
-      isResized: false,
-      key: testTweets[0].id_str,
-      scrollTop: 100
-    };
-    const item = new ScrollItem({ propsData: { data: data, itemType: 'tweet' } });
-    item.$vuetify = this.$vuetify;
-    this.$nextTick(() => {
-      console.log(this.scrollPanel.clientHeight);
-      item.$mount(this.scrollPanel);
-    });
-    setTimeout(() => {
-      console.log(Object.keys(item.$props));
-      console.log(item.$props.data);
-    }, 1500);
-    // this.statePool.listBench.push(item);
-  }
-
-  CreateObjectPool() {
-    // const size = Math.ceil(this.scrollPanel.clientHeight / moduleUI.minHeight)
-    // console.log('size: ',size)
-    // for(let i=0;i<size;i++){
-    //   const data: M.ScrollItem<I.Tweet> = {
-    //     data: new I.Tweet(testTweets[0]),
-    //     height: 40,
-    //     isResized: false,
-    //     key: testTweets[0].id_str,
-    //     scrollTop: 100
-    //   };
-    //   const item = new ScrollItem({ propsData: { data: data, itemType: 'tweet' } });
-    //   item.$vuetify = this.$vuetify;
-    // }
   }
 
   @Watch('indexPanel')
@@ -259,26 +218,37 @@ export class ScrollPanelBase extends Vue {
     if (this.listVisible.length === 0) {
       return;
     }
-
     //렌더링용 데이터 추가
-    const keysBench = this.statePool.listBench.map(x => x.key);
+    const keysBench = this.statePool.listBench.map(x => x.$props['data'].key);
     this.listVisible.forEach(item => {
       if (keysBench.includes(item.key)) {
         return true;
       }
-      this.statePool.listBench.push(item);
-      // const component = new ScrollItem({ propsData: { data: item, itemType: 'tweet' } });
-      // component.$vuetify = this.$vuetify;
-      // component.$mount(this.scrollPort);
-      // this.statePool.listBench.push(component);
+      const component = new ScrollItem({ propsData: { data: item, itemType: 'tweet' } });
+      component.$on('on-resize', this.OnResizeTweet);
+      component.$vuetify = this.$vuetify;
+      this.statePool.listBench.push(component);
+
+      const div = document.createElement('div');
+      div.id = item.key;
+
+      this.scrollPort.appendChild(div);
+      component.$mount(div);
+      this.$children.push(component);
     });
     //렌더링에서 뺴야 될 데이터 체크
     const keysVisible = this.listVisible.map(x => x.key);
     for (let i = 0; i < this.statePool.listBench.length; ) {
-      if (keysVisible.includes(this.statePool.listBench[i].key)) {
+      if (keysVisible.includes(this.statePool.listBench[i].$props['data'].key)) {
         i++;
       } else {
+        const start = Date.now();
+        const destroy = this.statePool.listBench[i];
         this.statePool.listBench.splice(i, 1);
+        destroy.$el.remove();
+        destroy.$destroy();
+        const end = Date.now();
+        console.log(end - start);
       }
     }
   }

@@ -2,7 +2,7 @@
   <!-- <div> -->
   <div ref="scrollPanel" tabindex="-1" class="scroll-panel" @scroll="OnScroll">
     <div ref="scrollPort" class="scroll-area" :style="viewportStyle">
-      <scroll-item
+      <!-- <scroll-item
         ref="scrollItem"
         v-for="(item, i) in listComponent"
         :data="item"
@@ -10,7 +10,7 @@
         :key="i"
         :selected="item.key === state.selectKey"
         v-on:on-resize="OnResizeTweet"
-      />
+      /> -->
     </div>
   </div>
 </template>
@@ -73,19 +73,6 @@ export default class ScrollPanel extends M.ScrollPanelBase {
       this.scrollPanel.scrollTo({ top: last.scrollTop });
     });
   }
-
-  //TODO 호출이 너무 많이 됨
-  // OnResizeTweet(data: M.ResizeEvent) {
-  //   const moveY = data.newVal - data.oldVal;
-  //   this.state.totalHeight += moveY;
-  //   const idx = this.listData.findIndex(x => x.key == data.key);
-  //   const tweet = this.listData[idx];
-  //   if (!tweet) return;
-  //   if (tweet.isResized && idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
-  //     this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop + moveY + 40 });
-  //   }
-  //   moduleTweet.MoveScroll({ height: data.newVal, idxFrom: idx, listTweet: this.listData });
-  // }
 
   OnScroll() {
     this.state.scrollTop = this.scrollPanel.scrollTop;
