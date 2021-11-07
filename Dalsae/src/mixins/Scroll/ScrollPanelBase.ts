@@ -60,8 +60,8 @@ export class ScrollPanelBase extends Vue {
   @Ref()
   scrollPanel!: HTMLElement;
 
-  @Ref()
-  scrollItem!: Vue[];
+  // @Ref()
+  // scrollItem!: Vue[];
 
   @Ref()
   scrollPort!: HTMLElement;
@@ -113,7 +113,6 @@ export class ScrollPanelBase extends Vue {
   @Watch('indexPanel')
   OnChangePanelIndex(newVal: number) {
     console.log('index panel', newVal);
-    if (!this.scrollItem) return;
     if (newVal === -1) return;
     const selectData = this.stateData.listData[newVal];
     if (!selectData) return;
@@ -124,7 +123,7 @@ export class ScrollPanelBase extends Vue {
       this.scrollPanel.scrollTo({ top: selectData.scrollTop });
       return;
     }
-    const component = this.scrollItem.find(x => x.$props.data.key === selectData.key);
+    const component = this.statePool.listBench.find(x => x.$props.data.key === selectData.key);
     if (!component) return;
     const tweetPos = component.$el.getBoundingClientRect();
     const panelPos = this.scrollPanel.getBoundingClientRect();
@@ -138,12 +137,21 @@ export class ScrollPanelBase extends Vue {
       //올라가는 로직
       this.scrollPanel.scrollTo({ top: selectData.scrollTop });
     }
+    this.Emit(newVal);
   }
 
   @Watch('isSmallTweet', { immediate: true, deep: true })
   OnChangeSmall() {
     this.SetIndex();
   }
+
+  Emit(index: number) {
+    const key = this.stateData.listData[index].key;
+    for (let i = 0; i < this.statePool.listBench.length; i++) {
+      this.statePool.listBench[i].$emit('on-change-selected-key', key);
+    }
+  }
+
   Clear() {
     this.stateData.listData = [];
     this.stateData.setKey.clear();
@@ -224,7 +232,7 @@ export class ScrollPanelBase extends Vue {
       if (keysBench.includes(item.key)) {
         return true;
       }
-      const component = new ScrollItem({ propsData: { data: item, itemType: 'tweet' } });
+      const component = new ScrollItem({ propsData: { data: item, itemType: this.itemType } });
       component.$on('on-resize', this.OnResizeTweet);
       component.$vuetify = this.$vuetify;
       this.statePool.listBench.push(component);
