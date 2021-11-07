@@ -6,6 +6,7 @@ import { moduleImage } from '@/store/modules/ImageStore';
 import { copyImageToClipboard } from 'copy-image-clipboard';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { Messagetype } from '@/mixins';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export class ImageContentBase extends Mixins(Vue) {
@@ -26,6 +27,14 @@ export class ImageContentBase extends Mixins(Vue) {
 
   @Ref()
   img!: HTMLImageElement[];
+
+  GetSrc(media: I.Media) {
+    if (moduleOption.uiOption.isLoadOrgImg) {
+      return `${media.media_url}:orig`;
+    } else {
+      return media.media_url;
+    }
+  }
 
   get isZoomAble() {
     const div = this.imgDiv[this.index];

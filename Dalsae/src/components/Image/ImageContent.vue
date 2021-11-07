@@ -12,7 +12,7 @@
       <div ref="imgDiv" v-show="i == index" v-for="(image, i) in media" :key="i" class="img-div">
         <img
           ref="img"
-          :src="image.media_url_https"
+          :src="GetSrc(image)"
           class="img-content"
           :class="{ zoom: isZoom }"
           :style="imgStyle"
