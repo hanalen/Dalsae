@@ -4,6 +4,7 @@ import * as I from '@/Interfaces';
 import moment from 'moment';
 import { moduleOption } from '@/store/modules/OptionStore';
 import store from '@/store';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
 
 @Component
 export class TweetBase extends Vue {
@@ -76,6 +77,11 @@ export class TweetBase extends Vue {
     entities.urls?.forEach(url => {
       text = text.replace(url.url, url.display_url);
     });
+    moduleOption.muteOption.highlight.forEach(item => {
+      text = text.replaceAll(item, `<span class="primary--text">${item}</span>`);
+    });
+    const screenName = moduleSwitter.selectUser.user.screen_name;
+    text = text.replaceAll(`@${screenName}`, `<span class="primary--text">@${screenName}</span>`);
     text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return text;
   }

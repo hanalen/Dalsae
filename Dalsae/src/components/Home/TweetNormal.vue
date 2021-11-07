@@ -6,7 +6,7 @@
     <div class="tweet-left">
       <propic :user="orgUser" :option="uiOption"></propic>
     </div>
-    <div class="tweet-text" style="margin-left:4px;">
+    <div class="tweet-text-area" style="margin-left:4px;">
       <span class="user-name">{{ name }}</span>
       <div v-html="tweetText" :style="styleTweetText"></div>
       <span class="tweet-date">{{ date }}{{ via }}</span>
@@ -41,9 +41,12 @@
   width: 20px;
   padding-right: 2px;
 }
-.tweet-text {
+.tweet-text-area {
   width: 100%;
   max-width: 100%;
+}
+.tweet-text {
+  display: flex;
 }
 .selected {
   background-color: #e7f5fe;
