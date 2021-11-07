@@ -9,6 +9,7 @@ import { TweetSelectorBase } from '../Home';
 import { ETweetType } from '@/store/Interface';
 import { moduleUI } from '@/store/modules/UIStore';
 import ScrollItem from '@/components/Scroll/ScrollItem.vue';
+import { moduleOption } from '@/store/modules/OptionStore';
 class State {
   scrollTop = 0;
   totalHeight = 0;
@@ -77,6 +78,10 @@ export class ScrollPanelBase extends Vue {
 
   @Prop()
   tweetType!: ETweetType;
+
+  get isSmallTweet() {
+    return moduleOption.uiOption.isSmallTweet;
+  }
 
   get listComponent() {
     return this.statePool.listBench;
@@ -176,6 +181,10 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
+  @Watch('isSmallTweet', { immediate: true, deep: true })
+  OnChangeSmall() {
+    this.SetIndex();
+  }
   Clear() {
     this.stateData.listData = [];
     this.stateData.setKey.clear();
@@ -294,6 +303,9 @@ export class ScrollPanelBase extends Vue {
       }
       this.state.startIndex = startIndex;
       this.state.endIndex = startIndex + Math.floor(this.$el.clientHeight / moduleUI.minHeight);
+      if (this.isSmallTweet) {
+        this.state.endIndex += 10;
+      }
       if (this.$el.clientHeight === 0) {
         setTimeout(() => {
           this.SetIndex();

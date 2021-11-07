@@ -122,7 +122,7 @@ class UIStore extends VuexModule {
   stateInput: StateInput = new StateInput();
 
   get minHeight() {
-    return 40;
+    return 30;
   }
 
   get selectTweet() {
