@@ -23,7 +23,7 @@ class State {
 class StateData<T> {
   setKey: Set<string>;
   listData: M.ScrollItem<T>[];
-  // listVisible: M.ScrollItem<any>[] = [];
+  listVisible: M.ScrollItem<any>[] = [];
   constructor() {
     this.setKey = new Set();
     this.listData = [];
@@ -100,14 +100,15 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
-  get isRendered() {
+  isRendered() {
     if (!this.isMounted) return false;
     else if (this.$el.clientHeight === 0) return false;
     else return true;
   }
 
   get listVisible() {
-    return this.stateData.listData.slice(this.state.startIndex, this.state.endIndex);
+    return this.stateData.listVisible;
+    // return this.stateData.listData.slice(this.state.startIndex, this.state.endIndex);
   }
 
   @Watch('indexPanel')
@@ -166,7 +167,7 @@ export class ScrollPanelBase extends Vue {
       this.Clear();
     }
     this.CreateScrollData();
-    if (this.isRendered) {
+    if (this.isRendered()) {
       this.SetIndex();
       // this.CreateComponent();
     } else {
@@ -182,7 +183,7 @@ export class ScrollPanelBase extends Vue {
   }
   WaitTime() {
     setTimeout(() => {
-      if (!this.isRendered) {
+      if (!this.isRendered()) {
         this.WaitTime();
       } else {
         this.SetIndex();
@@ -223,9 +224,6 @@ export class ScrollPanelBase extends Vue {
   }
 
   CreateComponent() {
-    if (this.listVisible.length === 0) {
-      return;
-    }
     //렌더링용 데이터 추가
     const keysBench = this.statePool.listBench.map(x => x.$props['data'].key);
     this.listVisible.forEach(item => {
@@ -259,7 +257,7 @@ export class ScrollPanelBase extends Vue {
   }
 
   SetIndex() {
-    if (!this.isRendered) {
+    if (!this.isRendered()) {
       setTimeout(() => {
         this.SetIndex();
       }, 100);
@@ -286,6 +284,10 @@ export class ScrollPanelBase extends Vue {
           this.SetIndex();
         }, 100);
       }
+      this.stateData.listVisible = this.stateData.listData.slice(
+        this.state.startIndex,
+        this.state.endIndex
+      );
       this.CreateComponent();
     }
   }
