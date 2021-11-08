@@ -282,9 +282,48 @@ class TweetStore extends VuexModule {
 
   @Mutation
   private updateRTandFav(tweet: I.Tweet) {
-    const homes = this.homes;
+    const tweets = this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID)?.tweets;
+    if (!tweets) return;
+    const homes = tweets.homes;
     if (homes) {
       homes.forEach(item => {
+        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+          console.log('update rt fav');
+          item.orgTweet.retweeted = tweet.orgTweet.retweeted;
+          item.orgTweet.favorited = tweet.orgTweet.favorited;
+        }
+      });
+    }
+    const mentions = tweets.mentions;
+    if (mentions) {
+      mentions.forEach(item => {
+        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+          item.orgTweet.retweeted = tweet.orgTweet.retweeted;
+          item.orgTweet.favorited = tweet.orgTweet.favorited;
+        }
+      });
+    }
+    const fav = tweets.favorites;
+    if (fav) {
+      fav.forEach(item => {
+        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+          item.orgTweet.retweeted = tweet.orgTweet.retweeted;
+          item.orgTweet.favorited = tweet.orgTweet.favorited;
+        }
+      });
+    }
+    const open = tweets.opens;
+    if (open) {
+      open.forEach(item => {
+        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+          item.orgTweet.retweeted = tweet.orgTweet.retweeted;
+          item.orgTweet.favorited = tweet.orgTweet.favorited;
+        }
+      });
+    }
+    const conv = tweets.conv;
+    if (conv) {
+      conv.forEach(item => {
         if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
           item.orgTweet.retweeted = tweet.orgTweet.retweeted;
           item.orgTweet.favorited = tweet.orgTweet.favorited;
