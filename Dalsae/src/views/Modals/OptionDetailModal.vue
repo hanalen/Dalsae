@@ -61,20 +61,10 @@
                 </v-list>
                 <v-card-actions>
                   <v-text-field label="단어 입력" v-model="state.input"></v-text-field>
-                  <v-btn
-                    outlined
-                    color="primary"
-                    text
-                    @click="OnAdd(muteOption.keyword, state.input)"
-                  >
+                  <v-btn outlined color="primary" text @click="OnAddKeyword">
                     추가
                   </v-btn>
-                  <v-btn
-                    outlined
-                    color="red"
-                    text
-                    @click="OnRemove(muteOption.keyword, state.input)"
-                  >
+                  <v-btn outlined color="red" text @click="OnRemoveKeyword">
                     삭제
                   </v-btn>
                 </v-card-actions>
@@ -99,10 +89,10 @@
                 </v-list>
                 <v-card-actions>
                   <v-text-field label="사용자 아이디 입력" v-model="state.input"></v-text-field>
-                  <v-btn outlined color="primary" text @click="OnAdd(muteOption.user, state.input)">
+                  <v-btn outlined color="primary" text @click="OnAddUser">
                     추가
                   </v-btn>
-                  <v-btn outlined color="red" text @click="OnRemove(muteOption.user, state.input)">
+                  <v-btn outlined color="red" text @click="OnRemoveUser">
                     삭제
                   </v-btn>
                 </v-card-actions>
@@ -127,20 +117,10 @@
                 </v-list>
                 <v-card-actions>
                   <v-text-field label="어플 명칭 입력" v-model="state.input"></v-text-field>
-                  <v-btn
-                    outlined
-                    color="primary"
-                    text
-                    @click="OnAdd(muteOption.client, state.input)"
-                  >
+                  <v-btn outlined color="primary" text @click="OnAddClient">
                     추가
                   </v-btn>
-                  <v-btn
-                    outlined
-                    color="red"
-                    text
-                    @click="OnRemove(muteOption.client, state.input)"
-                  >
+                  <v-btn outlined color="red" text @click="OnRemoveClient">
                     삭제
                   </v-btn>
                 </v-card-actions>
@@ -174,12 +154,7 @@
                     v-model="state.input"
                     label="추가 등록은 트윗 우클릭에서 등록 할 수 있습니다."
                   ></v-text-field>
-                  <v-btn
-                    outlined
-                    color="red"
-                    text
-                    @click="OnRemoveTweet(muteOption.tweet, state.selectTweet)"
-                  >
+                  <v-btn outlined color="red" text @click="OnRemoveTweet">
                     삭제
                   </v-btn>
                 </v-card-actions>
@@ -204,20 +179,10 @@
                 </v-list>
                 <v-card-actions>
                   <v-text-field label="알림 단어 입력" v-model="state.input"></v-text-field>
-                  <v-btn
-                    outlined
-                    color="primary"
-                    text
-                    @click="OnAdd(muteOption.highlight, state.input)"
-                  >
+                  <v-btn outlined color="primary" text @click="OnAddHighlight">
                     추가
                   </v-btn>
-                  <v-btn
-                    outlined
-                    color="red"
-                    text
-                    @click="OnRemove(muteOption.highlight, state.input)"
-                  >
+                  <v-btn outlined color="red" text @click="OnRemoveHighlight">
                     삭제
                   </v-btn>
                 </v-card-actions>
@@ -309,9 +274,5 @@ import { Mixins, Component, Ref } from 'vue-property-decorator';
 import { OptionDetailModalBase, PinModalBase } from '@/mixins';
 
 @Component
-export default class OptionDetailModal extends OptionDetailModalBase {
-  async crated() {
-    console.log('option detail modal created');
-  }
-}
+export default class OptionDetailModal extends OptionDetailModalBase {}
 </script>

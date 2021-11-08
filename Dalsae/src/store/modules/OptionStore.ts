@@ -39,14 +39,32 @@ class OptionStore extends VuexModule {
   @Mutation
   private changeOption(uiOption: I.UIOption) {
     this.uiOption = uiOption;
+
+    window.preload.SaveOption({
+      uiOption: this.uiOption,
+      muteOption: this.muteOption,
+      hotKey: this.hotKey
+    });
   }
   @Mutation
   private changeMuteOption(muteOption: I.MuteOption) {
     this.muteOption = muteOption;
+
+    window.preload.SaveOption({
+      uiOption: this.uiOption,
+      muteOption: this.muteOption,
+      hotKey: this.hotKey
+    });
   }
   @Mutation
   private changeHotkey(hotKey: I.Hotkey) {
     this.hotKey = hotKey;
+
+    window.preload.SaveOption({
+      uiOption: this.uiOption,
+      muteOption: this.muteOption,
+      hotKey: this.hotKey
+    });
   }
   @Mutation
   private changeOptions(options: IOptionStore) {
@@ -80,6 +98,11 @@ class OptionStore extends VuexModule {
       };
       this.hotKey = new I.Hotkey();
     }
+    window.preload.SaveOption({
+      uiOption: this.uiOption,
+      muteOption: this.muteOption,
+      hotKey: this.hotKey
+    });
   }
 
   @Action

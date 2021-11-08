@@ -11,6 +11,7 @@ class State {
   selectWord: string;
   input: string;
   isInitHotkey: boolean;
+  selectTweet!: I.Tweet | undefined;
   constructor() {
     this.selectMenu = 0;
     this.listMenu = [];
@@ -137,12 +138,14 @@ export class OptionDetailModalBase extends Vue {
     moduleModal.ShowOptionDetailModal(bShow);
   }
 
-  get muteOption() {
-    return moduleOption.muteOption;
-  }
+  muteOption!: I.MuteOption;
 
   get hotKey() {
     return moduleOption.hotKey;
+  }
+
+  async created() {
+    this.muteOption = JSON.parse(JSON.stringify(moduleOption.muteOption));
   }
 
   state = new State();
@@ -157,22 +160,10 @@ export class OptionDetailModalBase extends Vue {
     }
   }
 
-  async ClickClose() {
-    this.ModalClose();
-  }
-
-  async ModalClose() {
-    this.isShow = false;
-  }
-
   OnClickClose() {
     this.CloseModal();
     this.SaveHotkey();
-    window.preload.SaveOption({
-      hotKey: moduleOption.hotKey,
-      muteOption: moduleOption.muteOption,
-      uiOption: moduleOption.uiOption
-    });
+    moduleOption.ChangeMuteOption(this.muteOption);
   }
 
   CloseModal() {
@@ -208,24 +199,62 @@ export class OptionDetailModalBase extends Vue {
     moduleOption.ChangeHotkey(hotkey);
   }
 
-  OnAdd(list: string[], word: string) {
+  OnAddKeyword() {
+    this.muteOption.keyword.push(this.state.input);
     this.state.input = '';
-    if (list.indexOf(word) === -1)
-      //중복 등록 안되게
-      list.push(word);
   }
 
-  OnRemove(list: string[], word: string) {
-    const index = list.indexOf(word);
-    if (index === -1) return;
-    list.splice(index, 1);
+  OnRemoveKeyword() {
+    const idx = this.muteOption.keyword.findIndex(x => x === this.state.input);
+    if (idx > -1) {
+      this.muteOption.keyword.splice(idx, 1);
+    }
   }
 
-  OnRemoveTweet(list: I.Tweet[], tweet: I.Tweet) {
-    const index = list.indexOf(tweet);
-    if (index === -1) return;
-    list.splice(index, 1);
+  OnAddUser() {
+    // this.muteOption.
   }
+
+  OnRemoveUser() {
+    console.log('a');
+  }
+
+  OnAddClient() {
+    this.muteOption.client.push(this.state.input);
+    this.state.input = '';
+  }
+
+  OnRemoveClient() {
+    const idx = this.muteOption.client.findIndex(x => x === this.state.input);
+    if (idx > -1) {
+      this.muteOption.client.splice(idx, 1);
+    }
+    this.state.input = '';
+  }
+
+  OnAddHighlight() {
+    this.muteOption.highlight.push(this.state.input);
+    this.state.input = '';
+  }
+
+  OnRemoveHighlight() {
+    const idx = this.muteOption.highlight.findIndex(x => x === this.state.input);
+    if (idx > -1) {
+      this.muteOption.highlight.splice(idx, 1);
+    }
+    this.state.input = '';
+  }
+
+  OnRemoveTweet() {
+    const tweet = this.state.selectTweet;
+    if (tweet) {
+      const index = this.muteOption.tweet.findIndex(x => x.id_str === tweet.id_str);
+      if (index === -1) return;
+      this.state.selectTweet = undefined;
+      this.muteOption.tweet.splice(index, 1);
+    }
+  }
+
   SetHotkey() {
     for (const [key, value] of Object.entries(this.hotKey)) {
       const hotKey = value as I.Key;
