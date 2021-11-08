@@ -334,4 +334,44 @@ export class ProfilePage extends Vue {
     if (!url) return;
     window.preload.OpenBrowser(url?.expanded_url);
   }
+
+  OnKeyDown(e: KeyboardEvent) {
+    if (e.code === 'ArrowUp') {
+      e.preventDefault();
+      e.stopPropagation();
+      if (moduleProfile.stateProfile.selectMenu === 0) {
+        let idx = moduleProfile.stateProfile.indexFollowing - 1;
+        if (idx < 0) idx = 0;
+        moduleProfile.ChangeShowUser(moduleProfile.listFollowing.users[idx]);
+        moduleProfile.SetState({ ...moduleProfile.stateProfile, indexFollowing: idx });
+      } else {
+        let idx = moduleProfile.stateProfile.indexFollower - 1;
+        if (idx < 0) idx = 0;
+        moduleProfile.ChangeShowUser(moduleProfile.listFollower.users[idx]);
+        moduleProfile.SetState({ ...moduleProfile.stateProfile, indexFollower: idx });
+      }
+    } else if (e.code === 'ArrowDown') {
+      e.preventDefault();
+      e.stopPropagation();
+      if (moduleProfile.stateProfile.selectMenu === 0) {
+        let idx = moduleProfile.stateProfile.indexFollowing + 1;
+        if (idx >= moduleProfile.listFollowing.users.length) idx = 0;
+        moduleProfile.ChangeShowUser(moduleProfile.listFollowing.users[idx]);
+        moduleProfile.SetState({ ...moduleProfile.stateProfile, indexFollowing: idx });
+      } else {
+        let idx = moduleProfile.stateProfile.indexFollower + 1;
+        if (idx >= moduleProfile.listFollower.users.length) idx = 0;
+        moduleProfile.ChangeShowUser(moduleProfile.listFollower.users[idx]);
+        moduleProfile.SetState({ ...moduleProfile.stateProfile, indexFollower: idx });
+      }
+    } else if (e.code === 'ArrowLeft') {
+      e.preventDefault();
+      e.stopPropagation();
+      moduleProfile.SetState({ ...moduleProfile.stateProfile, selectMenu: 0 });
+    } else if (e.code === 'ArrowRight') {
+      e.preventDefault();
+      e.stopPropagation();
+      moduleProfile.SetState({ ...moduleProfile.stateProfile, selectMenu: 1 });
+    }
+  }
 }

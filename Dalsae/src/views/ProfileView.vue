@@ -339,6 +339,9 @@ export default class ProfileView extends MIX.ProfilePage {
       followDatas: follow,
       listBlockIds: blockId
     });
+    this.$nextTick(() => {
+      document.addEventListener('keydown', this.OnKeyDown);
+    });
   }
 }
 </script>
