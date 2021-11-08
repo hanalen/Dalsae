@@ -305,7 +305,7 @@ class Followers {
     moduleSysbar.RemoveSystemBar(S.ESystemBar.EErrorFollower);
     moduleSysbar.AddSystemBar({
       type: S.ESystemBar.EFollower,
-      icon: 'mdi-download',
+      icon: 'mdi-account-arrow-left-outline',
       text: '',
       toolTip: '팔로워 불러오는 중...'
     });
@@ -381,7 +381,7 @@ class Friends {
     moduleSysbar.RemoveSystemBar(S.ESystemBar.EErrorFollowing);
     moduleSysbar.AddSystemBar({
       type: ESystemBar.EFollwing,
-      icon: 'mdi-download',
+      icon: 'mdi-account-arrow-right-outline',
       text: '',
       toolTip: '팔로잉 불러오는 중...'
     });

@@ -91,7 +91,7 @@ export class ProfilePage extends Vue {
     if (newVal) {
       moduleSysbar.AddSystemBar({
         type: A.ESystemBar.EFOLLOWERIDS,
-        icon: 'mdi-download',
+        icon: 'mdi-account-arrow-left-outline',
         text: '',
         toolTip: '팔로워 불러오는 중...'
       });
@@ -105,7 +105,7 @@ export class ProfilePage extends Vue {
     if (newVal) {
       moduleSysbar.AddSystemBar({
         type: A.ESystemBar.EFOLLOWINGIDS,
-        icon: 'mdi-download',
+        icon: 'mdi-account-arrow-right-outline',
         text: '',
         toolTip: '팔로잉 불러오는 중...'
       });
@@ -119,7 +119,7 @@ export class ProfilePage extends Vue {
     if (newVal) {
       moduleSysbar.AddSystemBar({
         type: A.ESystemBar.EFOLLOW_REQUEST_IDS,
-        icon: 'mdi-download',
+        icon: 'mdi-account-clock-outline',
         text: '',
         toolTip: '팔로우 요청 불러오는 중...'
       });

@@ -16,7 +16,7 @@
             class="click-able"
             style="font-size:40px; color:#1da1f2"
             @click="OnClickAddAccount"
-            >mdi-dots-horizontal-circle-outline</v-icon
+            >mdi-account-plus</v-icon
           >
           <v-icon
             class="click-able"
