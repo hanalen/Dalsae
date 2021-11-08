@@ -161,6 +161,11 @@ export class OptionDetailModalBase extends Vue {
     this.CloseModal();
     this.SaveHotkey();
     moduleOption.ChangeMuteOption(this.muteOption);
+    window.preload.SaveOption({
+      uiOption: moduleOption.uiOption,
+      muteOption: moduleOption.muteOption,
+      hotKey: moduleOption.hotKey
+    });
   }
 
   CloseModal() {
