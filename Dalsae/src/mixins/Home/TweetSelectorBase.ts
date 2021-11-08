@@ -39,6 +39,13 @@ export class TweetSelectorBase extends Vue {
     moduleUI.ChangeSelectTweet(this.tweet.id_str);
   }
 
+  get via() {
+    let via = this.orgTweet.source;
+    via = via.substring(via.indexOf('>') + 1, 999);
+    via = via.substring(0, via.indexOf('<'));
+    return via;
+  }
+
   get x() {
     return moduleUI.stateContext.x;
   }
@@ -215,6 +222,21 @@ export class TweetSelectorBase extends Vue {
       hotKey: this.GetHotKeyText(hotKey.copy),
       isDivider: false
     });
+    listContext.push({ title: '', onClick: () => {}, isDivider: true });
+
+    listContext.push({
+      title: `${this.via} 뮤트`,
+      onClick: this.OnClickMuteClient,
+      value: value++,
+      isDivider: false
+    });
+
+    listContext.push({
+      title: '트윗 뮤트',
+      onClick: this.OnClickMuteTweet,
+      value: value++,
+      isDivider: false
+    });
 
     if (this.orgUser.id_str === moduleSwitter.selectID) {
       listContext.push({ title: '', onClick: () => {}, isDivider: true });
@@ -297,6 +319,22 @@ export class TweetSelectorBase extends Vue {
   OnClickCopy(value: number) {
     console.log('copy');
     moduleUtil.CopyTweet(this.tweet);
+  }
+
+  OnClickMuteClient(value: number) {
+    console.log(value);
+    const client = moduleOption.muteOption.client.concat(this.via);
+    const muteoption = { ...moduleOption.muteOption, client: client };
+    moduleOption.ChangeMuteOption(muteoption);
+  }
+
+  OnClickMuteTweet(value: number) {
+    const tweet = new I.Tweet();
+    tweet.id_str = this.tweet.orgTweet.id_str;
+    tweet.full_text = this.tweet.orgTweet.full_text;
+    const tweets = moduleOption.muteOption.tweet.concat(tweet);
+    const muteoption = { ...moduleOption.muteOption, tweet: tweets };
+    moduleOption.ChangeMuteOption(muteoption);
   }
 
   OnClickDelete(value: number) {
