@@ -138,21 +138,35 @@
         </v-tabs>
         <div class="scroll-panel">
           <v-tabs-items v-model="selectMenu">
-            <v-tab-item class="tab-item" :key="0">
+            <v-tab-item eager class="tab-item" :key="0">
               <scroll-panel
                 :listData="listFollowing"
                 :itemType="'user'"
                 :indexPanel="indexFollowing"
                 :style="styleScroll"
+                ref="refScrollFollowing"
               />
+              <v-progress-circular
+                v-if="isLoadFollowing"
+                :width="3"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
             </v-tab-item>
-            <v-tab-item class="tab-item" :key="1">
+            <v-tab-item eager class="tab-item" :key="1">
               <scroll-panel
                 :listData="listFollower"
                 :itemType="'user'"
                 :indexPanel="indexFollower"
                 :style="styleScroll"
+                ref="refScrollFollower"
               />
+              <v-progress-circular
+                v-if="isLoadFollower"
+                :width="3"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
             </v-tab-item>
           </v-tabs-items>
         </div>
@@ -294,6 +308,11 @@ tab-name {
   display: flex;
   justify-content: space-between;
 }
+.v-progress-circular {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
 </style>
 
 <script lang="ts">
@@ -313,10 +332,6 @@ export default class ProfileView extends MIX.ProfilePage {
   async created() {
     // const testFollowing = window.preload.LoadTestFriends();
     // console.log(testFollowing);
-    // moduleSwitter.AddFollowingList({
-    //   followList: testFollowing,
-    //   selectId: moduleSwitter.selectID
-    // });
     // moduleProfile.SetSelectUserFollowingList(testFollowing);
     // const testSwitter = window.preload.LoadSwitter();
     // moduleSwitter.InitSwitter(testSwitter);
@@ -324,6 +339,7 @@ export default class ProfileView extends MIX.ProfilePage {
     //   moduleProfile.ChangeShowUser(testSwitter.listUser[1].user);
     // }
     // moduleProfile.ChangeSelectUser(testSwitter.selectUser.user);
+
     // return;
     const id = this.$route.query.screenName.toString();
     const switter = window.preload.profile.GetSwitter(id);
@@ -341,6 +357,8 @@ export default class ProfileView extends MIX.ProfilePage {
     });
     this.$nextTick(() => {
       document.addEventListener('keydown', this.OnKeyDown);
+      this.refScrollFollowing.$el.addEventListener('scroll', this.OnScrollFollowing);
+      this.refScrollFollower.$el.addEventListener('scroll', this.OnScrollFollower);
     });
   }
 }

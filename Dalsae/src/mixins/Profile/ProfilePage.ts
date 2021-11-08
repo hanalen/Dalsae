@@ -9,9 +9,21 @@ import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
 import { moduleSysbar } from '@/store/modules/SystemBarStore';
 import { moduleModal } from '@/store/modules/ModalStore';
+import { ScrollPanelBase } from '@/mixins';
+import twitterRequest from '@/API/TwitterRequest';
 
 @Component
 export class ProfilePage extends Vue {
+  @Ref()
+  refScrollFollowing!: ScrollPanelBase;
+  @Ref()
+  refScrollFollower!: ScrollPanelBase;
+  get isLoadFollowing() {
+    return moduleProfile.stateProfile.isLoadFollowing;
+  }
+  get isLoadFollower() {
+    return moduleProfile.stateProfile.isLoadFollower;
+  }
   get listMsg() {
     return moduleModal.stateMessage.listMessage;
   }
@@ -144,30 +156,34 @@ export class ProfilePage extends Vue {
     this.isLoadProfile = false;
   }
 
-  async LoadFollowerList() {
+  async LoadFollowerList(cursor = '-1') {
+    if (moduleProfile.stateProfile.isLoadFollower) return;
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadFollower: true });
+    const { screen_name } = moduleProfile.selectUser;
     const resp = await moduleApi.followers.List(
-      {
-        screen_name: moduleProfile.selectUser.screen_name,
-        count: 200
-      },
+      { screen_name: screen_name, count: 200, cursor: cursor },
       '',
       false
     );
-    if (resp.data) {
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadFollower: false });
+
+    if (!twitterRequest.CheckAPIError(resp.data)) {
       moduleProfile.SetSelectUserFollowerList(resp.data);
     }
   }
 
-  async LoadFollowingList() {
+  async LoadFollowingList(cursor = '-1') {
+    if (moduleProfile.stateProfile.isLoadFollowing) return;
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadFollowing: true });
+    const { screen_name } = moduleProfile.selectUser;
     const resp = await moduleApi.friends.List(
-      {
-        screen_name: moduleProfile.selectUser.screen_name,
-        count: 200
-      },
+      { screen_name: screen_name, count: 200, cursor: cursor },
       '',
       false
     );
-    if (resp.data) {
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadFollowing: false });
+
+    if (!twitterRequest.CheckAPIError(resp.data)) {
       moduleProfile.SetSelectUserFollowingList(resp.data);
     }
   }
@@ -372,6 +388,30 @@ export class ProfilePage extends Vue {
       e.preventDefault();
       e.stopPropagation();
       moduleProfile.SetState({ ...moduleProfile.stateProfile, selectMenu: 1 });
+    }
+  }
+  OnScrollFollowing(e: Event) {
+    const { next_cursor_str } = moduleProfile.listFollowing;
+    if (next_cursor_str === '0') return;
+
+    const el = e.target as HTMLElement;
+    const list = this.refScrollFollowing.stateData.listData;
+    const bottomPos = list[list.length - 1].scrollTop + list[list.length - 1].height;
+    const scrollPos = el.scrollTop + this.refScrollFollowing.$el.clientHeight;
+    if (scrollPos > bottomPos - 100) {
+      this.LoadFollowingList(next_cursor_str);
+    }
+  }
+  OnScrollFollower(e: Event) {
+    const { next_cursor_str } = moduleProfile.listFollower;
+    if (next_cursor_str === '0') return;
+
+    const el = e.target as HTMLElement;
+    const list = this.refScrollFollower.stateData.listData;
+    const bottomPos = list[list.length - 1].scrollTop + list[list.length - 1].height;
+    const scrollPos = el.scrollTop + this.refScrollFollower.$el.clientHeight;
+    if (scrollPos > bottomPos - 100) {
+      this.LoadFollowerList(next_cursor_str);
     }
   }
 }

@@ -70,7 +70,13 @@ class ProfileStore extends VuexModule {
 
   @Mutation
   private setSelectUserFollowerList(listUser: I.FollowerList) {
-    this.listFollower = listUser;
+    if (this.listFollower.users.length > 0) {
+      this.listFollower.users = this.listFollower.users.concat(listUser.users);
+      this.listFollower.next_cursor_str = listUser.next_cursor_str;
+      this.listFollower.previous_cursor_str = listUser.previous_cursor_str;
+    } else {
+      this.listFollower = listUser;
+    }
   }
 
   @Action
@@ -80,7 +86,13 @@ class ProfileStore extends VuexModule {
 
   @Mutation
   private setSelectUserFollowingList(listUser: I.FollowerList) {
-    this.listFollowing = listUser;
+    if (this.listFollowing.users.length > 0) {
+      this.listFollowing.users = this.listFollowing.users.concat(listUser.users);
+      this.listFollowing.next_cursor_str = listUser.next_cursor_str;
+      this.listFollowing.previous_cursor_str = listUser.previous_cursor_str;
+    } else {
+      this.listFollowing = listUser;
+    }
   }
 
   @Action
