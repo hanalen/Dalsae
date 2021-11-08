@@ -25,25 +25,25 @@ class State {
         subTitle: '트윗을 필터링 해줍니다',
         menuSub: [
           { title: '단어 뮤트', icon: 'mdi-filter', menuNumber: 0 },
-          { title: '사용자 뮤트', icon: 'mdi-account-off', menuNumber: 1 },
-          { title: '클라이언트 뮤트', icon: 'mdi-filter', menuNumber: 2 },
-          { title: '트윗 뮤트', icon: 'mdi-filter', menuNumber: 3 }
+          // { title: '사용자 뮤트', icon: 'mdi-account-off', menuNumber: 1 },
+          { title: '클라이언트 뮤트', icon: 'mdi-filter', menuNumber: 1 },
+          { title: '트윗 뮤트', icon: 'mdi-filter', menuNumber: 2 }
         ]
       },
       {
         title: '단어 알림 설정',
         subTitle: '특정 단어가 들어간 트윗을 알림 표시 합니다.',
-        menuSub: [{ title: '단어 알림', icon: 'mdi-filter', menuNumber: 4 }]
+        menuSub: [{ title: '단어 알림', icon: 'mdi-filter', menuNumber: 3 }]
       },
       {
         title: '필터링 상세 설정',
         subTitle: '특정 조건 필터링을 제외 할 수 있습니다.',
-        menuSub: [{ title: '필터링 상세 설정', icon: 'mdi-filter', menuNumber: 5 }]
+        menuSub: [{ title: '필터링 상세 설정', icon: 'mdi-filter', menuNumber: 4 }]
       },
       {
         title: '단축키 설정',
         subTitle: '프로그램을 보다 편하게 ',
-        menuSub: [{ title: '단축키 설정', icon: 'mdi-keyboard', menuNumber: 6 }]
+        menuSub: [{ title: '단축키 설정', icon: 'mdi-keyboard', menuNumber: 5 }]
       }
     );
     this.listHotkeyMenu.push(
@@ -140,12 +140,11 @@ export class OptionDetailModalBase extends Vue {
 
   muteOption!: I.MuteOption;
 
-  get hotKey() {
-    return moduleOption.hotKey;
-  }
+  hotKey!: I.Hotkey;
 
   async created() {
     this.muteOption = JSON.parse(JSON.stringify(moduleOption.muteOption));
+    this.hotKey = JSON.parse(JSON.stringify(moduleOption.hotKey));
   }
 
   state = new State();

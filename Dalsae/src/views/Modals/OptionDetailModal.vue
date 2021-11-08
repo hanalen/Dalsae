@@ -70,7 +70,7 @@
                 </v-card-actions>
               </v-card>
             </v-tab-item>
-            <v-tab-item :key="1">
+            <!-- <v-tab-item :key="1">
               <v-card outlined height="100vh">
                 <v-card-title>
                   사용자 뮤트
@@ -97,8 +97,8 @@
                   </v-btn>
                 </v-card-actions>
               </v-card>
-            </v-tab-item>
-            <v-tab-item :key="2">
+            </v-tab-item> -->
+            <v-tab-item :key="1">
               <v-card outlined height="100vh">
                 <v-card-title>
                   어플(서비스) 뮤트
@@ -126,7 +126,7 @@
                 </v-card-actions>
               </v-card>
             </v-tab-item>
-            <v-tab-item :key="3">
+            <v-tab-item :key="2">
               <v-card outlined height="100vh">
                 <v-card-title>
                   트윗 뮤트
@@ -160,7 +160,7 @@
                 </v-card-actions>
               </v-card>
             </v-tab-item>
-            <v-tab-item :key="4">
+            <v-tab-item :key="3">
               <v-card outlined height="100vh">
                 <v-card-title>
                   단어 알림
@@ -188,7 +188,7 @@
                 </v-card-actions>
               </v-card>
             </v-tab-item>
-            <v-tab-item :key="5">
+            <v-tab-item :key="4">
               <v-card outlined height="100vh">
                 <v-card-title>
                   필터링 상세 설정
@@ -205,7 +205,7 @@
                 </v-list>
               </v-card>
             </v-tab-item>
-            <v-tab-item :key="6" eager
+            <v-tab-item :key="5" eager
               ><!--eager: mounted할때 렌더링하는 옵션-->
               <v-card outlined height="100vh">
                 <v-card-title>
