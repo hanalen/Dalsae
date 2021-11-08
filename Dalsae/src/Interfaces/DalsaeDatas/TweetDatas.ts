@@ -201,6 +201,7 @@ export class TweetDatas {
     muteIds: string[]
   ): boolean {
     const { client, keyword } = muteOption;
+    const listTweet = muteOption.tweet;
     const orgTweet = tweet.retweeted_status ? tweet.retweeted_status : tweet;
     let source = orgTweet.source;
     source = source.substring(source.indexOf('>') + 1, 999);
@@ -227,6 +228,15 @@ export class TweetDatas {
     for (let i = 0; i < muteIds.length; i++) {
       if (muteIds.includes(orgTweet.user.id_str)) return true;
       else if (muteIds.includes(tweet.user.id_str)) return true;
+    }
+    for (let i = 0; i < listTweet.length; i++) {
+      if (listTweet[i].id_str === orgTweet.id_str) {
+        return true;
+      } else if (listTweet[i].id_str === orgTweet.in_reply_to_status_id_str) {
+        return true;
+      } else if (listTweet[i].id_str === orgTweet.quoted_status?.id_str) {
+        return true;
+      }
     }
     return false;
   }
