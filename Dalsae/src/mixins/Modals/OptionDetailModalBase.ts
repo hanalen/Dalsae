@@ -138,17 +138,15 @@ export class OptionDetailModalBase extends Vue {
     moduleModal.ShowOptionDetailModal(bShow);
   }
 
-  muteOption!: I.MuteOption;
+  get muteOption() {
+    return moduleOption.muteOption;
+  }
 
-  hotKey!: I.Hotkey;
-
-  async created() {
-    this.muteOption = JSON.parse(JSON.stringify(moduleOption.muteOption));
-    this.hotKey = JSON.parse(JSON.stringify(moduleOption.hotKey));
+  get hotKey() {
+    return moduleOption.hotKey;
   }
 
   state = new State();
-
   @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
   OnSelectMenuChanged(newMenu: number) {
     this.state.input = '';
@@ -201,6 +199,7 @@ export class OptionDetailModalBase extends Vue {
   OnAddKeyword() {
     this.muteOption.keyword.push(this.state.input);
     this.state.input = '';
+    moduleOption.ChangeMuteOption(this.muteOption);
   }
 
   OnRemoveKeyword() {
@@ -208,6 +207,7 @@ export class OptionDetailModalBase extends Vue {
     if (idx > -1) {
       this.muteOption.keyword.splice(idx, 1);
     }
+    moduleOption.ChangeMuteOption(this.muteOption);
   }
 
   OnAddUser() {
@@ -221,6 +221,7 @@ export class OptionDetailModalBase extends Vue {
   OnAddClient() {
     this.muteOption.client.push(this.state.input);
     this.state.input = '';
+    moduleOption.ChangeMuteOption(this.muteOption);
   }
 
   OnRemoveClient() {
@@ -229,11 +230,13 @@ export class OptionDetailModalBase extends Vue {
       this.muteOption.client.splice(idx, 1);
     }
     this.state.input = '';
+    moduleOption.ChangeMuteOption(this.muteOption);
   }
 
   OnAddHighlight() {
     this.muteOption.highlight.push(this.state.input);
     this.state.input = '';
+    moduleOption.ChangeMuteOption(this.muteOption);
   }
 
   OnRemoveHighlight() {
@@ -242,6 +245,7 @@ export class OptionDetailModalBase extends Vue {
       this.muteOption.highlight.splice(idx, 1);
     }
     this.state.input = '';
+    moduleOption.ChangeMuteOption(this.muteOption);
   }
 
   OnRemoveTweet() {
@@ -252,6 +256,7 @@ export class OptionDetailModalBase extends Vue {
       this.state.selectTweet = undefined;
       this.muteOption.tweet.splice(index, 1);
     }
+    moduleOption.ChangeMuteOption(this.muteOption);
   }
 
   SetHotkey() {

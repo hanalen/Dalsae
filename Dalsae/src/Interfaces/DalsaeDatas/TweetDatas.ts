@@ -95,6 +95,8 @@ export function CheckMute(
 
   for (let i = 0; i < tweetIds.length; i++) {
     if (tweetIds.includes(orgTweet.id_str)) return true;
+    else if (tweetIds.includes(orgTweet.in_reply_to_status_id_str)) return true;
+    else if (tweetIds.includes(orgTweet.quoted_status?.id_str)) return true;
   }
   //TODO 공홈에서 땡겨온 유저 뮤트 목록이랑 연동 필요
   if (muteIds) {
