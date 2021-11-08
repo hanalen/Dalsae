@@ -152,7 +152,7 @@ export class OptionDetailModalBase extends Vue {
   @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
   OnSelectMenuChanged(newMenu: number) {
     this.state.input = '';
-    if (newMenu === 6 && !this.state.isInitHotkey) {
+    if (newMenu === 5 && !this.state.isInitHotkey) {
       //created에서 호출 시 ref 생성 전이라 오류 생김
       this.SetHotkey();
       this.state.isInitHotkey = true;
