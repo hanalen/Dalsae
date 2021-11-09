@@ -11,3 +11,4 @@ export * from './Users';
 export * from './Followers';
 export * from './Friendships';
 export * from './Mutes';
+export * from './DirectMessage';
