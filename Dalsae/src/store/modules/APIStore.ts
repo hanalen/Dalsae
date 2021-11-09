@@ -570,6 +570,28 @@ class OAuth {
   }
 }
 
+class DirectMessage {
+  async New(text: string, recvUserId: string, media?: string) {
+    const dmEvent: I.ReqDMNew = {
+      event: {
+        type: 'message_create',
+        message_create: { target: { recipient_id: recvUserId }, message_data: { text: text } }
+      }
+    };
+    const result = await twitterRequest.call.directMessage.New(dmEvent);
+    console.log(result);
+  }
+  async List() {
+    const result = await twitterRequest.call.directMessage.List({ count: '50' });
+    if (!twitterRequest.GetApiError(result.data as I.ResponseTwitterError)) {
+      //add~
+    }
+  }
+  async Show(id: string) {
+    const result = await twitterRequest.call.directMessage.Show({ id: id });
+  }
+}
+
 @Module({ dynamic: true, store, name: 'api' })
 class APIStore extends VuexModule {
   account = new Account();
@@ -582,5 +604,6 @@ class APIStore extends VuexModule {
   friends = new Friends();
   friendships = new Friendships();
   mutes = new Mutes();
+  directMessage = new DirectMessage();
 }
 export const moduleApi = getModule(APIStore);

@@ -484,6 +484,24 @@ export class TwitterRequest {
             data
           })
       },
+      directMessage: {
+        New: (data: P.ReqDMNew) =>
+          this.requestDirectMessage<P.ReqDMNew, I.DMEvent>(
+            baseUrl + '/direct_messages/events/new.json',
+            'POST',
+            {
+              data
+            }
+          ),
+        List: (data: P.ReqDMList) =>
+          this.get<P.ReqDMList, I.DMList>(baseUrl + '/direct_messages/events/list.json', {
+            data
+          }),
+        Show: (data: P.ReqDMShow) =>
+          this.get<P.ReqDMShow, I.DMEvent>(baseUrl + '/direct_messages/events/show.json', {
+            data
+          })
+      },
       oauth: {
         ReqToken: (data: P.ReqToken) =>
           this.requestOAuth<P.ReqToken>('https://api.twitter.com/oauth/request_token', {
