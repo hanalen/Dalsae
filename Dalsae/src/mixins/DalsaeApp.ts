@@ -13,6 +13,7 @@ import { moduleApi } from '@/store/modules/APIStore';
 import { eventBus } from '@/plugins';
 import { moduleUtil } from '@/store/modules/UtilStore';
 import { ETweetType } from '@/store/Interface';
+import { UserStreaming } from '@/API';
 @Component
 export class DalsaeApp extends Vue {
   get selectUserID() {
@@ -24,6 +25,9 @@ export class DalsaeApp extends Vue {
     this.$nextTick(() => {
       if (!newID && !moduleSwitter.selectUser) {
         moduleModal.ShowPinModal(true);
+      }
+      if (oldID) {
+        moduleTweet.StopStreaming(oldID);
       }
       if (newID && oldID) {
         this.StartDalsae();
@@ -93,6 +97,9 @@ export class DalsaeApp extends Vue {
       // moduleApi.block.Ids({ cursor: '-1', stringify_ids: true });
       // moduleApi.statuses.TimeLine();
       // moduleApi.statuses.Mention();
+      const streaming = new UserStreaming();
+      streaming.Connect(moduleSwitter.publicKey, moduleSwitter.secretKey, moduleSwitter.selectID);
+      moduleTweet.AddStreaming({ key: moduleSwitter.selectID, streaming: streaming });
     }
   }
 
@@ -100,7 +107,6 @@ export class DalsaeApp extends Vue {
     console.log('hotkey', hotKeyType);
     let selectTweet: I.Tweet | undefined = undefined;
     if (moduleUI.selectTweet) selectTweet = moduleUI.selectTweet;
-    const { isSendRTCheck } = moduleOption.uiOption;
     switch (hotKeyType) {
       case I.E_HOTKEY.SHOWTL:
         moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_HOME });
