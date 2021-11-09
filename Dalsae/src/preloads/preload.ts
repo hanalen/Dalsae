@@ -106,13 +106,22 @@ export default class Preload {
     return ret;
   }
 
-  LoadTestFriends(): I.FollowerList {
-    const ret = fs.readJSONSync('Data/friends.json');
+  LoadTestFriends(): I.User[] {
+    const ret = fs.readJSONSync('Data/following.json');
+    return ret;
+  }
+
+  LoadTestFollower(): I.User[] {
+    const ret = fs.readJSONSync('Data/follower.json');
     return ret;
   }
 
   LoadTestImageTweet(): I.Tweet {
     const ret = fs.readJsonSync('Data/imagetest.json');
+    return ret;
+  }
+  LoadTestDM(): I.DMList {
+    const ret = fs.readJSONSync('Data/dmList.json');
     return ret;
   }
 }
