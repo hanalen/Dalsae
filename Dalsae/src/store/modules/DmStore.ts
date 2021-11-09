@@ -22,6 +22,10 @@ class StateDirectMessage {
 class DmStore extends VuexModule {
   stateDm = new StateDirectMessage();
 
+  get listUser() {
+    return this.stateDm.listDmPair.map(x => x.user);
+  }
+
   @Mutation
   private addDm(dm: I.DMEvent | I.DMEvent[]) {
     let listDm: I.DMEvent[] = [];
@@ -49,8 +53,15 @@ class DmStore extends VuexModule {
           user = new I.User();
           user.id_str = key;
         }
-        this.stateDm.listDmPair.push({ id: key, listDm: [item], user: user });
+        user.last_direct_message = item;
+        this.stateDm.listDmPair.splice(0, 0, { id: key, listDm: [item], user: user });
       } else {
+        //새로 등록되는 거 맨 앞으로 등록
+        this.stateDm.listDmPair.splice(
+          this.stateDm.listDmPair.findIndex(x => x.id === find.id),
+          1
+        );
+        this.stateDm.listDmPair.splice(0, 0, find);
         if (!find.listDm.find(x => x.id === item.id)) {
           const date = new Date(Number.parseInt(item.created_timestamp)).getTime();
           let idx = 0;
@@ -61,6 +72,7 @@ class DmStore extends VuexModule {
             }
             idx = i + 1;
           }
+          find.user.last_direct_message = item;
           find.listDm.splice(idx, 0, item);
         } else {
           console.log('dm exists!');
