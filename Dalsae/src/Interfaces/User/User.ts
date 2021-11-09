@@ -32,6 +32,7 @@ export class User {
   default_profile_image: boolean;
   following: boolean;
   follow_request_sent: boolean;
+  last_direct_message?: I.DMEvent; //dm페이지 전용으로 추가한 값
   constructor() {
     this.created_at = '';
     this.default_profile = false;
