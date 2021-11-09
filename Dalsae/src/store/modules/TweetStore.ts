@@ -14,6 +14,7 @@ import {
   FindTweetIndex
 } from '@/Interfaces';
 import { moduleUI } from './UIStore';
+import { UserStreaming } from '@/API';
 export interface ITweetStore {
   tweetDatas: I.TweetDatas;
 }
@@ -23,17 +24,26 @@ interface TweetPair {
   tweets: I.Tweets;
 }
 
+interface StreamingPair {
+  key: string;
+  streaming: UserStreaming;
+}
+
 class StateTweet {
   tweets: TweetPair[];
   constructor() {
     this.tweets = [];
   }
 }
+class StateStreaming {
+  streamings: StreamingPair[] = [];
+}
 
 @Module({ dynamic: true, store, name: 'tweet' })
 class TweetStore extends VuexModule {
   // states
   stateTweet = new StateTweet();
+  stateStreaming = new StateStreaming();
 
   get homes() {
     return this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID)?.tweets.homes;
@@ -355,6 +365,33 @@ class TweetStore extends VuexModule {
   @Action
   ClearConv(user_id_str: string) {
     this.context.commit('clearConv', user_id_str);
+  }
+
+  @Mutation
+  private addStreaming(streaming: StreamingPair) {
+    this.stateStreaming.streamings.push(streaming);
+  }
+
+  @Action
+  AddStreaming(streaming: StreamingPair) {
+    this.context.commit('addStreaming', streaming);
+  }
+
+  @Mutation
+  private stopStreaming(idStr: string) {
+    console.log('stop streaming');
+    const idx = this.stateStreaming.streamings.findIndex(x => x.key === idStr);
+    if (idx < 0) return;
+    const streaming = this.stateStreaming.streamings[idx];
+    if (streaming) {
+      streaming.streaming.StopStreaming();
+      this.stateStreaming.streamings.splice(idx, 1);
+    }
+  }
+
+  @Action
+  StopStreaming(idStr: string) {
+    this.context.commit('stopStreaming', idStr);
   }
 }
 
