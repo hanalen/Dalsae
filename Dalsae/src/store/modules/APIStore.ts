@@ -12,6 +12,8 @@ import { moduleUI } from './UIStore';
 import { ESystemBar, ETweetType } from '@/store/Interface';
 import { moduleProfile } from './ProfileStore';
 import { moduleSysbar } from './SystemBarStore';
+import { moduleModal } from './ModalStore';
+import { Messagetype } from '@/mixins';
 
 class Account {
   async VerifyCredentials(): Promise<P.APIResp<I.User>> {
@@ -19,6 +21,30 @@ class Account {
     if (!twitterRequest.CheckAPIError(result.data)) {
       moduleSwitter.UpdateSwitterUser(result.data);
     }
+    return result;
+  }
+  async UpdateProfile(
+    name: string,
+    url: string,
+    location: string,
+    description: string
+  ): Promise<P.APIResp<I.User>> {
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isUpdateProfile: true });
+    const result = await twitterRequest.call.account.ProfileUpdate({
+      name: name,
+      location: location,
+      description: description,
+      url: url
+    });
+    if (!twitterRequest.CheckAPIError(result.data)) {
+      moduleModal.AddMessage({
+        errorType: Messagetype.E_INFO,
+        message: '프로필이 수정 되었습니다.',
+        time: 3
+      });
+      moduleProfile.ChangeShowUser(result.data);
+    }
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isUpdateProfile: false });
     return result;
   }
 }

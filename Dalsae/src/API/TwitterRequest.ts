@@ -296,7 +296,11 @@ export class TwitterRequest {
     return {
       account: {
         VerifyCredentials: () =>
-          this.get<P.ReqUserInfo, I.User>(baseUrl + '/account/verify_credentials.json', {})
+          this.get<P.ReqUserInfo, I.User>(baseUrl + '/account/verify_credentials.json', {}),
+        ProfileUpdate: (data: P.ReqProfileUpdate) =>
+          this.post<P.ReqProfileUpdate, I.User>(baseUrl + '/account/update_profile.json', {
+            data
+          })
       },
       media: {
         Upload: (data: P.ReqMedia) => {
