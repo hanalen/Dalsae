@@ -1,6 +1,8 @@
 <template>
   <div class="dm-panel" :style="stylePanel">
-    <div class="dm-left"></div>
+    <div class="dm-left">
+      <dm-user v-for="(user, i) in listUser" :key="i" :user="user" />
+    </div>
     <div class="dm-right"></div>
   </div>
 </template>
@@ -29,6 +31,7 @@ import { Vue, Mixins, Component, Ref, Provide, Prop } from 'vue-property-decorat
 import * as I from '@/Interfaces';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleOption } from '@/store/modules/OptionStore';
+import { moduleDm } from '@/store/modules/DmStore';
 
 @Component
 export default class DmPanel extends Vue {
@@ -42,6 +45,9 @@ export default class DmPanel extends Vue {
         height: 'calc(100vh - 156px)'
       };
     }
+  }
+  get listUser() {
+    return moduleDm.listUser;
   }
 }
 </script>
