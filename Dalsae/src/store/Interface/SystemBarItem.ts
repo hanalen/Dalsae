@@ -19,5 +19,7 @@ export enum ESystemBar {
   EFollwing,
   EErrorFollowing,
   EBolckIds,
-  EErrorBlockIds
+  EErrorBlockIds,
+  EStreaming,
+  EErrorStreaming
 }
