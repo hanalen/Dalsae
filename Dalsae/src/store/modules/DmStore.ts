@@ -35,14 +35,14 @@ class DmStore extends VuexModule {
       listDm = dm;
     }
     const { selectID } = moduleSwitter;
-    listDm.forEach(item => {
-      const sender = item.message_create?.sender_id;
-      const recv = item.message_create?.target?.recipient_id;
-      if (!sender || !recv) return;
+    for (const dm of listDm) {
+      const sender = dm.message_create?.sender_id;
+      const recv = dm.message_create?.target?.recipient_id;
+      if (!sender || !recv) continue;
 
       const key = sender === selectID ? recv : sender; //대화 상대 id
-      const find = this.stateDm.listDmPair.find(x => x.id === key);
-      if (!find) {
+      let pair = this.stateDm.listDmPair.find(x => x.id === key);
+      if (!pair) {
         //첫 대화 add
         let user: I.User | undefined;
         //내 팔로잉, 팔로워일 경우 user정보 땡겨옴
@@ -53,32 +53,30 @@ class DmStore extends VuexModule {
           user = new I.User();
           user.id_str = key;
         }
-        user.last_direct_message = item;
-        this.stateDm.listDmPair.splice(0, 0, { id: key, listDm: [item], user: user });
-      } else {
-        //새로 등록되는 거 맨 앞으로 등록
-        this.stateDm.listDmPair.splice(
-          this.stateDm.listDmPair.findIndex(x => x.id === find.id),
-          1
-        );
-        this.stateDm.listDmPair.splice(0, 0, find);
-        if (!find.listDm.find(x => x.id === item.id)) {
-          const date = new Date(Number.parseInt(item.created_timestamp)).getTime();
-          let idx = 0;
-          for (let i = 0, len = find.listDm.length; i < len; i++) {
-            const next = new Date(Number.parseInt(find.listDm[i].created_timestamp)).getTime();
-            if (date > next) {
-              break;
-            }
-            idx = i + 1;
-          }
-          find.user.last_direct_message = item;
-          find.listDm.splice(idx, 0, item);
-        } else {
-          console.log('dm exists!');
-        }
+        pair = { id: key, listDm: [], user: user };
+        this.stateDm.listDmPair.push(pair);
       }
+      pair.listDm.push(dm);
+      pair.user.last_direct_message = dm;
+    }
+    this.stateDm.listDmPair.sort((a, b) => {
+      let c = 0;
+      let d = 0;
+      if (a.user.last_direct_message?.created_timestamp) {
+        c = Number.parseInt(a.user.last_direct_message?.created_timestamp);
+      }
+      if (b.user.last_direct_message?.created_timestamp) {
+        d = Number.parseInt(b.user.last_direct_message?.created_timestamp);
+      }
+      return d - c;
     });
+    for (const pair of this.stateDm.listDmPair) {
+      pair.listDm.sort((a, b) => {
+        const c = Number.parseInt(a.created_timestamp);
+        const d = Number.parseInt(b.created_timestamp);
+        return c - d;
+      });
+    }
   }
 
   @Action
