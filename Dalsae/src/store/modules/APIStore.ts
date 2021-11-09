@@ -14,6 +14,7 @@ import { moduleProfile } from './ProfileStore';
 import { moduleSysbar } from './SystemBarStore';
 import { moduleModal } from './ModalStore';
 import { Messagetype } from '@/mixins';
+import { moduleDm } from './DmStore';
 
 class Account {
   async VerifyCredentials(): Promise<P.APIResp<I.User>> {
@@ -584,7 +585,7 @@ class DirectMessage {
   async List() {
     const result = await twitterRequest.call.directMessage.List({ count: '50' });
     if (!twitterRequest.GetApiError(result.data as I.ResponseTwitterError)) {
-      //add~
+      moduleDm.AddDm(result.data.events);
     }
   }
   async Show(id: string) {
