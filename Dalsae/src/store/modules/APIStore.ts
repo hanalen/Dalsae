@@ -575,6 +575,7 @@ class DirectMessage {
   async New(text: string, recvUserId: string, media?: string) {
     const dmEvent: I.ReqDMNew = {
       event: {
+        created_timestamp: '',
         type: 'message_create',
         message_create: { target: { recipient_id: recvUserId }, message_data: { text: text } }
       }
