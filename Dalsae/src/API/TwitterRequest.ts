@@ -26,7 +26,7 @@ function CreateOptions(
   return options;
 }
 
-function CreateHeader(authorization: string, contentType?: string) {
+export function CreateHeader(authorization: string, contentType?: string) {
   const ret = {
     'Content-Type': contentType ? contentType : 'application/x-www-form-urlencoded;encoding=utf-8',
     Authorization: authorization
