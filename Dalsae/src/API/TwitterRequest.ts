@@ -230,6 +230,41 @@ export class TwitterRequest {
       return e;
     }
   }
+  async requestDirectMessage<TReq, TResp>( //DM 전송 전용
+    url: string,
+    method: P.Method,
+    params: P.APIReq<TReq>
+  ): Promise<P.APIResp<TResp>> {
+    try {
+      const oauth: I.OAuth = new I.OAuth();
+      oauth.SetKey(moduleSwitter.publicKey, moduleSwitter.secretKey);
+
+      // const body = params && params.data && !isQueryParam ? oauth.CreateBody(params) : '';
+      const reqUrl = oauth.GetUrl(params, url, false);
+      const resp = await axios({
+        method: method,
+        url: reqUrl,
+        headers: CreateHeader(oauth.GetHeader(undefined, method, url), 'application/json'),
+        data: JSON.stringify(params.data)
+      });
+      console.log(resp);
+      return { data: resp.data };
+    } catch (e) {
+      const error = e as any;
+      if (error.response) {
+        const errorMsg = this.GetApiError(error.response.data);
+        moduleModal.AddMessage({ errorType: M.Messagetype.E_ERROR, time: 3, message: errorMsg });
+        return error.response;
+      } else {
+        moduleModal.AddMessage({
+          errorType: M.Messagetype.E_ERROR,
+          time: 3,
+          message: (e as Error).message
+        });
+      }
+      return e;
+    }
+  }
 
   async media<TResp>(
     url: string,
