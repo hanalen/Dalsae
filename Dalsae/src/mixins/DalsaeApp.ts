@@ -14,6 +14,7 @@ import { eventBus } from '@/plugins';
 import { moduleUtil } from '@/store/modules/UtilStore';
 import { ETweetType } from '@/store/Interface';
 import { UserStreaming } from '@/API';
+import { moduleDom } from '@/store/modules/DomStore';
 @Component
 export class DalsaeApp extends Vue {
   get selectUserID() {
@@ -30,6 +31,7 @@ export class DalsaeApp extends Vue {
         moduleTweet.StopStreaming(oldID);
       }
       if (newID && oldID) {
+        moduleDom.ResetScrollDatas();
         this.StartDalsae();
       }
     });

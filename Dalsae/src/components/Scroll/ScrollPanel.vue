@@ -39,7 +39,7 @@ import { mixins } from 'vue-class-component';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { eventBus } from '@/plugins/EventBus';
 import { ETweetType } from '@/store/Interface';
-import { moduleUI } from '@/store/modules/UIStore';
+import { moduleDom } from '@/store/modules/DomStore';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
 @Component
@@ -52,6 +52,7 @@ export default class ScrollPanel extends M.ScrollPanelBase {
           this.stateData.listData[i].isResized = true;
         }
       });
+      moduleDom.RegisteScrollPanel(this);
     });
     eventBus.$on('FocusPanel', () => {
       if (this.scrollPanel) {

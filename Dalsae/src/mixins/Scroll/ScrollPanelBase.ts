@@ -153,13 +153,6 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
-  Clear() {
-    this.stateData.listData = [];
-    this.stateData.setKey.clear();
-    // this.stateData.listVisible = [];
-    this.statePool.listBench = [];
-  }
-
   @Watch('listData', { immediate: true, deep: true })
   OnChangeListData(newVal: any[]) {
     if (!newVal) return;
@@ -348,5 +341,15 @@ export class ScrollPanelBase extends Vue {
       listTweet[i].scrollTop = total;
       total += listTweet[i].height;
     }
+  }
+
+  Clear() {
+    this.statePool.listBench.forEach(item => {
+      item.$el.remove();
+      item.$destroy();
+    });
+    this.stateData = new StateData();
+    this.state = new State();
+    this.statePool = new StatePool();
   }
 }

@@ -17,6 +17,18 @@ class DomStore extends VuexModule {
   RegisteScrollPanel(panel: M.ScrollPanelBase) {
     this.context.commit('registeScrollPanel', panel);
   }
+
+  @Mutation
+  private resetScrollDatas() {
+    this.listScrollPanel.forEach(item => {
+      item.Clear();
+    });
+  }
+
+  @Action
+  ResetScrollDatas() {
+    this.context.commit('resetScrollDatas');
+  }
 }
 
 export const moduleDom = getModule(DomStore);
