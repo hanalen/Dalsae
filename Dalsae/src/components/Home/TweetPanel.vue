@@ -37,7 +37,7 @@
         />
       </v-tab-item>
       <v-tab-item :key="2">
-        <span>dm</span>
+        <dm-panel />
       </v-tab-item>
       <v-tab-item :key="3">
         <v-progress-circular
