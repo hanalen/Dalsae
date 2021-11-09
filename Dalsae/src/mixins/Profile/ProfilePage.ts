@@ -14,10 +14,19 @@ import twitterRequest from '@/API/TwitterRequest';
 
 @Component
 export class ProfilePage extends Vue {
+  state = {
+    name: '',
+    bio: '',
+    place: '',
+    url: ''
+  };
   @Ref()
   refScrollFollowing!: ScrollPanelBase;
   @Ref()
   refScrollFollower!: ScrollPanelBase;
+  get isUpdateProfile() {
+    return moduleProfile.stateProfile.isUpdateProfile;
+  }
   get isLoadFollowing() {
     return moduleProfile.stateProfile.isLoadFollowing;
   }
@@ -218,6 +227,14 @@ export class ProfilePage extends Vue {
     }
   }
 
+  get editMode() {
+    return moduleProfile.stateProfile.isEditMode;
+  }
+
+  get editText() {
+    return moduleProfile.stateProfile.isEditMode ? '저장' : '프로필 수정';
+  }
+
   get userText() {
     const { name, screen_name } = this.showUser;
     return name + '<br />' + screen_name;
@@ -413,5 +430,18 @@ export class ProfilePage extends Vue {
     if (scrollPos > bottomPos - 100) {
       this.LoadFollowerList(next_cursor_str);
     }
+  }
+  OnClickEdit(e: MouseEvent) {
+    const { isEditMode } = moduleProfile.stateProfile;
+    if (isEditMode) {
+      const { name, url, place, bio } = this.state;
+      moduleApi.account.UpdateProfile(name, url, place, bio);
+    } else {
+      this.state.bio = this.userBio;
+      this.state.name = this.name;
+      this.state.place = this.place;
+      this.state.url = this.url;
+    }
+    moduleProfile.SetState({ ...moduleProfile.stateProfile, isEditMode: !isEditMode });
   }
 }

@@ -22,6 +22,9 @@ class StateProfile {
 
   indexFollowing = 0;
   indexFollower = 0;
+
+  isEditMode = false;
+  isUpdateProfile = false;
 }
 
 @Module({ dynamic: true, store, name: 'profile' })

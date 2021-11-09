@@ -12,6 +12,16 @@
         {{ item.message }}
       </v-alert>
     </div>
+    <div class="full-loading" v-if="isUpdateProfile">
+      <v-progress-circular
+        v-if="isUpdateProfile"
+        :width="4"
+        size="60"
+        color="primary"
+        indeterminate
+        style="position: relative !important;"
+      ></v-progress-circular>
+    </div>
     <v-progress-circular
       v-if="isLoadProfile"
       :width="5"
@@ -74,14 +84,25 @@
         <div class="profile-right">
           <div class="profile-right-top">
             <div>
-              <span class="user-name">{{ name }}</span
+              <v-text-field
+                v-if="editMode"
+                class="ma-0 "
+                label="이름"
+                v-model="state.name"
+                height="20"
+                hide-details
+                style="font-size: 14px"
+              ></v-text-field>
+              <span v-else class="user-name">{{ name }}</span
               ><br />
-              <span class="user-screen-name">{{ screenName }}</span>
-              <span class="follow-text">
-                {{ followerText }}
-              </span>
-              <br />
-              <br />
+              <div v-if="!editMode">
+                <span class="user-screen-name">{{ screenName }}</span>
+                <span class="follow-text" v-if="!editMode">
+                  {{ followerText }}
+                </span>
+                <br />
+                <br />
+              </div>
             </div>
             <v-btn
               v-if="!itsMe"
@@ -94,15 +115,53 @@
             >
               {{ followText }}
             </v-btn>
+            <v-btn
+              v-if="itsMe"
+              class="btn-follow"
+              height="30"
+              outlined
+              color="primary"
+              text
+              @click="OnClickEdit"
+            >
+              {{ editText }}
+            </v-btn>
           </div>
-          <div v-html="userBio" @click="OnClickLink"></div>
+          <v-text-field
+            v-if="editMode"
+            height="20"
+            class="ma-0 "
+            label="자기소개 입력"
+            v-model="state.bio"
+            hide-details
+            style="font-size: 14px"
+          ></v-text-field>
+          <div v-else v-html="userBio" @click="OnClickLink"></div>
           <div class="user-place color-gray">
-            <v-icon size="16">mdi-compass-outline </v-icon>
-            <span>{{ place }}</span>
+            <v-icon v-if="!editMode" size="16">mdi-compass-outline </v-icon>
+            <v-text-field
+              v-if="editMode"
+              height="20"
+              class="ma-0 "
+              label="위치 입력"
+              v-model="state.place"
+              hide-details
+              style="font-size: 14px ;margin-top:12px !important"
+            ></v-text-field>
+            <span v-else>{{ place }}</span>
           </div>
           <div class="user-url">
-            <v-icon size="16">mdi-link-variant</v-icon>
-            <span class="url" @click="OnClickProfileURL">{{ url }}</span>
+            <v-icon v-if="!editMode" size="16">mdi-link-variant</v-icon>
+            <v-text-field
+              v-if="editMode"
+              height="20"
+              class="ma-0 "
+              label="링크 입력"
+              v-model="state.url"
+              hide-details
+              style="font-size: 14px ; margin-top:12px !important"
+            ></v-text-field>
+            <span v-else class="url" @click="OnClickProfileURL">{{ url }}</span>
           </div>
         </div>
       </div>
@@ -197,6 +256,21 @@
 tab-name {
   display: flex;
 }
+.full-loading {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(202, 202, 202, 0.4);
+  z-index: 10;
+}
+input text {
+  font-size: 14px !important;
+}
+.v-input__slot {
+  margin: 0px !important;
+}
 .v-application {
   line-height: normal !important;
 }
@@ -254,7 +328,10 @@ tab-name {
 }
 .profile-view {
   padding: 4px;
-  font-size: 14px;
+  font-size: 14px !important;
+}
+.user-place {
+  display: flex;
 }
 .profile-header {
   border-radius: 20px;
