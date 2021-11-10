@@ -1,10 +1,18 @@
 <template>
   <div class="dm-item">
     <div class="left" v-if="!itsMe">
-      <span class="left-message">{{ text }}</span>
+      <p>
+        <span class="left-message">{{ text }}</span>
+        <br />
+        <span class="left-time"> {{ time }}</span>
+      </p>
     </div>
     <div v-else class="right">
-      <span class="right-message">{{ text }}</span>
+      <p>
+        <span class="right-message">{{ text }}</span>
+        <br />
+        <span class="right-time"> {{ time }}</span>
+      </p>
     </div>
   </div>
 </template>
@@ -15,18 +23,32 @@
   position: relative;
   width: auto;
   display: flex;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 .left,
 .right {
   display: flex;
-  flex-direction: row;
   width: 100%;
 }
 .left {
   justify-content: flex-start;
 }
-.right {
+.left-time,
+.right-time {
+  position: absolute;
+  color: rgb(156, 156, 156);
+}
+.right-time {
+  right: 4px;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  justify-content: flex-end;
+}
+.right,
+.right-message {
   justify-content: flex-end;
 }
 .left span,
@@ -55,6 +77,7 @@ import { Vue, Mixins, Component, Ref, Provide, Prop } from 'vue-property-decorat
 import * as I from '@/Interfaces';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import moment from 'moment';
 
 @Component
 export default class DmItem extends Vue {
@@ -69,7 +92,11 @@ export default class DmItem extends Vue {
     return this.dm.message_create?.message_data?.text;
   }
   get time() {
-    return 'weajkrwjaekr';
+    const stamp = Number.parseInt(this.dm.created_timestamp);
+    const date = new Date(stamp);
+    const locale = window.navigator.language;
+    moment.locale(locale);
+    return moment(date).calendar();
   }
 }
 </script>
