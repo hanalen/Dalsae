@@ -1,18 +1,12 @@
 <template>
   <div class="dm-item">
     <div class="left" v-if="!itsMe">
-      <p>
-        <span class="left-message">{{ text }}</span>
-        <br />
-        <span class="left-time"> {{ time }}</span>
-      </p>
+      <div v-html="text" class="left-message" @click="OnClickLink"></div>
+      <span class=" time">{{ time }}</span>
     </div>
     <div v-else class="right">
-      <p>
-        <span class="right-message">{{ text }}</span>
-        <br />
-        <span class="right-time"> {{ time }}</span>
-      </p>
+      <span class="time"> {{ time }}</span>
+      <div v-html="text" class="right-message" @click="OnClickLink"></div>
     </div>
   </div>
 </template>
@@ -30,23 +24,6 @@
   display: flex;
   width: 100%;
 }
-.left {
-  justify-content: flex-start;
-}
-.left-time,
-.right-time {
-  position: absolute;
-  color: rgb(156, 156, 156);
-}
-.right-time {
-  right: 4px;
-}
-.item {
-  display: flex;
-  flex-direction: column;
-  width: 70%;
-  justify-content: flex-end;
-}
 .right,
 .right-message {
   justify-content: flex-end;
@@ -58,16 +35,20 @@
 }
 .left-message {
   padding: 4px;
+  max-width: 70%;
   background-color: #d5eefd;
   border-radius: 10px 10px 10px 0px;
 }
 .right-message {
   padding: 4px;
+  max-width: 70%;
   background-color: #e7f5fe;
   border-radius: 10px 10px 0px 10px;
 }
 .time {
-  font-size: 12p;
+  font-size: 12px !important;
+  margin: 0px 4px;
+  color: rgb(156, 156, 156);
 }
 </style>
 
@@ -89,7 +70,21 @@ export default class DmItem extends Vue {
   }
 
   get text() {
-    return this.dm.message_create?.message_data?.text;
+    let text = this.dm.message_create?.message_data?.text;
+    if (!text) return '';
+    const entities = this.dm.message_create?.message_data?.entities;
+    if (!entities) return text;
+    const { urls, media } = entities;
+    if (urls) {
+      for (const url of urls) {
+        text = text.replace(url.url, `<span class="url" ref="refUrl">${url.display_url}</span>`);
+      }
+    }
+    if (media) {
+      text = text.replace(media.url, `<span class="url" ref="refUrl">${media.display_url}</span>`);
+    }
+    // text += `<br/><span class="left-time">${this.time}</span>`;
+    return text;
   }
   get time() {
     const stamp = Number.parseInt(this.dm.created_timestamp);
@@ -97,6 +92,28 @@ export default class DmItem extends Vue {
     const locale = window.navigator.language;
     moment.locale(locale);
     return moment(date).calendar();
+  }
+
+  OnClickLink(e: MouseEvent) {
+    const el = e.target as Element;
+    if (el.tagName === 'SPAN' && el.className === 'url') {
+      const entities = this.dm.message_create?.message_data?.entities;
+      const urls = entities?.urls;
+      if (urls) {
+        for (const url of urls) {
+          if (url.display_url === el.innerHTML) {
+            window.preload.OpenBrowser(url.expanded_url);
+            return;
+          }
+        }
+      }
+      const media = entities?.media;
+      if (media) {
+        if (media.display_url === el.innerHTML) {
+          window.preload.OpenBrowser(media.expanded_url);
+        }
+      }
+    }
   }
 }
 </script>
