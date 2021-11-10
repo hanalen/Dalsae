@@ -581,7 +581,9 @@ class DirectMessage {
       }
     };
     const result = await twitterRequest.call.directMessage.New(dmEvent);
-    console.log(result);
+    if (!twitterRequest.GetApiError(result.data as I.ResponseTwitterError)) {
+      moduleDm.AddDm(result.data);
+    }
   }
   async List() {
     const result = await twitterRequest.call.directMessage.List({ count: '50' });

@@ -37,6 +37,7 @@
           background-color="white"
           v-on:paste="Paste"
           type="text"
+          @keydown.enter="OnEnter"
         />
         <!-- </input> -->
       </div>
@@ -108,6 +109,7 @@ import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleDm } from '@/store/modules/DmStore';
 import * as M from '@/mixins';
+import { moduleApi } from '@/store/modules/APIStore';
 
 @Component
 export default class DmPanel extends Vue {
@@ -235,6 +237,15 @@ export default class DmPanel extends Vue {
         this.listImage = listImage;
       }
     }
+  }
+
+  OnEnter(e: KeyboardEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    const input = e.target as HTMLInputElement;
+    const text = input.value;
+    input.value = '';
+    moduleApi.directMessage.New(text, moduleDm.stateDm.selectUser.id_str);
   }
 }
 </script>
