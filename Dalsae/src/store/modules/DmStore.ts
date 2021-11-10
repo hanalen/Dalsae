@@ -70,6 +70,16 @@ class DmStore extends VuexModule {
       pair.listDm.push(dm);
       pair.user.last_direct_message = dm;
     }
+    for (const pair of this.stateDm.listDmPair) {
+      pair.listDm.sort((a, b) => {
+        const c = Number.parseInt(a.created_timestamp);
+        const d = Number.parseInt(b.created_timestamp);
+        return c - d;
+      });
+    }
+    for (const pair of this.stateDm.listDmPair) {
+      pair.user.last_direct_message = pair.listDm[pair.listDm.length - 1];
+    }
     this.stateDm.listDmPair.sort((a, b) => {
       let c = 0;
       let d = 0;
@@ -81,16 +91,6 @@ class DmStore extends VuexModule {
       }
       return d - c;
     });
-    for (const pair of this.stateDm.listDmPair) {
-      pair.listDm.sort((a, b) => {
-        const c = Number.parseInt(a.created_timestamp);
-        const d = Number.parseInt(b.created_timestamp);
-        return c - d;
-      });
-    }
-    for (const pair of this.stateDm.listDmPair) {
-      pair.user.last_direct_message = pair.listDm[pair.listDm.length - 1];
-    }
   }
 
   @Action
