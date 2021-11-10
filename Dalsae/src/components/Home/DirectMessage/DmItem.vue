@@ -1,14 +1,10 @@
 <template>
   <div class="dm-item">
-    <div class="left" v-if="!itsMe">
+    <propic :user="user" :size="40" />
+    <div class="dm" :class="{ me: itsMe }">
       <img v-if="img" :src="img" />
       <div v-html="text" class="left-message" @click="OnClickLink"></div>
       <span class=" time">{{ time }}</span>
-    </div>
-    <div v-else class="right">
-      <img v-if="img" :src="img" />
-      <span class="time"> {{ time }}</span>
-      <div v-html="text" class="right-message" @click="OnClickLink"></div>
     </div>
   </div>
 </template>
@@ -16,39 +12,24 @@
 <style lang="scss" scoped>
 .dm-item {
   font-size: 14px;
-  position: relative;
-  width: auto;
   display: flex;
   margin-bottom: 10px;
 }
-img {
-  max-width: 70%;
-  max-height: 100px;
-}
-.left,
-.right {
-  display: flex;
-  width: 100%;
-}
-.right,
-.right-message {
-  justify-content: flex-end;
-}
-.left span,
-.right span {
-  max-width: 70%;
-  word-break: break-all;
-}
-.left-message {
+.dm {
+  margin-left: 10px;
   padding: 4px;
   max-width: 70%;
+  border-radius: 0px 10px 10px 10px;
   background-color: #d5eefd;
-  border-radius: 10px 10px 10px 0px;
+}
+img {
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 20px;
 }
 .right-message {
   padding: 4px;
   max-width: 70%;
-  background-color: #e7f5fe;
   border-radius: 10px 10px 0px 10px;
 }
 .time {
@@ -67,12 +48,22 @@ import { moduleSwitter } from '@/store/modules/SwitterStore';
 import moment from 'moment';
 import axios from 'axios';
 import { CreateHeader } from '@/API';
+import { moduleDm } from '@/store/modules/DmStore';
 
 @Component
 export default class DmItem extends Vue {
   @Prop()
   dm!: I.DMEvent;
+
   img = '';
+
+  get user() {
+    if (this.itsMe) {
+      return moduleSwitter.selectUser.user;
+    } else {
+      return moduleDm.stateDm.selectUser;
+    }
+  }
 
   async created() {
     const url = this.dm.message_create?.message_data?.attachment?.media?.media_url_https;

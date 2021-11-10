@@ -12,7 +12,7 @@
           <span>@{{ selectUser.screen_name }}</span>
         </div>
       </div>
-      <div class="dm-body">
+      <div class="dm-body" :style="styleBody">
         <dm-item v-for="(dm, i) in listDm" :key="i" :dm="dm" />
       </div>
       <div class="dm-input">
@@ -58,12 +58,15 @@
   width: calc(100vw - 300px);
   height: 100%;
   padding: 8px;
+}
+.dm-body {
   overflow-y: scroll;
 }
 .dm-user-info {
   display: flex;
   border-bottom: dashed 2px rgba(0, 0, 0, 0.12);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  height: 60px;
 }
 .dm-input,
 .dm-user-info {
@@ -128,6 +131,17 @@ export default class DmPanel extends Vue {
     } else {
       return {
         width: 'calc(100vw - 330px)'
+      };
+    }
+  }
+  get styleBody() {
+    if (moduleOption.uiOption.isSmallInput) {
+      return {
+        height: 'calc(100vh - 200px)'
+      };
+    } else {
+      return {
+        height: 'calc(100vh - 260px)'
       };
     }
   }
