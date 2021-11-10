@@ -591,6 +591,7 @@ class DirectMessage {
   }
   async Show(id: string) {
     const result = await twitterRequest.call.directMessage.Show({ id: id });
+    return result;
   }
 }
 

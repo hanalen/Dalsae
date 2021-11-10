@@ -498,7 +498,7 @@ export class TwitterRequest {
             data
           }),
         Show: (data: P.ReqDMShow) =>
-          this.get<P.ReqDMShow, I.DMEvent>(baseUrl + '/direct_messages/events/show.json', {
+          this.get<P.ReqDMShow, I.DMShow>(baseUrl + '/direct_messages/events/show.json', {
             data
           })
       },
