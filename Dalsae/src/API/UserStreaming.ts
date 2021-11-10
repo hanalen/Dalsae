@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as I from '@/Interfaces';
 import { ESystemBar, ETweetType } from '@/store/Interface';
+import { moduleApi } from '@/store/modules/APIStore';
+import { moduleDm } from '@/store/modules/DmStore';
 import { moduleSysbar } from '@/store/modules/SystemBarStore';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import axios from 'axios';
-import { CreateHeader } from './TwitterRequest';
+import twitterRequest, { CreateHeader } from './TwitterRequest';
 export class UserStreaming {
   private idStr = '';
   private reader!: ReadableStreamDefaultReader<Uint8Array>;
@@ -95,7 +97,7 @@ export class UserStreaming {
       return this.ReadStreaming();
     }
   }
-  private ParseJson(json: string) {
+  private async ParseJson(json: string) {
     if (json.length < 10) return; //이상 패킷으로 예상 됨
 
     try {
@@ -108,6 +110,26 @@ export class UserStreaming {
           type: ETweetType.E_HOME,
           listTweet: undefined
         });
+      } else {
+        const dm: I.StreamingDM = JSON.parse(json);
+        console.log(dm);
+        if (dm.direct_message) {
+          const idx = dm.direct_message.text.indexOf('https://t.co');
+          if (idx > -1) {
+            //entitie요청
+            const resp = await moduleApi.directMessage.Show(dm.direct_message.id_str);
+            if (!twitterRequest.GetApiError(resp.data as I.ResponseTwitterError)) {
+              moduleDm.AddDm(resp.data.event);
+              return;
+            } else {
+              console.log('dm api error');
+            }
+          }
+          //api리밋, entitie가 없을 경우 그냥 등록
+          moduleDm.AddDmStreaming(dm);
+        } else {
+          console.log(json);
+        }
       }
     } catch (ex) {
       console.log(

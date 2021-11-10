@@ -104,6 +104,20 @@ class DmStore extends VuexModule {
   }
 
   @Action
+  AddDmStreaming(dm: I.StreamingDM) {
+    const timeStamp = new Date(dm.direct_message.created_at).getTime().toString();
+    const addDm: I.DMEvent = { created_timestamp: timeStamp, type: 'message_create' };
+    addDm.id = dm.direct_message.id_str;
+    const messageCreate: I.MessageCreate = {
+      sender_id: dm.direct_message.sender.id_str,
+      target: { recipient_id: dm.direct_message.recipient.id_str }
+    };
+    addDm.message_create = messageCreate;
+    messageCreate.message_data = { text: dm.direct_message.text };
+    this.context.commit('addDm', addDm);
+  }
+
+  @Action
   ChangeSelectUser(user: I.User) {
     this.context.commit('changeSelectUser', user);
   }
