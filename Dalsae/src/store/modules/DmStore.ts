@@ -88,6 +88,9 @@ class DmStore extends VuexModule {
         return c - d;
       });
     }
+    for (const pair of this.stateDm.listDmPair) {
+      pair.user.last_direct_message = pair.listDm[pair.listDm.length - 1];
+    }
   }
 
   @Action
