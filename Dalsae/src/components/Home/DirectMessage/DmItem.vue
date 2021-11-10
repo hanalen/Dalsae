@@ -41,7 +41,7 @@ img {
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/camelcase */
-import { Vue, Mixins, Component, Ref, Provide, Prop } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Ref, Provide, Prop, Watch } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
@@ -65,10 +65,13 @@ export default class DmItem extends Vue {
     }
   }
 
-  async created() {
-    const url = this.dm.message_create?.message_data?.attachment?.media?.media_url_https;
+  @Watch('dm', { immediate: true, deep: true })
+  OnWatchDm(newVal: I.DMEvent) {
+    const url = newVal.message_create?.message_data?.attachment?.media?.media_url_https;
     if (url) {
       this.DownloadImage(url);
+    } else {
+      this.img = '';
     }
   }
 
