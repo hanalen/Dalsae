@@ -1,5 +1,5 @@
 <template>
-  <div class="dm-user">
+  <div class="dm-user" @click="OnClick" :class="{ selected: selected }">
     <div class="dm-user-top">
       <div class="propic">
         <img :src="img" />
@@ -22,6 +22,12 @@
   // display: flex;
   font-size: 14px !important;
   border-bottom: dashed 1px rgba(0, 0, 0, 0.12);
+}
+.dm-user:hover {
+  background-color: #d5eefd;
+}
+.selected {
+  background-color: #e7f5fe;
 }
 .text-area {
   margin-left: 4px;
@@ -58,11 +64,17 @@ import { Vue, Mixins, Component, Ref, Provide, Prop } from 'vue-property-decorat
 import * as I from '@/Interfaces';
 import { moduleModal } from '@/store/modules/ModalStore';
 import moment from 'moment';
+import { moduleProfile } from '@/store/modules/ProfileStore';
+import { moduleDm } from '@/store/modules/DmStore';
 
 @Component
 export default class DmUser extends Vue {
   @Prop()
   user!: I.User;
+
+  get selected() {
+    return moduleDm.stateDm.selectUser.id_str === this.user.id_str;
+  }
 
   get img() {
     return this.user.profile_image_url_https.replace('_normal', '');
@@ -99,6 +111,9 @@ export default class DmUser extends Vue {
     const stamp = Number.parseInt(this.user.last_direct_message?.created_timestamp);
     const date = new Date(stamp);
     return moment(date).format('LLLL') + ':' + moment(date).format('ss');
+  }
+  OnClick(e: MouseEvent) {
+    moduleDm.ChangeSelectUser(this.user);
   }
 }
 </script>

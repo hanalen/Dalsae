@@ -3,7 +3,9 @@
     <div class="dm-left">
       <dm-user v-for="(user, i) in listUser" :key="i" :user="user" />
     </div>
-    <div class="dm-right"></div>
+    <div class="dm-right">
+      <dm-item v-for="(dm, i) in listDm" :key="i" :dm="dm" />
+    </div>
   </div>
 </template>
 
@@ -15,13 +17,12 @@
   width: 400px;
   height: 100%;
   overflow-y: scroll;
-  background-color: azure;
 }
 .dm-right {
   width: 100%;
   height: 100%;
+  padding: 8px;
   overflow-y: scroll;
-  background-color: gray;
 }
 </style>
 
@@ -48,6 +49,9 @@ export default class DmPanel extends Vue {
   }
   get listUser() {
     return moduleDm.listUser;
+  }
+  get listDm() {
+    return moduleDm.listDm;
   }
 }
 </script>

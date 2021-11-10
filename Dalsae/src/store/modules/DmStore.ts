@@ -13,8 +13,10 @@ interface DmPair {
 
 class StateDirectMessage {
   listDmPair: DmPair[];
+  selectUser: I.User;
   constructor() {
     this.listDmPair = [];
+    this.selectUser = new I.User();
   }
 }
 
@@ -24,6 +26,15 @@ class DmStore extends VuexModule {
 
   get listUser() {
     return this.stateDm.listDmPair.map(x => x.user);
+  }
+
+  get listDm() {
+    const pair = this.stateDm.listDmPair.find(x => x.id === this.stateDm.selectUser.id_str);
+    if (pair) {
+      return pair.listDm;
+    } else {
+      return [];
+    }
   }
 
   @Mutation
@@ -82,6 +93,16 @@ class DmStore extends VuexModule {
   @Action
   AddDm(dm: I.DMEvent | I.DMEvent[]) {
     this.context.commit('addDm', dm);
+  }
+
+  @Mutation
+  private changeSelectUser(user: I.User) {
+    this.stateDm.selectUser = user;
+  }
+
+  @Action
+  ChangeSelectUser(user: I.User) {
+    this.context.commit('changeSelectUser', user);
   }
 }
 
