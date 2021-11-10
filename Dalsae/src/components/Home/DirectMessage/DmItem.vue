@@ -1,10 +1,12 @@
 <template>
   <div class="dm-item">
     <div class="left" v-if="!itsMe">
+      <img v-if="img" :src="img" />
       <div v-html="text" class="left-message" @click="OnClickLink"></div>
       <span class=" time">{{ time }}</span>
     </div>
     <div v-else class="right">
+      <img v-if="img" :src="img" />
       <span class="time"> {{ time }}</span>
       <div v-html="text" class="right-message" @click="OnClickLink"></div>
     </div>
@@ -18,6 +20,10 @@
   width: auto;
   display: flex;
   margin-bottom: 10px;
+}
+img {
+  max-width: 70%;
+  max-height: 100px;
 }
 .left,
 .right {
@@ -59,11 +65,40 @@ import * as I from '@/Interfaces';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import moment from 'moment';
+import axios from 'axios';
+import { CreateHeader } from '@/API';
 
 @Component
 export default class DmItem extends Vue {
   @Prop()
   dm!: I.DMEvent;
+  img = '';
+
+  async created() {
+    const url = this.dm.message_create?.message_data?.attachment?.media?.media_url_https;
+    if (url) {
+      this.DownloadImage(url);
+    }
+  }
+
+  async DownloadImage(url: string) {
+    const method = 'GET';
+    const oauth = new I.OAuth();
+    oauth.SetKey(moduleSwitter.publicKey, moduleSwitter.secretKey);
+    const resp = await axios({
+      method: method,
+      url: url,
+      headers: CreateHeader(oauth.GetHeader(undefined, method, url)),
+      responseType: 'blob'
+    });
+    console.log(resp);
+    const reader = new FileReader();
+    reader.readAsDataURL(resp.data);
+    reader.onload = e => {
+      const img = e.target?.result as string;
+      this.img = img;
+    };
+  }
 
   get itsMe() {
     return this.dm.message_create?.sender_id === moduleSwitter.selectID;
