@@ -1,10 +1,10 @@
 <template>
   <div class="dm-item">
     <div class="left" v-if="!itsMe">
-      <span>{{ text }}</span>
+      <span class="left-message">{{ text }}</span>
     </div>
     <div v-else class="right">
-      <span>{{ text }}</span>
+      <span class="right-message">{{ text }}</span>
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@
 .left,
 .right {
   display: flex;
+  flex-direction: row;
   width: 100%;
 }
 .left {
@@ -30,18 +31,21 @@
 }
 .left span,
 .right span {
-  max-width: 45%;
+  max-width: 70%;
   word-break: break-all;
 }
-.left span {
+.left-message {
   padding: 4px;
   background-color: #d5eefd;
   border-radius: 10px 10px 10px 0px;
 }
-.right span {
+.right-message {
   padding: 4px;
   background-color: #e7f5fe;
   border-radius: 10px 10px 0px 10px;
+}
+.time {
+  font-size: 12p;
 }
 </style>
 
@@ -63,6 +67,9 @@ export default class DmItem extends Vue {
 
   get text() {
     return this.dm.message_create?.message_data?.text;
+  }
+  get time() {
+    return 'weajkrwjaekr';
   }
 }
 </script>
