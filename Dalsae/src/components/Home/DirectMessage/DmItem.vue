@@ -2,6 +2,16 @@
   <div class="dm-item">
     <propic :user="user" :size="40" />
     <div class="dm" :class="{ me: itsMe }">
+      <v-progress-circular
+        v-if="isLoadImage"
+        :width="3"
+        color="primary"
+        indeterminate
+      ></v-progress-circular>
+      <div v-if="isErrorLoadImage">
+        <v-icon color="primary">mdi-alert-circle-outline</v-icon>
+        <span>이미지 불러오기 에러</span>
+      </div>
       <img v-if="img" :src="img" />
       <div v-html="text" class="left-message" @click="OnClickLink"></div>
       <span class=" time">{{ time }}</span>
@@ -49,6 +59,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { CreateHeader } from '@/API';
 import { moduleDm } from '@/store/modules/DmStore';
+import twitterRequest from '@/API/TwitterRequest';
 
 @Component
 export default class DmItem extends Vue {
@@ -56,6 +67,8 @@ export default class DmItem extends Vue {
   dm!: I.DMEvent;
 
   img = '';
+  isLoadImage = false;
+  isErrorLoadImage = false;
 
   get user() {
     if (this.itsMe) {
@@ -79,19 +92,25 @@ export default class DmItem extends Vue {
     const method = 'GET';
     const oauth = new I.OAuth();
     oauth.SetKey(moduleSwitter.publicKey, moduleSwitter.secretKey);
-    const resp = await axios({
-      method: method,
-      url: url,
-      headers: CreateHeader(oauth.GetHeader(undefined, method, url)),
-      responseType: 'blob'
-    });
-    console.log(resp);
-    const reader = new FileReader();
-    reader.readAsDataURL(resp.data);
-    reader.onload = e => {
-      const img = e.target?.result as string;
-      this.img = img;
-    };
+    try {
+      this.isLoadImage = true;
+      const resp = await axios({
+        method: method,
+        url: url,
+        headers: CreateHeader(oauth.GetHeader(undefined, method, url)),
+        responseType: 'blob'
+      });
+      this.isLoadImage = false;
+      const reader = new FileReader();
+      reader.readAsDataURL(resp.data);
+      reader.onload = e => {
+        const img = e.target?.result as string;
+        this.img = img;
+      };
+    } catch (e) {
+      this.isLoadImage = false;
+      this.isErrorLoadImage = true;
+    }
   }
 
   get itsMe() {
