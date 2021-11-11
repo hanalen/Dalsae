@@ -21,7 +21,7 @@
     "axios": "^0.19.2",
     "copy-image-clipboard": "^2.0.1",
     "crypto-js": "^4.0.0",
-    "electron": "^11.0.1",
+    "electron": "^11.5.0",
     "electron-builder": "^22.7.0",
     "electron-log": "^4.2.4",
     "faker": "^5.5.3",
