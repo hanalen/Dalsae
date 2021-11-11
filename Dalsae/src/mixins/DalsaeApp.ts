@@ -15,6 +15,7 @@ import { moduleUtil } from '@/store/modules/UtilStore';
 import { ETweetType } from '@/store/Interface';
 import { UserStreaming } from '@/API';
 import { moduleDom } from '@/store/modules/DomStore';
+import { moduleDm } from '@/store/modules/DmStore';
 @Component
 export class DalsaeApp extends Vue {
   get selectUserID() {
@@ -76,18 +77,19 @@ export class DalsaeApp extends Vue {
         user_id_str: moduleSwitter.selectID,
         listTweet: testTweets
       });
-      const testFollowing = window.preload.LoadTestFriends();
-      console.log(testFollowing);
+      const following = window.preload.LoadTestFriends();
+      const follower = window.preload.LoadTestFollower();
       const { followDatas } = moduleSwitter.stateIds;
       const datas = followDatas.dicUsers.get(moduleSwitter.selectID);
       if (datas) {
-        datas.listFollowing = testFollowing.users;
+        datas.listFollowing = following;
+        datas.listFollower = follower;
         moduleSwitter.SetStateIds({ ...moduleSwitter.stateIds, followDatas: followDatas });
       }
-      // moduleSwitter.AddFollowingList({
-      //   followList: testFollowing,
-      //   selectId: moduleSwitter.selectID
-      // });
+
+      const dms = window.preload.LoadTestDM();
+      console.log(dms);
+      moduleDm.AddDm(dms.events);
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
@@ -99,9 +101,10 @@ export class DalsaeApp extends Vue {
       // moduleApi.block.Ids({ cursor: '-1', stringify_ids: true });
       // moduleApi.statuses.TimeLine();
       // moduleApi.statuses.Mention();
-      const streaming = new UserStreaming();
-      streaming.Connect(moduleSwitter.publicKey, moduleSwitter.secretKey, moduleSwitter.selectID);
-      moduleTweet.AddStreaming({ key: moduleSwitter.selectID, streaming: streaming });
+      // moduleApi.directMessage.List();
+      // const streaming = new UserStreaming();
+      // streaming.Connect(moduleSwitter.publicKey, moduleSwitter.secretKey, moduleSwitter.selectID);
+      // moduleTweet.AddStreaming({ key: moduleSwitter.selectID, streaming: streaming });
     }
   }
 
