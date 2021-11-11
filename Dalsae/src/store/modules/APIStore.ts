@@ -574,16 +574,29 @@ class OAuth {
 
 class DirectMessage {
   async New(text: string, recvUserId: string, media?: string) {
+    let mediaId = '';
+    if (media) {
+      const status = new Statuses();
+      const resp = await status.Upload(media, true);
+      if (resp?.media_id_string) mediaId = resp?.media_id_string;
+    }
     const dmEvent: I.ReqDMNew = {
       event: {
         created_timestamp: '',
         type: 'message_create',
-        message_create: { target: { recipient_id: recvUserId }, message_data: { text: text } }
+        message_create: {
+          target: { recipient_id: recvUserId },
+          message_data: { text: text }
+        }
       }
     };
+    if (media && dmEvent.event.message_create?.message_data) {
+      const attachment: I.Attachment = { type: 'media', media: { id: mediaId } };
+      dmEvent.event.message_create.message_data.attachment = attachment;
+    }
     const result = await twitterRequest.call.directMessage.New(dmEvent);
     if (!twitterRequest.GetApiError(result.data as I.ResponseTwitterError)) {
-      moduleDm.AddDm(result.data);
+      moduleDm.AddDm(result.data.event);
     }
   }
   async List() {
