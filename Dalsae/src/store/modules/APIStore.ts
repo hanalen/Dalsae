@@ -51,7 +51,8 @@ class Account {
 }
 
 class Statuses {
-  async Upload(media: string): Promise<P.MediaResp | undefined> {
+  async Upload(media: string, isDm = false): Promise<P.MediaResp | undefined> {
+    console.log(media);
     const split = media.split(','); //data:image/png;base64, 이거 잘라야함
     const str = split[0];
     media = split[1];
@@ -64,7 +65,7 @@ class Statuses {
         command: 'INIT',
         total_bytes: media.length,
         media_type: type,
-        media_category: 'tweet_gif'
+        media_category: isDm ? 'dm_gif' : 'tweet_gif'
       });
       console.log(result);
       const loopCount = Math.ceil(media.length / 5242880);
@@ -93,8 +94,8 @@ class Statuses {
       return result.data;
     } else {
       const result = await twitterRequest.call.media.Upload({
-        media: media
-        // media_category: 'tweet_image'
+        media: media,
+        media_category: isDm ? 'dm_image' : 'tweet_image'
       });
       return result.data;
     }
