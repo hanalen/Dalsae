@@ -154,7 +154,7 @@ export class TwitterRequest {
           message: (e as Error).message
         });
       }
-      return e;
+      return e as Promise<P.APIResp<TResp>>;
     }
   }
 
@@ -227,7 +227,7 @@ export class TwitterRequest {
           message: (e as Error).message
         });
       }
-      return e;
+      return e as Promise<P.APIResp<TResp>>;
     }
   }
   async requestDirectMessage<TReq, TResp>( //DM 전송 전용
@@ -262,7 +262,7 @@ export class TwitterRequest {
           message: (e as Error).message
         });
       }
-      return e;
+      return e as Promise<P.APIResp<TResp>>;
     }
   }
 
@@ -315,7 +315,7 @@ export class TwitterRequest {
           message: (e as Error).message
         });
       }
-      return e;
+      return e as Promise<P.APIResp<TResp>>;
     }
   }
 
