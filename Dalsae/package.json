@@ -55,7 +55,7 @@
     "sass-loader": "^8.0.2",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^7.0.4",
-    "typescript": "~3.8.3",
+    "typescript": "^4.4.4",
     "vue-cli-plugin-electron-builder": "^2.0.0-rc.1",
     "vue-svg-loader": "^0.16.0",
     "vue-template-compiler": "^2.6.14",
