@@ -6,3 +6,4 @@ export * from './Target';
 export * from './Attachment';
 export * from './DMEntitie';
 export * from './DMShow';
+export * from './DMMedia';
