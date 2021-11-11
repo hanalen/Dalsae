@@ -7,7 +7,9 @@
     @click="Click"
     v-if="media"
   >
-    <v-icon color="primary" size="50" v-if="isVideo">mdi-play-circle-outline </v-icon>
+    <v-icon class="icon-video" color="primary" size="50" v-if="isVideo"
+      >mdi-play-circle-outline
+    </v-icon>
     <div class="tweet-images-group" v-show="isHover">
       <img class="tweet-image" v-for="(item, i) in media" :key="i" :src="imgPreview(item)" />
     </div>
@@ -24,6 +26,16 @@
 </template>
 
 <style lang="scss" scoped>
+.image-preview {
+  position: relative;
+}
+.icon-video {
+  position: absolute !important;
+  left: 25%;
+  top: 25%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+}
 .image-preview:hover {
   cursor: pointer;
 }
