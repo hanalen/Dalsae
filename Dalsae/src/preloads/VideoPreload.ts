@@ -11,7 +11,7 @@ export default class VideoPreload {
     // Log.info('tweet id: ' + tweetId);
     const window = new remote.BrowserWindow({
       show: true,
-      title: 'dalsae-image',
+      title: 'dalsae-video',
       width: 1900,
       height: 1200,
       webPreferences: {
@@ -21,14 +21,14 @@ export default class VideoPreload {
         preload: path.join(__dirname, 'preload')
       }
     });
-    window.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL as string}ImageView?tweetId=${ipcName}`);
+    window.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL as string}VideoView?tweetId=${ipcName}`);
     window.webContents.openDevTools();
-    ipcRenderer.send('AddChannel', { name: `image_${ipcName}`, value: JSON.stringify(tweet) });
+    ipcRenderer.send('AddChannel', { name: `video_${ipcName}`, value: JSON.stringify(tweet) });
     ipcRenderer.send('AddChannel', { name: `option_${ipcName}`, value: JSON.stringify(option) });
   }
 
   GetTweet(tweetId: string) {
-    const tweet = ipcRenderer.sendSync('image_' + tweetId);
+    const tweet = ipcRenderer.sendSync('video_' + tweetId);
     return tweet;
   }
 
