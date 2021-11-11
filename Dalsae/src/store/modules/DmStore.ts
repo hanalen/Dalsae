@@ -20,9 +20,20 @@ class StateDirectMessage {
   }
 }
 
+class StateInput {
+  input: string;
+  image: string;
+  constructor() {
+    this.image = '';
+    this.input = '';
+  }
+}
+
 @Module({ dynamic: true, store, name: 'dm' })
 class DmStore extends VuexModule {
   stateDm = new StateDirectMessage();
+
+  stateInput = new StateInput();
 
   get listUser() {
     return this.stateDm.listDmPair.map(x => x.user);
@@ -120,6 +131,16 @@ class DmStore extends VuexModule {
   @Action
   ChangeSelectUser(user: I.User) {
     this.context.commit('changeSelectUser', user);
+  }
+
+  @Mutation
+  private setStateDmInput(state: StateInput) {
+    this.stateInput = state;
+  }
+
+  @Action
+  SetStateDmInput(state: StateInput) {
+    this.context.commit('setStateDmInput', state);
   }
 }
 

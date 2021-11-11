@@ -24,15 +24,11 @@
           @change="OnFileChange"
           multiple
         />
-        <div class="add-image" v-if="listImage.length > 0">
-          <add-image :img="listImage[0]" :index="0"></add-image>
+        <div class="add-image" v-if="image">
+          <add-image :img="image" :index="0"></add-image>
         </div>
         <div>
-          <v-icon
-            v-if="listImage.length === 0 && !isAddedMedia"
-            color="info"
-            @click="OnClickAddImage"
-            class="click-able"
+          <v-icon v-if="!image" color="info" @click="OnClickAddImage" class="click-able"
             >mdi-image-outline</v-icon
           >
           <input
@@ -41,6 +37,7 @@
             background-color="white"
             v-on:paste="Paste"
             type="text"
+            v-model="input"
             @keydown.enter="OnEnter"
             @keydown.esc="OnEsc"
           />
@@ -92,8 +89,8 @@
 
 .add-image {
   max-width: calc(100vw - 350px);
-  // max-height: 140px;
-  // object-fit: cover;
+  max-height: 240px;
+  object-fit: cover;
 }
 
 input {
@@ -126,7 +123,18 @@ import { moduleApi } from '@/store/modules/APIStore';
 
 @Component
 export default class DmPanel extends Vue {
-  listImage: string[] = [];
+  get image() {
+    return moduleDm.stateInput.image;
+  }
+  set image(image: string) {
+    moduleDm.SetStateDmInput({ ...moduleDm.stateInput, image: image });
+  }
+  get input() {
+    return moduleDm.stateInput.input;
+  }
+  set input(value: string) {
+    moduleDm.SetStateDmInput({ ...moduleDm.stateInput, input: value });
+  }
   get stylePanel() {
     if (moduleOption.uiOption.isSmallInput) {
       return {
@@ -139,7 +147,7 @@ export default class DmPanel extends Vue {
     }
   }
   get styleInput() {
-    if (this.listImage.length === 0 && !this.isAddedMedia) {
+    if (!this.image) {
       return {
         width: 'calc(100vw - 360px)'
       };
@@ -151,13 +159,13 @@ export default class DmPanel extends Vue {
   }
   get styleBody() {
     let height = moduleOption.uiOption.isSmallInput ? 200 : 260;
-    if (this.listImage.length > 0) height += 240;
+    if (this.image) height += 240;
     return {
       height: `calc(100vh - ${height}px)`
     };
   }
   get styleDmInput() {
-    if (this.listImage.length === 0) {
+    if (!this.image) {
       return {
         height: '25px'
       };
@@ -177,13 +185,6 @@ export default class DmPanel extends Vue {
     return moduleDm.listDm;
   }
 
-  get isAddedMedia() {
-    if (this.listImage.length > 0) {
-      return this.listImage[0].indexOf('data:image/gif') === 0;
-    } else {
-      return false;
-    }
-  }
   @Ref()
   refFile!: HTMLInputElement;
   @Ref()
@@ -215,6 +216,7 @@ export default class DmPanel extends Vue {
   }
 
   OnDrop(e: DragEvent) {
+    console.log('on drop dm');
     if (!e.dataTransfer) return;
     const files = e.dataTransfer.items;
     for (let i = 0; i < files.length; i++) {
@@ -235,19 +237,13 @@ export default class DmPanel extends Vue {
   }
 
   AddImage(img: string) {
-    if (this.isAddedMedia) {
+    if (this.image) {
       moduleModal.AddMessage({
         errorType: M.Messagetype.E_INFO,
-        message: 'GIF는 하나만 등록 가능합니다.',
+        message: 'DM에서 이미지는 하나만 등록 가능합니다.',
         time: 3
       });
-    } else if (this.listImage.length >= 4) {
-      moduleModal.AddMessage({
-        errorType: M.Messagetype.E_INFO,
-        message: '이미지는 4장까지 등록 가능합니다.',
-        time: 3
-      });
-    } else if (this.listImage.findIndex(x => x === img) > -1) {
+    } else if (this.image === img) {
       //동일한 이미지 등록 시 스킵처리
       moduleModal.AddMessage({
         errorType: M.Messagetype.E_INFO,
@@ -255,38 +251,20 @@ export default class DmPanel extends Vue {
         time: 3
       });
     } else {
-      const isGif = img.indexOf('data:image/gif') === 0;
-      if (isGif && this.listImage.length > 0) {
-        moduleModal.AddMessage({
-          errorType: M.Messagetype.E_INFO,
-          message: '이미지와 GIF는 동시에 등록이 불가능합니다.',
-          time: 3
-        });
-      } else {
-        const listImage: string[] = this.listImage.slice();
-        listImage.push(img);
-        this.listImage = listImage;
-      }
+      this.image = img;
     }
   }
 
   OnEnter(e: KeyboardEvent) {
     e.preventDefault();
     e.stopPropagation();
-    const input = e.target as HTMLInputElement;
-    const text = input.value;
-    input.value = '';
-    this.listImage = [];
-    if (this.listImage.length > 0)
-      moduleApi.directMessage.New(text, moduleDm.stateDm.selectUser.id_str, this.listImage[0]);
-    else moduleApi.directMessage.New(text, moduleDm.stateDm.selectUser.id_str);
+    moduleApi.directMessage.New(this.input, moduleDm.stateDm.selectUser.id_str, this.image);
+    moduleDm.SetStateDmInput({ image: '', input: '' });
   }
   OnEsc(e: KeyboardEvent) {
     e.preventDefault();
     e.stopPropagation();
-    const input = e.target as HTMLInputElement;
-    input.value = '';
-    this.listImage = [];
+    moduleDm.SetStateDmInput({ image: '', input: '' });
   }
 }
 </script>
