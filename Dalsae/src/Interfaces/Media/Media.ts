@@ -1,3 +1,4 @@
+import * as I from '@/Interfaces';
 export interface Media {
   id_str: string;
   media_url: string;
@@ -6,4 +7,5 @@ export interface Media {
   display_url: string;
   expanded_url: string;
   type: string;
+  video_info: I.VideoInfo;
 }
