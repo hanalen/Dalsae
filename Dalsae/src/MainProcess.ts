@@ -31,6 +31,12 @@ console.log('----------------');
 console.log('----------------');
 console.log('----------------');
 console.log(path.join(__dirname, 'preload'));
+
+ipcMain.on('test_on', (event, payload) => {
+  const content = payload;
+  event.reply('test_on', { content });
+});
+
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
@@ -41,7 +47,7 @@ function createWindow() {
       // Use pluginOptions.`nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       webSecurity: false,
-      enableRemoteModule: true,
+      // enableRemoteModule: true,
       preload: path.join(__dirname, 'preload')
     }
   });

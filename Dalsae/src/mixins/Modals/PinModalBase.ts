@@ -39,7 +39,7 @@ export class PinModalBase extends Vue {
     if (!result.data) return;
     result.data.oauth_token_secret;
     console.log(result.data);
-    window.preload.OpenBrowser(
+    window.ipc.browser.OpenBrowser(
       `https://api.twitter.com/oauth/authorize?oauth_token=${result.data.oauth_token}`
     );
     const user = new I.DalsaeUser();
@@ -56,7 +56,7 @@ export class PinModalBase extends Vue {
   async GetAccessToken(pin: string) {
     const result = await moduleApi.oauth.ReqAccessToken({ oauth_verifier: pin });
     if (result.data) {
-      window.preload.SaveSwitter(moduleSwitter.stateSwitter.switter);
+      window.ipc.files.SaveSwitter(moduleSwitter.stateSwitter.switter);
       this.CloseModal();
     }
   }

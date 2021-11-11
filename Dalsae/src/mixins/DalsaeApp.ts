@@ -42,27 +42,33 @@ export class DalsaeApp extends Vue {
     // moduleTweet.Init(moduleSwitter.selectID);
     this.LoadConfig();
     this.$nextTick(() => {
+      window.ipc.ipcPipe.on('test_on', (data:object)=>{
+        console.log('callbacked! data:', data)
+      })
       this.StartDalsae();
     });
+    setTimeout(() => {
+      window.ipc.ipcPipe.send('test_on', {text: 'this is testparta'});
+    }, 3000);
   }
 
   LoadConfig() {
-    window.preload.LoadConfig();
-    const switter = window.preload.LoadSwitter();
+    window.ipc.files.LoadConfig();
+    const switter = window.ipc.files.LoadSwitter();
     if (switter) {
       moduleSwitter.InitSwitter(switter);
     }
-    const option = window.preload.LoadOption();
+    const option = window.ipc.files.LoadOption();
     moduleOption.ChangeOptions(option);
     if (!option) {
       const { uiOption, muteOption, hotKey } = moduleOption;
-      window.preload.SaveOption({ uiOption: uiOption, muteOption: muteOption, hotKey: hotKey });
+      window.ipc.files.SaveOption({ uiOption: uiOption, muteOption: muteOption, hotKey: hotKey });
     }
   }
 
   OnOptionChange() {
     if (moduleModal.bOption) return; //open할때
-    window.preload.SaveOption({
+    window.ipc.files.SaveOption({
       hotKey: moduleOption.hotKey,
       muteOption: moduleOption.muteOption,
       uiOption: moduleOption.uiOption
@@ -71,14 +77,14 @@ export class DalsaeApp extends Vue {
 
   async StartDalsae() {
     if (moduleSwitter.selectUser) {
-      const testTweets = window.preload.LoadTestTweet();
+      const testTweets = window.ipc.files.LoadTestTweet();
       store.dispatch('AddTweet', {
         type: ETweetType.E_HOME,
         user_id_str: moduleSwitter.selectID,
         listTweet: testTweets
       });
-      const following = window.preload.LoadTestFriends();
-      const follower = window.preload.LoadTestFollower();
+      const following = window.ipc.files.LoadTestFriends();
+      const follower = window.ipc.files.LoadTestFollower();
       const { followDatas } = moduleSwitter.stateIds;
       const datas = followDatas.dicUsers.get(moduleSwitter.selectID);
       if (datas) {
@@ -87,14 +93,14 @@ export class DalsaeApp extends Vue {
         moduleSwitter.SetStateIds({ ...moduleSwitter.stateIds, followDatas: followDatas });
       }
 
-      const dms = window.preload.LoadTestDM();
+      const dms = window.ipc.files.LoadTestDM();
       console.log(dms);
       moduleDm.AddDm(dms.events);
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
       // await moduleApi.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
-      // window.preload.SaveSwitter(moduleSwitter.stateSwitter.switter);
+      // window.ipc.files.SaveSwitter(moduleSwitter.stateSwitter.switter);
       // moduleApi.friends.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
       // moduleApi.followers.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
       // moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true }, moduleSwitter.selectID);

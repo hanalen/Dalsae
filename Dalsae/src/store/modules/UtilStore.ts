@@ -62,12 +62,12 @@ class UtilStore extends VuexModule {
   OpenLink(tweet: I.Tweet, title: string) {
     const url = tweet.orgTweet.entities.urls.find(x => x.display_url === title);
     if (!url) return;
-    window.preload.OpenBrowser(url.expanded_url);
+    window.ipc.browser.OpenBrowser(url.expanded_url);
   }
   @Action
   OnClickViewWeb(tweet: I.Tweet) {
     const url = `https://twitter.com/${tweet.orgUser.screen_name}/status/${tweet.orgTweet.id_str}`;
-    window.preload.OpenBrowser(url);
+    window.ipc.browser.OpenBrowser(url);
   }
   @Action
   OnClickQt(tweet: I.Tweet) {

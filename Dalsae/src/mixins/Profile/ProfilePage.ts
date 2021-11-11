@@ -311,7 +311,7 @@ export class ProfilePage extends Vue {
       const { description } = entities;
       const find = description.urls.find(x => x.display_url === el.innerHTML);
       if (find) {
-        window.preload.OpenBrowser(find.expanded_url);
+        window.ipc.browser.OpenBrowser(find.expanded_url);
       }
     }
   }
@@ -365,7 +365,7 @@ export class ProfilePage extends Vue {
     if (!this.showUser.url) return;
     const url = this.showUser.entities.url.urls.find(x => x.url === this.showUser.url);
     if (!url) return;
-    window.preload.OpenBrowser(url?.expanded_url);
+    window.ipc.browser.OpenBrowser(url?.expanded_url);
   }
 
   OnKeyDown(e: KeyboardEvent) {

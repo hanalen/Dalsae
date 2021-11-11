@@ -150,7 +150,7 @@ export default class DmItem extends Vue {
       if (urls) {
         for (const url of urls) {
           if (url.display_url === el.innerHTML) {
-            window.preload.OpenBrowser(url.expanded_url);
+            window.ipc.browser.OpenBrowser(url.expanded_url);
             return;
           }
         }
@@ -158,7 +158,7 @@ export default class DmItem extends Vue {
       const media = entities?.media;
       if (media) {
         if (media.display_url === el.innerHTML) {
-          window.preload.OpenBrowser(media.expanded_url);
+          window.ipc.browser.OpenBrowser(media.expanded_url);
         }
       }
     }

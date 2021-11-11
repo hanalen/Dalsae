@@ -1,4 +1,4 @@
-import { remote, ipcRenderer, shell } from 'electron';
+import { contextBridge,  BrowserWindow, ipcRenderer, shell, ipcMain } from 'electron';
 import Log from 'electron-log';
 import path from 'path';
 let ipcName = Math.random() * (99999 - 0) + 0;
@@ -14,119 +14,85 @@ const pathSwitter = 'Data/Switter.json';
 const pathOption = 'Data/Option.json';
 const pathBlockids = 'Data/block.json';
 
-export default class Preload {
-  image: ImagePreload = new ImagePreload();
-  video: VideoPreload = new VideoPreload();
-  profile: ProfilePreload = new ProfilePreload();
-  ClickLink() {
-    ipcName = Math.random() * (99999 - 0) + 0;
-    console.log('asdfasdf');
-    const v = new remote.BrowserWindow({
-      show: true,
-      title: 'image-test',
-      webPreferences: {
-        // Use pluginOptions.nodeIntegration, leave this alone
-        // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-        webSecurity: false,
-        nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
-        preload: path.join(__dirname, 'preload')
-      }
-    });
-    console.log(`${process.env.WEBPACK_DEV_SERVER_URL as string}test`);
-    v.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL as string}test?userid=${ipcName}`);
-    v.webContents.openDevTools();
-    ipcRenderer.send('AddChannel', { name: ipcName, value: 'value is ' + ipcName });
-    v.on('ready-to-show', () => {
-      //show: true일 경우 호출 안 됨
-      Log.info('ready to show');
-      v.show();
-    });
-  }
-
-  GetData(userid: any): string {
-    //remote.ipcrenderer은 null로 나온다
-    Log.info('--------------');
-    Log.info('get data'); //testwindow의 preload랑 다른 object!
-    Log.info(userid);
-    // Log.info(ipcRenderer);
-    const v = ipcRenderer.sendSync(userid);
-    Log.info('--------------');
-    Log.info('synced ipc renderer');
-    Log.info(v);
-    return v;
-  }
-
-  OpenBrowser(url: string) {
-    shell.openExternal(url);
-  }
-
-  LoadConfig() {
-    this.CheckFolder();
-  }
-
-  CheckFolder() {
-    if (fs.existsSync(pathData) === false) {
-      fs.mkdirsSync(pathData);
-    }
-  }
-
-  LoadSwitter(): I.Switter {
-    return this.ReadFile<I.Switter>(pathSwitter);
-  }
-
-  LoadBlock(): string[] {
-    return this.ReadFile<string[]>(pathBlockids);
-  }
-
-  LoadOption(): IOptionStore {
-    return this.ReadFile<IOptionStore>(pathOption);
-  }
-
-  ReadFile<T>(path: string): T {
-    const ret = fs.readJsonSync(path, { throws: false }) as T;
-    return ret;
-  }
-
-  SaveSwitter(switter: I.Switter) {
-    this.SaveFile(pathSwitter, switter);
-  }
-
-  SaveOption(option: IOptionStore) {
-    this.SaveFile(pathOption, option);
-  }
-
-  SaveBlocks(ids: string[]) {
-    this.SaveFile(pathBlockids, ids);
-  }
-
-  SaveFile(path: string, data: object) {
-    fs.writeJSONSync(path, data);
-  }
-
-  LoadTestTweet(): I.Tweet[] {
-    const ret = fs.readJsonSync('Data/testqt.json');
-    return ret;
-  }
-
-  LoadTestFriends(): I.User[] {
-    const ret = fs.readJSONSync('Data/following.json');
-    return ret;
-  }
-
-  LoadTestFollower(): I.User[] {
-    const ret = fs.readJSONSync('Data/follower.json');
-    return ret;
-  }
-
-  LoadTestImageTweet(): I.Tweet {
-    const ret = fs.readJsonSync('Data/imagetest.json');
-    return ret;
-  }
-  LoadTestDM(): I.DMList {
-    const ret = fs.readJSONSync('Data/dmList.json');
-    return ret;
+function CheckFolder() {
+  if (fs.existsSync(pathData) === false) {
+    fs.mkdirsSync(pathData);
   }
 }
 
-type PreloadWindow = typeof window & { preload: Preload };
-(window as PreloadWindow).preload = new Preload();
+function ReadFile<T>(path: string): T {
+  const ret = fs.readJsonSync(path, { throws: false }) as T;
+  return ret;
+}
+
+function SaveFile(path: string, data: object) {
+  fs.writeJSONSync(path, data);
+}
+
+//window에서 node 접근 가능하게 해주는 변수
+const files = {
+  LoadSwitter(): I.Switter {
+    return ReadFile<I.Switter>(pathSwitter);
+  },
+  LoadConfig() {
+    CheckFolder();
+  },
+  LoadOption(): IOptionStore {
+    return ReadFile<IOptionStore>(pathOption);
+  },
+  LoadBlock(): string[] {
+    return this.ReadFile<string[]>(pathBlockids);
+  },
+  ReadFile<T>(path: string): T {
+    const ret = fs.readJsonSync(path, { throws: false }) as T;
+    return ret;
+  },
+  SaveSwitter(switter: I.Switter) {
+    SaveFile(pathSwitter, switter);
+  },
+  SaveOption(option: IOptionStore) {
+    SaveFile(pathOption, option);
+  },
+  SaveBlocks(ids: string[]) {
+    SaveFile(pathBlockids, ids);
+  },
+  LoadTestTweet(): I.Tweet[] {
+    const ret = fs.readJsonSync('Data/testqt.json');
+    return ret;
+  },
+  LoadTestFriends(): I.User[] {
+    const ret = fs.readJSONSync('Data/following.json');
+    return ret;
+  },
+  LoadTestFollower(): I.User[] {
+    const ret = fs.readJSONSync('Data/follower.json');
+    return ret;
+  },
+  LoadTestImageTweet(): I.Tweet {
+    const ret = fs.readJsonSync('Data/imagetest.json');
+    return ret;
+  },
+  LoadTestDM(): I.DMList {
+    const ret = fs.readJSONSync('Data/dmList.json');
+    return ret;
+  },
+}
+
+const browser = {
+  OpenBrowser(url: string) {
+    shell.openExternal(url);
+  }
+}
+
+//vue 윈도우에서 콜백 받을 때 사용, 윈도우->send->mainprocess에서 on->ipc.on 콜->메인윈도우에 콜백
+const ipcPipe = {
+  send: (channel: string, data:object)=>{ console.log('chaneel send', data); ipcRenderer.send(channel, data)},
+  on: (channel: string, callback: (data: object)=>void)=>{ipcRenderer.on(channel, (event, args)=>callback({...args}))}
+}
+
+export const ipc = {
+  files: files,
+  ipcPipe: ipcPipe,
+  browser: browser,
+}
+contextBridge.exposeInMainWorld('ipc', ipc);

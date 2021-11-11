@@ -1,7 +1,4 @@
-import PreloadImpl from './preloads/preload';
-
+import { ipc } from './preloads/preload'
 declare global {
-  interface Window {
-    preload: PreloadImpl;
-  }
+  interface Window {ipc: typeof ipc}
 }
