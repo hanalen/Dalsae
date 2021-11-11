@@ -7,5 +7,5 @@ export interface Media {
   display_url: string;
   expanded_url: string;
   type: string;
-  video_info: I.VideoInfo;
+  video_info?: I.VideoInfo;
 }
