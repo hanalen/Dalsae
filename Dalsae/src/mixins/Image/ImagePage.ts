@@ -87,7 +87,7 @@ export class ImagePage extends Vue {
       index: index,
       progress: { bError: false, bStartDownload: true, percent: 0 }
     });
-    window.preload.image.DownloadImage(this.media[index], index, this.CallBack);
+    window.ipc.image.DownloadImage(this.media[index], index, this.CallBack);
   }
 
   CallBack(index: number, percent: number, bError: boolean) {

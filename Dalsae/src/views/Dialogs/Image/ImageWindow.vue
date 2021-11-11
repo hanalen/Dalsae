@@ -16,7 +16,7 @@ export default class ImageWindow extends Vue {
   async created() {
     const id = this.$route.query.tweetId;
     if (id) {
-      const json = window.preload.image.GetTweet(id.toString());
+      const json = window.ipc.image.GetTweet(id.toString());
       this.tweet = JSON.parse(json);
     }
   }

@@ -39,9 +39,9 @@ class UtilStore extends VuexModule {
     const media = tweet.orgTweet.extended_entities?.media;
     if (!media) return;
     if (media[0].type === 'photo') {
-      window.preload.image.OpenImageWindow(tweet, moduleOption.uiOption);
+      window.ipc.image.OpenImageWindow(tweet, moduleOption.uiOption);
     } else {
-      window.preload.video.OpenVideoWindow(tweet, moduleOption.uiOption);
+      window.ipc.video.OpenVideoWindow(tweet, moduleOption.uiOption);
     }
   }
   @Action

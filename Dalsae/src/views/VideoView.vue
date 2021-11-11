@@ -107,9 +107,9 @@ export default class VideoView extends Vue {
   async created() {
     const id = this.$route.query.tweetId;
     if (id) {
-      const option = window.preload.video.GetOption(id.toString());
+      const option = window.ipc.video.GetOption(id.toString());
       moduleOption.ChangeOption(JSON.parse(option));
-      const json = window.preload.video.GetTweet(id.toString());
+      const json = window.ipc.video.GetTweet(id.toString());
       this.tweet = new I.Tweet(JSON.parse(json));
       this.media = this.tweet.extended_entities.media[0];
     }

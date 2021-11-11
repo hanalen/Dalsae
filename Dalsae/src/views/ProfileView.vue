@@ -419,13 +419,13 @@ export default class ProfileView extends MIX.ProfilePage {
 
     // return;
     const id = this.$route.query.screenName.toString();
-    const switter = window.preload.profile.GetSwitter(id);
+    const switter = window.ipc.profile.GetSwitter(id);
     moduleSwitter.InitSwitter(switter);
     await this.LoadUserInfo(id);
     this.LoadFollowerList();
     this.LoadFollowingList();
-    const follow = window.preload.profile.GetFollowDatas(id);
-    const blockId = window.preload.profile.GetBlockIds(id);
+    const follow = window.ipc.profile.GetFollowDatas(id);
+    const blockId = window.ipc.profile.GetBlockIds(id);
     moduleOption.ChangeOption({ ...moduleOption.uiOption, isBigPropic: false });
     moduleSwitter.SetStateIds({
       ...moduleSwitter.stateIds,
