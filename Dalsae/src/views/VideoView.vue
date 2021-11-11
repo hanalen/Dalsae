@@ -59,8 +59,7 @@ import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import { moduleImage } from '@/store/modules/ImageStore';
 import { moduleOption } from '@/store/modules/OptionStore';
-import videojs from 'video.js';
-import { VideoJsPlayerOptions, ControlBarOptions } from '@types/video.js';
+import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js';
 import 'video.js/dist/video-js.css';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { Messagetype } from '@/mixins';
@@ -99,7 +98,7 @@ export default class VideoView extends Vue {
   @Ref()
   refVideo!: HTMLVideoElement;
 
-  player!: videojs.VideoJsPlayer;
+  player!: VideoJsPlayer;
 
   media!: I.Media;
 
