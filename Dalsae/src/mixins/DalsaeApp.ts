@@ -42,13 +42,13 @@ export class DalsaeApp extends Vue {
     // moduleTweet.Init(moduleSwitter.selectID);
     this.LoadConfig();
     this.$nextTick(() => {
-      window.ipc.ipcPipe.on('test_on', (data:object)=>{
-        console.log('callbacked! data:', data)
-      })
+      window.ipc.ipcPipe.on('test_on', (data: object) => {
+        console.log('callbacked! data:', data);
+      });
       this.StartDalsae();
     });
     setTimeout(() => {
-      window.ipc.ipcPipe.send('test_on', {text: 'this is testparta'});
+      window.ipc.ipcPipe.send('test_on', { text: 'this is testparta' });
     }, 3000);
   }
 

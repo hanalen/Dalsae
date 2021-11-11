@@ -3,7 +3,7 @@
 import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import Log from 'electron-log';
-import * as I from '@/Interfaces'
+import * as I from '@/Interfaces';
 // import { DataManager } from '@/views/Test/TestDataManager';
 import {
   createProtocol
@@ -103,7 +103,7 @@ ipcMain.on('AddChannel', (event, arg: IpcParam) => {
   });
 });
 
-interface CreateWindowParam{
+interface CreateWindowParam {
   url: string;
   title: string;
 }
@@ -122,7 +122,7 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   });
   window.loadURL(param.url);
   window.webContents.openDevTools();
-})
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

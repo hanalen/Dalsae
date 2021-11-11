@@ -1,8 +1,8 @@
-import { contextBridge,  BrowserWindow, ipcRenderer, shell, ipcMain } from 'electron';
+import { contextBridge, BrowserWindow, ipcRenderer, shell, ipcMain } from 'electron';
 import Log from 'electron-log';
 import path from 'path';
-let ipcName = Math.random() * (99999 - 0) + 0;
-import {imagePreload} from './ImagePreload';
+const ipcName = Math.random() * (99999 - 0) + 0;
+import { imagePreload } from './ImagePreload';
 import fs from 'fs-extra';
 import * as I from '@/Interfaces';
 import { IOptionStore } from '@/store/modules/OptionStore';
@@ -76,20 +76,25 @@ const files = {
   LoadTestDM(): I.DMList {
     const ret = fs.readJSONSync('Data/dmList.json');
     return ret;
-  },
-}
+  }
+};
 
 const browser = {
   OpenBrowser(url: string) {
     shell.openExternal(url);
   }
-}
+};
 
 //vue 윈도우에서 콜백 받을 때 사용, 윈도우->send->mainprocess에서 on->ipc.on 콜->메인윈도우에 콜백
 const ipcPipe = {
-  send: (channel: string, data:object)=>{ console.log('chaneel send', data); ipcRenderer.send(channel, data)},
-  on: (channel: string, callback: (data: object)=>void)=>{ipcRenderer.on(channel, (event, args)=>callback({...args}))}
-}
+  send: (channel: string, data: object) => {
+    console.log('chaneel send', data);
+    ipcRenderer.send(channel, data);
+  },
+  on: (channel: string, callback: (data: object) => void) => {
+    ipcRenderer.on(channel, (event, args) => callback({ ...args }));
+  }
+};
 
 export const ipc = {
   files: files,
@@ -98,5 +103,5 @@ export const ipc = {
   image: imagePreload,
   profile: profilePreload,
   video: videoPreload
-}
+};
 contextBridge.exposeInMainWorld('ipc', ipc);

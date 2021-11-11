@@ -1,10 +1,10 @@
-import {  BrowserWindow, ipcRenderer } from 'electron';
+import { BrowserWindow, ipcRenderer } from 'electron';
 import Log from 'electron-log';
 import path from 'path';
 import * as I from '@/Interfaces';
 import fs from 'fs';
 import Axios from 'axios';
-import http from 'http'
+import http from 'http';
 
 export const imagePreload = {
   DownloadImage(
@@ -45,7 +45,7 @@ export const imagePreload = {
   OpenImageWindow(tweet: any, option: I.UIOption) {
     const ipcName = Math.random() * (99999 - 0) + 0;
     const url = `${process.env.WEBPACK_DEV_SERVER_URL as string}ImageView?tweetId=${ipcName}`;
-    ipcRenderer.send('OpenWindow', {url:url, title:'dalsae-image'});
+    ipcRenderer.send('OpenWindow', { url: url, title: 'dalsae-image' });
     ipcRenderer.send('AddChannel', { name: `image_${ipcName}`, value: JSON.stringify(tweet) });
     ipcRenderer.send('AddChannel', { name: `option_${ipcName}`, value: JSON.stringify(option) });
   },
@@ -57,4 +57,4 @@ export const imagePreload = {
     const option = ipcRenderer.sendSync('option_' + tweetId);
     return option;
   }
-}
+};

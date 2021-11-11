@@ -8,8 +8,8 @@ import Axios from 'axios';
 export const videoPreload = {
   OpenVideoWindow(tweet: any, option: I.UIOption) {
     const ipcName = Math.random() * (99999 - 0) + 0;
-    const url = `${process.env.WEBPACK_DEV_SERVER_URL as string}VideoView?tweetId=${ipcName}`
-    ipcRenderer.send('OpenWindow', {url:url, title: 'dalsae-video'})
+    const url = `${process.env.WEBPACK_DEV_SERVER_URL as string}VideoView?tweetId=${ipcName}`;
+    ipcRenderer.send('OpenWindow', { url: url, title: 'dalsae-video' });
     ipcRenderer.send('AddChannel', { name: `video_${ipcName}`, value: JSON.stringify(tweet) });
     ipcRenderer.send('AddChannel', { name: `option_${ipcName}`, value: JSON.stringify(option) });
   },
@@ -59,4 +59,4 @@ export const videoPreload = {
         });
     });
   }
-}
+};

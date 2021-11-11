@@ -227,7 +227,7 @@ export class TwitterRequest {
           message: (e as Error).message
         });
       }
-      return e as Promise<P.APIResp<TResp>>;
+      return e as Promise<P.APIResp<P.OAuthRes>>;
     }
   }
   async requestDirectMessage<TReq, TResp>( //DM 전송 전용
