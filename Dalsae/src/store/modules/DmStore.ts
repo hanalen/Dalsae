@@ -4,6 +4,7 @@ import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-dec
 import store from '@/store';
 import * as M from '@/mixins';
 import { moduleSwitter } from './SwitterStore';
+import { moduleApi } from './APIStore';
 
 interface DmPair {
   id: string; //key
@@ -74,6 +75,7 @@ class DmStore extends VuexModule {
           //팔로잉, 워가 아닌 사람과의 dm, user정보 요청 해야 함....
           user = new I.User();
           user.id_str = key;
+          moduleApi.users.Show({ user_id: key });
         }
         pair = { id: key, listDm: [], user: user };
         this.stateDm.listDmPair.push(pair);
@@ -141,6 +143,19 @@ class DmStore extends VuexModule {
   @Action
   SetStateDmInput(state: StateInput) {
     this.context.commit('setStateDmInput', state);
+  }
+
+  @Mutation
+  private setDMUser(user: I.User) {
+    const pair = this.stateDm.listDmPair.find(x => x.id === user.id_str);
+    if (!pair) return;
+    user.last_direct_message = pair.user.last_direct_message;
+    pair.user = user;
+  }
+
+  @Action
+  SetDMUser(user: I.User) {
+    this.context.commit('setDMUser', user);
   }
 }
 

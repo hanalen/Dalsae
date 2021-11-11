@@ -320,6 +320,9 @@ class Block {
 class Users {
   async Show(data: P.ReqShow): Promise<P.APIResp<I.User>> {
     const result = await twitterRequest.call.users.Show(data);
+    if (!twitterRequest.CheckAPIError(result.data)) {
+      moduleDm.SetDMUser(result.data);
+    }
     return result;
   }
 }
