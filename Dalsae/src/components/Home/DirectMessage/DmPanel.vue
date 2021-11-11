@@ -15,7 +15,7 @@
       <div class="dm-body" :style="styleBody">
         <dm-item v-for="(dm, i) in listDm" :key="i" :dm="dm" />
       </div>
-      <div class="dm-input">
+      <div class="dm-input" :style="styleDmInput" @drop="OnDrop">
         <input
           ref="refFile"
           type="file"
@@ -24,21 +24,27 @@
           @change="OnFileChange"
           multiple
         />
-        <v-icon
-          v-if="listImage.length === 0 && !isAddedMedia"
-          color="info"
-          @click="OnClickAddImage"
-          class="click-able"
-          >mdi-image-outline</v-icon
-        >
-        <input
-          ref="refText"
-          :style="styleInput"
-          background-color="white"
-          v-on:paste="Paste"
-          type="text"
-          @keydown.enter="OnEnter"
-        />
+        <div class="add-image" v-if="listImage.length > 0">
+          <add-image :img="listImage[0]" :index="0"></add-image>
+        </div>
+        <div>
+          <v-icon
+            v-if="listImage.length === 0 && !isAddedMedia"
+            color="info"
+            @click="OnClickAddImage"
+            class="click-able"
+            >mdi-image-outline</v-icon
+          >
+          <input
+            ref="refText"
+            :style="styleInput"
+            background-color="white"
+            v-on:paste="Paste"
+            type="text"
+            @keydown.enter="OnEnter"
+            @keydown.esc="OnEsc"
+          />
+        </div>
         <!-- </input> -->
       </div>
     </div>
@@ -77,10 +83,17 @@
 .dm-input {
   bottom: 4px;
   position: absolute;
-  height: 25px;
+  flex-direction: column;
+  // height: 25px;
 }
 .name-area span {
   margin-left: 4px;
+}
+
+.add-image {
+  max-width: calc(100vw - 350px);
+  // max-height: 140px;
+  // object-fit: cover;
 }
 
 input {
@@ -137,13 +150,20 @@ export default class DmPanel extends Vue {
     }
   }
   get styleBody() {
-    if (moduleOption.uiOption.isSmallInput) {
+    let height = moduleOption.uiOption.isSmallInput ? 200 : 260;
+    if (this.listImage.length > 0) height += 240;
+    return {
+      height: `calc(100vh - ${height}px)`
+    };
+  }
+  get styleDmInput() {
+    if (this.listImage.length === 0) {
       return {
-        height: 'calc(100vh - 200px)'
+        height: '25px'
       };
     } else {
       return {
-        height: 'calc(100vh - 260px)'
+        height: '275px'
       };
     }
   }
@@ -193,6 +213,17 @@ export default class DmPanel extends Vue {
       }
     }
   }
+
+  OnDrop(e: DragEvent) {
+    if (!e.dataTransfer) return;
+    const files = e.dataTransfer.items;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].kind == 'file') {
+        this.FileToString(files[i].getAsFile());
+      }
+    }
+  }
+
   FileToString(file: File | null) {
     if (!file) return;
     const reader = new FileReader();
@@ -245,7 +276,17 @@ export default class DmPanel extends Vue {
     const input = e.target as HTMLInputElement;
     const text = input.value;
     input.value = '';
-    moduleApi.directMessage.New(text, moduleDm.stateDm.selectUser.id_str);
+    this.listImage = [];
+    if (this.listImage.length > 0)
+      moduleApi.directMessage.New(text, moduleDm.stateDm.selectUser.id_str, this.listImage[0]);
+    else moduleApi.directMessage.New(text, moduleDm.stateDm.selectUser.id_str);
+  }
+  OnEsc(e: KeyboardEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    const input = e.target as HTMLInputElement;
+    input.value = '';
+    this.listImage = [];
   }
 }
 </script>
