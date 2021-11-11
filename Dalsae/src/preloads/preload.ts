@@ -2,12 +2,13 @@ import { contextBridge,  BrowserWindow, ipcRenderer, shell, ipcMain } from 'elec
 import Log from 'electron-log';
 import path from 'path';
 let ipcName = Math.random() * (99999 - 0) + 0;
-import ImagePreload from './ImagePreload';
+import {imagePreload} from './ImagePreload';
 import fs from 'fs-extra';
 import * as I from '@/Interfaces';
 import { IOptionStore } from '@/store/modules/OptionStore';
-import ProfilePreload from './ProfilePreload';
-import VideoPreload from './VideoPreload';
+import { profilePreload } from './ProfilePreload';
+import { videoPreload } from './VideoPreload';
+import http from 'http';
 
 const pathData = 'Data/';
 const pathSwitter = 'Data/Switter.json';
@@ -94,5 +95,8 @@ export const ipc = {
   files: files,
   ipcPipe: ipcPipe,
   browser: browser,
+  image: imagePreload,
+  profile: profilePreload,
+  video: videoPreload
 }
 contextBridge.exposeInMainWorld('ipc', ipc);
