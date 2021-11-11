@@ -4,6 +4,7 @@ import * as I from '@/Interfaces';
 import moment from 'moment';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleOption } from '@/store/modules/OptionStore';
+import { moduleUtil } from '@/store/modules/UtilStore';
 
 @Component
 export class ImagePreviewBase extends Vue {
@@ -14,13 +15,16 @@ export class ImagePreviewBase extends Vue {
   @Prop()
   tweet!: I.Tweet;
 
+  get isVideo() {
+    return this.media[0].type !== 'photo';
+  }
+
   imgPreview(src: I.Media) {
     return src.media_url_https + ':thumb';
   }
 
   Click(e: Event) {
-    // this.state.isHover = this.state.isHover;
-    window.preload.image.OpenImageWindow(this.tweet, moduleOption.uiOption);
+    moduleUtil.OpenImage(this.tweet);
   }
   MouseOver(e: Event) {
     this.isHover = true;

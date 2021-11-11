@@ -7,6 +7,7 @@
     @click="Click"
     v-if="media"
   >
+    <v-icon color="primary" size="50" v-if="isVideo">mdi-play-circle-outline </v-icon>
     <div class="tweet-images-group" v-show="isHover">
       <img class="tweet-image" v-for="(item, i) in media" :key="i" :src="imgPreview(item)" />
     </div>

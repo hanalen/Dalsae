@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router';
 import Home from '../views/Home.vue';
 import ImageView from '@/views/ImageView.vue';
 import ProfileView from '@/views/ProfileView.vue';
+import VideoView from '@/views/VideoView.vue';
 
 function register() {
   const files = require.context('../', true, /\.vue$/i);
@@ -24,6 +25,12 @@ export const routes: Array<RouteConfig> = [
     path: '/ImageView',
     name: 'ImageView',
     component: ImageView,
+    props: route => ({ tweetId: route.params })
+  },
+  {
+    path: '/VideoView',
+    name: 'VideoView',
+    component: VideoView,
     props: route => ({ tweetId: route.params })
   },
   {
