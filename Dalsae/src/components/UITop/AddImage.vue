@@ -32,6 +32,7 @@ img {
 
 <script lang="ts">
 import { DalsaeApp } from '@/mixins';
+import { moduleDm } from '@/store/modules/DmStore';
 import { moduleUI } from '@/store/modules/UIStore';
 import { Vue, Mixins, Component, Ref, Provide, Prop } from 'vue-property-decorator';
 
@@ -46,6 +47,7 @@ export default class TopSmall extends Vue {
     const listImage = moduleUI.stateInput.listImage.concat();
     listImage.splice(this.index, 1);
     moduleUI.SetStateInput({ ...moduleUI.stateInput, listImage: listImage });
+    moduleDm.SetStateDmInput({ ...moduleDm.stateInput, image: '' });
   }
 }
 </script>
