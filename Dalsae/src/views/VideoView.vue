@@ -23,7 +23,15 @@
         </div>
       </v-container>
     </v-main>
-    <div class="video-view">
+    <v-progress-circular
+      class="progress"
+      v-if="!isLoadVideo"
+      :width="5"
+      size="50"
+      color="primary"
+      indeterminate
+    ></v-progress-circular>
+    <div class="video-view" v-show="isLoadVideo">
       <video ref="refVideo" class="video-js"></video>
     </div>
   </v-app>
@@ -36,6 +44,11 @@
   height: 100vh;
   display: flex;
   justify-content: center;
+}
+.progress {
+  position: fixed;
+  top: 50%;
+  left: 50%;
 }
 </style>
 
@@ -50,10 +63,12 @@ import videojs from 'video.js';
 import { VideoJsPlayerOptions, ControlBarOptions } from '@types/video.js';
 import 'video.js/dist/video-js.css';
 import { moduleModal } from '@/store/modules/ModalStore';
+import { Messagetype } from '@/mixins';
 @Component
 export default class VideoView extends Vue {
   bExpanded = false;
   bMounted = false;
+  isLoadVideo = false;
   get listMsg() {
     return moduleModal.stateMessage.listMessage;
   }
@@ -90,28 +105,42 @@ export default class VideoView extends Vue {
 
   tweet!: I.Tweet;
   async created() {
-    const tweets = window.preload.LoadTestTweet();
-    this.tweet = new I.Tweet(tweets[1]);
-    this.media = this.tweet.extended_entities.media[0];
-    this.$nextTick(() => {
-      this.bMounted = true;
-      const { url, content_type } = this.media.video_info.variants[0];
-      const option: VideoJsPlayerOptions = {
-        autoplay: true,
-        controls: true,
-        loop: this.media.type === 'animated_gif',
-        sources: [{ src: url, type: content_type }]
-      };
-      this.player = videojs(this.refVideo, option);
-    });
-    return;
     const id = this.$route.query.tweetId;
     if (id) {
       const option = window.preload.video.GetOption(id.toString());
       moduleOption.ChangeOption(JSON.parse(option));
       const json = window.preload.video.GetTweet(id.toString());
       this.tweet = new I.Tweet(JSON.parse(json));
+      this.media = this.tweet.extended_entities.media[0];
     }
+    // const tweets = window.preload.LoadTestTweet();
+    // this.tweet = new I.Tweet(tweets[1]);
+    // this.media = this.tweet.extended_entities.media[0];
+    this.$nextTick(() => {
+      if (!id) {
+        moduleModal.AddMessage({
+          errorType: Messagetype.E_ERROR,
+          time: 10,
+          message: '동영상 플레이어 오류'
+        });
+        return;
+      }
+      this.bMounted = true;
+      const variant = this.media.video_info?.variants[0];
+      if (!variant) return;
+      const { url, content_type } = variant;
+      const isGif = this.media.type === 'animated_gif';
+      const option: VideoJsPlayerOptions = {
+        autoplay: true,
+        controls: true,
+        loop: isGif,
+        controlBar: { volumePanel: !isGif, fullscreenToggle: false, pictureInPictureToggle: false },
+        sources: [{ src: url, type: content_type }]
+      };
+      this.player = videojs(this.refVideo, option, () => {
+        this.isLoadVideo = true;
+      });
+    });
   }
 }
 </script>
