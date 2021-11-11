@@ -17,6 +17,8 @@ img {
 }
 .img-item {
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 .click-able:hover {
   cursor: pointer;
