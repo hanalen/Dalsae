@@ -11,23 +11,8 @@ export const profilePreload ={
     followDatas: I.FollowDatas,
     blockIds: string[]
   ) {
-    console.log('open prifle');
-    // Log.info('tweet id: ' + tweetId);
-    const window = new BrowserWindow({
-      show: true,
-      title: 'dalsae-profile',
-      width: 1900,
-      height: 1200,
-      webPreferences: {
-        webSecurity: false,
-        nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
-        preload: path.join(__dirname, 'preload')
-      }
-    });
-    window.loadURL(
-      `${process.env.WEBPACK_DEV_SERVER_URL as string}ProfileView?screenName=${screenName}`
-    );
-    window.webContents.openDevTools();
+    const url = `${process.env.WEBPACK_DEV_SERVER_URL as string}ProfileView?screenName=${screenName}`
+    ipcRenderer.send('OpenWindow', {url:url, title: 'dalsae-profile'})
     ipcRenderer.send('AddChannel', { name: `switter_${screenName}`, value: switter });
     ipcRenderer.send('AddChannel', { name: `followdatas_${screenName}`, value: followDatas });
     ipcRenderer.send('AddChannel', { name: `blokcids_${screenName}`, value: blockIds });

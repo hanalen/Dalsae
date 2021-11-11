@@ -44,20 +44,8 @@ export const imagePreload = {
   },
   OpenImageWindow(tweet: any, option: I.UIOption) {
     const ipcName = Math.random() * (99999 - 0) + 0;
-    // Log.info('tweet id: ' + tweetId);
-    const window = new BrowserWindow({
-      show: true,
-      title: 'dalsae-image',
-      width: 1900,
-      height: 1200,
-      webPreferences: {
-        webSecurity: false,
-        nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
-        preload: path.join(__dirname, 'preload')
-      }
-    });
-    window.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL as string}ImageView?tweetId=${ipcName}`);
-    window.webContents.openDevTools();
+    const url = `${process.env.WEBPACK_DEV_SERVER_URL as string}ImageView?tweetId=${ipcName}`;
+    ipcRenderer.send('OpenWindow', {url:url, title:'dalsae-image'});
     ipcRenderer.send('AddChannel', { name: `image_${ipcName}`, value: JSON.stringify(tweet) });
     ipcRenderer.send('AddChannel', { name: `option_${ipcName}`, value: JSON.stringify(option) });
   },
