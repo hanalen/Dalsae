@@ -486,7 +486,7 @@ export class TwitterRequest {
       },
       directMessage: {
         New: (data: P.ReqDMNew) =>
-          this.requestDirectMessage<P.ReqDMNew, I.DMEvent>(
+          this.requestDirectMessage<P.ReqDMNew, I.ReqDMNew>(
             baseUrl + '/direct_messages/events/new.json',
             'POST',
             {
