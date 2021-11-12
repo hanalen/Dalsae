@@ -89,3 +89,4 @@ dist/
 storybook-static/
 #Electron-builder output
 /dist_electron
+Sound/*

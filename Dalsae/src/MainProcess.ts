@@ -1,6 +1,6 @@
 'use strict';
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain, ipcRenderer } from 'electron';
 import path from 'path';
 import Log from 'electron-log';
 import * as I from '@/Interfaces';
@@ -122,6 +122,10 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   });
   window.loadURL(param.url);
   window.webContents.openDevTools();
+});
+ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
+  const path = app.getAppPath();
+  event.reply('GetAppPath', path);
 });
 
 // Quit when all windows are closed.

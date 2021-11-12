@@ -191,7 +191,7 @@
             <v-tab-item :key="4">
               <v-card outlined height="100vh">
                 <v-card-title>
-                  필터링 상세 설정
+                  필터링 및 알림 상세 설정
                 </v-card-title>
                 <v-card-subtitle>
                   특정 상황의 필터링 표시를 설정 합니다.<br />
@@ -202,6 +202,29 @@
                     v-model="muteOption.isMuteMention"
                     label="멘션 및 알림 설정도 필터링 처리"
                   ></v-switch>
+                  <v-switch v-model="muteOption.isPlaySoundAlarm" label="알림 소리 재생"></v-switch>
+                  <div style="display: flex;" v-if="muteOption.isPlaySoundAlarm">
+                    <v-card-subtitle>
+                      알림 소리 복사는 셀프입니다.
+                    </v-card-subtitle>
+                    <v-btn
+                      height="30px"
+                      width="80px"
+                      outlined
+                      color="primary"
+                      @click="OnClickOpenFolder"
+                    >
+                      폴더 열기
+                    </v-btn>
+                  </div>
+                  <v-select
+                    v-if="muteOption.isPlaySoundAlarm"
+                    :items="listSoundFiles"
+                    label="파일을 선택 해주세요"
+                    v-model="pathSound"
+                    dense
+                    outlined
+                  ></v-select>
                 </v-list>
               </v-card>
             </v-tab-item>

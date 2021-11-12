@@ -253,4 +253,6 @@ export interface MuteOption {
   highlight: string[];
   isMuteMention: boolean; //멘션함도 뮤트
   isShowMute: boolean; //뮤트된 트윗 우선 표시 여부
+  isPlaySoundAlarm: false;
+  pathSound: string;
 }

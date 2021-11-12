@@ -31,7 +31,9 @@ class OptionStore extends VuexModule {
     tweet: [],
     client: [],
     isMuteMention: true,
-    isShowMute: true
+    isShowMute: true,
+    isPlaySoundAlarm: false,
+    pathSound: ''
   };
   hotKey: I.Hotkey = new I.Hotkey();
 
@@ -76,7 +78,9 @@ class OptionStore extends VuexModule {
         tweet: [],
         client: [],
         isMuteMention: true,
-        isShowMute: true
+        isShowMute: true,
+        isPlaySoundAlarm: false,
+        pathSound: ''
       };
       this.hotKey = new I.Hotkey();
     }

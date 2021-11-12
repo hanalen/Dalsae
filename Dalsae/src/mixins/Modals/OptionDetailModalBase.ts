@@ -146,6 +146,18 @@ export class OptionDetailModalBase extends Vue {
     return moduleOption.hotKey;
   }
 
+  get listSoundFiles() {
+    return window.ipc.files.GetSoundFiles();
+  }
+
+  get pathSound() {
+    return this.muteOption.pathSound;
+  }
+
+  set pathSound(path: string) {
+    this.muteOption.pathSound = path;
+  }
+
   state = new State();
   @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
   OnSelectMenuChanged(newMenu: number) {
@@ -155,6 +167,10 @@ export class OptionDetailModalBase extends Vue {
       this.SetHotkey();
       this.state.isInitHotkey = true;
     }
+  }
+
+  OnClickOpenFolder() {
+    window.ipc.files.OpenSoundFolder();
   }
 
   OnClickClose() {

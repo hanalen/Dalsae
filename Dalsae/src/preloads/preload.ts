@@ -1,4 +1,4 @@
-import { contextBridge, BrowserWindow, ipcRenderer, shell, ipcMain } from 'electron';
+import { contextBridge, BrowserWindow, ipcRenderer, shell, ipcMain, app } from 'electron';
 import Log from 'electron-log';
 import path from 'path';
 const ipcName = Math.random() * (99999 - 0) + 0;
@@ -11,6 +11,7 @@ import { videoPreload } from './VideoPreload';
 import http from 'http';
 
 const pathData = 'Data/';
+const pathSound = 'Sound/';
 const pathSwitter = 'Data/Switter.json';
 const pathOption = 'Data/Option.json';
 const pathBlockids = 'Data/block.json';
@@ -18,6 +19,9 @@ const pathBlockids = 'Data/block.json';
 function CheckFolder() {
   if (fs.existsSync(pathData) === false) {
     fs.mkdirsSync(pathData);
+  }
+  if (fs.existsSync(pathSound) === false) {
+    fs.mkdirsSync(pathSound);
   }
 }
 
@@ -76,6 +80,16 @@ const files = {
   LoadTestDM(): I.DMList {
     const ret = fs.readJSONSync('Data/dmList.json');
     return ret;
+  },
+  GetSoundFiles(): string[] {
+    const ret = fs.readdirSync(pathSound);
+    return ret;
+  },
+  OpenSoundFolder() {
+    ipcRenderer.on('GetAppPath', (event, path: string) => {
+      shell.openExternal(path + '/' + pathSound);
+    });
+    ipcRenderer.send('GetAppPath');
   }
 };
 
