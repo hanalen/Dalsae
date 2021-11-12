@@ -4,6 +4,7 @@ export interface UIOption {
   isShowPropic: boolean; //인장 표시
   isBigPropic: boolean; //인장 크게 표시
   isShowPreview: boolean; //이미지 미리보기 표시
+  isSmallPreview: boolean; //이미지 미리보기 작게 표시
   isUseRead: boolean; //읽은 트윗 여부
 
   isSmallInput: boolean; //트윗 입력칸 작게 표시

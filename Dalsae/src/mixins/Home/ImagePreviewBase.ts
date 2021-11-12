@@ -33,8 +33,25 @@ export class ImagePreviewBase extends Vue {
     this.isHover = false;
   }
 
+  get styleSize() {
+    return {
+      width: this.size + 'px',
+      height: this.size + 'px'
+    };
+  }
+
+  get styleGroup() {
+    return {
+      right: this.size + 30 + 'px'
+    };
+  }
+
+  get size() {
+    return moduleOption.uiOption.isSmallPreview ? 90 : 100;
+  }
+
   get maxWidth() {
-    if (this.media) return (this.media.length * 8 + 100).toString() + 'px';
+    if (this.media) return (this.media.length * 8 + this.size).toString() + 'px';
     else return '0px';
   }
 }

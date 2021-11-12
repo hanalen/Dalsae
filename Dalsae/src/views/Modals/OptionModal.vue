@@ -33,6 +33,11 @@
           <v-switch v-model="option.isShowPropic" label="인장을 표시"></v-switch>
           <v-switch v-model="option.isBigPropic" label="인장을 크게 표시"></v-switch>
           <v-switch v-model="option.isShowPreview" label="이미지 미리보기를 표시"></v-switch>
+          <v-switch
+            v-if="option.isShowPreview"
+            v-model="option.isSmallPreview"
+            label="이미지 미리보기를 작게 표시"
+          ></v-switch>
           <v-switch v-model="option.isSmallTweet" label="트윗을 한 줄로 표시"></v-switch>
           <v-switch v-model="option.isUseRead" label="읽지 않은 트윗을 굵게 표시"></v-switch>
         </v-list-item-content>
