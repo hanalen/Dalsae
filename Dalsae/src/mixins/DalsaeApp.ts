@@ -62,7 +62,6 @@ export class DalsaeApp extends Vue {
       window.ipc.ipcPipe.on('test_on', (data: object) => {
         console.log('callbacked! data:', data);
       });
-      this.StartDalsae();
       moduleDom.RegisterAudio(this.refAudio);
     });
     setTimeout(() => {
