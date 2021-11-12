@@ -1,7 +1,7 @@
 <template>
   <div class="propic" :class="imgClass">
     <img :src="img" :style="styleImg" />
-    <v-icon v-if="verified" color="primary">mdi-check-decagram-outline </v-icon>
+    <v-icon :size="20" v-if="verified" color="primary">mdi-check-decagram-outline </v-icon>
   </div>
 </template>
 
