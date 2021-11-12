@@ -1,27 +1,29 @@
-import { contextBridge, BrowserWindow, ipcRenderer, shell, ipcMain, app } from 'electron';
-import Log from 'electron-log';
-import path from 'path';
-const ipcName = Math.random() * (99999 - 0) + 0;
+import { contextBridge, ipcRenderer, shell } from 'electron';
 import { imagePreload } from './ImagePreload';
 import fs from 'fs-extra';
 import * as I from '@/Interfaces';
 import { IOptionStore } from '@/store/modules/OptionStore';
 import { profilePreload } from './ProfilePreload';
 import { videoPreload } from './VideoPreload';
-import http from 'http';
 
-const pathData = 'Data/';
-const pathSound = 'Sound/';
-const pathSwitter = 'Data/Switter.json';
-const pathOption = 'Data/Option.json';
-const pathBlockids = 'Data/block.json';
+const pathData = '/Data/';
+const pathSound = '/Sound/';
+const pathSwitter = '/Data/Switter.json';
+const pathOption = '/Data/Option.json';
+const pathBlockids = '/Data/block.json';
+
+let appPath = '';
+ipcRenderer.on('GetAppPath', (event, path: string) => {
+  appPath = path;
+});
+ipcRenderer.sendSync('GetAppPath');
 
 function CheckFolder() {
-  if (fs.existsSync(pathData) === false) {
-    fs.mkdirsSync(pathData);
+  if (fs.existsSync(appPath + pathData) === false) {
+    fs.mkdirsSync(appPath + pathData);
   }
-  if (fs.existsSync(pathSound) === false) {
-    fs.mkdirsSync(pathSound);
+  if (fs.existsSync(appPath + pathSound) === false) {
+    fs.mkdirsSync(appPath + pathSound);
   }
 }
 
@@ -36,60 +38,60 @@ function SaveFile(path: string, data: object) {
 
 //window에서 node 접근 가능하게 해주는 변수
 const files = {
+  GetAppPath(): string {
+    return appPath;
+  },
   LoadSwitter(): I.Switter {
-    return ReadFile<I.Switter>(pathSwitter);
+    return ReadFile<I.Switter>(appPath + pathSwitter);
   },
   LoadConfig() {
     CheckFolder();
   },
   LoadOption(): IOptionStore {
-    return ReadFile<IOptionStore>(pathOption);
+    return ReadFile<IOptionStore>(appPath + pathOption);
   },
   LoadBlock(): string[] {
-    return this.ReadFile<string[]>(pathBlockids);
+    return this.ReadFile<string[]>(appPath + pathBlockids);
   },
   ReadFile<T>(path: string): T {
     const ret = fs.readJsonSync(path, { throws: false }) as T;
     return ret;
   },
   SaveSwitter(switter: I.Switter) {
-    SaveFile(pathSwitter, switter);
+    SaveFile(appPath + pathSwitter, switter);
   },
   SaveOption(option: IOptionStore) {
-    SaveFile(pathOption, option);
+    SaveFile(appPath + pathOption, option);
   },
   SaveBlocks(ids: string[]) {
-    SaveFile(pathBlockids, ids);
+    SaveFile(appPath + pathBlockids, ids);
   },
   LoadTestTweet(): I.Tweet[] {
-    const ret = fs.readJsonSync('Data/testqt.json');
+    const ret = fs.readJsonSync(appPath + '/Data/testqt.json');
     return ret;
   },
   LoadTestFriends(): I.User[] {
-    const ret = fs.readJSONSync('Data/following.json');
+    const ret = fs.readJSONSync(appPath + '/Data/following.json');
     return ret;
   },
   LoadTestFollower(): I.User[] {
-    const ret = fs.readJSONSync('Data/follower.json');
+    const ret = fs.readJSONSync(appPath + '/Data/follower.json');
     return ret;
   },
   LoadTestImageTweet(): I.Tweet {
-    const ret = fs.readJsonSync('Data/imagetest.json');
+    const ret = fs.readJsonSync(appPath + '/Data/imagetest.json');
     return ret;
   },
   LoadTestDM(): I.DMList {
-    const ret = fs.readJSONSync('Data/dmList.json');
+    const ret = fs.readJSONSync(appPath + '/Data/dmList.json');
     return ret;
   },
   GetSoundFiles(): string[] {
-    const ret = fs.readdirSync(pathSound);
+    const ret = fs.readdirSync(appPath + pathSound);
     return ret;
   },
   OpenSoundFolder() {
-    ipcRenderer.on('GetAppPath', (event, path: string) => {
-      shell.openExternal(path + '/' + pathSound);
-    });
-    ipcRenderer.send('GetAppPath');
+    shell.openExternal(appPath + pathSound);
   }
 };
 
