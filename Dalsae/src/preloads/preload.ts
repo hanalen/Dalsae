@@ -13,10 +13,10 @@ const pathOption = '/Data/Option.json';
 const pathBlockids = '/Data/block.json';
 
 let appPath = '';
-ipcRenderer.on('GetAppPath', (event, path: string) => {
+ipcRenderer.once('GetAppPath', (event, path: string) => {
   appPath = path;
 });
-ipcRenderer.sendSync('GetAppPath');
+ipcRenderer.send('GetAppPath');
 
 function CheckFolder() {
   if (fs.existsSync(appPath + pathData) === false) {
