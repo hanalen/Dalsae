@@ -68,8 +68,11 @@ export class ImagePage extends Vue {
   OnKeyDown(e: KeyboardEvent) {
     const { ctrlKey, altKey, shiftKey, key } = e;
     if (ctrlKey && !altKey && !shiftKey && key === 's') {
+      //저장 시 하단 미리보기를 켜야 다운로드 상황을 표시 가능함.
+      moduleOption.ChangeOption({ ...moduleOption.uiOption, isShowBottomPreview: true });
       this.Save(this.index);
     } else if (ctrlKey && !altKey && !shiftKey && key === 'a') {
+      moduleOption.ChangeOption({ ...moduleOption.uiOption, isShowBottomPreview: true });
       for (let i = 0; i < this.media.length; i++) {
         this.Save(i);
       }
