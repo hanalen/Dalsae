@@ -38,13 +38,14 @@ export class DalsaeApp extends Vue {
   @Watch('selectUserID', { immediate: true, deep: true })
   OnChangeData(newID: string, oldID: string) {
     this.$nextTick(() => {
-      if (!newID && !moduleSwitter.selectUser) {
+      console.info('selct user id', newID, oldID);
+      if (!newID && !moduleSwitter.selectUser.user_id) {
         moduleModal.ShowPinModal(true);
       }
       if (oldID) {
         moduleTweet.StopStreaming(oldID);
       }
-      if (newID && oldID) {
+      if (newID) {
         moduleDom.ResetScrollDatas();
         this.StartDalsae();
       }
@@ -94,41 +95,42 @@ export class DalsaeApp extends Vue {
   }
 
   async StartDalsae() {
-    if (moduleSwitter.selectUser) {
-      const testTweets = window.ipc.files.LoadTestTweet();
+    if (moduleSwitter.selectID) {
+      // const testTweets = window.ipc.files.LoadTestTweet();
       // store.dispatch('AddTweet', {
       //   type: ETweetType.E_HOME,
       //   user_id_str: moduleSwitter.selectID,
       //   listTweet: testTweets
       // });
-      const following = window.ipc.files.LoadTestFriends();
-      const follower = window.ipc.files.LoadTestFollower();
-      const { followDatas } = moduleSwitter.stateIds;
-      const datas = followDatas.dicUsers.get(moduleSwitter.selectID);
-      if (datas) {
-        datas.listFollowing = following;
-        datas.listFollower = follower;
-        moduleSwitter.SetStateIds({ ...moduleSwitter.stateIds, followDatas: followDatas });
-      }
+      // const following = window.ipc.files.LoadTestFriends();
+      // const follower = window.ipc.files.LoadTestFollower();
+      // const { followDatas } = moduleSwitter.stateIds;
+      // const datas = followDatas.dicUsers.get(moduleSwitter.selectID);
+      // if (datas) {
+      //   datas.listFollowing = following;
+      //   datas.listFollower = follower;
+      //   moduleSwitter.SetStateIds({ ...moduleSwitter.stateIds, followDatas: followDatas });
+      // }
 
-      const dms = window.ipc.files.LoadTestDM();
-      console.log(dms);
-      moduleDm.AddDm(dms.events);
+      // const dms = window.ipc.files.LoadTestDM();
+      // console.log(dms);
+      // moduleDm.AddDm(dms.events);
       //api 콜 등등
       //홈, 멘션, 관글, 차단 비동기로 호출
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
-      // await moduleApi.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
-      // window.ipc.files.SaveSwitter(moduleSwitter.stateSwitter.switter);
-      // moduleApi.friends.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
-      // moduleApi.followers.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
-      // moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true }, moduleSwitter.selectID);
-      // moduleApi.block.Ids({ cursor: '-1', stringify_ids: true });
-      // moduleApi.statuses.TimeLine();
-      // moduleApi.statuses.Mention();
-      // moduleApi.directMessage.List();
-      // const streaming = new UserStreaming();
-      // streaming.Connect(moduleSwitter.publicKey, moduleSwitter.secretKey, moduleSwitter.selectID);
-      // moduleTweet.AddStreaming({ key: moduleSwitter.selectID, streaming: streaming });
+      await moduleApi.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
+      window.ipc.files.SaveSwitter(moduleSwitter.stateSwitter.switter);
+      moduleApi.friends.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
+      moduleApi.followers.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
+      moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true }, moduleSwitter.selectID);
+      moduleApi.block.Ids({ cursor: '-1', stringify_ids: true });
+      moduleApi.statuses.TimeLine();
+      moduleApi.statuses.Mention();
+      moduleApi.directMessage.List();
+      const streaming = new UserStreaming();
+      console.log('selectID: ', moduleSwitter.selectID);
+      streaming.Connect(moduleSwitter.publicKey, moduleSwitter.secretKey, moduleSwitter.selectID);
+      moduleTweet.AddStreaming({ key: moduleSwitter.selectID, streaming: streaming });
     }
   }
 
