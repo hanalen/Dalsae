@@ -308,7 +308,7 @@ export class TweetSelectorBase extends Vue {
   OnClickLink(value: number) {
     const context = this.listContext.find(x => x.value === value);
     if (!context) return;
-    moduleUtil.OpenLink(this.tweet, context.title);
+    moduleUtil.OpenLink({ tweet: this.tweet, title: context.title });
   }
 
   OnClickReply(value: number) {

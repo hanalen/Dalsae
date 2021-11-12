@@ -3,7 +3,7 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import * as M from '@/mixins';
 import store from '@/store';
-import { ETweetType } from '@/store/Interface';
+import { ETweetType, OpenLink } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
@@ -61,15 +61,28 @@ class UtilStore extends VuexModule {
     });
   }
   @Action
-  OpenLink(tweet: I.Tweet, title: string) {
+  OpenLink(openLink: OpenLink) {
+    const { tweet, title } = openLink;
     const url = tweet.orgTweet.entities.urls.find(x => x.display_url === title);
     if (!url) return;
     window.ipc.browser.OpenBrowser(url.expanded_url);
+    moduleTweet.AddTweet({
+      listTweet: undefined,
+      tweet: tweet,
+      type: ETweetType.E_OPEN,
+      user_id_str: moduleSwitter.selectID
+    });
   }
   @Action
   OnClickViewWeb(tweet: I.Tweet) {
     const url = `https://twitter.com/${tweet.orgUser.screen_name}/status/${tweet.orgTweet.id_str}`;
     window.ipc.browser.OpenBrowser(url);
+    moduleTweet.AddTweet({
+      listTweet: undefined,
+      tweet: tweet,
+      type: ETweetType.E_OPEN,
+      user_id_str: moduleSwitter.selectID
+    });
   }
   @Action
   OnClickQt(tweet: I.Tweet) {
