@@ -132,7 +132,13 @@ export class TweetSelectorBase extends Vue {
         hotKey: this.GetHotKeyText(hotKey.showImage),
         isDivider: false
       });
-      listContext.push({ title: '', onClick: () => {}, isDivider: true });
+      listContext.push({
+        title: '',
+        onClick: () => {
+          return;
+        },
+        isDivider: true
+      });
     }
     if (this.orgTweet.entities.urls.length > 0) {
       this.orgTweet.entities.urls.forEach(url => {
@@ -143,7 +149,13 @@ export class TweetSelectorBase extends Vue {
           isDivider: false
         });
       });
-      listContext.push({ title: '', onClick: () => {}, isDivider: true });
+      listContext.push({
+        title: '',
+        onClick: () => {
+          return;
+        },
+        isDivider: true
+      });
     }
 
     listContext.push({
@@ -160,7 +172,13 @@ export class TweetSelectorBase extends Vue {
       hotKey: this.GetHotKeyText(hotKey.replyAll),
       isDivider: false
     });
-    listContext.push({ title: '', onClick: () => {}, isDivider: true });
+    listContext.push({
+      title: '',
+      onClick: () => {
+        return;
+      },
+      isDivider: true
+    });
 
     listContext.push({
       title: this.orgTweet.retweeted ? '리트윗 해제' : '리트윗',
@@ -183,7 +201,13 @@ export class TweetSelectorBase extends Vue {
       hotKey: this.GetHotKeyText(hotKey.sendFavorite),
       isDivider: false
     });
-    listContext.push({ title: '', onClick: () => {}, isDivider: true });
+    listContext.push({
+      title: '',
+      onClick: () => {
+        return;
+      },
+      isDivider: true
+    });
 
     this.listUsers.forEach(user => {
       listContext.push({
@@ -193,7 +217,13 @@ export class TweetSelectorBase extends Vue {
         value: value++,
         isDivider: false
       });
-      listContext.push({ title: '', onClick: () => {}, isDivider: true });
+      listContext.push({
+        title: '',
+        onClick: () => {
+          return;
+        },
+        isDivider: true
+      });
     });
 
     if (this.tweet.entities.hashtags.length) {
@@ -206,7 +236,13 @@ export class TweetSelectorBase extends Vue {
           isDivider: false
         });
       });
-      listContext.push({ title: '', onClick: () => {}, isDivider: true });
+      listContext.push({
+        title: '',
+        onClick: () => {
+          return;
+        },
+        isDivider: true
+      });
     }
 
     listContext.push({
@@ -222,7 +258,13 @@ export class TweetSelectorBase extends Vue {
       hotKey: this.GetHotKeyText(hotKey.copy),
       isDivider: false
     });
-    listContext.push({ title: '', onClick: () => {}, isDivider: true });
+    listContext.push({
+      title: '',
+      onClick: () => {
+        return;
+      },
+      isDivider: true
+    });
 
     listContext.push({
       title: `${this.via} 뮤트`,
@@ -239,7 +281,13 @@ export class TweetSelectorBase extends Vue {
     });
 
     if (this.orgUser.id_str === moduleSwitter.selectID) {
-      listContext.push({ title: '', onClick: () => {}, isDivider: true });
+      listContext.push({
+        title: '',
+        onClick: () => {
+          return;
+        },
+        isDivider: true
+      });
 
       listContext.push({
         title: '트윗 삭제',
