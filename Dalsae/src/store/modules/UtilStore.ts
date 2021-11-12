@@ -17,6 +17,7 @@ import { eventBus } from '@/plugins';
 import { FindTweet } from '@/Interfaces';
 import axios from 'axios';
 import { moduleDom } from './DomStore';
+import { decode } from 'html-entities';
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
   get isFocusPanel() {
@@ -161,6 +162,7 @@ class UtilStore extends VuexModule {
         text = text.replace(media.url, media.display_url);
       });
     }
+    text = decode(text);
     copy(text);
     moduleModal.AddMessage({
       message: '트윗이 복사되었습니다',
