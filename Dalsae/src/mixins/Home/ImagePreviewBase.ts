@@ -42,7 +42,7 @@ export class ImagePreviewBase extends Vue {
 
   get styleGroup() {
     return {
-      right: this.size + 30 + 'px'
+      right: this.media.length * 8 + this.size + 'px'
     };
   }
 
