@@ -5,6 +5,9 @@ import moment from 'moment';
 import { moduleOption } from '@/store/modules/OptionStore';
 import store from '@/store';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { moduleUtil } from '@/store/modules/UtilStore';
+import { moduleUI } from '@/store/modules/UIStore';
+import { ETweetType } from '@/store/Interface';
 
 @Component
 export class TweetBase extends Vue {
@@ -13,6 +16,11 @@ export class TweetBase extends Vue {
 
   @Prop()
   selected!: boolean;
+
+  OnClickConv() {
+    moduleUtil.LoadConv(this.tweet);
+    moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_CONV });
+  }
 
   get isRetweet() {
     return this.tweet.retweeted_status !== undefined;
