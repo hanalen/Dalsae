@@ -41,6 +41,7 @@
 }
 .tweet-images-group {
   position: absolute;
+  display: flex;
   right: 120px;
   background: white;
   padding: 4px;
