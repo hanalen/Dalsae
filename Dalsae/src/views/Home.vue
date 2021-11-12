@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 <template>
   <v-app>
+    <audio style="diplay: none;" ref="refAudio" :src="pathSound" />
     <div class="app-alert">
       <v-alert
         dense

@@ -22,6 +22,19 @@ export class DalsaeApp extends Vue {
     return moduleSwitter.selectID;
   }
 
+  appPath = '';
+
+  get pathSound() {
+    return this.appPath + '/Sound/' + this.pathSoundOrg;
+  }
+
+  get pathSoundOrg() {
+    return moduleOption.muteOption.pathSound;
+  }
+
+  @Ref()
+  refAudio!: HTMLAudioElement;
+
   @Watch('selectUserID', { immediate: true, deep: true })
   OnChangeData(newID: string, oldID: string) {
     this.$nextTick(() => {
@@ -39,13 +52,17 @@ export class DalsaeApp extends Vue {
   }
 
   async created() {
-    // moduleTweet.Init(moduleSwitter.selectID);
+    // window.ipc.ipcPipe.on('GetAppPath', (data: object) => {
+    //   this.appPath = data['path'];
+    //   this.LoadConfig();
+    // });
     this.LoadConfig();
     this.$nextTick(() => {
       window.ipc.ipcPipe.on('test_on', (data: object) => {
         console.log('callbacked! data:', data);
       });
       this.StartDalsae();
+      moduleDom.RegisterAudio(this.refAudio);
     });
     setTimeout(() => {
       window.ipc.ipcPipe.send('test_on', { text: 'this is testparta' });
@@ -54,6 +71,7 @@ export class DalsaeApp extends Vue {
 
   LoadConfig() {
     window.ipc.files.LoadConfig();
+    this.appPath = window.ipc.files.GetAppPath();
     const switter = window.ipc.files.LoadSwitter();
     if (switter) {
       moduleSwitter.InitSwitter(switter);
@@ -78,11 +96,11 @@ export class DalsaeApp extends Vue {
   async StartDalsae() {
     if (moduleSwitter.selectUser) {
       const testTweets = window.ipc.files.LoadTestTweet();
-      store.dispatch('AddTweet', {
-        type: ETweetType.E_HOME,
-        user_id_str: moduleSwitter.selectID,
-        listTweet: testTweets
-      });
+      // store.dispatch('AddTweet', {
+      //   type: ETweetType.E_HOME,
+      //   user_id_str: moduleSwitter.selectID,
+      //   listTweet: testTweets
+      // });
       const following = window.ipc.files.LoadTestFriends();
       const follower = window.ipc.files.LoadTestFollower();
       const { followDatas } = moduleSwitter.stateIds;
