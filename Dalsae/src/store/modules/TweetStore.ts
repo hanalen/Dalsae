@@ -237,13 +237,12 @@ class TweetStore extends VuexModule {
       console.log('exists');
       return; //exists
     }
-    const idx = FindTweetIndex(tweet, orgTweets);
-    orgTweets.splice(idx, 0, new I.Tweet(tweet));
+    orgTweets.splice(0, 0, new I.Tweet(tweet));
     const { open } = moduleUI.statePanel;
-    const idx2 = tweets.tweets.mentions.findIndex(x => x.id_str === open.selectedId);
+    const idx = tweets.tweets.mentions.findIndex(x => x.id_str === open.selectedId);
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
-      open: { ...open, index: idx2 }
+      open: { ...open, index: idx }
     });
   }
   @Mutation
