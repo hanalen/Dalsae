@@ -146,9 +146,7 @@ export class OptionDetailModalBase extends Vue {
     return moduleOption.hotKey;
   }
 
-  get listSoundFiles() {
-    return window.ipc.files.GetSoundFiles();
-  }
+  listSoundFiles: string[] = [];
 
   get pathSound() {
     return this.muteOption.pathSound;
@@ -215,6 +213,10 @@ export class OptionDetailModalBase extends Vue {
     }
     const hotkey = Object.fromEntries(map);
     moduleOption.ChangeHotkey(hotkey);
+  }
+
+  OnClickSelect() {
+    this.listSoundFiles = window.ipc.files.GetSoundFiles();
   }
 
   OnAddKeyword() {

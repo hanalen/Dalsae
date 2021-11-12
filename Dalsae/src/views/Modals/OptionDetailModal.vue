@@ -218,6 +218,7 @@
                     </v-btn>
                   </div>
                   <v-select
+                    @click="OnClickSelect"
                     v-if="muteOption.isPlaySoundAlarm"
                     :items="listSoundFiles"
                     label="파일을 선택 해주세요"
