@@ -17,10 +17,20 @@
         </v-card-actions>
         <v-card-actions v-else>
           <v-spacer></v-spacer>
-          <v-btn color="primary" ref="refYes" @click="OnClickBtn(true)">
+          <v-btn
+            color="primary"
+            ref="refYes"
+            @keydown.enter="OnClickBtn(true)"
+            @click="OnClickBtn(true)"
+          >
             예(Y)
           </v-btn>
-          <v-btn color="secondary" ref="refNo" @click="OnClickBtn(false)">
+          <v-btn
+            color="secondary"
+            ref="refNo"
+            @keydown.enter="OnClickBtn(false)"
+            @click="OnClickBtn(false)"
+          >
             아니오(N)
           </v-btn>
           <v-spacer></v-spacer>
