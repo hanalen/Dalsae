@@ -13,13 +13,9 @@
       </v-alert>
     </div>
     <v-main app>
-      <v-container fluid :style="styleTop">
+      <v-container fluid :style="styleTop" v-if="option.isShowTweet">
         <div :style="styleTweet" ref="refTweet">
-          <tweet-selector
-            v-if="option.isShowTweet"
-            :selected="false"
-            :tweet="tweet"
-          ></tweet-selector>
+          <tweet-selector :selected="false" :tweet="tweet"></tweet-selector>
         </div>
       </v-container>
     </v-main>
@@ -63,11 +59,17 @@ import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js';
 import 'video.js/dist/video-js.css';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { Messagetype } from '@/mixins';
+import { moduleUI } from '@/store/modules/UIStore';
 @Component
 export default class VideoView extends Vue {
   bExpanded = false;
   bMounted = false;
   isLoadVideo = false;
+
+  get isShowTweet() {
+    return moduleOption.uiOption.isShowTweet;
+  }
+
   get listMsg() {
     return moduleModal.stateMessage.listMessage;
   }
@@ -86,14 +88,8 @@ export default class VideoView extends Vue {
       };
     }
   }
-  get styleContent() {
-    return {
-      height: 'calc(100vh - 310px)'
-    };
-  }
-
   get option() {
-    return moduleImage.option;
+    return moduleOption.uiOption;
   }
   @Ref()
   refVideo!: HTMLVideoElement;
@@ -112,9 +108,6 @@ export default class VideoView extends Vue {
       this.tweet = new I.Tweet(JSON.parse(json));
       this.media = this.tweet.extended_entities.media[0];
     }
-    // const tweets = window.preload.LoadTestTweet();
-    // this.tweet = new I.Tweet(tweets[1]);
-    // this.media = this.tweet.extended_entities.media[0];
     this.$nextTick(() => {
       if (!id) {
         moduleModal.AddMessage({
