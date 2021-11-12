@@ -17,7 +17,7 @@ export class ImagePage extends Vue {
   }
 
   get option() {
-    return moduleImage.option;
+    return moduleOption.uiOption;
   }
 
   get index() {

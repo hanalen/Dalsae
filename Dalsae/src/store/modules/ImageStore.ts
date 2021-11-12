@@ -52,21 +52,6 @@ class ImageStore extends VuexModule {
   stateImage = new ImageViewState();
   stateProgress = new ProgressState();
   tweet = new I.Tweet();
-  option: I.UIOption = {
-    isBigPropic: true,
-    isLoadOrgImg: false,
-    isSendCheck: false,
-    isSendEnter: true,
-    isSendRTCheck: true,
-    isSendRTProtected: true,
-    isShowBottomPreview: true,
-    isShowPreview: true,
-    isShowPropic: true,
-    isShowTweet: true,
-    isSmallInput: false,
-    isSmallTweet: false,
-    isUseRead: false
-  };
 
   @Mutation
   private changeState(state: ImageViewState) {
@@ -94,16 +79,6 @@ class ImageStore extends VuexModule {
   @Action
   SetTweet(tweet: I.Tweet) {
     this.context.commit('setTweet', tweet);
-  }
-
-  @Mutation
-  private setOption(option: I.UIOption) {
-    this.option = option;
-  }
-
-  @Action
-  SetOption(option: I.UIOption) {
-    this.context.commit('setOption', option);
   }
 
   @Mutation
