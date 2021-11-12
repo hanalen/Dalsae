@@ -102,6 +102,8 @@ export default class Home extends Mixins(DalsaeApp) {
       }
     });
     if (e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
       if (moduleUI.stateContext.isShow) {
         moduleUtil.OnEnterByContext();
       }

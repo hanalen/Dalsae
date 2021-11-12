@@ -169,13 +169,15 @@ export class DalsaeApp extends Vue {
         }
         break;
       case I.E_HOTKEY.SHOWQT:
-        moduleTweet.AddTweet({
-          tweet: selectTweet,
-          listTweet: undefined,
-          user_id_str: moduleSwitter.selectID,
-          type: ETweetType.E_CONV
-        });
-        moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_CONV });
+        if (selectTweet?.orgTweet.is_quote_status && selectTweet.orgTweet.quoted_status) {
+          moduleTweet.AddTweet({
+            tweet: selectTweet?.orgTweet.quoted_status,
+            listTweet: undefined,
+            user_id_str: moduleSwitter.selectID,
+            type: ETweetType.E_CONV
+          });
+          moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_CONV });
+        }
         break;
       case I.E_HOTKEY.SENDQT:
         if (selectTweet) moduleUtil.OnClickQt(selectTweet);
