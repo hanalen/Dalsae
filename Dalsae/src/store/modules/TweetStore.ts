@@ -15,6 +15,7 @@ import {
 } from '@/Interfaces';
 import { moduleUI } from './UIStore';
 import { UserStreaming } from '@/API';
+import { moduleDom } from './DomStore';
 export interface ITweetStore {
   tweetDatas: I.TweetDatas;
 }
@@ -81,6 +82,8 @@ class TweetStore extends VuexModule {
     let listConcatTweets: I.Tweet[] = [];
     listConcatTweets = tweet ? [tweet] : [];
 
+    let isAddMention = false;
+
     if (listTweet) {
       listConcatTweets = listConcatTweets.concat(listTweet);
     }
@@ -97,6 +100,7 @@ class TweetStore extends VuexModule {
           mentions.splice(idx, 0, new I.Tweet(item));
           const { mention } = moduleUI.statePanel;
           const idx2 = mentions.findIndex(x => x.id_str === mention.selectedId);
+          isAddMention = true;
           moduleUI.SetStatePanel({
             ...moduleUI.statePanel,
             mention: { ...mention, index: idx2 }
@@ -114,6 +118,14 @@ class TweetStore extends VuexModule {
       ...moduleUI.statePanel,
       home: { ...home, index: idx }
     });
+    if (
+      isAddMention &&
+      moduleOption.muteOption.pathSound &&
+      moduleOption.muteOption.isPlaySoundAlarm
+    ) {
+      //알람!
+      moduleDom.stateDom.audio.play();
+    }
   }
 
   @Mutation
@@ -138,6 +150,7 @@ class TweetStore extends VuexModule {
     if (tweet) {
       listConcatTweets = [tweet];
     }
+    let isAddMention = false;
     listConcatTweets.forEach(item => {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
         console.log('exists');
@@ -146,6 +159,7 @@ class TweetStore extends VuexModule {
       if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
+      isAddMention = true;
     });
     const { mention } = moduleUI.statePanel;
     const idx = tweets.tweets.mentions.findIndex(x => x.id_str === mention.selectedId);
@@ -153,6 +167,15 @@ class TweetStore extends VuexModule {
       ...moduleUI.statePanel,
       mention: { ...mention, index: idx }
     });
+
+    if (
+      isAddMention &&
+      moduleOption.muteOption.pathSound &&
+      moduleOption.muteOption.isPlaySoundAlarm
+    ) {
+      //알람!
+      moduleDom.stateDom.audio.play();
+    }
   }
 
   @Mutation
