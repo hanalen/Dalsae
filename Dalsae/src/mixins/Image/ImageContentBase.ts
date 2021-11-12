@@ -210,18 +210,11 @@ export class ImageContentBase extends Mixins(Vue) {
   }
   OnKeyDown(e: KeyboardEvent) {
     const { isZoom, top, left } = moduleImage.stateImage;
-    if (e.key === '1') {
+    if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4') {
       moduleImage.Reset();
-      moduleImage.ChangeState({ ...moduleImage.stateImage, index: 0 });
-    } else if (e.key === '2') {
-      moduleImage.Reset();
-      moduleImage.ChangeState({ ...moduleImage.stateImage, index: 1 });
-    } else if (e.key === '3') {
-      moduleImage.Reset();
-      moduleImage.ChangeState({ ...moduleImage.stateImage, index: 2 });
-    } else if (e.key === '4') {
-      moduleImage.Reset();
-      moduleImage.ChangeState({ ...moduleImage.stateImage, index: 3 });
+      const index = Number.parseInt(e.key) - 1;
+      if (index >= this.media.length) return;
+      moduleImage.ChangeState({ ...moduleImage.stateImage, index: index });
     } else if (e.key === 'e') {
       this.Zoom();
     } else if (e.key === 'q') {
