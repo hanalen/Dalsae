@@ -92,8 +92,14 @@ class TweetStore extends VuexModule {
     }
     listConcatTweets.forEach(item => {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) return; //exists
-      if (!CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
+      if (
+        !CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds) &&
+        muteOption.isMuteMention //멘션도 뮤트처리
+      )
+        return; //muted
       if (CheckMention(item, user_id_str, muteOption)) {
+        if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds))
+          return; //muted
         const mentions = tweets?.tweets.mentions;
         if (mentions) {
           const idx = FindTweetIndex(item, mentions);
