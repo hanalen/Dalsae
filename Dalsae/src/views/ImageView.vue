@@ -14,7 +14,7 @@
       </v-alert>
     </div>
     <v-main app>
-      <v-container fluid :style="styleTop">
+      <v-container fluid :style="styleTop" v-if="isShowTweet">
         <div :style="styleTweet" ref="refTweet">
           <tweet-selector
             v-if="option.isShowTweet"
@@ -40,7 +40,7 @@
         <image-content :style="styleContent" :tweet="tweet" :index="index"> </image-content>
       </v-container>
     </v-main>
-    <v-footer fixed height="130">
+    <v-footer fixed height="130" v-if="isShowBottom">
       <div class="bottom">
         <image-popup-preview
           v-for="(media, i) in media"
@@ -139,8 +139,11 @@ export default class ImageView extends Mixins(MIX.ImagePage) {
     }
   }
   get styleContent() {
+    let height = 310;
+    if (!this.isShowBottom) height -= 130;
+    if (!this.isShowTweet) height -= 180;
     return {
-      height: 'calc(100vh - 310px)'
+      height: `calc(100vh - ${height}px)`
     };
   }
   get isBigTweet() {

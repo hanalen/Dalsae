@@ -3,6 +3,7 @@ import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
 import { moduleImage } from '@/store/modules/ImageStore';
 import { moduleModal } from '@/store/modules/ModalStore';
+import { moduleOption } from '@/store/modules/OptionStore';
 
 @Component
 export class ImagePage extends Vue {
@@ -47,6 +48,14 @@ export class ImagePage extends Vue {
   }
   get y() {
     return moduleImage.stateImage.clickY;
+  }
+
+  get isShowBottom() {
+    return moduleOption.uiOption.isShowBottomPreview;
+  }
+
+  get isShowTweet() {
+    return moduleOption.uiOption.isShowTweet;
   }
 
   OnClickMedia(media: I.Media) {
