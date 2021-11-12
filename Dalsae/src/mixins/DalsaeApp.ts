@@ -188,6 +188,7 @@ export class DalsaeApp extends Vue {
         if (selectTweet) moduleApi.statuses.Destroy(selectTweet);
         break;
       case I.E_HOTKEY.INPUT:
+        moduleDom.stateDom.textArea.focus();
         break;
       case I.E_HOTKEY.SHOWCONTEXT:
         if (selectTweet) eventBus.$emit('ShowContextMenu', selectTweet.id_str);
