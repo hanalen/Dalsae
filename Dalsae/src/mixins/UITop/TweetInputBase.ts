@@ -13,7 +13,7 @@ import { moduleUtil } from '@/store/modules/UtilStore';
 @Component
 export class TweetInputBase extends Vue {
   @Ref()
-  textArea!: HTMLInputElement;
+  textArea!: HTMLTextAreaElement;
   @Ref()
   refFile!: HTMLInputElement;
   get inputText() {

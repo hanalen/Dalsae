@@ -6,6 +6,7 @@ import * as M from '@/mixins';
 
 class StateDom {
   audio!: HTMLAudioElement;
+  textArea!: HTMLTextAreaElement;
 }
 
 @Module({ dynamic: true, store, name: 'dom' })
@@ -43,6 +44,16 @@ class DomStore extends VuexModule {
   @Action
   RegisterAudio(audio: HTMLAudioElement) {
     this.context.commit('registerAudio', audio);
+  }
+
+  @Mutation
+  private registerTextArea(text: HTMLTextAreaElement) {
+    this.stateDom.textArea = text;
+  }
+
+  @Action
+  RegisterTextArea(text: HTMLTextAreaElement) {
+    this.context.commit('registerTextArea', text);
   }
 }
 

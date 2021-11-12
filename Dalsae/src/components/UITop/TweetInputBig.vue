@@ -106,6 +106,7 @@ textarea {
 <script lang="ts">
 import { DalsaeApp, UITopBase, TweetInputBase } from '@/mixins';
 import { eventBus } from '@/plugins';
+import { moduleDom } from '@/store/modules/DomStore';
 import { mixins } from 'vue-class-component';
 import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 
@@ -113,9 +114,10 @@ import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
 export default class TweetInput extends TweetInputBase {
   async created() {
     this.$nextTick(() => {
-      eventBus.$on('FocusInput', () => {
-        this.textArea.focus();
-      });
+      moduleDom.RegisterTextArea(this.textArea);
+      // eventBus.$on('FocusInput', () => {
+      //   this.textArea.focus();
+      // });
     });
   }
 }

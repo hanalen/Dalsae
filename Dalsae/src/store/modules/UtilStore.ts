@@ -16,6 +16,7 @@ import { moduleModal } from './ModalStore';
 import { eventBus } from '@/plugins';
 import { FindTweet } from '@/Interfaces';
 import axios from 'axios';
+import { moduleDom } from './DomStore';
 @Module({ dynamic: true, store, name: 'util' })
 class UtilStore extends VuexModule {
   get isFocusPanel() {
@@ -73,12 +74,14 @@ class UtilStore extends VuexModule {
   OnClickQt(tweet: I.Tweet) {
     const str = `https://twitter.com/${tweet.orgUser.screen_name}/status/${tweet.orgTweet.id_str}`;
     moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: str });
+    moduleDom.stateDom.textArea.focus();
   }
 
   @Action
   Reply(tweet: I.Tweet) {
     const mentions = `@${tweet.orgUser.screen_name} `;
     moduleUI.SetStateInput({ ...moduleUI.stateInput, replyTweet: tweet, inputText: mentions });
+    moduleDom.stateDom.textArea.focus();
   }
 
   @Action
@@ -96,6 +99,7 @@ class UtilStore extends VuexModule {
       mentions += `@${user} `;
     });
     moduleUI.SetStateInput({ ...moduleUI.stateInput, replyTweet: tweet, inputText: mentions });
+    moduleDom.stateDom.textArea.focus();
   }
   @Action
   LoadTweets() {
@@ -173,12 +177,14 @@ class UtilStore extends VuexModule {
       text += `#${hash.text} `;
     });
     moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: text });
+    moduleDom.stateDom.textArea.focus();
   }
 
   @Action
   AddHash(hash: I.Hashtag) {
     if (!hash) return;
     moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: `#${hash.text}` });
+    moduleDom.stateDom.textArea.focus();
   }
 
   @Action
@@ -210,7 +216,7 @@ class UtilStore extends VuexModule {
       autoCompleteWord: ''
     });
     moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: text });
-    eventBus.$emit('FocusInput');
+    moduleDom.stateDom.textArea.focus();
   }
   @Action
   Retweet(tweet: I.Tweet | undefined) {

@@ -80,7 +80,8 @@ export default class ProfileUser extends Vue {
   }
 
   OnClickUser(e: MouseEvent) {
-    console.log(e);
+    e.preventDefault();
+    e.stopPropagation();
     this.$emit('on-click-small-user', this.user);
   }
 }

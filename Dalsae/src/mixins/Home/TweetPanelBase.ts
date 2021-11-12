@@ -9,6 +9,7 @@ import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { eventBus } from '@/plugins';
 import { moduleUtil } from '@/store/modules/UtilStore';
 import { moduleOption } from '@/store/modules/OptionStore';
+import { moduleDom } from '@/store/modules/DomStore';
 
 @Component
 export class TweetPanelBase extends Vue {
@@ -161,11 +162,11 @@ export class TweetPanelBase extends Vue {
 
   async ArrowUp() {
     if (this.listTweet.length === 0) {
-      eventBus.$emit('FocusInput');
+      moduleDom.stateDom.textArea.focus();
       return;
     }
     if (await moduleUI.Up()) {
-      eventBus.$emit('FocusInput');
+      moduleDom.stateDom.textArea.focus();
     }
   }
 
