@@ -1,7 +1,7 @@
 <template>
   <div class="tweet" :class="{ selected: selected }">
     <div class="tweet-conv">
-      <v-icon @click="OnClickConv" class="icon-conv" size="18px" v-show="isConv"
+      <v-icon @click="OnClickConv" class="icon-conv" size="18px" :style="styleConv" v-show="isConv"
         >mdi-chat-plus</v-icon
       >
     </div>
@@ -39,12 +39,17 @@
 .tweet:hover {
   background-color: #d5eefd;
 }
+.icon-conv {
+  position: absolute;
+}
 .icon-conv:hover {
   cursor: pointer;
 }
 .tweet-conv {
+  position: relative;
   width: 20px;
   padding-right: 2px;
+  display: block !important;
 }
 .tweet-text-area {
   width: 100%;

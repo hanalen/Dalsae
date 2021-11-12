@@ -109,4 +109,15 @@ export class TweetBase extends Vue {
       };
     }
   }
+
+  get styleConv() {
+    if (this.uiOption.isBigPropic) {
+      return {
+        top: '26px'
+      };
+    }
+    return {
+      top: '14px'
+    };
+  }
 }
