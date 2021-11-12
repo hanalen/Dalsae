@@ -62,7 +62,10 @@ class ModalStore extends VuexModule {
     const follower = moduleSwitter.listFollower.filter(
       x => x.screen_name.toUpperCase().indexOf(word) > -1 || x.name.toUpperCase().indexOf(word) > -1
     );
-    return following.concat(follower);
+    const ret = following.concat(follower);
+    return ret.filter((user, i) => {
+      return ret.findIndex(x => x.id_str === user.id_str) === i;
+    });
   }
 
   @Action
