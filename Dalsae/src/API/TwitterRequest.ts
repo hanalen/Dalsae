@@ -31,8 +31,6 @@ export function CreateHeader(authorization: string, contentType?: string) {
     'Content-Type': contentType ? contentType : 'application/x-www-form-urlencoded;encoding=utf-8',
     Authorization: authorization
   };
-  console.log('header');
-  console.log(ret);
   return ret;
   // return {
   //   'Content-Type': contentType ? contentType : 'application/x-www-form-urlencoded;encoding=utf-8',
