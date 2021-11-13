@@ -59,7 +59,9 @@ export class TweetBase extends Vue {
   }
 
   get name() {
-    return this.orgUser.screen_name + ' / ' + this.orgUser.name;
+    return this.orgUser.screen_name + ' / ' + this.orgUser.name + this.orgUser.protected
+      ? '🔒'
+      : '';
   }
 
   get date() {
