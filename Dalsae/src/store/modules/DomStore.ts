@@ -22,6 +22,7 @@ class DomStore extends VuexModule {
         if (currentTweet.orgTweet.id_str === tweet.orgTweet.id_str) {
           currentTweet.orgTweet.retweeted = tweet.retweeted;
           currentTweet.orgTweet.favorited = tweet.favorited;
+          item.isResized = true;
         }
       }
     }
