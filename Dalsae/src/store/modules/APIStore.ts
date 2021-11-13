@@ -155,7 +155,8 @@ class Statuses {
       const { id_str } = tweet.orgTweet;
       const result = await twitterRequest.call.statuses.Retweet({ id_str: id_str });
       if (!twitterRequest.CheckAPIError(result.data)) {
-        moduleTweet.UpdateRTandFav(result.data);
+        result.data.retweeted = true;
+        moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
       }
       return result;
     }
@@ -167,7 +168,8 @@ class Statuses {
       const { id_str } = tweet.orgTweet;
       const result = await twitterRequest.call.statuses.UnRetweet({ id_str: id_str });
       if (!twitterRequest.CheckAPIError(result.data)) {
-        moduleTweet.UpdateRTandFav(result.data);
+        result.data.retweeted = false;
+        moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
       }
       return result;
     }
@@ -232,7 +234,8 @@ class Favorites {
       const { id_str } = tweet.orgTweet;
       const result = await twitterRequest.call.favorites.Create({ id: id_str });
       if (!twitterRequest.CheckAPIError(result.data)) {
-        moduleTweet.UpdateRTandFav(result.data);
+        result.data.favorited = true;
+        moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
       }
       return result;
     }
@@ -244,7 +247,8 @@ class Favorites {
       const { id_str } = tweet.orgTweet;
       const result = await twitterRequest.call.favorites.Destroy({ id: id_str });
       if (!twitterRequest.CheckAPIError(result.data)) {
-        moduleTweet.UpdateRTandFav(result.data);
+        result.data.favorited = false;
+        moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
       }
       return result;
     }

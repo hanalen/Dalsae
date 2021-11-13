@@ -15,6 +15,19 @@ class DomStore extends VuexModule {
   stateDom = new StateDom();
 
   @Mutation
+  private updateRTandFav(tweet: I.Tweet) {
+    for (const panel of this.listScrollPanel) {
+      for (const item of panel.stateData.listData) {
+        const currentTweet = item.data as I.Tweet;
+        if (currentTweet.orgTweet.id_str === tweet.orgTweet.id_str) {
+          currentTweet.orgTweet.retweeted = tweet.retweeted;
+          currentTweet.orgTweet.favorited = tweet.favorited;
+        }
+      }
+    }
+  }
+
+  @Mutation
   private registeScrollPanel(panel: M.ScrollPanelBase) {
     this.listScrollPanel.push(panel);
   }
