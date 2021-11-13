@@ -117,6 +117,7 @@ import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import { moduleImage } from '@/store/modules/ImageStore';
 import { moduleOption } from '@/store/modules/OptionStore';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
 @Component
 export default class ImageView extends Mixins(MIX.ImagePage) {
   @Ref()
@@ -166,6 +167,8 @@ export default class ImageView extends Mixins(MIX.ImagePage) {
     });
     const id = this.$route.query.tweetId;
     if (id) {
+      const switter = window.ipc.image.GetSwitter(id.toString());
+      moduleSwitter.InitSwitter(JSON.parse(switter));
       const option = window.ipc.image.GetOption(id.toString());
       moduleOption.ChangeOption(JSON.parse(option));
       const json = window.ipc.image.GetTweet(id.toString());

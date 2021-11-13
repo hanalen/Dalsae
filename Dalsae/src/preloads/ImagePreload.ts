@@ -42,12 +42,13 @@ export const imagePreload = {
         });
     });
   },
-  OpenImageWindow(tweet: any, option: I.UIOption) {
+  OpenImageWindow(tweet: any, option: I.UIOption, switter: I.Switter) {
     const ipcName = Math.random() * (99999 - 0) + 0;
     const url = `${process.env.WEBPACK_DEV_SERVER_URL as string}ImageView?tweetId=${ipcName}`;
     ipcRenderer.send('OpenWindow', { url: url, title: 'dalsae-image' });
     ipcRenderer.send('AddChannel', { name: `image_${ipcName}`, value: JSON.stringify(tweet) });
     ipcRenderer.send('AddChannel', { name: `option_${ipcName}`, value: JSON.stringify(option) });
+    ipcRenderer.send('AddChannel', { name: `switter_${ipcName}`, value: JSON.stringify(switter) });
   },
   GetTweet(tweetId: string) {
     const tweet = ipcRenderer.sendSync('image_' + tweetId);
@@ -56,5 +57,9 @@ export const imagePreload = {
   GetOption(tweetId: string) {
     const option = ipcRenderer.sendSync('option_' + tweetId);
     return option;
+  },
+  GetSwitter(tweetId: string) {
+    const switter = ipcRenderer.sendSync('switter_' + tweetId);
+    return switter;
   }
 };

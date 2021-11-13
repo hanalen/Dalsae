@@ -6,12 +6,13 @@ import http from 'http';
 import fs from 'fs';
 import Axios from 'axios';
 export const videoPreload = {
-  OpenVideoWindow(tweet: any, option: I.UIOption) {
+  OpenVideoWindow(tweet: any, option: I.UIOption, switter: I.Switter) {
     const ipcName = Math.random() * (99999 - 0) + 0;
     const url = `${process.env.WEBPACK_DEV_SERVER_URL as string}VideoView?tweetId=${ipcName}`;
     ipcRenderer.send('OpenWindow', { url: url, title: 'dalsae-video' });
     ipcRenderer.send('AddChannel', { name: `video_${ipcName}`, value: JSON.stringify(tweet) });
     ipcRenderer.send('AddChannel', { name: `option_${ipcName}`, value: JSON.stringify(option) });
+    ipcRenderer.send('AddChannel', { name: `switter_${ipcName}`, value: JSON.stringify(switter) });
   },
 
   GetTweet(tweetId: string) {
@@ -23,7 +24,10 @@ export const videoPreload = {
     const option = ipcRenderer.sendSync('option_' + tweetId);
     return option;
   },
-
+  GetSwitter(tweetId: string) {
+    const switter = ipcRenderer.sendSync('switter_' + tweetId);
+    return switter;
+  },
   DownloadImage(
     media: I.Media,
     index: number,

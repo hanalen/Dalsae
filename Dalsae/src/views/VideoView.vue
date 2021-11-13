@@ -60,6 +60,7 @@ import 'video.js/dist/video-js.css';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { Messagetype } from '@/mixins';
 import { moduleUI } from '@/store/modules/UIStore';
+import { moduleSwitter } from '@/store/modules/SwitterStore';
 @Component
 export default class VideoView extends Vue {
   bExpanded = false;
@@ -102,6 +103,8 @@ export default class VideoView extends Vue {
   async created() {
     const id = this.$route.query.tweetId;
     if (id) {
+      const switter = window.ipc.video.GetSwitter(id.toString());
+      moduleSwitter.InitSwitter(JSON.parse(switter));
       const option = window.ipc.video.GetOption(id.toString());
       moduleOption.ChangeOption(JSON.parse(option));
       const json = window.ipc.video.GetTweet(id.toString());
