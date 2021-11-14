@@ -5,3 +5,4 @@ export * from './UITop';
 export * from './Image';
 export * from './Scroll';
 export * from './Profile';
+export * from './Common';
