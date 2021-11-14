@@ -403,9 +403,10 @@ import { moduleApi } from '@/store/modules/APIStore';
 import { moduleSysbar } from '@/store/modules/SystemBarStore';
 import { ESystemBar } from '@/store/Interface';
 import { moduleOption } from '@/store/modules/OptionStore';
+import { IPCPipeLine } from '@/mixins';
 
 @Component
-export default class ProfileView extends MIX.ProfilePage {
+export default class ProfileView extends Mixins(MIX.ProfilePage, IPCPipeLine) {
   async created() {
     // const testFollowing = window.preload.LoadTestFriends();
     // console.log(testFollowing);

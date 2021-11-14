@@ -119,7 +119,7 @@ import { moduleImage } from '@/store/modules/ImageStore';
 import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 @Component
-export default class ImageView extends Mixins(MIX.ImagePage) {
+export default class ImageView extends Mixins(MIX.ImagePage, MIX.IPCPipeLine) {
   @Ref()
   refTweet!: HTMLElement;
   bExpanded = false;

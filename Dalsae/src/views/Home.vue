@@ -46,14 +46,14 @@
 <script lang="ts">
 import { Vue, Component, Mixins } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
-import { DalsaeApp } from '@/mixins';
+import { DalsaeApp, IPCPipeLine } from '@/mixins';
 import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
 
 @Component
-export default class Home extends Mixins(DalsaeApp) {
+export default class Home extends Mixins(DalsaeApp, IPCPipeLine) {
   get listMsg() {
     return moduleModal.stateMessage.listMessage;
   }
@@ -79,6 +79,9 @@ export default class Home extends Mixins(DalsaeApp) {
     this.$nextTick(() => {
       document.addEventListener('keydown', this.KeyDown);
     });
+    setTimeout(() => {
+      console.log(this.ipctitle);
+    }, 3000);
   }
   KeyDown(e: KeyboardEvent) {
     if (

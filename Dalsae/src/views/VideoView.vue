@@ -58,11 +58,11 @@ import { moduleOption } from '@/store/modules/OptionStore';
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js';
 import 'video.js/dist/video-js.css';
 import { moduleModal } from '@/store/modules/ModalStore';
-import { Messagetype } from '@/mixins';
+import { IPCPipeLine, Messagetype } from '@/mixins';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 @Component
-export default class VideoView extends Vue {
+export default class VideoView extends Mixins(Vue, IPCPipeLine) {
   bExpanded = false;
   bMounted = false;
   isLoadVideo = false;
