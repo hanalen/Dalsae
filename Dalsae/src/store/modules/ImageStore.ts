@@ -82,6 +82,15 @@ class ImageStore extends VuexModule {
   }
 
   @Mutation
+  private updateRTandFav(tweet: I.Tweet) {
+    if (!this.tweet) return;
+    if (this.tweet.orgTweet.id_str !== tweet.orgTweet.id_str) return;
+
+    this.tweet.orgTweet.favorited = tweet.orgTweet.favorited;
+    this.tweet.orgTweet.retweeted = tweet.orgTweet.retweeted;
+  }
+
+  @Mutation
   private changeProgress(change: M.ChangeProgress) {
     if (change.index > 3) return;
     this.stateProgress.listProgress[change.index].percent = change.progress.percent;
