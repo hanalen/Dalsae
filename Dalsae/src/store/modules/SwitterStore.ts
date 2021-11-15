@@ -5,6 +5,7 @@ import * as A from '@/store/Interface';
 import store from '@/store';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { FollowDatas } from '@/Interfaces/DalsaeDatas/FollowDatas';
+import { UpdateFollowInfo } from '@/store/Interface';
 class StateSwitter {
   switter: I.Switter;
   tempUser: I.DalsaeUser;
@@ -138,6 +139,22 @@ class SwitterStore extends VuexModule {
   @Action
   public UpdateSwitterUser(user: I.User) {
     this.context.commit('updateSwitterUser', user);
+  }
+
+  @Mutation
+  private updateFollow(userInfo: UpdateFollowInfo) {
+    const ids = this.stateIds.followDatas.dicUsers.get(userInfo.selecId);
+    if (!ids) return;
+    const { user } = userInfo;
+    if (user.following) {
+      //팔로잉 추가
+      const idx = ids.listFollowing.findIndex(x => x.id_str === user.id_str);
+      if (idx === -1) ids.listFollowing.push(user);
+    } else {
+      //언팔로잉
+      const idx = ids.listFollowing.findIndex(x => x.id_str === user.id_str);
+      if (idx !== -1) ids.listFollowing.splice(idx, 1);
+    }
   }
 
   @Mutation

@@ -3,7 +3,7 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import * as M from '@/mixins';
 import store from '@/store';
-import { ETweetType } from '@/store/Interface';
+import { ETweetType, UpdateFollowInfo } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
@@ -116,7 +116,8 @@ class ProfileStore extends VuexModule {
   }
 
   @Mutation
-  private updateFollowUserInfo(user: I.User) {
+  private updateFollow(userInfo: UpdateFollowInfo) {
+    const { user } = userInfo;
     if (user.following) {
       this.listFollowingIds.ids.push(user.id_str);
     } else {
@@ -125,13 +126,11 @@ class ProfileStore extends VuexModule {
         this.listFollowingIds.ids.splice(idx, 1);
       }
     }
-    //TODO 메인 윈도우store에 데이터 넘겨야 함
   }
 
   @Action
   UpdateFollowUserInfo(user: I.User) {
-    this.context.commit('updateFollowUserInfo', user);
-    this.context.commit('updateFollowInfo', user);
+    this.context.commit('updateFollow', { selecId: moduleSwitter.selectID, user: user });
   }
 
   @Mutation
