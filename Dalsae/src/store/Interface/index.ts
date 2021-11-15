@@ -6,3 +6,4 @@ export * from './AddFollowList';
 export * from './ChangeProgress';
 export * from './SystemBarItem';
 export * from './OpenLink';
+export * from './UpdateFollowInfo';
