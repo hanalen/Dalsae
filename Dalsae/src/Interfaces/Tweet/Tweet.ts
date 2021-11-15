@@ -21,8 +21,8 @@ export class Tweet {
   source: string;
   isRead: boolean;
 
-  orgTweet: I.Tweet;
-  orgUser: I.User;
+  orgTweet!: I.Tweet;
+  orgUser!: I.User;
 
   constructor(tweet?: Tweet) {
     if (tweet) {
@@ -46,7 +46,7 @@ export class Tweet {
       this.isRead = false;
       const orgTweet = tweet.retweeted_status ? tweet.retweeted_status : tweet; //원본 트윗 저장
       this.orgTweet = JSON.parse(JSON.stringify(orgTweet));
-      this.orgUser = JSON.parse(JSON.stringify(this.orgTweet.user));
+      this.orgUser = JSON.parse(JSON.stringify(this.orgTweet?.user));
     } else {
       this.created_at = '';
       this.id_str = '';
@@ -73,12 +73,10 @@ export class Tweet {
       };
       this.extended_entities = { media: [] };
       this.isRead = false;
-      this.orgTweet = new Tweet();
-      this.orgUser = new I.User();
     }
   }
 
   get media() {
-    return this.orgTweet.extended_entities?.media;
+    return this.orgTweet?.extended_entities?.media;
   }
 }
