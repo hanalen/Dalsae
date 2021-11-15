@@ -113,7 +113,7 @@ ipcMain.on('AddChannelOn', (event, arg: IpcParam) => {
   Log.info(arg);
   mainWin?.webContents.send(arg.name, arg.data);
   for (const win of listWindow) {
-    if (window) win.webContents.send(arg.name, arg.data);
+    if (win) win.webContents.send(arg.name, arg.data);
   }
 });
 ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
