@@ -14,7 +14,8 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win: BrowserWindow | null;
+let mainWin: BrowserWindow | null;
+const listWindow: BrowserWindow[] = [];
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -40,7 +41,7 @@ ipcMain.on('test_on', (event, payload) => {
 
 function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({
+  mainWin = new BrowserWindow({
     width: 1900,
     height: 1200,
     title: 'dalsae',
@@ -56,25 +57,26 @@ function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     // win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL as string}Image`);
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
+    mainWin.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
 
     if (!process.env.IS_TEST) {
-      win.webContents.openDevTools();
+      mainWin.webContents.openDevTools();
     }
   } else {
     createProtocol('app');
     // Load the index.html when not in development
-    win.loadURL('app://./index.html');
+    mainWin.loadURL('app://./index.html');
   }
 
-  win.on('closed', () => {
-    win = null;
+  mainWin.on('closed', () => {
+    mainWin = null;
   });
 }
 
 interface IpcParam {
   name: string;
   value: string;
+  data?: any;
 }
 
 const listIpcParam: IpcParam[] = [];
@@ -95,7 +97,6 @@ ipcMain.on('AddChannel', (event, arg: IpcParam) => {
     // Log.info(arg.name);
     // Log.info(arg2);
     const ipc = listIpcParam.find(x => x.name === arg.name);
-    Log.info(ipc);
     if (ipc) {
       event.returnValue = ipc.value; //sync일 경우 이렇게 해야 함
       // event.sender.send(name, ipc.value);
@@ -108,6 +109,13 @@ interface CreateWindowParam {
   title: string;
 }
 
+ipcMain.on('AddChannelOn', (event, arg: IpcParam) => {
+  Log.info(arg);
+  mainWin?.webContents.send(arg.name, arg.data);
+  for (const win of listWindow) {
+    if (window) win.webContents.send(arg.name, arg.data);
+  }
+});
 ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   const window = new BrowserWindow({
     show: true,
@@ -122,6 +130,12 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   });
   window.loadURL(param.url);
   window.webContents.openDevTools();
+  listWindow.push(window);
+
+  window.on('closed', () => {
+    const idx = listWindow.findIndex(x => x === window);
+    listWindow.splice(idx, 1);
+  });
 });
 ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
   const path = app.getAppPath();
@@ -140,7 +154,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (win === null) {
+  if (mainWin === null) {
     createWindow();
   }
 });

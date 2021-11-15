@@ -5,6 +5,7 @@ import * as I from '@/Interfaces';
 import { IOptionStore } from '@/store/modules/OptionStore';
 import { profilePreload } from './ProfilePreload';
 import { videoPreload } from './VideoPreload';
+import { EIPcType } from '@/mixins';
 
 const pathData = '/Data/';
 const pathSound = '/Sound/';
@@ -103,11 +104,11 @@ const browser = {
 
 //vue 윈도우에서 콜백 받을 때 사용, 윈도우->send->mainprocess에서 on->ipc.on 콜->메인윈도우에 콜백
 const ipcPipe = {
-  send: (channel: string, data: object) => {
+  send: (channel: EIPcType, data: any) => {
     console.log('chaneel send', data);
-    ipcRenderer.send(channel, data);
+    ipcRenderer.send('AddChannelOn', { name: channel, data: data, value: '' });
   },
-  on: (channel: string, callback: (data: object) => void) => {
+  on: (channel: string, callback: (data: any) => void) => {
     ipcRenderer.on(channel, (event, args) => callback({ ...args }));
   }
 };
