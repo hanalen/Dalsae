@@ -13,7 +13,7 @@ import { ESystemBar, ETweetType } from '@/store/Interface';
 import { moduleProfile } from './ProfileStore';
 import { moduleSysbar } from './SystemBarStore';
 import { moduleModal } from './ModalStore';
-import { Messagetype } from '@/mixins';
+import { EIPcType, Messagetype } from '@/mixins';
 import { moduleDm } from './DmStore';
 
 class Account {
@@ -156,7 +156,8 @@ class Statuses {
       const result = await twitterRequest.call.statuses.Retweet({ id_str: id_str });
       if (!twitterRequest.CheckAPIError(result.data)) {
         result.data.retweeted = true;
-        moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
+        window.ipc.ipcPipe.send(EIPcType.ERetweet, new I.Tweet(result.data));
+        // moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
       }
       return result;
     }
@@ -169,7 +170,8 @@ class Statuses {
       const result = await twitterRequest.call.statuses.UnRetweet({ id_str: id_str });
       if (!twitterRequest.CheckAPIError(result.data)) {
         result.data.retweeted = false;
-        moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
+        window.ipc.ipcPipe.send(EIPcType.ERetweet, new I.Tweet(result.data));
+        // moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
       }
       return result;
     }
@@ -235,7 +237,8 @@ class Favorites {
       const result = await twitterRequest.call.favorites.Create({ id: id_str });
       if (!twitterRequest.CheckAPIError(result.data)) {
         result.data.favorited = true;
-        moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
+        window.ipc.ipcPipe.send(EIPcType.EFavorite, new I.Tweet(result.data));
+        // moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
       }
       return result;
     }
@@ -248,7 +251,8 @@ class Favorites {
       const result = await twitterRequest.call.favorites.Destroy({ id: id_str });
       if (!twitterRequest.CheckAPIError(result.data)) {
         result.data.favorited = false;
-        moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
+        window.ipc.ipcPipe.send(EIPcType.EFavorite, new I.Tweet(result.data));
+        // moduleTweet.UpdateRTandFav(new I.Tweet(result.data));
       }
       return result;
     }
@@ -513,7 +517,8 @@ class Friendships {
         });
       } else {
         result.data.following = true;
-        moduleProfile.UpdateFollowUserInfo(result.data);
+        window.ipc.ipcPipe.send(EIPcType.EFollow, result.data);
+        // moduleProfile.UpdateFollowUserInfo(result.data);
       }
     }
     return result;
@@ -522,7 +527,8 @@ class Friendships {
     const result = await twitterRequest.call.friendships.Destroy(data);
     if (!twitterRequest.CheckAPIError(result.data)) {
       result.data.following = false;
-      moduleProfile.UpdateFollowUserInfo(result.data);
+      window.ipc.ipcPipe.send(EIPcType.EFollow, result.data);
+      // moduleProfile.UpdateFollowUserInfo(result.data);
       // window.preload.profile.UpdateFollow(result.data);
     }
     return result;
