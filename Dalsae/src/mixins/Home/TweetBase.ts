@@ -47,11 +47,11 @@ export class TweetBase extends Vue {
   }
 
   get orgTweet() {
-    return this.tweet.retweeted_status ? this.tweet.retweeted_status : this.tweet; //원본 트윗 저장
+    return this.tweet.orgTweet;
   }
 
   get orgUser() {
-    return this.orgTweet.user;
+    return this.tweet.orgUser;
   }
 
   get media() {

@@ -25,7 +25,7 @@ export class ImagePage extends Vue {
   }
 
   get orgTweet() {
-    return this.tweet.retweeted_status ? this.tweet.retweeted_status : this.tweet; //원본 트윗 저장
+    return this.tweet.orgTweet;
   }
 
   get media() {
