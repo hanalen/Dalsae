@@ -137,6 +137,7 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   window.on('closed', () => {
     const idx = listWindow.findIndex(x => x === window);
     listWindow.splice(idx, 1);
+    mainWin?.focus();
   });
 });
 ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
