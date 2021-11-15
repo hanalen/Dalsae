@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { Component, Vue } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { EIPcType } from '.';
 import { moduleImage } from '@/store/modules/ImageStore';
 import { moduleProfile } from '@/store/modules/ProfileStore';
-import { UpdateFollowInfo } from '@/store/Interface';
+import { ETweetType, UpdateFollowInfo } from '@/store/Interface';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 @Component
 export class IPCPipeLine extends Vue {
@@ -20,8 +21,13 @@ export class IPCPipeLine extends Vue {
       const sendTweet = new I.Tweet(tweet);
       moduleTweet.UpdateRTandFav(sendTweet);
     });
-    window.ipc.ipcPipe.on(EIPcType.EOpenWeb, (data: I.Tweet) => {
-      console.log('callbacked! data EOpenWeb:', data);
+    window.ipc.ipcPipe.on(EIPcType.EOpenWeb, (tweet: I.Tweet) => {
+      moduleTweet.AddTweet({
+        listTweet: undefined,
+        tweet: tweet,
+        type: ETweetType.E_OPEN,
+        user_id_str: moduleSwitter.selectID
+      });
     });
   }
 }

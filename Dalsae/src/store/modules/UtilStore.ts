@@ -7,7 +7,7 @@ import { ETweetType, OpenLink } from '@/store/Interface';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
-import { ContextItem, Messagetype } from '@/mixins';
+import { ContextItem, EIPcType, Messagetype } from '@/mixins';
 import { moduleUI } from './UIStore';
 import { moduleApi } from './APIStore';
 import copy from 'copy-to-clipboard';
@@ -74,23 +74,13 @@ class UtilStore extends VuexModule {
     const url = tweet.orgTweet.entities.urls.find(x => x.display_url === title);
     if (!url) return;
     window.ipc.browser.OpenBrowser(url.expanded_url);
-    moduleTweet.AddTweet({
-      listTweet: undefined,
-      tweet: tweet,
-      type: ETweetType.E_OPEN,
-      user_id_str: moduleSwitter.selectID
-    });
+    window.ipc.ipcPipe.send(EIPcType.EOpenWeb, tweet);
   }
   @Action
   OnClickViewWeb(tweet: I.Tweet) {
     const url = `https://twitter.com/${tweet.orgUser.screen_name}/status/${tweet.orgTweet.id_str}`;
     window.ipc.browser.OpenBrowser(url);
-    moduleTweet.AddTweet({
-      listTweet: undefined,
-      tweet: tweet,
-      type: ETweetType.E_OPEN,
-      user_id_str: moduleSwitter.selectID
-    });
+    window.ipc.ipcPipe.send(EIPcType.EOpenWeb, tweet);
   }
   @Action
   OnClickQt(tweet: I.Tweet) {
