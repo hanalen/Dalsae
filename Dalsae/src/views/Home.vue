@@ -79,9 +79,6 @@ export default class Home extends Mixins(DalsaeApp, IPCPipeLine) {
     this.$nextTick(() => {
       document.addEventListener('keydown', this.KeyDown);
     });
-    setTimeout(() => {
-      console.log(this.ipctitle);
-    }, 3000);
   }
   KeyDown(e: KeyboardEvent) {
     if (
