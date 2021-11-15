@@ -52,10 +52,17 @@ class Account {
 
 class Statuses {
   async Upload(media: string, isDm = false): Promise<P.MediaResp | undefined> {
-    console.log(media);
     const split = media.split(','); //data:image/png;base64, 이거 잘라야함
     const str = split[0];
     media = split[1];
+
+    let media_category = '';
+    if (str === 'data:image/gif;base64') media_category = 'tweet_gif';
+    else if (str === 'data:image/png;base64') media_category = 'tweet_image';
+    else if (str === 'data:image/jpeg;base64') media_category = 'tweet_image';
+
+    if (isDm) media_category = media_category.replace('tweet_', 'dm_');
+
     const type = str.substring(5, str.indexOf(';'));
     if (media.length >= 5242880) {
       //이미지 전송 방식: base64 to binary -> 자르기 -> binary 자른 데이터 to base64 전송
@@ -65,7 +72,7 @@ class Statuses {
         command: 'INIT',
         total_bytes: media.length,
         media_type: type,
-        media_category: isDm ? 'dm_gif' : 'tweet_gif'
+        media_category: media_category
       });
       console.log(result);
       const loopCount = Math.ceil(media.length / 5242880);
@@ -85,17 +92,16 @@ class Statuses {
         command: 'FINALIZE',
         media_id: result.data.media_id_string
       });
-      const resStatus = await twitterRequest.call.media.UploadStatus({
-        command: 'STATUS',
-        media_id: result.data.media_id_string
-      });
+      // const resStatus = await twitterRequest.call.media.UploadStatus({
+      //   command: 'STATUS',
+      //   media_id: result.data.media_id_string
+      // });
       console.log(resFinal);
-      console.log(resStatus);
+      // console.log(resStatus);
       return result.data;
     } else {
       const result = await twitterRequest.call.media.Upload({
-        media: media,
-        media_category: isDm ? 'dm_image' : 'tweet_image'
+        media: media
       });
       return result.data;
     }
