@@ -110,7 +110,6 @@ interface CreateWindowParam {
 }
 
 ipcMain.on('AddChannelOn', (event, arg: IpcParam) => {
-  Log.info(arg);
   mainWin?.webContents.send(arg.name, arg.data);
   for (const win of listWindow) {
     if (win) win.webContents.send(arg.name, arg.data);
@@ -140,6 +139,11 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
 ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
   const path = app.getAppPath();
   event.reply('GetAppPath', path);
+});
+
+ipcMain.on('MainWindowAlarm', () => {
+  if (!mainWin) return;
+  if (!mainWin.isFocused()) mainWin.flashFrame(true);
 });
 
 // Quit when all windows are closed.

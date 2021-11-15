@@ -322,5 +322,14 @@ class UtilStore extends VuexModule {
       }
     });
   }
+
+  @Action
+  Alarm(isAlarm: boolean) {
+    if (!isAlarm) return;
+    window.ipc.ipcPipe.alarm();
+    if (moduleOption.muteOption.pathSound && moduleOption.muteOption.isPlaySoundAlarm) {
+      moduleDom.stateDom.audio.play();
+    }
+  }
 }
 export const moduleUtil = getModule(UtilStore);

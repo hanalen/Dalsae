@@ -16,6 +16,8 @@ import {
 import { moduleUI } from './UIStore';
 import { UserStreaming } from '@/API';
 import { moduleDom } from './DomStore';
+import { EIPcType } from '@/mixins';
+import { moduleUtil } from './UtilStore';
 export interface ITweetStore {
   tweetDatas: I.TweetDatas;
 }
@@ -124,14 +126,7 @@ class TweetStore extends VuexModule {
       ...moduleUI.statePanel,
       home: { ...home, index: idx }
     });
-    if (
-      isAddMention &&
-      moduleOption.muteOption.pathSound &&
-      moduleOption.muteOption.isPlaySoundAlarm
-    ) {
-      //알람!
-      moduleDom.stateDom.audio.play();
-    }
+    moduleUtil.Alarm(isAddMention);
   }
 
   @Mutation
@@ -174,14 +169,7 @@ class TweetStore extends VuexModule {
       mention: { ...mention, index: idx }
     });
 
-    if (
-      isAddMention &&
-      moduleOption.muteOption.pathSound &&
-      moduleOption.muteOption.isPlaySoundAlarm
-    ) {
-      //알람!
-      moduleDom.stateDom.audio.play();
-    }
+    moduleUtil.Alarm(isAddMention);
   }
 
   @Mutation

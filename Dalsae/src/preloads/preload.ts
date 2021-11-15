@@ -104,8 +104,10 @@ const browser = {
 
 //vue 윈도우에서 콜백 받을 때 사용, 윈도우->send->mainprocess에서 on->ipc.on 콜->메인윈도우에 콜백
 const ipcPipe = {
+  alarm: () => {
+    ipcRenderer.send('MainWindowAlarm');
+  },
   send: (channel: EIPcType, data: any) => {
-    console.log('chaneel send', data);
     ipcRenderer.send('AddChannelOn', { name: channel, data: data, value: '' });
   },
   on: (channel: string, callback: (data: any) => void) => {
