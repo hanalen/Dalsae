@@ -71,6 +71,9 @@ function createWindow() {
   mainWin.on('closed', () => {
     mainWin = null;
   });
+  mainWin.on('focus', () => {
+    mainWin?.webContents.send('windowFocused');
+  });
 }
 
 interface IpcParam {

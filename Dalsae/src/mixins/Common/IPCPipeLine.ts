@@ -7,6 +7,7 @@ import { moduleImage } from '@/store/modules/ImageStore';
 import { moduleProfile } from '@/store/modules/ProfileStore';
 import { ETweetType, UpdateFollowInfo } from '@/store/Interface';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import { moduleDom } from '@/store/modules/DomStore';
 @Component
 export class IPCPipeLine extends Vue {
   async created() {
@@ -28,6 +29,10 @@ export class IPCPipeLine extends Vue {
         type: ETweetType.E_OPEN,
         user_id_str: moduleSwitter.selectID
       });
+    });
+    ///////////////////
+    window.ipc.ipcPipe.on(EIPcType.EWindowFocused, () => {
+      moduleDom.stateDom.textArea.focus();
     });
   }
 }
