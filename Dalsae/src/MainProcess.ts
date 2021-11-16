@@ -102,6 +102,7 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   const window = new BrowserWindow({
     show: true,
     title: param.title,
+    autoHideMenuBar: true,
     width: 1900,
     height: 1200,
     webPreferences: {
