@@ -34,6 +34,9 @@
 </template>
 
 <style lang="scss" scoped>
+.tweet-selector {
+  background-color: white;
+}
 .v-list-item {
   min-height: 24px !important;
   max-width: 300px !important;
