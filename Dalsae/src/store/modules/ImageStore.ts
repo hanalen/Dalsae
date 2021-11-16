@@ -83,7 +83,7 @@ class ImageStore extends VuexModule {
 
   @Mutation
   private updateRTandFav(tweet: I.Tweet) {
-    if (!this.tweet) return;
+    if (!this.tweet || !this.tweet.orgTweet) return;
     if (this.tweet.orgTweet.id_str !== tweet.orgTweet.id_str) return;
 
     this.tweet.orgTweet.favorited = tweet.orgTweet.favorited;
