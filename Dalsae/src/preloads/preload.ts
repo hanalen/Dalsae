@@ -17,7 +17,6 @@ const pathBlockids = '/Data/block.json';
 
 let appPath = '';
 ipcRenderer.once('GetAppPath', (event, path: string) => {
-  Log.info('GetAppPath ipc once', path);
   appPath = path;
 });
 ipcRenderer.send('GetAppPath');

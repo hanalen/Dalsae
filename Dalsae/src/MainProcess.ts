@@ -3,8 +3,6 @@
 import { app, protocol, BrowserWindow, ipcMain, MenuItem, dialog, ipcRenderer } from 'electron';
 import path from 'path';
 import Log from 'electron-log';
-import * as I from '@/Interfaces';
-// import { DataManager } from '@/views/Test/TestDataManager';
 import {
   createProtocol
   /* installVueDevtools */
@@ -28,11 +26,6 @@ app.whenReady().then(() => {
     .then((name: string) => console.log(`Added Extension:  ${name}`))
     .catch((err: Error) => console.log('An error occurred: ', err));
 });
-console.log('----------------');
-console.log('----------------');
-console.log('----------------');
-console.log('----------------');
-console.log(path.join(__dirname, 'preload'));
 
 const pathAppConfig = app.getPath('userData') + '/Dalsae/AppConfig.json';
 
@@ -83,24 +76,11 @@ interface IpcParam {
 const listIpcParam: IpcParam[] = [];
 
 ipcMain.on('AddChannel', (event, arg: IpcParam) => {
-  // Log.info('--------------');
-  // Log.info('Add Channel, preload에서 호출');
-  // Log.info(event);
-  // Log.info(arg);
-  // Log.info(arg.name);
-  // Log.info(arg.value);
-
   listIpcParam.push(arg);
   ipcMain.once(arg.name, (event, arg2) => {
-    //once는 한번 쏘고 삭제됨
-    // Log.info('--------------');
-    // Log.info('ipc dynamic on');
-    // Log.info(arg.name);
-    // Log.info(arg2);
     const ipc = listIpcParam.find(x => x.name === arg.name);
     if (ipc) {
       event.returnValue = ipc.value; //sync일 경우 이렇게 해야 함
-      // event.sender.send(name, ipc.value);
     }
   });
 });
@@ -152,15 +132,11 @@ import fs from 'fs-extra';
 import { AppConfig } from '@/Interfaces';
 
 ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
-  Log.info('ipc getapppath');
-
   let path = app.getAppPath();
   if (fs.existsSync(pathAppConfig)) {
     const appConfig: AppConfig = fs.readJsonSync(pathAppConfig);
-    Log.info('appCOnfig: ', appConfig);
     if (appConfig) path = appConfig.appPath;
   }
-  Log.info(pathAppConfig, path);
   event.reply('GetAppPath', path);
 });
 
@@ -175,7 +151,6 @@ ipcMain.on('OpenPathSetting', async event => {
     title: '달새 설정 폴더 위치 지정',
     properties: ['openDirectory']
   });
-  Log.info(dir);
   if (dir.canceled) return;
 
   const appConfig: AppConfig = { appPath: dir.filePaths[0] };
