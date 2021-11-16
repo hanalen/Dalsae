@@ -22,7 +22,9 @@ export class DalsaeApp extends Vue {
     return moduleSwitter.selectID;
   }
 
-  appPath = '';
+  get appPath() {
+    return moduleOption.appPath;
+  }
 
   get pathSound() {
     return this.appPath + '/Sound/' + this.pathSoundOrg;
@@ -71,7 +73,7 @@ export class DalsaeApp extends Vue {
 
   LoadConfig() {
     window.ipc.files.LoadConfig();
-    this.appPath = window.ipc.files.GetAppPath();
+    moduleOption.SetAppPath(window.ipc.files.GetAppPath());
     const switter = window.ipc.files.LoadSwitter();
     if (switter) {
       moduleSwitter.InitSwitter(switter);
