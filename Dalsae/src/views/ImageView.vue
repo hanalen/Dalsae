@@ -140,9 +140,11 @@ export default class ImageView extends Mixins(MIX.ImagePage, MIX.IPCPipeLine) {
     }
   }
   get styleContent() {
-    let height = 310;
-    if (!this.isShowBottom) height -= 130;
-    if (!this.isShowTweet) height -= 180;
+    const mount = this.bMounted;
+    if (!mount) return;
+    let height = 0;
+    if (this.isShowBottom) height += 130;
+    if (this.isShowTweet) height += this.refTweet.clientHeight;
     return {
       height: `calc(100vh - ${height}px)`
     };
