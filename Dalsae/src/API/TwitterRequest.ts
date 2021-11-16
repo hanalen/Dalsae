@@ -371,7 +371,7 @@ export class TwitterRequest {
           return ret;
         },
         UploadStatus: (data: P.ReqMedia) => {
-          const ret = this.get<P.ReqMedia, I.Tweet>(
+          const ret = this.get<P.ReqMedia, I.UploadStatus>(
             'https://upload.twitter.com/1.1/media/upload.json',
             { data }
           );

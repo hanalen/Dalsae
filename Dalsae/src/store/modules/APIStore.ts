@@ -51,6 +51,11 @@ class Account {
 }
 
 class Statuses {
+  sleep(second: number) {
+    return new Promise(resolve => {
+      setTimeout(resolve, second * 1000);
+    });
+  }
   async Upload(media: string, isDm = false): Promise<P.MediaResp | undefined> {
     const split = media.split(','); //data:image/png;base64, 이거 잘라야함
     const str = split[0];
@@ -92,11 +97,18 @@ class Statuses {
         command: 'FINALIZE',
         media_id: result.data.media_id_string
       });
-      const resStatus = await twitterRequest.call.media.UploadStatus({
-        command: 'STATUS',
-        media_id: result.data.media_id_string
-      });
-      console.log(resStatus);
+      while (true) {
+        const resStatus = await twitterRequest.call.media.UploadStatus({
+          command: 'STATUS',
+          media_id: result.data.media_id_string
+        });
+        console.log(resStatus);
+        const { check_after_secs, state } = resStatus.data.processing_info;
+        if (state === 'failed' || state === 'succeeded') break;
+        if (resStatus.data.processing_info.check_after_secs > 0) {
+          await this.sleep(check_after_secs);
+        }
+      }
       console.log(resFinal);
       return result.data;
     } else {
