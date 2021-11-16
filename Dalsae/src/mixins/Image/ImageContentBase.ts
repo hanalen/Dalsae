@@ -231,6 +231,16 @@ export class ImageContentBase extends Mixins(Vue) {
     } else if (e.key === 'd') {
       if (!isZoom) return;
       moduleImage.ChangeState({ ...moduleImage.stateImage, left: left - 20 });
+    } else if (e.key === 'r') {
+      if (moduleOption.uiOption.isLoadOrgImg) return;
+      this.ZoomReset();
+      moduleModal.AddMessage({
+        errorType: MIX.Messagetype.E_INFO,
+        message: '이미지 원본을 불러왔습니다.',
+        time: 1
+      });
+      moduleImage.Reset();
+      moduleOption.ChangeOption({ ...moduleOption.uiOption, isLoadOrgImg: true });
     } else if (e.key === ' ') {
       if (this.isZoomAble) {
         moduleImage.ChangeState({
