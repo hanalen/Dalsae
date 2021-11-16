@@ -92,13 +92,17 @@ const files = {
     return ret;
   },
   OpenSoundFolder() {
-    shell.openExternal(appPath + pathSound);
+    shell.openPath(appPath + pathSound);
   }
 };
 
 const browser = {
   OpenBrowser(url: string) {
     shell.openExternal(url);
+  },
+  OpenFolder(path: string) {
+    //openExternal는 ASCII만 된다 뻐킹 레이시스트들아
+    shell.openPath(path);
   }
 };
 

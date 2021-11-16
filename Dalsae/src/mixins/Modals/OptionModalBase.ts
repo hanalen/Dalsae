@@ -51,5 +51,6 @@ export class OptionModalBase extends Vue {
   }
   OnClickOpenPath() {
     // path
+    window.ipc.browser.OpenFolder(this.appPath);
   }
 }
