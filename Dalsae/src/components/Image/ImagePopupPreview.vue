@@ -2,8 +2,8 @@
   <div @click="OnClickMedia" class="img-preview">
     <img :src="media.media_url_https" class="bottom-preview" />
     <div class="progress" v-if="isDownloadStart">
-      <v-icon size="15px" v-if="isDownloadEnd">mdi-check-all</v-icon>
-      <v-icon size="15px" v-if="isError">mdi-alert-circle-outline </v-icon>
+      <v-icon size="15px" color="white" v-if="isDownloadEnd">mdi-check-all</v-icon>
+      <v-icon size="15px" color="white" v-if="isError">mdi-alert-circle-outline </v-icon>
       <v-progress-linear
         color="light-blue"
         height="10"
