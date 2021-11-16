@@ -118,6 +118,8 @@ ipcMain.on('AddChannelOn', (event, arg: IpcParam) => {
     if (win) win.webContents.send(arg.name, arg.data);
   }
 });
+import electronLocalshortcut from 'electron-localshortcut';
+
 ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   const window = new BrowserWindow({
     show: true,
@@ -136,8 +138,15 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
 
   window.on('closed', () => {
     const idx = listWindow.findIndex(x => x === window);
+    Log.info('closed idx: ', idx);
     listWindow.splice(idx, 1);
     mainWin?.focus();
+  });
+  electronLocalshortcut.register(window, 'ESC', () => {
+    window.close();
+  });
+  electronLocalshortcut.register(window, 'ENTER', () => {
+    window.close();
   });
 });
 ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
