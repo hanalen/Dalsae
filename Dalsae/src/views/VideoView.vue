@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="app">
     <div class="app-alert">
       <v-alert
         dense
@@ -13,31 +13,29 @@
       </v-alert>
     </div>
     <v-main app>
-      <v-container fluid :style="styleTop" v-if="option.isShowTweet">
+      <v-container class="container" fluid v-if="option.isShowTweet">
         <div :style="styleTweet" ref="refTweet">
           <tweet-selector :selected="false" :tweet="tweet"></tweet-selector>
         </div>
+        <v-progress-circular
+          class="progress"
+          v-if="!isLoadVideo"
+          :width="5"
+          size="50"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+        <div class="video-view" :style="styleContent" v-show="isLoadVideo">
+          <video ref="refVideo" class="video-js"></video>
+        </div>
       </v-container>
     </v-main>
-    <v-progress-circular
-      class="progress"
-      v-if="!isLoadVideo"
-      :width="5"
-      size="50"
-      color="primary"
-      indeterminate
-    ></v-progress-circular>
-    <div class="video-view" v-show="isLoadVideo">
-      <video ref="refVideo" class="video-js"></video>
-    </div>
   </v-app>
 </template>
 
 <style lang="scss" scoped>
 .video-view {
-  background-color: gray;
-  width: 100vw;
-  height: 100vh;
+  background-color: black;
   display: flex;
   justify-content: center;
 }
@@ -45,6 +43,13 @@
   position: fixed;
   top: 50%;
   left: 50%;
+}
+.video-js {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+.app {
+  background-color: black !important;
 }
 </style>
 
@@ -67,6 +72,9 @@ export default class VideoView extends Mixins(Vue, IPCPipeLine) {
   bMounted = false;
   isLoadVideo = false;
 
+  @Ref()
+  refTweet!: HTMLElement;
+
   get isShowTweet() {
     return moduleOption.uiOption.isShowTweet;
   }
@@ -74,12 +82,14 @@ export default class VideoView extends Mixins(Vue, IPCPipeLine) {
   get listMsg() {
     return moduleModal.stateMessage.listMessage;
   }
-  get styleTop() {
-    if (!this.bExpanded) {
-      return {
-        'max-height': '180px'
-      };
-    }
+  get styleContent() {
+    const mount = this.bMounted;
+    if (!mount) return;
+    let height = 50;
+    if (this.isShowTweet) height += this.refTweet.clientHeight;
+    return {
+      height: `calc(100vh - ${height}px)`
+    };
   }
   get styleTweet() {
     if (!this.bExpanded) {
