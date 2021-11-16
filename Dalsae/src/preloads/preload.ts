@@ -107,13 +107,31 @@ const ipcPipe = {
   alarm: () => {
     ipcRenderer.send('MainWindowAlarm');
   },
-  send: (channel: EIPcType, data: any) => {
+  openPathSetting: () => {
+    ipcRenderer.send('OpenPathSetting');
+  },
+  send: (channel: EIPcType, data: any | undefined) => {
     ipcRenderer.send('AddChannelOn', { name: channel, data: data, value: '' });
   },
   on: (channel: string, callback: (data: any) => void) => {
     ipcRenderer.on(channel, (event, args) => callback({ ...args }));
   }
 };
+
+ipcRenderer.on('ChangeAppPath', (event, path: string) => {
+  //옵션 폴더 경로가 바뀔 경우 기존 옵션 파일 이동 처리
+  const prevPath = appPath;
+  const nextPath = path;
+
+  const switter: I.Switter = files.LoadSwitter();
+  const option: IOptionStore = files.LoadOption();
+
+  appPath = nextPath;
+
+  CheckFolder();
+  files.SaveSwitter(switter);
+  files.SaveOption(option);
+});
 
 export const ipc = {
   files: files,

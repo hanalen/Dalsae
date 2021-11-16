@@ -10,6 +10,7 @@ export interface IOptionStore {
 
 @Module({ dynamic: true, store, name: 'option' })
 class OptionStore extends VuexModule {
+  appPath = '';
   uiOption: I.UIOption = {
     isBigPropic: true,
     isLoadOrgImg: true,
@@ -104,6 +105,16 @@ class OptionStore extends VuexModule {
   @Action
   ChangeHotkey(hotkey: I.Hotkey) {
     this.context.commit('changeHotkey', hotkey);
+  }
+
+  @Mutation
+  private setAppPath(path: string) {
+    this.appPath = path;
+  }
+
+  @Action
+  SetAppPath(path: string) {
+    this.context.commit('setAppPath', path);
   }
 }
 

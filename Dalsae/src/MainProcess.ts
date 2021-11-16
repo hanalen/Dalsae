@@ -1,6 +1,6 @@
 'use strict';
 
-import { app, protocol, BrowserWindow, ipcMain, MenuItem } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain, MenuItem, dialog, ipcRenderer } from 'electron';
 import path from 'path';
 import Log from 'electron-log';
 import * as I from '@/Interfaces';
@@ -158,6 +158,19 @@ ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
 ipcMain.on('MainWindowAlarm', () => {
   if (!mainWin) return;
   if (!mainWin.isFocused()) mainWin.flashFrame(true);
+});
+
+ipcMain.on('OpenPathSetting', async event => {
+  if (!mainWin) return;
+  const dir = await dialog.showOpenDialog(mainWin, {
+    title: '달새 설정 폴더 위치 지정',
+    properties: ['openDirectory']
+  });
+  Log.info(dir);
+  if (dir.canceled) return;
+
+  mainWin.webContents.send('pathSetting', { path: dir.filePaths[0] });
+  event.reply('ChangeAppPath', dir.filePaths[0]);
 });
 
 // Quit when all windows are closed.

@@ -74,6 +74,19 @@
           <v-switch v-model="option.isLoadOrgImg" label="이미지 원본 불러오기"></v-switch>
         </v-list-item-content>
       </v-list-item>
+      <v-divider></v-divider>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>폴더 설정</v-list-item-title>
+          <v-list-item-subtitle>현재 경로: {{ appPath }}</v-list-item-subtitle>
+          <v-btn height="30px" width="30px" outlined color="primary" @click="OnClickChangePath">
+            경로 선택
+          </v-btn>
+          <v-btn height="30px" width="30px" outlined color="secondary" @click="OnClickOpenPath">
+            폴더 열기
+          </v-btn>
+        </v-list-item-content>
+      </v-list-item>
       <!-- <v-divider></v-divider> -->
     </v-list>
     <!-- <v-divider></v-divider> -->

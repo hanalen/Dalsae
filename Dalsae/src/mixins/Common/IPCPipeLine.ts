@@ -8,9 +8,13 @@ import { moduleProfile } from '@/store/modules/ProfileStore';
 import { ETweetType, UpdateFollowInfo } from '@/store/Interface';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleDom } from '@/store/modules/DomStore';
+import { moduleOption } from '@/store/modules/OptionStore';
 @Component
 export class IPCPipeLine extends Vue {
   async created() {
+    const appPath = window.ipc.files.GetAppPath();
+    moduleOption.SetAppPath(appPath);
+
     window.ipc.ipcPipe.on(EIPcType.EFollow, (user: I.User) => {
       moduleProfile.UpdateFollowUserInfo(user);
     });
@@ -33,6 +37,10 @@ export class IPCPipeLine extends Vue {
     ///////////////////
     window.ipc.ipcPipe.on(EIPcType.EWindowFocused, () => {
       moduleDom.stateDom.textArea.focus();
+    });
+
+    window.ipc.ipcPipe.on(EIPcType.EPathSetting, (data: { path: string }) => {
+      moduleOption.SetAppPath(data.path);
     });
   }
 }

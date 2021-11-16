@@ -3,5 +3,7 @@ export enum EIPcType {
   EFavorite = 'favorite',
   EFollow = 'follow',
   EOpenWeb = 'openWeb',
-  EWindowFocused = 'windowFocused'
+  EWindowFocused = 'windowFocused',
+  EOpenPath = 'openpath',
+  EPathSetting = 'pathSetting'
 }
