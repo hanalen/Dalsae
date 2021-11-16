@@ -1,7 +1,7 @@
 <template>
   <div class="dm-item">
     <propic :user="user" :size="40" />
-    <div class="dm" :class="{ me: itsMe }">
+    <div class="dm" :style="styleDm" :class="{ me: itsMe }">
       <v-progress-circular
         v-if="isLoadImage"
         :width="3"
@@ -111,6 +111,14 @@ export default class DmItem extends Vue {
     return this.media?.video_info?.variants[0].url;
   }
 
+  get styleDm() {
+    if (this.isVideo) {
+      return {
+        width: '70%'
+      };
+    }
+  }
+
   @Watch('dm', { immediate: true, deep: true })
   OnWatchDm(newVal: I.DMEvent) {
     if (!this.media) return;
@@ -187,6 +195,7 @@ export default class DmItem extends Vue {
     const option: VideoJsPlayerOptions = {
       controls: true,
       loop: this.isGif,
+      fluid: true,
       controlBar: {
         volumePanel: !this.isGif,
         fullscreenToggle: false,
@@ -194,9 +203,7 @@ export default class DmItem extends Vue {
       },
       sources: [{ src: this.video, type: this.media?.video_info?.variants[0].content_type }]
     };
-    this.player = videojs(this.refVideo, option, () => {
-      // this.isLoadVideo = true;
-    });
+    this.player = videojs(this.refVideo, option);
   }
 
   OnClickLink(e: MouseEvent) {
