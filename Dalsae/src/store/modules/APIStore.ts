@@ -56,6 +56,52 @@ class Statuses {
       setTimeout(resolve, second * 1000);
     });
   }
+  private async UploadBigFile(
+    media: string,
+    media_category: string,
+    type: string
+  ): Promise<P.APIResp<P.MediaResp>> {
+    //이미지 전송 방식: base64 to binary -> 자르기 -> binary 자른 데이터 to base64 전송
+    console.log('------start upload-----');
+    const result = await twitterRequest.call.media.UploadInit({
+      command: 'INIT',
+      total_bytes: media.length,
+      media_type: type,
+      media_category: media_category
+    });
+    console.log(result);
+    const loopCount = Math.ceil(media.length / 5242880);
+    console.log('loop count: ' + loopCount);
+    for (let i = 0; i < loopCount; i++) {
+      const chunk = media.substr(i * 5242880, 5242880);
+      console.log('chun size: ' + chunk.length);
+      const resp = await twitterRequest.call.media.UploadAppend({
+        command: 'APPEND',
+        media: btoa(chunk),
+        media_id: result.data.media_id_string,
+        segment_index: i
+      });
+      console.log(resp);
+    }
+    const resFinal = await twitterRequest.call.media.UploadFinally({
+      command: 'FINALIZE',
+      media_id: result.data.media_id_string
+    });
+    while (true) {
+      const resStatus = await twitterRequest.call.media.UploadStatus({
+        command: 'STATUS',
+        media_id: result.data.media_id_string
+      });
+      console.log(resStatus);
+      const { check_after_secs, state } = resStatus.data.processing_info;
+      if (state === 'failed' || state === 'succeeded') break;
+      if (resStatus.data.processing_info.check_after_secs > 0) {
+        await this.sleep(check_after_secs);
+      }
+    }
+    console.log(resFinal);
+    return result;
+  }
   async Upload(media: string, isDm = false): Promise<P.MediaResp | undefined> {
     const split = media.split(','); //data:image/png;base64, 이거 잘라야함
     const str = split[0];
@@ -69,53 +115,18 @@ class Statuses {
     if (isDm) media_category = media_category.replace('tweet_', 'dm_');
 
     const type = str.substring(5, str.indexOf(';'));
-    if (media.length >= 5242880) {
-      //이미지 전송 방식: base64 to binary -> 자르기 -> binary 자른 데이터 to base64 전송
-      media = atob(split[1]);
-      console.log('------start upload-----');
-      const result = await twitterRequest.call.media.UploadInit({
-        command: 'INIT',
-        total_bytes: media.length,
-        media_type: type,
-        media_category: media_category
-      });
-      console.log(result);
-      const loopCount = Math.ceil(media.length / 5242880);
-      console.log('loop count: ' + loopCount);
-      for (let i = 0; i < loopCount; i++) {
-        const chunk = media.substr(i * 5242880, 5242880);
-        console.log('chun size: ' + chunk.length);
-        const resp = await twitterRequest.call.media.UploadAppend({
-          command: 'APPEND',
-          media: btoa(chunk),
-          media_id: result.data.media_id_string,
-          segment_index: i
+    try {
+      if (media.length >= 5242880) {
+        const result = await this.UploadBigFile(atob(split[1]), media_category, type);
+        return result.data;
+      } else {
+        const result = await twitterRequest.call.media.Upload({
+          media: media
         });
-        console.log(resp);
+        return result.data;
       }
-      const resFinal = await twitterRequest.call.media.UploadFinally({
-        command: 'FINALIZE',
-        media_id: result.data.media_id_string
-      });
-      while (true) {
-        const resStatus = await twitterRequest.call.media.UploadStatus({
-          command: 'STATUS',
-          media_id: result.data.media_id_string
-        });
-        console.log(resStatus);
-        const { check_after_secs, state } = resStatus.data.processing_info;
-        if (state === 'failed' || state === 'succeeded') break;
-        if (resStatus.data.processing_info.check_after_secs > 0) {
-          await this.sleep(check_after_secs);
-        }
-      }
-      console.log(resFinal);
-      return result.data;
-    } else {
-      const result = await twitterRequest.call.media.Upload({
-        media: media
-      });
-      return result.data;
+    } catch (e) {
+      console.log(e);
     }
   }
   async Update(
