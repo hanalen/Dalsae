@@ -362,6 +362,36 @@ class TweetStore extends VuexModule {
   UpdateRTandFav(tweet: I.Tweet) {
     this.context.commit('updateRTandFav', tweet);
   }
+  @Mutation
+  private deleteTweet(tweet: I.Tweet) {
+    const pair = this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID);
+    if (!pair) return;
+
+    for (const t of pair.tweets.homes) {
+      if (t.orgTweet.id_str === tweet.id_str) {
+        t.isDelete = true;
+        break;
+      }
+    }
+    for (const t of pair.tweets.mentions) {
+      if (t.orgTweet.id_str === tweet.id_str) {
+        t.isDelete = true;
+        break;
+      }
+    }
+    for (const t of pair.tweets.favorites) {
+      if (t.orgTweet.id_str === tweet.id_str) {
+        t.isDelete = true;
+        break;
+      }
+    }
+    for (const t of pair.tweets.conv) {
+      if (t.orgTweet.id_str === tweet.id_str) {
+        t.isDelete = true;
+        break;
+      }
+    }
+  }
 
   @Action
   AddConv(addTweet: A.AddTweet) {

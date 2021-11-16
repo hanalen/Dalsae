@@ -93,6 +93,9 @@ export class TweetBase extends Vue {
     const screenName = moduleSwitter.selectUser.user.screen_name;
     text = text.replaceAll(`@${screenName}`, `<span class="primary--text">@${screenName}</span>`);
     text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    if (this.tweet.isDelete) {
+      text = '<del>' + text + '</del>';
+    }
     return text;
   }
 

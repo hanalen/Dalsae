@@ -34,6 +34,9 @@ export class IPCPipeLine extends Vue {
         user_id_str: moduleSwitter.selectID
       });
     });
+    window.ipc.ipcPipe.on(EIPcType.EDeleteTweet, (tweet: I.Tweet) => {
+      moduleDom.DeleteTweet(tweet);
+    });
     ///////////////////
     window.ipc.ipcPipe.on(EIPcType.EWindowFocused, () => {
       moduleDom.stateDom.textArea.focus();

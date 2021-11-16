@@ -69,6 +69,23 @@ class DomStore extends VuexModule {
   RegisterTextArea(text: HTMLTextAreaElement) {
     this.context.commit('registerTextArea', text);
   }
+
+  @Mutation
+  private deleteTweet(tweet: I.Tweet) {
+    for (const panel of this.listScrollPanel) {
+      const find = panel.stateData.listData.find(x => x.key === tweet.id_str);
+      if (find) {
+        const t = find.data as I.Tweet;
+        t.isDelete = true;
+        break;
+      }
+    }
+  }
+
+  @Action
+  DeleteTweet(tweet: I.Tweet) {
+    this.context.commit('deleteTweet', tweet);
+  }
 }
 
 export const moduleDom = getModule(DomStore);

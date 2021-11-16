@@ -5,5 +5,6 @@ export enum EIPcType {
   EOpenWeb = 'openWeb',
   EWindowFocused = 'windowFocused',
   EOpenPath = 'openpath',
-  EPathSetting = 'pathSetting'
+  EPathSetting = 'pathSetting',
+  EDeleteTweet = 'deleteTweet'
 }

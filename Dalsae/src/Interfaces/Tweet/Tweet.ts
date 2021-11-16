@@ -20,6 +20,7 @@ export class Tweet {
   retweeted: boolean;
   source: string;
   isRead: boolean;
+  isDelete: boolean;
 
   orgTweet!: I.Tweet;
   orgUser!: I.User;
@@ -47,6 +48,7 @@ export class Tweet {
       const orgTweet = tweet.retweeted_status ? tweet.retweeted_status : tweet; //원본 트윗 저장
       this.orgTweet = JSON.parse(JSON.stringify(orgTweet));
       this.orgUser = JSON.parse(JSON.stringify(this.orgTweet?.user));
+      this.isDelete = false;
     } else {
       this.created_at = '';
       this.id_str = '';
@@ -73,6 +75,7 @@ export class Tweet {
       };
       this.extended_entities = { media: [] };
       this.isRead = false;
+      this.isDelete = false;
     }
   }
 

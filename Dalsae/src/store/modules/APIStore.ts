@@ -130,7 +130,9 @@ class Statuses {
     if (moduleSwitter.selectUser?.user.id_str === tweet.orgUser.id_str) {
       const { id_str } = tweet.orgTweet;
       const result = await twitterRequest.call.statuses.Destroy({ id_str: id_str });
-      return result;
+      if (!twitterRequest.CheckAPIError(result.data)) {
+        window.ipc.ipcPipe.send(EIPcType.EDeleteTweet, result.data);
+      }
     }
   }
   async Show(id_str: string) {
