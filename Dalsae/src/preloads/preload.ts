@@ -6,15 +6,18 @@ import { IOptionStore } from '@/store/modules/OptionStore';
 import { profilePreload } from './ProfilePreload';
 import { videoPreload } from './VideoPreload';
 import { EIPcType } from '@/mixins';
+import Log from 'electron-log';
 
 const pathData = '/Data/';
 const pathSound = '/Sound/';
+const pathImage = '/Image/';
 const pathSwitter = '/Data/Switter.json';
 const pathOption = '/Data/Option.json';
 const pathBlockids = '/Data/block.json';
 
 let appPath = '';
 ipcRenderer.once('GetAppPath', (event, path: string) => {
+  Log.info('GetAppPath ipc once', path);
   appPath = path;
 });
 ipcRenderer.send('GetAppPath');
@@ -25,6 +28,9 @@ function CheckFolder() {
   }
   if (fs.existsSync(appPath + pathSound) === false) {
     fs.mkdirsSync(appPath + pathSound);
+  }
+  if (fs.existsSync(appPath + pathImage) === false) {
+    fs.mkdirSync(appPath + pathImage);
   }
 }
 

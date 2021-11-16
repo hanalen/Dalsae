@@ -34,10 +34,7 @@ console.log('----------------');
 console.log('----------------');
 console.log(path.join(__dirname, 'preload'));
 
-ipcMain.on('test_on', (event, payload) => {
-  const content = payload;
-  event.reply('test_on', { content });
-});
+const pathAppConfig = app.getPath('userData') + '/Dalsae/AppConfig.json';
 
 function createWindow() {
   // Create the browser window.
@@ -150,8 +147,20 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     window.close();
   });
 });
+
+import fs from 'fs-extra';
+import { AppConfig } from '@/Interfaces';
+
 ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
-  const path = app.getAppPath();
+  Log.info('ipc getapppath');
+
+  let path = app.getAppPath();
+  if (fs.existsSync(pathAppConfig)) {
+    const appConfig: AppConfig = fs.readJsonSync(pathAppConfig);
+    Log.info('appCOnfig: ', appConfig);
+    if (appConfig) path = appConfig.appPath;
+  }
+  Log.info(pathAppConfig, path);
   event.reply('GetAppPath', path);
 });
 
@@ -168,6 +177,9 @@ ipcMain.on('OpenPathSetting', async event => {
   });
   Log.info(dir);
   if (dir.canceled) return;
+
+  const appConfig: AppConfig = { appPath: dir.filePaths[0] };
+  fs.writeJSON(pathAppConfig, appConfig);
 
   mainWin.webContents.send('pathSetting', { path: dir.filePaths[0] });
   event.reply('ChangeAppPath', dir.filePaths[0]);

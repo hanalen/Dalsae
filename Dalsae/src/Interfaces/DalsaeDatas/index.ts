@@ -4,3 +4,4 @@ export * from './OAuth';
 export * from './Options';
 export * from './TweetDatas';
 export * from './FollowDatas';
+export * from './AppConfig';

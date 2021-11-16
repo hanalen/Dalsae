@@ -8,6 +8,7 @@ import http from 'http';
 
 export const imagePreload = {
   DownloadImage(
+    appPath: string,
     media: I.Media,
     index: number,
     callback: (index: number, percent: number, bError: boolean) => void
@@ -15,7 +16,7 @@ export const imagePreload = {
     //progress show, hide 해야 함
     const url = media.media_url + ':orig';
     const fileName = media.media_url.substring(media.media_url.lastIndexOf('/'), 9999999999);
-    const file = fs.createWriteStream('Data/Image/' + fileName);
+    const file = fs.createWriteStream(appPath + '/Image/' + fileName);
     http.get(url).on('response', function(res) {
       const header = res.headers['content-length'];
       let len = 0;
