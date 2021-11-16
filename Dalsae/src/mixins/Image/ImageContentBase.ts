@@ -221,16 +221,16 @@ export class ImageContentBase extends Mixins(Vue) {
       this.ZoomOut();
     } else if (e.key === 'w') {
       if (!isZoom) return;
-      moduleImage.ChangeState({ ...moduleImage.stateImage, top: top - 20 });
+      moduleImage.ChangeState({ ...moduleImage.stateImage, top: top + 20 });
     } else if (e.key === 'a') {
       if (!isZoom) return;
-      moduleImage.ChangeState({ ...moduleImage.stateImage, left: left - 20 });
+      moduleImage.ChangeState({ ...moduleImage.stateImage, left: left + 20 });
     } else if (e.key === 's') {
       if (!isZoom) return;
-      moduleImage.ChangeState({ ...moduleImage.stateImage, top: top + 20 });
+      moduleImage.ChangeState({ ...moduleImage.stateImage, top: top - 20 });
     } else if (e.key === 'd') {
       if (!isZoom) return;
-      moduleImage.ChangeState({ ...moduleImage.stateImage, left: left + 20 });
+      moduleImage.ChangeState({ ...moduleImage.stateImage, left: left - 20 });
     } else if (e.key === ' ') {
       if (this.isZoomAble) {
         moduleImage.ChangeState({
