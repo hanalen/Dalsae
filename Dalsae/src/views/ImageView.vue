@@ -95,6 +95,9 @@
 .bottom {
   display: flex;
 }
+.v-footer {
+  background-color: rgb(34, 34, 34) !important;
+}
 .v-toolbar__content {
   align-items: baseline !important;
 }

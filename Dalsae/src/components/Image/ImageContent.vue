@@ -36,6 +36,7 @@
   margin: auto;
   justify-content: center;
   display: flex;
+  background-color: rgb(87, 87, 87) !important;
 }
 .img-div {
   display: flex;
