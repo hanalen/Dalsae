@@ -34,6 +34,8 @@
   overflow-x: scroll;
   overflow: hidden;
   margin: auto;
+  justify-content: center;
+  display: flex;
 }
 .img-div {
   display: flex;
