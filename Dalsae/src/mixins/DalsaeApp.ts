@@ -154,6 +154,10 @@ export class DalsaeApp extends Vue {
         moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_OPEN });
         break;
       case I.E_HOTKEY.SENDDM:
+        if (selectTweet) {
+          moduleDm.StartDM(selectTweet.orgUser);
+          moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_DM });
+        }
         break;
       case I.E_HOTKEY.LOADING:
         moduleUtil.LoadTweets();

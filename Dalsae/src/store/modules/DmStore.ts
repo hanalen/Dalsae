@@ -157,6 +157,21 @@ class DmStore extends VuexModule {
   SetDMUser(user: I.User) {
     this.context.commit('setDMUser', user);
   }
+
+  @Mutation
+  private startDM(user: I.User) {
+    if (this.stateDm.listDmPair.find(x => x.id === user.id_str)) {
+      this.stateDm.selectUser = user;
+    } else {
+      this.stateDm.listDmPair.push({ id: user.id_str, user: user, listDm: [] });
+      this.stateDm.selectUser = user;
+    }
+  }
+
+  @Action
+  StartDM(user: I.User) {
+    this.context.commit('startDM', user);
+  }
 }
 
 export const moduleDm = getModule(DmStore);
