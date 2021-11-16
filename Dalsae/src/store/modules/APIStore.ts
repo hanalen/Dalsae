@@ -92,13 +92,11 @@ class Statuses {
         command: 'FINALIZE',
         media_id: result.data.media_id_string
       });
-      if (isDm) {
-        const resStatus = await twitterRequest.call.media.UploadStatus({
-          command: 'STATUS',
-          media_id: result.data.media_id_string
-        });
-        console.log(resStatus);
-      }
+      const resStatus = await twitterRequest.call.media.UploadStatus({
+        command: 'STATUS',
+        media_id: result.data.media_id_string
+      });
+      console.log(resStatus);
       console.log(resFinal);
       return result.data;
     } else {

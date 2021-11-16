@@ -291,7 +291,7 @@ export class TwitterRequest {
       //   contentType
       // );
       const resp = await axios({
-        method: 'POST',
+        method: method,
         url: reqUrl,
         headers: header,
         data: body
@@ -371,10 +371,9 @@ export class TwitterRequest {
           return ret;
         },
         UploadStatus: (data: P.ReqMedia) => {
-          const ret = this.media<P.MediaResp>(
+          const ret = this.get<P.ReqMedia, I.Tweet>(
             'https://upload.twitter.com/1.1/media/upload.json',
-            'POST',
-            { data: data }
+            { data }
           );
           return ret;
         }
