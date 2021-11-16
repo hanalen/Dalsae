@@ -80,7 +80,9 @@ class DmStore extends VuexModule {
         pair = { id: key, listDm: [], user: user };
         this.stateDm.listDmPair.push(pair);
       }
-      pair.listDm.push(dm);
+      if (!pair.listDm.find(x => x.id === dm.id)) {
+        pair.listDm.push(dm);
+      }
       pair.user.last_direct_message = dm;
     }
     for (const pair of this.stateDm.listDmPair) {
