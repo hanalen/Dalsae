@@ -43,6 +43,7 @@
   top: 25%;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 50%;
+  z-index: 5;
 }
 .image-preview:hover {
   cursor: pointer;
