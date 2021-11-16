@@ -92,12 +92,14 @@ class Statuses {
         command: 'FINALIZE',
         media_id: result.data.media_id_string
       });
-      // const resStatus = await twitterRequest.call.media.UploadStatus({
-      //   command: 'STATUS',
-      //   media_id: result.data.media_id_string
-      // });
+      if (isDm) {
+        const resStatus = await twitterRequest.call.media.UploadStatus({
+          command: 'STATUS',
+          media_id: result.data.media_id_string
+        });
+        console.log(resStatus);
+      }
       console.log(resFinal);
-      // console.log(resStatus);
       return result.data;
     } else {
       const result = await twitterRequest.call.media.Upload({
