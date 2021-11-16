@@ -12,6 +12,7 @@
         <v-icon color="primary">mdi-alert-circle-outline</v-icon>
         <span>이미지 불러오기 에러</span>
       </div>
+      <video v-if="isVideo" ref="refVideo" class="video-js"></video>
       <img v-if="img" :src="img" />
       <div v-html="text" class="left-message" @click="OnClickLink"></div>
       <span class=" time">{{ time }}</span>
@@ -47,6 +48,10 @@ img {
   margin: 0px 4px;
   color: rgb(156, 156, 156);
 }
+.video-js {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
 </style>
 
 <script lang="ts">
@@ -60,13 +65,20 @@ import axios from 'axios';
 import { CreateHeader } from '@/API';
 import { moduleDm } from '@/store/modules/DmStore';
 import twitterRequest from '@/API/TwitterRequest';
+import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js';
 
 @Component
 export default class DmItem extends Vue {
   @Prop()
   dm!: I.DMEvent;
 
+  @Ref()
+  refVideo!: HTMLVideoElement;
+  player!: VideoJsPlayer;
+
   img = '';
+  video = '';
+
   isLoadImage = false;
   isErrorLoadImage = false;
 
@@ -78,17 +90,43 @@ export default class DmItem extends Vue {
     }
   }
 
+  get media() {
+    return this.dm.message_create?.message_data?.attachment?.media;
+  }
+
+  get isVideo() {
+    return this.media?.type !== 'photo' && this.media?.type;
+  }
+
+  get isGif() {
+    return this.media?.type === 'animated_gif';
+  }
+
+  get photoUrl() {
+    return this.media?.media_url_https;
+  }
+
+  get videoUrl() {
+    if (!this.isVideo) return '';
+    return this.media?.video_info?.variants[0].url;
+  }
+
   @Watch('dm', { immediate: true, deep: true })
   OnWatchDm(newVal: I.DMEvent) {
-    const url = newVal.message_create?.message_data?.attachment?.media?.media_url_https;
-    if (url) {
-      this.DownloadImage(url);
+    if (!this.media) return;
+
+    if (this.isVideo) {
+      this.DownloadImage(this.videoUrl);
     } else {
-      this.img = '';
+      this.DownloadImage(this.photoUrl);
     }
   }
 
-  async DownloadImage(url: string) {
+  async DownloadImage(url: string | undefined) {
+    if (!url) {
+      this.isErrorLoadImage = true;
+      return;
+    }
     const method = 'GET';
     const oauth = new I.OAuth();
     oauth.SetKey(moduleSwitter.publicKey, moduleSwitter.secretKey);
@@ -105,7 +143,10 @@ export default class DmItem extends Vue {
       reader.readAsDataURL(resp.data);
       reader.onload = e => {
         const img = e.target?.result as string;
-        this.img = img;
+        if (this.isVideo) {
+          this.video = img;
+          this.PlayVideo();
+        } else this.img = img;
       };
     } catch (e) {
       this.isLoadImage = false;
@@ -140,6 +181,22 @@ export default class DmItem extends Vue {
     const locale = window.navigator.language;
     moment.locale(locale);
     return moment(date).calendar();
+  }
+
+  PlayVideo() {
+    const option: VideoJsPlayerOptions = {
+      controls: true,
+      loop: this.isGif,
+      controlBar: {
+        volumePanel: !this.isGif,
+        fullscreenToggle: false,
+        pictureInPictureToggle: false
+      },
+      sources: [{ src: this.video, type: this.media?.video_info?.variants[0].content_type }]
+    };
+    this.player = videojs(this.refVideo, option, () => {
+      // this.isLoadVideo = true;
+    });
   }
 
   OnClickLink(e: MouseEvent) {
