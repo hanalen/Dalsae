@@ -12,7 +12,7 @@ export interface IOptionStore {
 class OptionStore extends VuexModule {
   uiOption: I.UIOption = {
     isBigPropic: true,
-    isLoadOrgImg: false,
+    isLoadOrgImg: true,
     isSendCheck: false,
     isSendEnter: true,
     isSendRTCheck: true,
@@ -60,7 +60,7 @@ class OptionStore extends VuexModule {
     } else {
       this.uiOption = {
         isBigPropic: true,
-        isLoadOrgImg: false,
+        isLoadOrgImg: true,
         isSendCheck: false,
         isSendEnter: true,
         isSendRTCheck: true,
