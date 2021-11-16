@@ -315,7 +315,9 @@ class Favorites {
 }
 
 class Block {
-  async Ids(data: P.ReqBlockIds): Promise<P.APIResp<I.BlockIds>> {
+  timer!: NodeJS.Timeout;
+  async Ids(data: P.ReqBlockIds, idStr: string): Promise<P.APIResp<I.BlockIds>> {
+    clearTimeout(this.timer);
     moduleSysbar.RemoveSystemBar(S.ESystemBar.EErrorBlockIds);
     moduleSysbar.AddSystemBar({
       type: S.ESystemBar.EBolckIds,
@@ -325,15 +327,15 @@ class Block {
     });
     const result = await twitterRequest.call.block.Ids(data);
     if (!twitterRequest.CheckAPIError(result.data)) {
-      moduleSwitter.SetStateIds({
-        ...moduleSwitter.stateIds,
-        listBlockIds: moduleSwitter.stateIds.listBlockIds.concat(result.data.ids)
-      });
+      moduleSwitter.AddBlockIds({ idStr: idStr, ids: result.data });
       if (result.data.next_cursor_str !== '0') {
-        this.Ids({
-          cursor: result.data.next_cursor_str,
-          stringify_ids: true
-        });
+        this.Ids(
+          {
+            cursor: result.data.next_cursor_str,
+            stringify_ids: true
+          },
+          idStr
+        );
       }
     } else {
       const error = twitterRequest.GetApiError(result.data as I.ResponseTwitterError);
@@ -343,9 +345,9 @@ class Block {
         text: '차단 목록 에러',
         toolTip: error
       });
-      setTimeout(() => {
-        this.Ids(data);
-      }, 600000);
+      this.timer = setTimeout(() => {
+        this.Ids(data, idStr);
+      }, 10000);
     }
     moduleSysbar.RemoveSystemBar(ESystemBar.EBolckIds);
     return result;

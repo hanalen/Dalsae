@@ -7,3 +7,4 @@ export * from './ChangeProgress';
 export * from './SystemBarItem';
 export * from './OpenLink';
 export * from './UpdateFollowInfo';
+export * from './AddBlockIds';

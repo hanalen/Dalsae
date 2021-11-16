@@ -345,7 +345,7 @@ export class TweetSelectorBase extends Vue {
       userScreenName,
       moduleSwitter.stateSwitter.switter,
       moduleSwitter.stateIds.followDatas,
-      moduleSwitter.stateIds.listBlockIds
+      moduleSwitter.stateIds.dicBlockIds
     );
   }
 

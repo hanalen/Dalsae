@@ -66,9 +66,6 @@ export class DalsaeApp extends Vue {
       });
       moduleDom.RegisterAudio(this.refAudio);
     });
-    setTimeout(() => {
-      window.ipc.ipcPipe.send('test_on', { text: 'this is testparta' });
-    }, 3000);
   }
 
   LoadConfig() {
@@ -96,17 +93,18 @@ export class DalsaeApp extends Vue {
   }
 
   async StartDalsae() {
-    if (moduleSwitter.selectID) {
+    const id = moduleSwitter.selectID;
+    if (id) {
       // const testTweets = window.ipc.files.LoadTestTweet();
       // store.dispatch('AddTweet', {
       //   type: ETweetType.E_HOME,
-      //   user_id_str: moduleSwitter.selectID,
+      //   user_id_str: id,
       //   listTweet: testTweets
       // });
       // const following = window.ipc.files.LoadTestFriends();
       // const follower = window.ipc.files.LoadTestFollower();
       // const { followDatas } = moduleSwitter.stateIds;
-      // const datas = followDatas.dicUsers.get(moduleSwitter.selectID);
+      // const datas = followDatas.dicUsers.get(id);
       // if (datas) {
       //   datas.listFollowing = following;
       //   datas.listFollower = follower;
@@ -121,17 +119,18 @@ export class DalsaeApp extends Vue {
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
       await moduleApi.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
       window.ipc.files.SaveSwitter(moduleSwitter.stateSwitter.switter);
-      moduleApi.friends.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
-      moduleApi.followers.List({ screen_name: '', count: 200 }, moduleSwitter.selectID, true);
-      moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true }, moduleSwitter.selectID);
-      moduleApi.block.Ids({ cursor: '-1', stringify_ids: true });
+      moduleApi.friends.List({ screen_name: '', count: 200 }, id, true);
+      moduleApi.followers.List({ screen_name: '', count: 200 }, id, true);
+      const dicBlock = moduleSwitter.stateIds.dicBlockIds.get(id);
+      const cursorBlock = dicBlock ? dicBlock.next_cursor_str : '-1';
+      moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true }, id);
+      moduleApi.block.Ids({ cursor: cursorBlock, stringify_ids: true }, id);
       moduleApi.statuses.TimeLine();
       moduleApi.statuses.Mention();
       moduleApi.directMessage.List();
       const streaming = new UserStreaming();
-      console.log('selectID: ', moduleSwitter.selectID);
-      streaming.Connect(moduleSwitter.publicKey, moduleSwitter.secretKey, moduleSwitter.selectID);
-      moduleTweet.AddStreaming({ key: moduleSwitter.selectID, streaming: streaming });
+      streaming.Connect(moduleSwitter.publicKey, moduleSwitter.secretKey, id);
+      moduleTweet.AddStreaming({ key: id, streaming: streaming });
     }
   }
 

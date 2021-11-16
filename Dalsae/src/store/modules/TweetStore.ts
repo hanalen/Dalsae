@@ -76,10 +76,11 @@ class TweetStore extends VuexModule {
       this.stateTweet.tweets.push(tweets);
     }
     const { tweet, listTweet, user_id_str } = addTweet;
-    const { dicMuteIds, listBlockIds } = moduleSwitter.stateIds;
+    const { dicMuteIds, dicBlockIds } = moduleSwitter.stateIds;
     const { muteOption } = moduleOption;
     const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
-
+    let listBlockIds = dicBlockIds.get(moduleSwitter.selectID)?.ids;
+    if (!listBlockIds) listBlockIds = [];
     const orgTweets = tweets.tweets.homes;
     let listConcatTweets: I.Tweet[] = [];
     listConcatTweets = tweet ? [tweet] : [];
@@ -92,7 +93,7 @@ class TweetStore extends VuexModule {
     if (tweet) {
       listConcatTweets = [tweet];
     }
-    listConcatTweets.forEach(item => {
+    for (const item of listConcatTweets) {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) return; //exists
       if (
         !CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds) &&
@@ -119,7 +120,7 @@ class TweetStore extends VuexModule {
       }
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
-    });
+    }
     const { home } = moduleUI.statePanel;
     const idx = tweets.tweets.homes.findIndex(x => x.id_str === home.selectedId);
     moduleUI.SetStatePanel({
@@ -137,9 +138,11 @@ class TweetStore extends VuexModule {
       this.stateTweet.tweets.push(tweets);
     }
     const { tweet, listTweet, user_id_str } = addTweet;
-    const { dicMuteIds, listBlockIds } = moduleSwitter.stateIds;
+    const { dicMuteIds, dicBlockIds } = moduleSwitter.stateIds;
     const { muteOption } = moduleOption;
     const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
+    let listBlockIds = dicBlockIds.get(moduleSwitter.selectID)?.ids;
+    if (!listBlockIds) listBlockIds = [];
 
     const orgTweets = tweets.tweets.mentions;
     let listConcatTweets: I.Tweet[] = [];
@@ -152,7 +155,7 @@ class TweetStore extends VuexModule {
       listConcatTweets = [tweet];
     }
     let isAddMention = false;
-    listConcatTweets.forEach(item => {
+    for (const item of listConcatTweets) {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
         console.log('exists');
         return; //exists
@@ -161,7 +164,7 @@ class TweetStore extends VuexModule {
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
       isAddMention = true;
-    });
+    }
     const { mention } = moduleUI.statePanel;
     const idx = tweets.tweets.mentions.findIndex(x => x.id_str === mention.selectedId);
     moduleUI.SetStatePanel({
@@ -180,9 +183,11 @@ class TweetStore extends VuexModule {
       this.stateTweet.tweets.push(tweets);
     }
     const { tweet, listTweet, user_id_str } = addTweet;
-    const { dicMuteIds, listBlockIds } = moduleSwitter.stateIds;
+    const { dicMuteIds, dicBlockIds } = moduleSwitter.stateIds;
     const { muteOption } = moduleOption;
     const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
+    let listBlockIds = dicBlockIds.get(moduleSwitter.selectID)?.ids;
+    if (!listBlockIds) listBlockIds = [];
 
     const orgTweets = tweets.tweets.favorites;
     let listConcatTweets: I.Tweet[] = [];
@@ -194,7 +199,7 @@ class TweetStore extends VuexModule {
     if (tweet) {
       listConcatTweets = [tweet];
     }
-    listConcatTweets.forEach(item => {
+    for (const item of listConcatTweets) {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
         console.log('exists');
         return; //exists
@@ -202,7 +207,7 @@ class TweetStore extends VuexModule {
       if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
-    });
+    }
     const { favorite } = moduleUI.statePanel;
     const idx = tweets.tweets.mentions.findIndex(x => x.id_str === favorite.selectedId);
     moduleUI.SetStatePanel({
@@ -241,9 +246,12 @@ class TweetStore extends VuexModule {
       this.stateTweet.tweets.push(tweets);
     }
     const { tweet, user_id_str } = addTweet;
-    const { dicMuteIds, listBlockIds } = moduleSwitter.stateIds;
+    const { dicMuteIds, dicBlockIds } = moduleSwitter.stateIds;
     const { muteOption } = moduleOption;
     const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
+    let listBlockIds = dicBlockIds.get(moduleSwitter.selectID)?.ids;
+    if (!listBlockIds) listBlockIds = [];
+
     if (!tweet) return;
     const orgTweets = tweets.tweets.conv;
 

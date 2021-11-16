@@ -431,7 +431,7 @@ export default class ProfileView extends Mixins(MIX.ProfilePage, IPCPipeLine) {
     moduleSwitter.SetStateIds({
       ...moduleSwitter.stateIds,
       followDatas: follow,
-      listBlockIds: blockId
+      dicBlockIds: blockId
     });
     this.$nextTick(() => {
       document.addEventListener('keydown', this.OnKeyDown);

@@ -16,7 +16,7 @@ class StateSwitter {
 }
 
 class StateIds {
-  listBlockIds: string[] = [];
+  dicBlockIds: Map<string, I.BlockIds> = new Map();
   dicMuteIds: Map<string, string[]> = new Map();
 
   followDatas = new FollowDatas();
@@ -165,6 +165,28 @@ class SwitterStore extends VuexModule {
   @Action
   SetStateIds(state: StateIds) {
     this.context.commit('setStateIds', state);
+  }
+
+  @Mutation
+  private addBlockIds(ids: A.AddBlockIds) {
+    let listIds = this.stateIds.dicBlockIds.get(ids.idStr);
+    if (!listIds) {
+      const item = {
+        ids: [],
+        next_cursor_str: '',
+        previous_cursor_str: ''
+      };
+      this.stateIds.dicBlockIds.set(ids.idStr, item);
+      listIds = item;
+    }
+    listIds.ids = listIds.ids.concat(ids.ids.ids);
+    listIds.next_cursor_str = ids.ids.next_cursor_str;
+    listIds.previous_cursor_str = ids.ids.previous_cursor_str;
+  }
+
+  @Action
+  AddBlockIds(ids: A.AddBlockIds) {
+    this.context.commit('addBlockIds', ids);
   }
 }
 

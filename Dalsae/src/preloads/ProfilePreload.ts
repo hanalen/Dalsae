@@ -9,7 +9,7 @@ export const profilePreload = {
     screenName: string,
     switter: I.Switter,
     followDatas: I.FollowDatas,
-    blockIds: string[]
+    blockIds: Map<string, I.BlockIds>
   ) {
     const url = `${process.env
       .WEBPACK_DEV_SERVER_URL as string}ProfileView?screenName=${screenName}`;
@@ -30,7 +30,7 @@ export const profilePreload = {
   },
 
   GetBlockIds(screenName: string) {
-    const blockIds: string[] = ipcRenderer.sendSync('blokcids_' + screenName);
+    const blockIds: Map<string, I.BlockIds> = ipcRenderer.sendSync('blokcids_' + screenName);
     return blockIds;
   }
 };
