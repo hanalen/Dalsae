@@ -1,6 +1,6 @@
 'use strict';
 
-import { app, protocol, BrowserWindow, ipcMain, ipcRenderer } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain, MenuItem } from 'electron';
 import path from 'path';
 import Log from 'electron-log';
 import * as I from '@/Interfaces';
@@ -45,6 +45,7 @@ function createWindow() {
     width: 1900,
     height: 1200,
     title: 'dalsae',
+    autoHideMenuBar: true,
     webPreferences: {
       // Use pluginOptions.`nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
