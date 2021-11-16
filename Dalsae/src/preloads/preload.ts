@@ -98,6 +98,9 @@ const files = {
   },
   OpenSoundFolder() {
     shell.openPath(appPath + pathSound);
+  },
+  OpenImageFolder() {
+    shell.openPath(appPath + pathImage);
   }
 };
 

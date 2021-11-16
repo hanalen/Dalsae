@@ -255,6 +255,8 @@ export class ImageContentBase extends Mixins(Vue) {
       }
     } else if (e.key === 'c' && e.ctrlKey && !e.shiftKey && !e.altKey) {
       this.CopyImage(this.index);
+    } else if (e.key === 'F3' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+      window.ipc.files.OpenImageFolder();
     }
   }
 }

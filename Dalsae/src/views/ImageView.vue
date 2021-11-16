@@ -79,6 +79,18 @@
               </div>
             </template>
           </v-list-item>
+          <v-list-item value="1">
+            <template>
+              <div class="context-item" @click="OnClickOpenFolder">
+                <span>
+                  이미지 저장 폴더 열기
+                </span>
+                <span>
+                  (F3)
+                </span>
+              </div>
+            </template>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-menu>

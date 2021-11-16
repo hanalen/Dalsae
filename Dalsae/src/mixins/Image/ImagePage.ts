@@ -102,6 +102,10 @@ export class ImagePage extends Vue {
     window.ipc.image.DownloadImage(moduleOption.appPath, this.media[index], index, this.CallBack);
   }
 
+  OnClickOpenFolder() {
+    window.ipc.files.OpenImageFolder();
+  }
+
   CallBack(index: number, percent: number, bError: boolean) {
     moduleImage.ChangeProgress({
       index: index,
