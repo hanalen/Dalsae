@@ -36,6 +36,7 @@
 <style lang="scss" scoped>
 .tweet-selector {
   background-color: white;
+  overflow-x: hidden;
 }
 .v-list-item {
   min-height: 24px !important;
