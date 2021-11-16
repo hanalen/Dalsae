@@ -3,6 +3,7 @@
 import { app, protocol, BrowserWindow, ipcMain, MenuItem, dialog, ipcRenderer } from 'electron';
 import path from 'path';
 import Log from 'electron-log';
+import windowStateKeeper from 'electron-window-state';
 import {
   createProtocol
   /* installVueDevtools */
@@ -31,9 +32,18 @@ const pathAppConfig = app.getPath('userData') + '/Dalsae/AppConfig.json';
 
 function createWindow() {
   // Create the browser window.
+
+  const windowState = windowStateKeeper({
+    defaultWidth: 600,
+    defaultHeight: 1000,
+    file: 'dalsaeMainWindow.json'
+  });
+
   mainWin = new BrowserWindow({
-    width: 1900,
-    height: 1200,
+    x: windowState.x,
+    y: windowState.y,
+    width: windowState.width,
+    height: windowState.height,
     title: 'dalsae',
     autoHideMenuBar: true,
     webPreferences: {
@@ -44,6 +54,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload')
     }
   });
+  windowState.manage(mainWin);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -99,18 +110,27 @@ ipcMain.on('AddChannelOn', (event, arg: IpcParam) => {
 import electronLocalshortcut from 'electron-localshortcut';
 
 ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
+  const windowState = windowStateKeeper({
+    defaultWidth: 600,
+    defaultHeight: 1000,
+    file: `dalsae${param.title}window.json`
+  });
+
   const window = new BrowserWindow({
     show: true,
     title: param.title,
     autoHideMenuBar: true,
-    width: 1900,
-    height: 1200,
+    x: windowState.x,
+    y: windowState.y,
+    width: windowState.width,
+    height: windowState.height,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
       preload: path.join(__dirname, 'preload')
     }
   });
+  windowState.manage(window);
   window.loadURL(param.url);
   window.webContents.openDevTools();
   listWindow.push(window);
