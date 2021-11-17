@@ -409,7 +409,6 @@ class TweetStore extends VuexModule {
   @Mutation
   private clearConv(user_id_str: string) {
     const find = this.stateTweet.tweets.find(x => x.key === user_id_str);
-    console.log('clreaconv', find);
     if (find) {
       find.tweets.conv.splice(0, 999);
       console.log(find.tweets.conv);

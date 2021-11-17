@@ -73,7 +73,6 @@ export class UserStreaming {
     // }, 3000);
   }
   private async ReadStreaming() {
-    console.log('read streaming...');
     const result = await this.reader.read();
     this.AppendJson(result);
   }
@@ -103,6 +102,7 @@ export class UserStreaming {
     try {
       const tweet: I.Tweet = JSON.parse(json);
       if (tweet.id_str != undefined) {
+        console.log(tweet.full_text);
         console.log(tweet);
         moduleTweet.AddTweet({
           tweet: tweet,
@@ -112,6 +112,7 @@ export class UserStreaming {
         });
       } else {
         const dm: I.StreamingDM = JSON.parse(json);
+        console.log(dm.direct_message.text);
         console.log(dm);
         if (dm.direct_message) {
           const idx = dm.direct_message.text.indexOf('https://t.co');
