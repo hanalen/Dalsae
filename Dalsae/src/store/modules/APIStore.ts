@@ -347,7 +347,7 @@ class Block {
       });
       this.timer = setTimeout(() => {
         this.Ids(data, idStr);
-      }, 10000);
+      }, 60000);
     }
     moduleSysbar.RemoveSystemBar(ESystemBar.EBolckIds);
     return result;
