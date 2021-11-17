@@ -369,11 +369,13 @@ class Users {
 }
 
 class Followers {
+  timerList!: NodeJS.Timeout;
   async List(
     data: P.ReqList,
     selectId: string,
     isLoadFull: boolean
   ): Promise<P.APIResp<I.FollowerList>> {
+    clearTimeout(this.timerList);
     moduleSysbar.RemoveSystemBar(S.ESystemBar.EErrorFollower);
     moduleSysbar.AddSystemBar({
       type: S.ESystemBar.EFollower,
@@ -410,7 +412,7 @@ class Followers {
         text: '팔로워 목록 에러',
         toolTip: error
       });
-      setTimeout(() => {
+      this.timerList = setTimeout(() => {
         this.List(data, selectId, isLoadFull);
       }, 60000);
     }
@@ -445,11 +447,13 @@ class Followers {
 }
 
 class Friends {
+  timerList!: NodeJS.Timeout;
   async List(
     data: P.ReqList,
     selectId: string,
     isLoadFull: boolean
   ): Promise<P.APIResp<I.FollowerList>> {
+    clearTimeout(this.timerList);
     moduleSysbar.RemoveSystemBar(S.ESystemBar.EErrorFollowing);
     moduleSysbar.AddSystemBar({
       type: ESystemBar.EFollwing,
@@ -486,7 +490,7 @@ class Friends {
         text: '팔로잉 목록 에러',
         toolTip: error
       });
-      setTimeout(() => {
+      this.timerList = setTimeout(() => {
         this.List(data, selectId, isLoadFull);
       }, 60000);
     }
