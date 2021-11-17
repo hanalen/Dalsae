@@ -66,7 +66,7 @@
 <script lang="ts">
 /* eslint-disable @typescript-eslint/camelcase */
 import { DalsaeApp } from '@/mixins';
-import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Ref, Provide, Prop } from 'vue-property-decorator';
 import * as M from '@/mixins';
 import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleTweet } from '@/store/modules/TweetStore';
@@ -79,13 +79,7 @@ export default class QtTweet extends M.TweetBase {
   OnClickQT(e: MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    moduleTweet.AddTweet({
-      tweet: this.tweet,
-      listTweet: undefined,
-      user_id_str: moduleSwitter.selectID,
-      type: ETweetType.E_CONV
-    });
-    moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 5 });
+    moduleUtil.AddQtTweet(this.tweet);
   }
 }
 </script>

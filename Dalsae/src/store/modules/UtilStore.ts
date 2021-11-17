@@ -339,5 +339,37 @@ class UtilStore extends VuexModule {
       moduleDom.stateDom.audio.play();
     }
   }
+
+  @Action
+  async AddQtTweet(qtTweet: I.Tweet) {
+    //파라메터는 무조건 qtTweet
+    console.log('qttweet org', qtTweet);
+    if (qtTweet.orgTweet.quoted_status && qtTweet.orgTweet.quoted_status_id_str) {
+      qtTweet.orgTweet.quoted_status = new I.Tweet(qtTweet.orgTweet.quoted_status);
+    } else if (qtTweet.orgTweet.quoted_status_id_str) {
+      const result = await moduleApi.statuses.Show(qtTweet.orgTweet.quoted_status_id_str);
+      console.log(result);
+      if (!twitterRequest.CheckAPIError(result.data)) {
+        qtTweet.orgTweet.quoted_status = new I.Tweet(result.data);
+      } else {
+        const error = twitterRequest.GetApiError(result.data as I.ResponseTwitterError);
+        qtTweet = new I.Tweet();
+        qtTweet.user = new I.User();
+        qtTweet.orgUser = new I.User();
+        qtTweet.id_str = Date.now().toString();
+        qtTweet.orgTweet = new I.Tweet();
+        qtTweet.orgTweet.full_text = error;
+      }
+    }
+    console.log('last qt', qtTweet);
+    moduleTweet.AddTweet({
+      tweet: qtTweet,
+      listTweet: undefined,
+      user_id_str: moduleSwitter.selectID,
+      type: ETweetType.E_CONV
+    });
+    // moduleDom.UpdateScrollTweet(qtTweet);
+    moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 5 });
+  }
 }
 export const moduleUtil = getModule(UtilStore);
