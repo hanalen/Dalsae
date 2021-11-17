@@ -79,6 +79,10 @@ export class TweetPanelBase extends Vue {
     return moduleUI.statePanel.mention.isLoad;
   }
 
+  get isLoadConv() {
+    return moduleUI.statePanel.conv.isLoad;
+  }
+
   get isLoadFavorite() {
     return moduleUI.statePanel.favorite.isLoad;
   }

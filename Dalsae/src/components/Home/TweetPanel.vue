@@ -64,6 +64,12 @@
         />
       </v-tab-item>
       <v-tab-item :key="5">
+        <v-progress-circular
+          v-if="isLoadConv"
+          :width="3"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
         <scroll-panel
           :listData="tweetConv"
           :itemType="'tweet'"
