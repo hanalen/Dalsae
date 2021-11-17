@@ -22,7 +22,7 @@ export class TweetPanelBase extends Vue {
 
   @Watch('selectMenu', { immediate: true, deep: true })
   OnChangeSelectMenu(newVal: number, oldVal: number) {
-    if (oldVal === 5) {
+    if (oldVal === 5 && newVal !== 5) {
       moduleTweet.ClearConv(moduleSwitter.selectID);
     }
   }
