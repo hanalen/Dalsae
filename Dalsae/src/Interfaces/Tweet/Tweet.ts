@@ -14,6 +14,7 @@ export class Tweet {
   user!: I.User;
   place!: string;
   is_quote_status: boolean;
+  quoted_status_id_str!: string;
   retweet_count!: number;
   favorite_count!: number;
   favorited: boolean;
@@ -42,6 +43,8 @@ export class Tweet {
       this.favorite_count = tweet.favorite_count;
       this.place = tweet.place;
       this.is_quote_status = tweet.is_quote_status;
+      this.quoted_status = tweet.quoted_status;
+      this.quoted_status_id_str = tweet.quoted_status_id_str;
       this.quoted_status = tweet.quoted_status;
       this.in_reply_to_status_id_str = tweet.in_reply_to_status_id_str;
       this.isRead = false;
