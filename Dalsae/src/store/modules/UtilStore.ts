@@ -136,7 +136,7 @@ class UtilStore extends VuexModule {
 
   ///대화 불러오기
   @Action
-  LoadConv(tweet: I.Tweet) {
+  async LoadConv(tweet: I.Tweet) {
     moduleTweet.AddConv({
       listTweet: undefined,
       tweet: tweet,
@@ -157,7 +157,15 @@ class UtilStore extends VuexModule {
       find = FindTweet(id_str, moduleSwitter.selectID, moduleTweet.homes, moduleTweet.mentions);
     }
     if (id_str && !find) {
-      moduleApi.statuses.Show(id_str);
+      const result = await moduleApi.statuses.Show(id_str);
+      if (!twitterRequest.CheckAPIError(result.data)) {
+        moduleTweet.AddConv({
+          tweet: new I.Tweet(result.data),
+          type: ETweetType.E_CONV,
+          listTweet: undefined,
+          user_id_str: moduleSwitter.selectID
+        });
+      }
     }
   }
 

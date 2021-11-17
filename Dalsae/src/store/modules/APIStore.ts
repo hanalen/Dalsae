@@ -168,14 +168,6 @@ class Statuses {
       ...moduleUI.statePanel,
       conv: { ...moduleUI.statePanel.conv, isLoad: false }
     });
-    if (result.data) {
-      moduleTweet.AddConv({
-        tweet: result.data,
-        type: ETweetType.E_CONV,
-        listTweet: undefined,
-        user_id_str: moduleSwitter.selectID
-      });
-    }
     return result;
   }
 
