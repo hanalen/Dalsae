@@ -5,6 +5,9 @@ import store from '@/store';
 import * as M from '@/mixins';
 import { moduleSwitter } from './SwitterStore';
 import { moduleApi } from './APIStore';
+import { moduleOption } from './OptionStore';
+import { moduleDom } from './DomStore';
+import { moduleUtil } from './UtilStore';
 
 interface DmPair {
   id: string; //key
@@ -57,6 +60,7 @@ class DmStore extends VuexModule {
     } else {
       listDm = dm;
     }
+    let isAdded = false;
     const { selectID } = moduleSwitter;
     for (const dm of listDm) {
       const sender = dm.message_create?.sender_id;
@@ -78,13 +82,17 @@ class DmStore extends VuexModule {
           moduleApi.users.Show({ user_id: key });
         }
         pair = { id: key, listDm: [], user: user };
+        isAdded = true;
         this.stateDm.listDmPair.push(pair);
       }
       if (!pair.listDm.find(x => x.id === dm.id)) {
+        isAdded = true;
         pair.listDm.push(dm);
       }
       pair.user.last_direct_message = dm;
     }
+    if (!isAdded) return;
+    moduleUtil.Alarm(isAdded);
     for (const pair of this.stateDm.listDmPair) {
       pair.listDm.sort((a, b) => {
         const c = Number.parseInt(a.created_timestamp);
