@@ -155,6 +155,12 @@ export class OptionDetailModalBase extends Vue {
   set pathSound(path: string) {
     this.muteOption.pathSound = path;
   }
+  @Watch('isShow')
+  OnChangeIsShow(newVal: boolean) {
+    if (newVal) {
+      this.OnClickSelect();
+    }
+  }
 
   state = new State();
   @Watch('state.selectMenu') //메뉴 넘어갈 때 입력하던 값 초기화
