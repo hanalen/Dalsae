@@ -170,8 +170,12 @@
                 </v-card-subtitle>
                 <v-list class="overflow-y-auto" dense max-height="300px">
                   <v-list-item-group v-model="state.selectWord" color="primary">
-                    <v-list-item v-for="(item, i) in muteOption.highlight" :key="i">
-                      <v-list-item-content @click="state.input = item">
+                    <v-list-item
+                      v-for="(item, i) in muteOption.highlight"
+                      :key="i"
+                      @click="state.input = item"
+                    >
+                      <v-list-item-content>
                         <v-list-item-title v-text="item"></v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
