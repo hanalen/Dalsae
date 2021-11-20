@@ -39,10 +39,12 @@ class StateInput {
   replyTweet: I.Tweet | undefined;
   inputText: string;
   listImage: string[];
+  video: string;
   constructor() {
     this.replyTweet = undefined;
     this.inputText = '';
     this.listImage = [];
+    this.video = '';
   }
 }
 

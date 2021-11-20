@@ -16,6 +16,9 @@ export class TweetInputBase extends Vue {
   textArea!: HTMLTextAreaElement;
   @Ref()
   refFile!: HTMLInputElement;
+  @Ref()
+  refFileVideo!: HTMLInputElement;
+
   get inputText() {
     return moduleUI.stateInput.inputText;
   }
@@ -32,8 +35,19 @@ export class TweetInputBase extends Vue {
     moduleUI.SetStateInput({ ...moduleUI.stateInput, listImage: listImage });
   }
 
+  get video() {
+    return moduleUI.stateInput.video;
+  }
+
+  set video(video: string) {
+    console.log(video);
+    moduleUI.SetStateInput({ ...moduleUI.stateInput, video: video });
+  }
+
   get isAddedMedia() {
-    if (this.listImage.length > 0) {
+    if (this.video) {
+      return true;
+    } else if (this.listImage.length > 0) {
       return this.listImage[0].indexOf('data:image/gif') === 0;
     } else {
       return false;
@@ -52,36 +66,56 @@ export class TweetInputBase extends Vue {
   OnClickAddImage(e: MouseEvent) {
     this.refFile.click();
   }
+  OnClickAddVideo() {
+    this.refFileVideo.click();
+  }
 
-  OnFileChange(e: Event) {
+  async OnFileChange(e: Event) {
     if (!e.target) return;
     const target = e.target as HTMLInputElement;
     const files = target.files;
     if (!files) return;
     if (!files.length) return;
     for (let i = 0; i < files.length; i++) {
-      this.FileToString(files[i]);
+      const img = await this.FileToString(files[i]);
+      this.AddImage(img);
     }
   }
 
-  OnDrop(e: DragEvent) {
+  async OnFileChangeVideo(e: Event) {
+    if (!e.target) return;
+    const target = e.target as HTMLInputElement;
+    const files = target.files;
+    if (!files) return;
+    if (!files.length) return;
+    for (let i = 0; i < files.length; i++) {
+      const video = await this.FileToString(files[i]);
+      this.video = video;
+    }
+  }
+
+  async OnDrop(e: DragEvent) {
     if (!e.dataTransfer) return;
     const files = e.dataTransfer.items;
     for (let i = 0; i < files.length; i++) {
       if (files[i].kind == 'file') {
-        this.FileToString(files[i].getAsFile());
+        const img = await this.FileToString(files[i].getAsFile());
+        this.AddImage(img);
       }
     }
   }
 
-  FileToString(file: File | null) {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = e.target?.result as string;
-      this.AddImage(img);
-    };
-    reader.readAsDataURL(file);
+  FileToString(file: File | null): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = e.target?.result as string;
+        resolve(img);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   }
 
   AddImage(img: string) {

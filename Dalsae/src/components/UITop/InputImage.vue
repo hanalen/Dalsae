@@ -1,29 +1,36 @@
 <template>
-  <div class="input-image" v-if="listImage.length > 0">
-    <div class="image-list list-one" v-if="length === 1">
-      <add-image :img="listImage[0]" :index="0"></add-image>
-    </div>
-    <div class="image-list list-two" v-else-if="length === 2">
-      <add-image :img="listImage[0]" :index="0"></add-image>
-      <add-image :img="listImage[1]" :index="1"></add-image>
-    </div>
-    <div class="image-list list-three" v-else-if="length === 3">
-      <div class="left">
-        <add-image :img="listImage[0]" :index="0"></add-image>
-        <add-image :img="listImage[2]" :index="2"></add-image>
+  <div>
+    <div class="input-video">
+      <div class="video-view" v-if="video">
+        <video ref="refVideo" class="video-js"></video>
       </div>
-      <div class="right">
+    </div>
+    <div class="input-image" v-if="listImage.length > 0">
+      <div class="image-list list-one" v-if="length === 1">
+        <add-image :img="listImage[0]" :index="0"></add-image>
+      </div>
+      <div class="image-list list-two" v-else-if="length === 2">
+        <add-image :img="listImage[0]" :index="0"></add-image>
         <add-image :img="listImage[1]" :index="1"></add-image>
       </div>
-    </div>
-    <div class="image-list list-four" v-else-if="length === 4">
-      <div class="left">
-        <add-image :img="listImage[0]" :index="0"></add-image>
-        <add-image :img="listImage[2]" :index="2"></add-image>
+      <div class="image-list list-three" v-else-if="length === 3">
+        <div class="left">
+          <add-image :img="listImage[0]" :index="0"></add-image>
+          <add-image :img="listImage[2]" :index="2"></add-image>
+        </div>
+        <div class="right">
+          <add-image :img="listImage[1]" :index="1"></add-image>
+        </div>
       </div>
-      <div class="right">
-        <add-image :img="listImage[1]" :index="1"></add-image>
-        <add-image :img="listImage[3]" :index="3"></add-image>
+      <div class="image-list list-four" v-else-if="length === 4">
+        <div class="left">
+          <add-image :img="listImage[0]" :index="0"></add-image>
+          <add-image :img="listImage[2]" :index="2"></add-image>
+        </div>
+        <div class="right">
+          <add-image :img="listImage[1]" :index="1"></add-image>
+          <add-image :img="listImage[3]" :index="3"></add-image>
+        </div>
       </div>
     </div>
   </div>
@@ -83,7 +90,9 @@
 <script lang="ts">
 import { DalsaeApp } from '@/mixins';
 import { moduleUI } from '@/store/modules/UIStore';
-import { Vue, Mixins, Component, Ref, Provide } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Ref, Provide, Watch } from 'vue-property-decorator';
+import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js';
+import 'video.js/dist/video-js.css';
 
 @Component
 export default class TopSmall extends Vue {
@@ -104,6 +113,37 @@ export default class TopSmall extends Vue {
   }
   get length() {
     return this.listImage.length;
+  }
+
+  get video() {
+    return moduleUI.stateInput.video;
+  }
+
+  @Watch('video')
+  OnWatchVideo(newVal: string) {
+    if (newVal) {
+      this.PlayVideo();
+    }
+  }
+
+  @Ref()
+  refVideo!: HTMLVideoElement;
+
+  player!: VideoJsPlayer;
+
+  PlayVideo() {
+    const option: VideoJsPlayerOptions = {
+      controls: true,
+      loop: false,
+      fluid: true,
+      controlBar: {
+        volumePanel: false,
+        fullscreenToggle: false,
+        pictureInPictureToggle: false
+      },
+      sources: [{ src: this.video, type: 'video/mp4' }]
+    };
+    this.player = videojs(this.refVideo, option);
   }
 }
 </script>

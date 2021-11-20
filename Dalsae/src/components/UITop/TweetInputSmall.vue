@@ -9,12 +9,26 @@
         @change="OnFileChange"
         multiple
       />
+      <input
+        ref="refFileVideo"
+        type="file"
+        hidden="hidden"
+        accept="video/mp4"
+        @change="OnFileChangeVideo"
+      />
       <v-icon
         v-if="listImage.length < 4 && !isAddedMedia"
         color="info"
         @click="OnClickAddImage"
         class="click-able"
         >mdi-image-outline</v-icon
+      >
+      <v-icon
+        v-if="listImage.length < 4 && !isAddedMedia"
+        color="info"
+        @click="OnClickAddImage"
+        class="click-able"
+        >mdi-video</v-icon
       >
       <textarea
         ref="textArea"

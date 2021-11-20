@@ -111,17 +111,22 @@ class Statuses {
     if (str === 'data:image/gif;base64') media_category = 'tweet_gif';
     else if (str === 'data:image/png;base64') media_category = 'tweet_image';
     else if (str === 'data:image/jpeg;base64') media_category = 'tweet_image';
+    else if (str === 'data:video/mp4;base64') media_category = 'amplify';
 
     if (isDm) media_category = media_category.replace('tweet_', 'dm_');
 
     const type = str.substring(5, str.indexOf(';'));
+    console.log(media_category, type);
+    console.log(media);
     try {
       if (media.length >= 5242880) {
         const result = await this.UploadBigFile(atob(split[1]), media_category, type);
         return result.data;
       } else {
         const result = await twitterRequest.call.media.Upload({
-          media: media
+          media: media,
+          media_category: media_category,
+          media_type: type
         });
         return result.data;
       }

@@ -288,10 +288,20 @@ class UtilStore extends VuexModule {
     }
     const listMedia: string[] = [];
     if (tweet.media) {
-      for (let i = 0; i < tweet.media.length; i++) {
-        const url = tweet.media[i].media_url_https;
+      for (const media of tweet.media) {
+        let url = '';
+        if (media.type !== 'photo') {
+          const variants = media.video_info?.variants;
+          if (variants) {
+            url = variants[variants.length - 1].url;
+          }
+        } else {
+          url = media.media_url_https;
+        }
+        console.log('media url: ', url);
         const result = await axios.get(url, { responseType: 'blob' });
         const base64 = (await this.readFileAsync(result.data)) as string;
+        console.log(base64);
         listMedia.push(base64);
       }
     }
