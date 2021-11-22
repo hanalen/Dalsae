@@ -305,7 +305,7 @@ class UtilStore extends VuexModule {
         listMedia.push(base64);
       }
     }
-    moduleApi.statuses.Update(text, listMedia);
+    moduleApi.statuses.Update(text, listMedia, '');
   }
 
   @Action

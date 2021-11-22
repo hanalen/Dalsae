@@ -137,12 +137,16 @@ class Statuses {
   async Update(
     tweet: string,
     image: string[],
+    video: string,
     in_reply_to_status_id?: string
   ): Promise<P.APIResp<I.Tweet>> {
     let mediaStr = '';
-    if (image) {
-      for (let i = 0; i < image.length; i++) {
-        const result = await this.Upload(image[i]);
+    if (image || video) {
+      let arr: string[] = [];
+      if (image) arr = arr.concat(image);
+      if (video) arr = arr.concat(video);
+      for (let i = 0; i < arr.length; i++) {
+        const result = await this.Upload(arr[i]);
         mediaStr += `${result?.media_id_string},`;
       }
       mediaStr = mediaStr.substring(0, mediaStr.length - 1);

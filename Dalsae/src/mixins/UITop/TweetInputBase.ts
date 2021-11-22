@@ -276,11 +276,12 @@ export class TweetInputBase extends Vue {
   }
 
   SendTweet() {
-    const { inputText, listImage, replyTweet } = moduleUI.stateInput;
-    if (inputText.length === 0 && listImage.length === 0) return;
-    moduleApi.statuses.Update(inputText, listImage, replyTweet?.id_str);
+    const { inputText, listImage, replyTweet, video } = moduleUI.stateInput;
+    if (inputText.length === 0 && listImage.length === 0 && !video) return;
+    moduleApi.statuses.Update(inputText, listImage, video, replyTweet?.id_str);
     this.inputText = '';
     this.listImage = [];
+    this.video = '';
     moduleUI.SetStateInput({ ...moduleUI.stateInput, replyTweet: new I.Tweet() });
   }
 
