@@ -111,7 +111,7 @@ class Statuses {
     if (str === 'data:image/gif;base64') media_category = 'tweet_gif';
     else if (str === 'data:image/png;base64') media_category = 'tweet_image';
     else if (str === 'data:image/jpeg;base64') media_category = 'tweet_image';
-    else if (str === 'data:video/mp4;base64') media_category = 'amplify';
+    else if (str === 'data:video/mp4;base64') media_category = 'tweet_video';
 
     if (isDm) media_category = media_category.replace('tweet_', 'dm_');
 
