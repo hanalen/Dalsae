@@ -1,9 +1,7 @@
 <template>
   <div>
     <div class="input-video">
-      <div class="video-view" v-if="video">
-        <video ref="refVideo" class="video-js"></video>
-      </div>
+      <div ref="refVideoView" class="video-view" v-show="video"></div>
     </div>
     <div class="input-image" v-if="listImage.length > 0">
       <div class="image-list list-one" v-if="length === 1">
@@ -84,6 +82,16 @@
     height: 140px;
   }
 }
+.video-view {
+  width: 480px;
+  height: 260px;
+  max-width: 500px;
+  max-height: 280px;
+}
+.video-js {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
 </style>
 
 <script lang="ts">
@@ -126,23 +134,30 @@ export default class TopSmall extends Vue {
   }
 
   @Ref()
-  refVideo!: HTMLVideoElement;
+  refVideoView!: HTMLElement;
 
   player!: VideoJsPlayer;
 
   PlayVideo() {
+    if (this.player) {
+      this.player.dispose();
+    }
+    const el = document.createElement('video');
+    el.className = 'video-js';
+    this.refVideoView.appendChild(el);
+
     const option: VideoJsPlayerOptions = {
       controls: true,
       loop: false,
       fluid: true,
       controlBar: {
-        volumePanel: false,
+        volumePanel: true,
         fullscreenToggle: false,
         pictureInPictureToggle: false
       },
       sources: [{ src: this.video, type: 'video/mp4' }]
     };
-    this.player = videojs(this.refVideo, option);
+    this.player = videojs(el, option);
   }
 }
 </script>

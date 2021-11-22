@@ -61,6 +61,7 @@ export default class Home extends Mixins(DalsaeApp, IPCPipeLine) {
     let ret = 0;
     ret += moduleOption.uiOption.isSmallInput ? 33 : 90;
     ret += moduleUI.stateInput.listImage.length > 0 ? 280 : 0;
+    ret += moduleUI.stateInput.video ? 280 : 0;
     return ret;
   }
   get isShowOptionModal() {

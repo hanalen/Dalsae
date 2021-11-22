@@ -40,7 +40,6 @@ export class TweetInputBase extends Vue {
   }
 
   set video(video: string) {
-    console.log(video);
     moduleUI.SetStateInput({ ...moduleUI.stateInput, video: video });
   }
 
@@ -164,6 +163,9 @@ export class TweetInputBase extends Vue {
   OnEsc(e: Event) {
     this.inputText = '';
     this.listImage = [];
+    this.video = '';
+    this.refFile.value = '';
+    this.refFileVideo.value = '';
     moduleUI.SetStateInput({ ...moduleUI.stateInput, replyTweet: new I.Tweet() });
   }
 
