@@ -45,8 +45,8 @@
 .image-list {
   display: flex;
   flex-direction: row;
-  max-width: 500px;
-  max-height: 280px;
+  width: 500px;
+  height: 280px;
 }
 .left,
 .right {
@@ -68,12 +68,11 @@
 }
 .list-three {
   .left .img-item {
-    // width: 50%;
+    width: 250px;
     height: 140px;
   }
   .right .img-item {
-    // width: 50%;
-    // width: 140px;
+    width: 250px;
     height: 280px;
   }
 }
@@ -81,7 +80,7 @@
   // flex-wrap: wrap;
   .img-item {
     // width: 25%;
-    // width: 50%;
+    width: 250px;
     height: 140px;
   }
 }
