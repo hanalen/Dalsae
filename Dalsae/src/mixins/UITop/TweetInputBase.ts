@@ -94,14 +94,13 @@ export class TweetInputBase extends Vue {
     }
   }
 
-  async OnDrop(e: DragEvent) {
+  OnDrop(e: DragEvent) {
     if (!e.dataTransfer) return;
     const files = e.dataTransfer.items;
     for (let i = 0; i < files.length; i++) {
-      if (files[i].kind == 'file') {
-        const img = await this.FileToString(files[i].getAsFile());
+      this.FileToString(files[i].getAsFile()).then(img => {
         this.AddImage(img);
-      }
+      });
     }
   }
 
@@ -118,7 +117,7 @@ export class TweetInputBase extends Vue {
     });
   }
 
-  AddImage(img: string) {
+  async AddImage(img: string) {
     if (this.isAddedMedia) {
       moduleModal.AddMessage({
         errorType: M.Messagetype.E_INFO,
@@ -287,12 +286,13 @@ export class TweetInputBase extends Vue {
     // console.log(e);
   }
 
-  Paste(e: ClipboardEvent) {
+  async Paste(e: ClipboardEvent) {
     if (!e.clipboardData) return;
     const files = e.clipboardData.items;
     for (let i = 0; i < files.length; i++) {
       if (files[i].type === 'image/png') {
-        this.FileToString(files[i].getAsFile());
+        const img = await this.FileToString(files[i].getAsFile());
+        this.AddImage(img);
       }
     }
   }
