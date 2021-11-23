@@ -1,28 +1,38 @@
 <template>
-  <div class="qt-tweet" @click="OnClickQT">
-    <div class="tweet-conv">
-      <v-icon size="18px" v-show="isConv">mdi-chat-plus</v-icon>
+  <div>
+    <div class="no-data" v-if="isNoData">
+      <span>트윗을 볼 수 없습니다.</span><br />
+      <span>링크를 클릭 해주시기 바랍니다.</span>
     </div>
-    <div class="tweet-left">
-      <propic :user="orgUser" :option="uiOption"></propic>
-    </div>
-    <div class="tweet-text" style="margin-left:4px;">
-      <span class="user-name">{{ name }}</span>
-      <div v-html="tweetText"></div>
-      <span class="tweet-date">{{ date }}{{ via }}</span>
-      <div class="retweet-info" v-if="isRetweet">
-        <propic :size="20" :user="tweet.user" :option="uiOption"></propic>
-        <span>{{ retweetText }}</span>
+    <div v-else class="qt-tweet" @click="OnClickQT">
+      <div class="tweet-conv">
+        <v-icon size="18px" v-show="isConv">mdi-chat-plus</v-icon>
       </div>
-    </div>
-    <div class="img-preview" v-if="isShowPreview">
-      <image-preview :media="media" :tweet="tweet"></image-preview>
+      <div class="tweet-left">
+        <propic :user="orgUser" :option="uiOption"></propic>
+      </div>
+      <div class="tweet-text" style="margin-left:4px;">
+        <span class="user-name">{{ name }}</span>
+        <div v-html="tweetText"></div>
+        <span class="tweet-date">{{ date }}{{ via }}</span>
+        <div class="retweet-info" v-if="isRetweet">
+          <propic :size="20" :user="tweet.user" :option="uiOption"></propic>
+          <span>{{ retweetText }}</span>
+        </div>
+      </div>
+      <div class="img-preview" v-if="isShowPreview">
+        <image-preview :media="media" :tweet="tweet"></image-preview>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.qt-tweet {
+.no-data {
+  flex-direction: column;
+}
+.qt-tweet,
+.no-data {
   display: flex;
   font-size: 14px;
   border: dashed 1px rgba(0, 0, 0, 0.12);
@@ -79,6 +89,7 @@ export default class QtTweet extends M.TweetBase {
   OnClickQT(e: MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
+    if (this.isNoData) return;
     moduleUtil.AddQtTweet(this.tweet);
   }
 }

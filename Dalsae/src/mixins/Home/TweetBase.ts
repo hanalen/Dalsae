@@ -22,6 +22,10 @@ export class TweetBase extends Vue {
     moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_CONV });
   }
 
+  get isNoData() {
+    return this.tweet.created_at === '';
+  }
+
   get isRetweet() {
     return this.tweet.retweeted_status !== undefined;
   }
