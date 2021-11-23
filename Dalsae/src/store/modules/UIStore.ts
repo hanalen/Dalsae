@@ -8,6 +8,7 @@ import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
 import { ContextItem } from '@/mixins';
+import { moduleDom } from './DomStore';
 
 export interface IStatePanel {
   tweetType: ETweetType;
@@ -209,6 +210,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, home: home };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(0);
     } else if (tweetType === ETweetType.E_MENTION) {
       const mention: IStatePanel = {
         ...this.statePanel.mention,
@@ -225,6 +227,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, favorite: favorite };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(0);
     } else if (tweetType === ETweetType.E_OPEN) {
       const open: IStatePanel = {
         ...this.statePanel.open,
@@ -233,6 +236,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, open: open };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(0);
     } else if (tweetType === ETweetType.E_CONV) {
       const conv: IStatePanel = {
         ...this.statePanel.conv,
@@ -241,6 +245,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, conv: conv };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(0);
     }
   }
 
@@ -256,6 +261,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, home: home };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(tweets.length - 1);
     } else if (tweetType === ETweetType.E_MENTION) {
       const tweets = moduleTweet.mentions;
       if (!tweets) return;
@@ -266,6 +272,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, mention: mention };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(tweets.length - 1);
     } else if (tweetType === ETweetType.E_FAVORITE) {
       const tweets = moduleTweet.favorites;
       if (!tweets) return;
@@ -276,6 +283,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, favorite: favorite };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(tweets.length - 1);
     } else if (tweetType === ETweetType.E_OPEN) {
       const tweets = moduleTweet.opens;
       if (!tweets) return;
@@ -286,6 +294,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, open: open };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(tweets.length - 1);
     } else if (tweetType === ETweetType.E_CONV) {
       const tweets = moduleTweet.convs;
       if (!tweets) return;
@@ -296,6 +305,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, conv: conv };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(tweets.length - 1);
     }
   }
 
@@ -315,6 +325,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, home: home };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(idx);
     } else if (this.stateUI.selectMenu === ETweetType.E_MENTION) {
       panel = this.statePanel.mention;
       listTweet = moduleTweet.mentions;
@@ -327,6 +338,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, mention: mention };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(idx);
     } else if (this.stateUI.selectMenu === ETweetType.E_FAVORITE) {
       panel = this.statePanel.favorite;
       listTweet = moduleTweet.favorites;
@@ -339,6 +351,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, favorite: favorite };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(idx);
     } else if (this.stateUI.selectMenu === ETweetType.E_CONV) {
       panel = this.statePanel.conv;
       listTweet = moduleTweet.convs;
@@ -351,6 +364,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, conv: conv };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(idx);
     } else if (this.stateUI.selectMenu === ETweetType.E_OPEN) {
       panel = this.statePanel.open;
       listTweet = moduleTweet.opens;
@@ -363,6 +377,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, open: open };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(idx);
     }
   }
 
@@ -383,6 +398,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, home: home };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_MENTION) {
       panel = this.statePanel.mention;
       listTweet = moduleTweet.mentions;
@@ -396,6 +412,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, mention: mention };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_FAVORITE) {
       panel = this.statePanel.favorite;
       listTweet = moduleTweet.favorites;
@@ -409,6 +426,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, favorite: favorite };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_CONV) {
       panel = this.statePanel.conv;
       listTweet = moduleTweet.convs;
@@ -422,6 +440,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, conv: conv };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_OPEN) {
       panel = this.statePanel.open;
       listTweet = moduleTweet.opens;
@@ -435,6 +454,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, open: opens };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(index);
     }
     return false;
   }
@@ -457,6 +477,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, home: home };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_MENTION) {
       panel = this.statePanel.mention;
       listTweet = moduleTweet.mentions;
@@ -471,6 +492,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, mention: mention };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_FAVORITE) {
       panel = this.statePanel.favorite;
       listTweet = moduleTweet.favorites;
@@ -485,6 +507,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, favorite: favorite };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_CONV) {
       panel = this.statePanel.conv;
       listTweet = moduleTweet.convs;
@@ -499,6 +522,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, conv: convs };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_OPEN) {
       panel = this.statePanel.open;
       listTweet = moduleTweet.opens;
@@ -513,6 +537,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, conv: open };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(index);
     }
     return false;
   }

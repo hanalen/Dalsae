@@ -52,7 +52,7 @@ export default class ScrollPanel extends M.ScrollPanelBase {
           this.stateData.listData[i].isResized = true;
         }
       });
-      moduleDom.RegisteScrollPanel(this);
+      moduleDom.RegisteScrollPanel({ panel: this, panelType: this.tweetType });
     });
     eventBus.$on('FocusPanel', () => {
       if (this.scrollPanel) {

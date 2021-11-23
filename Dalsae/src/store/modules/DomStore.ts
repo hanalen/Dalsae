@@ -3,21 +3,42 @@ import * as I from '@/Interfaces';
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import store from '@/store';
 import * as M from '@/mixins';
+import { ETweetType, RegisterPanel } from '../Interface';
+import { moduleUI } from './UIStore';
 
 class StateDom {
   audio!: HTMLAudioElement;
   textArea!: HTMLTextAreaElement;
 }
 
+interface ScrollPanel {
+  panelType: ETweetType;
+  panel: M.ScrollPanelBase;
+}
+
+class StateScrollPanel {
+  listScrollPanel: ScrollPanel[] = [];
+
+  ScrollToIndex(index: number) {
+    const pair = this.listScrollPanel.find(x => x.panelType === moduleUI.stateUI.selectMenu);
+    if (!pair) return;
+    pair.panel.ScrollToIndex(index);
+  }
+
+  Add(type: ETweetType, panel: M.ScrollPanelBase) {
+    this.listScrollPanel.push({ panelType: type, panel: panel });
+  }
+}
+
 @Module({ dynamic: true, store, name: 'dom' })
 class DomStore extends VuexModule {
-  listScrollPanel: M.ScrollPanelBase[] = [];
+  stateScrollPanel = new StateScrollPanel();
   stateDom = new StateDom();
 
   @Mutation
   private updateRTandFav(tweet: I.Tweet) {
-    for (const panel of this.listScrollPanel) {
-      for (const item of panel.stateData.listData) {
+    for (const panel of this.stateScrollPanel.listScrollPanel) {
+      for (const item of panel.panel.stateData.listData) {
         const currentTweet = item.data as I.Tweet;
         if (currentTweet.orgTweet.id_str === tweet.orgTweet.id_str) {
           currentTweet.orgTweet.retweeted = tweet.retweeted;
@@ -29,20 +50,20 @@ class DomStore extends VuexModule {
   }
 
   @Mutation
-  private registeScrollPanel(panel: M.ScrollPanelBase) {
-    this.listScrollPanel.push(panel);
+  private registeScrollPanel(panel: RegisterPanel) {
+    this.stateScrollPanel.Add(panel.panelType, panel.panel);
   }
 
   @Action
-  RegisteScrollPanel(panel: M.ScrollPanelBase) {
+  RegisteScrollPanel(panel: RegisterPanel) {
     this.context.commit('registeScrollPanel', panel);
   }
 
   @Mutation
   private resetScrollDatas() {
-    this.listScrollPanel.forEach(item => {
-      item.Clear();
-    });
+    for (const panel of this.stateScrollPanel.listScrollPanel) {
+      panel.panel.Clear();
+    }
   }
 
   @Action
@@ -72,8 +93,8 @@ class DomStore extends VuexModule {
 
   @Mutation
   private deleteTweet(tweet: I.Tweet) {
-    for (const panel of this.listScrollPanel) {
-      const find = panel.stateData.listData.find(x => x.key === tweet.id_str);
+    for (const panel of this.stateScrollPanel.listScrollPanel) {
+      const find = panel.panel.stateData.listData.find(x => x.key === tweet.id_str);
       if (find) {
         const t = find.data as I.Tweet;
         t.isDelete = true;

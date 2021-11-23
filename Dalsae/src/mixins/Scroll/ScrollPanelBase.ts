@@ -111,8 +111,7 @@ export class ScrollPanelBase extends Vue {
     // return this.stateData.listData.slice(this.state.startIndex, this.state.endIndex);
   }
 
-  @Watch('indexPanel')
-  OnChangePanelIndex(newVal: number) {
+  ScrollToIndex(newVal: number) {
     console.log('index panel', newVal);
     if (newVal === -1) return;
     const selectData = this.stateData.listData[newVal];
@@ -170,6 +169,7 @@ export class ScrollPanelBase extends Vue {
   }
   @Watch('state.scrollTop')
   OnWatchScrollTop(newVal: number, oldVal: number) {
+    if (!this.listData) return;
     if (this.listData.length === 0) return;
     this.SetIndex();
     // this.CreateComponent();
