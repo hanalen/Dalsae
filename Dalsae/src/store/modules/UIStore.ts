@@ -516,6 +516,11 @@ class UIStore extends VuexModule {
     }
     return false;
   }
+
+  @Mutation
+  private resetScrollDatas() {
+    this.statePanel = new StatePanel();
+  }
 }
 
 export const moduleUI = getModule(UIStore);
