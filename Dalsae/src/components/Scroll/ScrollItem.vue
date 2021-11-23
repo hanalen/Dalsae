@@ -70,8 +70,10 @@ export default class ScrollItem extends Vue {
   }
 
   async destroyed() {
-    this.obs.unobserve(this.$el);
-    this.obs.disconnect();
+    if (this.obs) {
+      this.obs.unobserve(this.$el);
+      this.obs.disconnect();
+    }
   }
 
   OnChangeSelectedKey(key: string) {
