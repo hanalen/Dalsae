@@ -13,7 +13,7 @@
         {{ item.message }}
       </v-alert>
     </div>
-    <v-main app>
+    <v-main app v-if="isLoaded">
       <v-container fluid :style="styleTop" v-if="isShowTweet">
         <div :style="styleTweet" ref="refTweet">
           <tweet-selector
@@ -138,7 +138,6 @@ export default class ImageView extends Mixins(MIX.ImagePage, MIX.IPCPipeLine) {
   @Ref()
   refTweet!: HTMLElement;
   bExpanded = false;
-  bMounted = false;
   get styleTop() {
     if (!this.bExpanded) {
       return {
@@ -155,8 +154,13 @@ export default class ImageView extends Mixins(MIX.ImagePage, MIX.IPCPipeLine) {
     }
   }
   get styleContent() {
-    const mount = this.bMounted;
+    const mount = this.isLoaded;
     if (!mount) return;
+    if (!this.refTweet) {
+      return {
+        height: '100vh'
+      };
+    }
     let height = 0;
     if (this.isShowBottom) height += 130;
     if (this.isShowTweet) height += this.refTweet.clientHeight;
@@ -165,7 +169,10 @@ export default class ImageView extends Mixins(MIX.ImagePage, MIX.IPCPipeLine) {
     };
   }
   get isBigTweet() {
-    if (!this.bMounted) return;
+    if (!this.isLoaded) return;
+    if (!this.refTweet) {
+      return false;
+    }
     const height = this.refTweet.clientHeight;
     if (height >= 150) {
       return true;
@@ -182,15 +189,15 @@ export default class ImageView extends Mixins(MIX.ImagePage, MIX.IPCPipeLine) {
       this.bMounted = true;
       window.addEventListener('keydown', this.OnKeyDown);
     });
-    const id = this.$route.query.tweetId;
-    if (id) {
-      const switter = window.ipc.image.GetSwitter(id.toString());
-      moduleSwitter.InitSwitter(JSON.parse(switter));
-      const option = window.ipc.image.GetOption(id.toString());
-      moduleOption.ChangeOption(JSON.parse(option));
-      const json = window.ipc.image.GetTweet(id.toString());
-      moduleImage.SetTweet(new I.Tweet(JSON.parse(json)));
-    }
+    // const id = this.$route.query.tweetId;
+    // if (id) {
+    //   const switter = window.ipc.image.GetSwitter(id.toString());
+    //   moduleSwitter.InitSwitter(JSON.parse(switter));
+    //   const option = window.ipc.image.GetOption(id.toString());
+    //   moduleOption.ChangeOption(JSON.parse(option));
+    //   const json = window.ipc.image.GetTweet(id.toString());
+    //   moduleImage.SetTweet(new I.Tweet(JSON.parse(json)));
+    // }
   }
 }
 </script>

@@ -1,4 +1,4 @@
-import { Vue, Mixins, Component, Inject, Emit, Prop, Provide } from 'vue-property-decorator';
+import { Vue, Mixins, Component, Inject, Emit, Prop, Provide, Watch } from 'vue-property-decorator';
 import * as MIX from '@/mixins';
 import * as I from '@/Interfaces';
 import { moduleImage } from '@/store/modules/ImageStore';
@@ -8,6 +8,32 @@ import { moduleOption } from '@/store/modules/OptionStore';
 @Component
 export class ImagePage extends Vue {
   indexContext = 0;
+  bMounted = false;
+
+  isLoaded = false;
+
+  get isInit() {
+    return moduleImage.isInit;
+  }
+
+  @Watch('isInit')
+  OnWatchInit() {
+    console.log('on watch init', JSON.parse(JSON.stringify(this.tweet)));
+    this.$nextTick(() => {
+      // this.isLoaded = true;
+    });
+  }
+
+  @Watch('tweet')
+  OnWatchTweet(newVal: I.Tweet, oldVal: I.Tweet) {
+    console.log('watch tweet', oldVal, newVal);
+    if (newVal.orgTweet) {
+      // this.isLoaded
+      setTimeout(() => {
+        this.isLoaded = true;
+      }, 1000);
+    }
+  }
 
   get listMsg() {
     return moduleModal.stateMessage.listMessage;
@@ -51,7 +77,7 @@ export class ImagePage extends Vue {
   }
 
   get isShowBottom() {
-    return moduleOption.uiOption.isShowBottomPreview;
+    return moduleOption.uiOption.isShowBottomPreview && this.isLoaded;
   }
 
   get isShowTweet() {

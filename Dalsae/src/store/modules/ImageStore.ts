@@ -52,6 +52,7 @@ class ImageStore extends VuexModule {
   stateImage = new ImageViewState();
   stateProgress = new ProgressState();
   tweet = new I.Tweet();
+  isInit = false;
 
   @Mutation
   private changeState(state: ImageViewState) {
@@ -109,6 +110,16 @@ class ImageStore extends VuexModule {
   @Action
   ChangeProgress(change: M.ChangeProgress) {
     this.context.commit('changeProgress', change);
+  }
+
+  @Mutation
+  private initImageView() {
+    this.isInit = true;
+  }
+
+  @Action
+  InitImageView() {
+    this.context.commit('initImageView');
   }
 }
 
