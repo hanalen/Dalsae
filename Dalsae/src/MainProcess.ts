@@ -99,6 +99,8 @@ ipcMain.on('AddChannel', (event, arg: IpcParam) => {
 interface CreateWindowParam {
   url: string;
   title: string;
+  type?: string;
+  ipcName?: number;
 }
 
 ipcMain.on('AddChannelOn', (event, arg: IpcParam) => {
@@ -109,7 +111,16 @@ ipcMain.on('AddChannelOn', (event, arg: IpcParam) => {
 });
 import electronLocalshortcut from 'electron-localshortcut';
 
+let imageWindow: BrowserWindow | undefined = undefined;
+let timerKey: NodeJS.Timeout;
 ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
+  if (param.type === 'image' && imageWindow) {
+    //이미지 윈도우 요청일 경우 띄우고 종료
+    clearTimeout(timerKey);
+    imageWindow.webContents.send('showimage', { ipcName: param.ipcName });
+    imageWindow.show();
+    return;
+  }
   const windowState = windowStateKeeper({
     defaultWidth: 600,
     defaultHeight: 1000,
@@ -117,7 +128,7 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   });
 
   const window = new BrowserWindow({
-    show: true,
+    show: param.type !== 'image',
     title: param.title,
     autoHideMenuBar: true,
     x: windowState.x,
@@ -130,15 +141,33 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
       preload: path.join(__dirname, 'preload')
     }
   });
+  if (param.type === 'image' && !imageWindow) {
+    //이미지 윈도우 하나만 캐싱
+    imageWindow = window;
+    window.on('ready-to-show', () => {
+      window.webContents.send('showimage', { ipcName: param.ipcName });
+      window.show();
+    });
+  }
   windowState.manage(window);
   window.loadURL(param.url);
   window.webContents.openDevTools();
   listWindow.push(window);
 
-  window.on('closed', () => {
-    const idx = listWindow.findIndex(x => x === window);
-    Log.info('closed idx: ', idx);
-    listWindow.splice(idx, 1);
+  window.on('close', (e: Event) => {
+    if (window === imageWindow) {
+      e.preventDefault();
+      imageWindow.hide();
+      timerKey = setTimeout(() => {
+        const idx = listWindow.findIndex(x => x === imageWindow);
+        listWindow.splice(idx, 1);
+        imageWindow?.destroy();
+        imageWindow = undefined;
+      }, 10000);
+    } else {
+      const idx = listWindow.findIndex(x => x === window);
+      listWindow.splice(idx, 1);
+    }
     mainWin?.focus();
   });
   electronLocalshortcut.register(window, 'ESC', () => {
