@@ -107,11 +107,15 @@ class Statuses {
     const str = split[0];
     media = split[1];
 
+    let isVideo = false;
     let media_category = '';
     if (str === 'data:image/gif;base64') media_category = 'tweet_gif';
     else if (str === 'data:image/png;base64') media_category = 'tweet_image';
     else if (str === 'data:image/jpeg;base64') media_category = 'tweet_image';
-    else if (str === 'data:video/mp4;base64') media_category = 'tweet_video';
+    else if (str === 'data:video/mp4;base64') {
+      isVideo = true;
+      media_category = 'tweet_video';
+    }
 
     if (isDm) media_category = media_category.replace('tweet_', 'dm_');
 
@@ -119,7 +123,8 @@ class Statuses {
     console.log(media_category, type);
     console.log(media);
     try {
-      if (media.length >= 5242880) {
+      if (media.length >= 5242880 || isVideo) {
+        //video일 경우 서버의 인코딩 대기 때문에 init, append 로직을 태워야 함
         const result = await this.UploadBigFile(atob(split[1]), media_category, type);
         return result.data;
       } else {
