@@ -45,5 +45,17 @@ export class IPCPipeLine extends Vue {
     window.ipc.ipcPipe.on(EIPcType.EPathSetting, (data: { path: string }) => {
       moduleOption.SetAppPath(data.path);
     });
+    //////////////////
+    //이미지 윈도우 전용
+    window.ipc.ipcPipe.on(EIPcType.EShowIage, (ipcData: { ipcName: string }) => {
+      const id = ipcData.ipcName;
+      const switter = window.ipc.image.GetSwitter(id.toString());
+      moduleSwitter.InitSwitter(JSON.parse(switter));
+      const option = window.ipc.image.GetOption(id.toString());
+      moduleOption.ChangeOption(JSON.parse(option));
+      const json = window.ipc.image.GetTweet(id.toString());
+      moduleImage.SetTweet(new I.Tweet(JSON.parse(json)));
+      moduleImage.InitImageView();
+    });
   }
 }
