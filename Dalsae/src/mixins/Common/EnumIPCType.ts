@@ -6,5 +6,6 @@ export enum EIPcType {
   EWindowFocused = 'windowFocused',
   EOpenPath = 'openpath',
   EPathSetting = 'pathSetting',
-  EDeleteTweet = 'deleteTweet'
+  EDeleteTweet = 'deleteTweet',
+  EShowIage = 'showimage'
 }
