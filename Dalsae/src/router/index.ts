@@ -46,4 +46,10 @@ const router = new VueRouter({
   routes
 });
 
+router.afterEach(() => {
+  Vue.nextTick(() => {
+    document.title = '달새';
+  });
+});
+
 export default router;
