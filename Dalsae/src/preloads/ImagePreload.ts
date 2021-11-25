@@ -5,6 +5,7 @@ import * as I from '@/Interfaces';
 import fs from 'fs';
 import Axios from 'axios';
 import http from 'http';
+import { EIPcType } from '@/mixins';
 
 function CheckFolder(path: string) {
   if (fs.existsSync(path) === false) {
@@ -61,20 +62,17 @@ export const imagePreload = {
       type: 'image',
       ipcName: ipcName
     });
-    ipcRenderer.send('AddChannel', { name: `image_${ipcName}`, value: JSON.stringify(tweet) });
-    ipcRenderer.send('AddChannel', { name: `option_${ipcName}`, value: JSON.stringify(option) });
-    ipcRenderer.send('AddChannel', { name: `switter_${ipcName}`, value: JSON.stringify(switter) });
-  },
-  GetTweet(tweetId: string) {
-    const tweet = ipcRenderer.sendSync('image_' + tweetId);
-    return tweet;
-  },
-  GetOption(tweetId: string) {
-    const option = ipcRenderer.sendSync('option_' + tweetId);
-    return option;
-  },
-  GetSwitter(tweetId: string) {
-    const switter = ipcRenderer.sendSync('switter_' + tweetId);
-    return switter;
+    ipcRenderer.send('RegisterData', { name: `switter_${ipcName}`, data: switter });
+    ipcRenderer.send('RegisterData', { name: `option_${ipcName}`, data: option });
+    ipcRenderer.send('RegisterData', { name: `tweet_${ipcName}`, data: tweet });
   }
+  // GetTweet(tweetId: string) {
+  //   ipcRenderer.send(EIPcType.EGetData, `tweet_${tweetId}`);
+  // },
+  // GetOption(tweetId: string) {
+  //   ipcRenderer.send(EIPcType.EGetData, `option_${tweetId}`);
+  // },
+  // GetSwitter(tweetId: string) {
+  //   ipcRenderer.send(EIPcType.EGetData, `switter_${tweetId}`);
+  // }
 };

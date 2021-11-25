@@ -80,21 +80,21 @@ function createWindow() {
 
 interface IpcParam {
   name: string;
-  value: string;
+  value?: any;
   data?: any;
 }
 
 const listIpcParam: IpcParam[] = [];
 
-ipcMain.on('AddChannel', (event, arg: IpcParam) => {
-  listIpcParam.push(arg);
-  ipcMain.once(arg.name, (event, arg2) => {
-    const ipc = listIpcParam.find(x => x.name === arg.name);
-    if (ipc) {
-      event.returnValue = ipc.value; //sync일 경우 이렇게 해야 함
-    }
-  });
-});
+// ipcMain.on('AddChannel', (event, arg: IpcParam) => {
+//   listIpcParam.push(arg);
+//   ipcMain.once(arg.name, (event, arg2) => {
+//     const ipc = listIpcParam.find(x => x.name === arg.name);
+//     if (ipc) {
+//       event.returnValue = ipc.value; //sync일 경우 이렇게 해야 함
+//     }
+//   });
+// });
 
 interface CreateWindowParam {
   url: string;
@@ -107,6 +107,23 @@ ipcMain.on('AddChannelOn', (event, arg: IpcParam) => {
   mainWin?.webContents.send(arg.name, arg.data);
   for (const win of listWindow) {
     if (win) win.webContents.send(arg.name, arg.data);
+  }
+});
+
+//메인윈도우에서 다른 윈도우 열기 전에 전달 할 데이터 등록
+ipcMain.on('RegisterData', (event, arg: IpcParam) => {
+  listIpcParam.push(arg);
+});
+
+//이미지, 비디오 등 윈도우에서 데이터 요청
+ipcMain.on('GetData', (event, name: string) => {
+  const idx = listIpcParam.findIndex(x => x.name === name);
+  if (idx === -1) return;
+  const find = listIpcParam[idx];
+  listIpcParam.splice(idx, 1);
+  mainWin?.webContents.send(name, find);
+  for (const win of listWindow) {
+    if (win) win.webContents.send(name, find);
   }
 });
 import electronLocalshortcut from 'electron-localshortcut';

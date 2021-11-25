@@ -122,11 +122,17 @@ const ipcPipe = {
   openPathSetting: () => {
     ipcRenderer.send('OpenPathSetting');
   },
-  send: (channel: EIPcType, data: any | undefined) => {
+  getData: (name: string) => {
+    ipcRenderer.send('GetData', name);
+  },
+  send: (channel: EIPcType | string, data: any | undefined) => {
     ipcRenderer.send('AddChannelOn', { name: channel, data: data, value: '' });
   },
   on: (channel: string, callback: (data: any) => void) => {
     ipcRenderer.on(channel, (event, args) => callback({ ...args }));
+  },
+  once: (channel: string, callback: (data: any) => void) => {
+    ipcRenderer.once(channel, (event, args) => callback({ ...args }));
   }
 };
 
