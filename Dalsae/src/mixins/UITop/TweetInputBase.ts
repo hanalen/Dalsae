@@ -306,6 +306,7 @@ export class TweetInputBase extends Vue {
       const num = inputText[i].charCodeAt(0);
       if (0 <= num && num <= 4351) count += 1;
       else if (8192 <= num && num <= 8205) count += 1;
+      else if (8206 === num || 8207 === num) count += 1;
       else if (8208 <= num && num <= 8223) count += 1;
       else if (8242 <= num && num <= 8247) count += 1;
       else if (num < 0) count += 0;
