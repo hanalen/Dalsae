@@ -219,6 +219,7 @@ class UIStore extends VuexModule {
       };
       const state: StatePanel = { ...this.statePanel, mention: mention };
       this.context.commit('setStatePanel', state);
+      moduleDom.stateScrollPanel.ScrollToIndex(0);
     } else if (tweetType === ETweetType.E_FAVORITE) {
       const favorite: IStatePanel = {
         ...this.statePanel.favorite,
