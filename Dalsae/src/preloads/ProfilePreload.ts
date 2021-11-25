@@ -11,8 +11,7 @@ export const profilePreload = {
     followDatas: I.FollowDatas,
     blockIds: Map<string, I.BlockIds>
   ) {
-    const url = `${process.env
-      .WEBPACK_DEV_SERVER_URL as string}ProfileView?screenName=${screenName}`;
+    const url = `/ProfileView?screenName=${screenName}`;
     ipcRenderer.send('OpenWindow', { url: url, title: 'dalsae-profile' });
     ipcRenderer.send('AddChannel', { name: `switter_${screenName}`, value: switter });
     ipcRenderer.send('AddChannel', { name: `followdatas_${screenName}`, value: followDatas });

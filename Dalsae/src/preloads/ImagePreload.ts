@@ -55,7 +55,7 @@ export const imagePreload = {
   },
   OpenImageWindow(tweet: I.Tweet, option: I.UIOption, switter: I.Switter) {
     const ipcName = tweet.id_str;
-    const url = `${process.env.WEBPACK_DEV_SERVER_URL as string}ImageView?tweetId=${ipcName}`;
+    const url = `/ImageView?tweetId=${ipcName}`;
     ipcRenderer.send('OpenWindow', {
       url: url,
       title: 'dalsae-image',
