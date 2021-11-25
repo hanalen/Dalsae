@@ -43,7 +43,8 @@ export class ImagePage extends Vue {
   }
 
   get media() {
-    return this.orgTweet.extended_entities.media;
+    if (!this.orgTweet) return [];
+    else return this.orgTweet.extended_entities.media;
   }
 
   get listProgress() {
@@ -69,7 +70,7 @@ export class ImagePage extends Vue {
   }
 
   get isShowTweet() {
-    return moduleOption.uiOption.isShowTweet;
+    return moduleOption.uiOption.isShowTweet && this.tweet.orgTweet !== undefined;
   }
 
   OnClickMedia(media: I.Media) {

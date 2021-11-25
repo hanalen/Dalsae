@@ -13,14 +13,10 @@
         {{ item.message }}
       </v-alert>
     </div>
-    <v-main app v-if="isLoaded">
+    <v-main app>
       <v-container fluid :style="styleTop" v-if="isShowTweet">
         <div :style="styleTweet" ref="refTweet">
-          <tweet-selector
-            v-if="option.isShowTweet"
-            :selected="false"
-            :tweet="tweet"
-          ></tweet-selector>
+          <tweet-selector v-if="isShowTweet" :selected="false" :tweet="tweet"></tweet-selector>
         </div>
         <v-btn
           v-if="isBigTweet && !bExpanded"
@@ -37,7 +33,8 @@
         </v-btn>
       </v-container>
       <v-container @contextmenu="OnContext">
-        <image-content :style="styleContent" :tweet="tweet" :index="index"> </image-content>
+        <image-content v-if="isLoaded" :style="styleContent" :tweet="tweet" :index="index">
+        </image-content>
       </v-container>
     </v-main>
     <v-footer fixed height="130" v-if="isShowBottom">
