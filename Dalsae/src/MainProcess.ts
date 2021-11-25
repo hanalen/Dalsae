@@ -33,6 +33,8 @@ const baseUrl = process.env.WEBPACK_DEV_SERVER_URL
   ? (process.env.WEBPACK_DEV_SERVER_URL as string)
   : 'app://./index.html';
 
+const isDevMode: boolean = process.env.WEBPACK_DEV_SERVER_URL ? true : false;
+
 function createWindow() {
   // Create the browser window.
 
@@ -72,7 +74,7 @@ function createWindow() {
     // Load the index.html when not in development
     mainWin.loadURL(baseUrl);
   }
-  mainWin.webContents.openDevTools();
+  if (isDevMode) mainWin.webContents.openDevTools();
 
   mainWin.on('closed', () => {
     mainWin = null;
@@ -173,7 +175,7 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   }
   windowState.manage(window);
   window.loadURL(`${baseUrl}#${param.url}`);
-  window.webContents.openDevTools();
+  if (isDevMode) window.webContents.openDevTools();
   listWindow.push(window);
 
   window.on('close', (e: Event) => {
