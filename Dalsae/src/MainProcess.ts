@@ -29,6 +29,9 @@ app.whenReady().then(() => {
 });
 
 const pathAppConfig = app.getPath('userData') + '/Dalsae/AppConfig.json';
+const baseUrl = process.env.WEBPACK_DEV_SERVER_URL
+  ? (process.env.WEBPACK_DEV_SERVER_URL as string)
+  : 'app://./index.html';
 
 function createWindow() {
   // Create the browser window.
@@ -67,8 +70,9 @@ function createWindow() {
   } else {
     createProtocol('app');
     // Load the index.html when not in development
-    mainWin.loadURL('app://./index.html');
+    mainWin.loadURL(baseUrl);
   }
+  mainWin.webContents.openDevTools();
 
   mainWin.on('closed', () => {
     mainWin = null;
@@ -132,11 +136,9 @@ ipcMain.on('GetData', (event, name: string) => {
 import electronLocalshortcut from 'electron-localshortcut';
 
 let imageWindow: BrowserWindow | undefined = undefined;
-let timerKey: NodeJS.Timeout;
 ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   if (param.type === 'image' && imageWindow) {
     //이미지 윈도우 요청일 경우 띄우고 종료
-    clearTimeout(timerKey);
     imageWindow.webContents.send('showimage', { ipcName: param.ipcName });
     imageWindow.show();
     return;
@@ -170,7 +172,7 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     });
   }
   windowState.manage(window);
-  window.loadURL(param.url);
+  window.loadURL(`${baseUrl}#${param.url}`);
   window.webContents.openDevTools();
   listWindow.push(window);
 
@@ -181,6 +183,7 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     } else {
       const idx = listWindow.findIndex(x => x === window);
       listWindow.splice(idx, 1);
+      window.destroy();
     }
     mainWin?.focus();
   });
