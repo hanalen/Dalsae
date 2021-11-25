@@ -55,9 +55,9 @@ class OptionStore extends VuexModule {
   @Mutation
   private changeOptions(options: IOptionStore) {
     if (options) {
-      this.hotKey = options.hotKey;
-      this.uiOption = options.uiOption;
-      this.muteOption = options.muteOption;
+      this.hotKey = { ...this.hotKey, ...options.hotKey };
+      this.uiOption = { ...this.uiOption, ...options.uiOption };
+      this.muteOption = { ...this.muteOption, ...options.muteOption };
     } else {
       this.uiOption = {
         isBigPropic: true,
