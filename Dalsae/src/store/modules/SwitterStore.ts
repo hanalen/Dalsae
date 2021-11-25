@@ -109,6 +109,7 @@ class SwitterStore extends VuexModule {
 
   @Action
   public InitSwitter(switter: I.Switter) {
+    if (!switter.selectUser) return; //구버전 설정 파일 충돌 방지!!!
     this.context.commit('initSwitter', switter);
     if (switter) {
       switter.listUser?.forEach(user => {
