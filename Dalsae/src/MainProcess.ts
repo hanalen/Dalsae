@@ -34,6 +34,7 @@ const baseUrl = process.env.WEBPACK_DEV_SERVER_URL
   : 'app://./index.html';
 
 const isDevMode: boolean = process.env.WEBPACK_DEV_SERVER_URL ? true : false;
+import electronLocalshortcut from 'electron-localshortcut';
 
 function createWindow() {
   // Create the browser window.
@@ -45,10 +46,10 @@ function createWindow() {
   });
 
   mainWin = new BrowserWindow({
-    x: windowState.x,
-    y: windowState.y,
-    width: windowState.width,
-    height: windowState.height,
+    x: isDevMode ? 400 : windowState.x,
+    y: isDevMode ? 0 : windowState.y,
+    width: isDevMode ? 1900 : windowState.width,
+    height: isDevMode ? 1200 : windowState.height,
     title: 'dalsae',
     autoHideMenuBar: true,
     webPreferences: {
@@ -59,7 +60,11 @@ function createWindow() {
       preload: path.join(__dirname, 'preload')
     }
   });
-  windowState.manage(mainWin);
+  if (!isDevMode) windowState.manage(mainWin);
+
+  electronLocalshortcut.register(mainWin, 'F12', () => {
+    mainWin?.webContents.openDevTools();
+  });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -135,7 +140,6 @@ ipcMain.on('GetData', (event, name: string) => {
     if (win) win.webContents.send(name, find.data);
   }
 });
-import electronLocalshortcut from 'electron-localshortcut';
 
 let imageWindow: BrowserWindow | undefined = undefined;
 ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
@@ -155,10 +159,10 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     show: false,
     title: param.title,
     autoHideMenuBar: true,
-    x: windowState.x,
-    y: windowState.y,
-    width: windowState.width,
-    height: windowState.height,
+    x: isDevMode ? 400 : windowState.x,
+    y: isDevMode ? 0 : windowState.y,
+    width: isDevMode ? 1900 : windowState.width,
+    height: isDevMode ? 1200 : windowState.height,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
@@ -169,7 +173,7 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     //이미지 윈도우 하나만 캐싱
     imageWindow = window;
   }
-  windowState.manage(window);
+  if (!isDevMode) windowState.manage(window);
   window.loadURL(`${baseUrl}#${param.url}`);
   if (isDevMode) window.webContents.openDevTools();
   listWindow.push(window);
@@ -198,6 +202,9 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   });
   electronLocalshortcut.register(window, 'ENTER', () => {
     window.close();
+  });
+  electronLocalshortcut.register(window, 'F12', () => {
+    window.webContents.openDevTools();
   });
 });
 
