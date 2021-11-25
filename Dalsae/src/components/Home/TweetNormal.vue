@@ -48,7 +48,7 @@
 .tweet-conv {
   position: relative;
   width: 20px;
-  padding-right: 2px;
+  margin-right: 4px;
   display: block !important;
 }
 .tweet-text-area {
