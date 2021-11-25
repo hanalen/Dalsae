@@ -111,16 +111,6 @@ class ImageStore extends VuexModule {
   ChangeProgress(change: M.ChangeProgress) {
     this.context.commit('changeProgress', change);
   }
-
-  @Mutation
-  private initImageView() {
-    this.isInit = true;
-  }
-
-  @Action
-  InitImageView() {
-    this.context.commit('initImageView');
-  }
 }
 
 export const moduleImage = getModule(ImageStore);

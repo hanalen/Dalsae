@@ -12,18 +12,6 @@ export class ImagePage extends Vue {
 
   isLoaded = false;
 
-  get isInit() {
-    return moduleImage.isInit;
-  }
-
-  @Watch('isInit')
-  OnWatchInit() {
-    console.log('on watch init', JSON.parse(JSON.stringify(this.tweet)));
-    this.$nextTick(() => {
-      // this.isLoaded = true;
-    });
-  }
-
   @Watch('tweet')
   OnWatchTweet(newVal: I.Tweet, oldVal: I.Tweet) {
     console.log('watch tweet', oldVal, newVal);
