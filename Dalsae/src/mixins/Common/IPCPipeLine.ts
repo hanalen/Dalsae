@@ -65,5 +65,49 @@ export class IPCPipeLine extends Vue {
       window.ipc.ipcPipe.getData(`tweet_${ipcData.ipcName}`);
       window.ipc.ipcPipe.getData(`option_${ipcData.ipcName}`);
     });
+
+    window.ipc.ipcPipe.on(EIPcType.EShowVideo, (ipcData: { ipcName: string }) => {
+      window.ipc.ipcPipe.once(`switter_${ipcData.ipcName}`, (switter: I.Switter) => {
+        console.log('ipc once switter', switter);
+        moduleSwitter.InitSwitter(switter);
+      });
+      window.ipc.ipcPipe.once(`option_${ipcData.ipcName}`, (option: I.UIOption) => {
+        console.log('ipc once option', option);
+        moduleOption.ChangeOption(option);
+      });
+      window.ipc.ipcPipe.once(`tweet_${ipcData.ipcName}`, (tweet: I.Tweet) => {
+        console.log('ipc once tweet', tweet);
+        moduleImage.SetTweet(tweet);
+      });
+
+      window.ipc.ipcPipe.getData(`switter_${ipcData.ipcName}`);
+      window.ipc.ipcPipe.getData(`tweet_${ipcData.ipcName}`);
+      window.ipc.ipcPipe.getData(`option_${ipcData.ipcName}`);
+    });
+
+    window.ipc.ipcPipe.on(EIPcType.EShowProfile, (ipcData: { ipcName: string }) => {
+      window.ipc.ipcPipe.once(`switter_${ipcData.ipcName}`, (switter: I.Switter) => {
+        console.log('ipc once switter', switter);
+        moduleSwitter.InitSwitter(switter);
+      });
+      window.ipc.ipcPipe.once(`followdatas_${ipcData.ipcName}`, (followDatas: I.FollowDatas) => {
+        moduleSwitter.SetStateIds({
+          ...moduleSwitter.stateIds,
+          followDatas: followDatas
+        });
+      });
+      window.ipc.ipcPipe.once(
+        `blokcids_${ipcData.ipcName}`,
+        (blockIds: Map<string, I.BlockIds>) => {
+          moduleSwitter.SetStateIds({
+            ...moduleSwitter.stateIds,
+            dicBlockIds: blockIds
+          });
+        }
+      );
+      window.ipc.ipcPipe.getData(`switter_${ipcData.ipcName}`);
+      window.ipc.ipcPipe.getData(`followdatas_${ipcData.ipcName}`);
+      window.ipc.ipcPipe.getData(`blokcids_${ipcData.ipcName}`);
+    });
   }
 }

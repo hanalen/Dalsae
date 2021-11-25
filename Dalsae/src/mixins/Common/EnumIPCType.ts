@@ -7,5 +7,7 @@ export enum EIPcType {
   EOpenPath = 'openpath',
   EPathSetting = 'pathSetting',
   EDeleteTweet = 'deleteTweet',
-  EShowIage = 'showimage'
+  EShowIage = 'showimage',
+  EShowVideo = 'showvideo',
+  EShowProfile = 'showprofile'
 }

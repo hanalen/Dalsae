@@ -13,9 +13,9 @@
       </v-alert>
     </div>
     <v-main app>
-      <v-container class="container" fluid v-if="option.isShowTweet">
+      <v-container class="container" fluid>
         <div :style="styleTweet" ref="refTweet">
-          <tweet-selector :selected="false" :tweet="tweet"></tweet-selector>
+          <tweet-selector v-if="isShowTweet" :selected="false" :tweet="tweet"></tweet-selector>
         </div>
         <v-progress-circular
           class="progress"
@@ -55,7 +55,7 @@
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/camelcase */
-import { Vue, Component, Mixins, Ref } from 'vue-property-decorator';
+import { Vue, Component, Mixins, Ref, Watch } from 'vue-property-decorator';
 import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 import { moduleImage } from '@/store/modules/ImageStore';
@@ -71,12 +71,13 @@ export default class VideoView extends Mixins(Vue, IPCPipeLine) {
   bExpanded = false;
   bMounted = false;
   isLoadVideo = false;
+  isLoaded = false;
 
   @Ref()
   refTweet!: HTMLElement;
 
   get isShowTweet() {
-    return moduleOption.uiOption.isShowTweet;
+    return moduleOption.uiOption.isShowTweet && this.tweet.orgTweet !== undefined;
   }
 
   get listMsg() {
@@ -107,20 +108,47 @@ export default class VideoView extends Mixins(Vue, IPCPipeLine) {
 
   player!: VideoJsPlayer;
 
-  media!: I.Media;
+  PlayVideo() {
+    if (!this.media) return;
+    const variant = this.media.video_info?.variants[0];
+    if (!variant) return;
+    const { url, content_type } = variant;
+    const isGif = this.media.type === 'animated_gif';
+    const option: VideoJsPlayerOptions = {
+      autoplay: true,
+      controls: true,
+      loop: isGif,
+      controlBar: { volumePanel: !isGif, fullscreenToggle: false, pictureInPictureToggle: false },
+      sources: [{ src: url, type: content_type }]
+    };
+    this.player = videojs(this.refVideo, option, () => {
+      this.isLoadVideo = true;
+    });
+  }
 
-  tweet!: I.Tweet;
+  get media() {
+    if (!this.tweet.orgTweet) return undefined;
+    else return this.tweet.extended_entities.media[0];
+  }
+
+  get tweet() {
+    return moduleImage.tweet;
+  }
+
+  @Watch('tweet')
+  OnWatchTweet(newVal: I.Tweet, oldVal: I.Tweet) {
+    console.log('watch tweet', oldVal, newVal);
+    if (newVal.orgTweet) {
+      // this.isLoaded
+      setTimeout(() => {
+        this.isLoaded = true;
+        this.PlayVideo();
+      }, 1000);
+    }
+  }
+
   async created() {
     const id = this.$route.query.tweetId;
-    if (id) {
-      const switter = window.ipc.video.GetSwitter(id.toString());
-      moduleSwitter.InitSwitter(JSON.parse(switter));
-      const option = window.ipc.video.GetOption(id.toString());
-      moduleOption.ChangeOption(JSON.parse(option));
-      const json = window.ipc.video.GetTweet(id.toString());
-      this.tweet = new I.Tweet(JSON.parse(json));
-      this.media = this.tweet.extended_entities.media[0];
-    }
     this.$nextTick(() => {
       if (!id) {
         moduleModal.AddMessage({
@@ -131,20 +159,6 @@ export default class VideoView extends Mixins(Vue, IPCPipeLine) {
         return;
       }
       this.bMounted = true;
-      const variant = this.media.video_info?.variants[0];
-      if (!variant) return;
-      const { url, content_type } = variant;
-      const isGif = this.media.type === 'animated_gif';
-      const option: VideoJsPlayerOptions = {
-        autoplay: true,
-        controls: true,
-        loop: isGif,
-        controlBar: { volumePanel: !isGif, fullscreenToggle: false, pictureInPictureToggle: false },
-        sources: [{ src: url, type: content_type }]
-      };
-      this.player = videojs(this.refVideo, option, () => {
-        this.isLoadVideo = true;
-      });
     });
   }
 }

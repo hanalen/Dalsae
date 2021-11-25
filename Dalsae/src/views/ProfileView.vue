@@ -408,31 +408,11 @@ import { IPCPipeLine } from '@/mixins';
 @Component
 export default class ProfileView extends Mixins(MIX.ProfilePage, IPCPipeLine) {
   async created() {
-    // const testFollowing = window.preload.LoadTestFriends();
-    // console.log(testFollowing);
-    // moduleProfile.SetSelectUserFollowingList(testFollowing);
-    // const testSwitter = window.preload.LoadSwitter();
-    // moduleSwitter.InitSwitter(testSwitter);
-    // if (testSwitter.listUser) {
-    //   moduleProfile.ChangeShowUser(testSwitter.listUser[1].user);
-    // }
-    // moduleProfile.ChangeSelectUser(testSwitter.selectUser.user);
-
-    // return;
     const id = this.$route.query.screenName.toString();
-    const switter = window.ipc.profile.GetSwitter(id);
-    moduleSwitter.InitSwitter(switter);
     await this.LoadUserInfo(id);
     this.LoadFollowerList();
     this.LoadFollowingList();
-    const follow = window.ipc.profile.GetFollowDatas(id);
-    const blockId = window.ipc.profile.GetBlockIds(id);
     moduleOption.ChangeOption({ ...moduleOption.uiOption, isBigPropic: false });
-    moduleSwitter.SetStateIds({
-      ...moduleSwitter.stateIds,
-      followDatas: follow,
-      dicBlockIds: blockId
-    });
     this.$nextTick(() => {
       document.addEventListener('keydown', this.OnKeyDown);
       this.refScrollFollowing.$el.addEventListener('scroll', this.OnScrollFollowing);

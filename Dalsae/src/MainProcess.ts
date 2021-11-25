@@ -152,7 +152,7 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   });
 
   const window = new BrowserWindow({
-    show: param.type !== 'image',
+    show: false,
     title: param.title,
     autoHideMenuBar: true,
     x: windowState.x,
@@ -168,15 +168,19 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   if (param.type === 'image' && !imageWindow) {
     //이미지 윈도우 하나만 캐싱
     imageWindow = window;
-    window.on('ready-to-show', () => {
-      window.webContents.send('showimage', { ipcName: param.ipcName });
-      window.show();
-    });
   }
   windowState.manage(window);
   window.loadURL(`${baseUrl}#${param.url}`);
   if (isDevMode) window.webContents.openDevTools();
   listWindow.push(window);
+
+  window.on('ready-to-show', () => {
+    if (param.type === 'image') window.webContents.send('showimage', { ipcName: param.ipcName });
+    if (param.type === 'video') window.webContents.send('showvideo', { ipcName: param.ipcName });
+    if (param.type === 'profile')
+      window.webContents.send('showprofile', { ipcName: param.ipcName });
+    window.show();
+  });
 
   window.on('close', (e: Event) => {
     if (window === imageWindow) {

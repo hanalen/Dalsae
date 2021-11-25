@@ -12,24 +12,15 @@ export const profilePreload = {
     blockIds: Map<string, I.BlockIds>
   ) {
     const url = `/ProfileView?screenName=${screenName}`;
-    ipcRenderer.send('OpenWindow', { url: url, title: 'dalsae-profile' });
-    ipcRenderer.send('AddChannel', { name: `switter_${screenName}`, value: switter });
-    ipcRenderer.send('AddChannel', { name: `followdatas_${screenName}`, value: followDatas });
-    ipcRenderer.send('AddChannel', { name: `blokcids_${screenName}`, value: blockIds });
-  },
 
-  GetSwitter(screenName: string) {
-    const switter: I.Switter = ipcRenderer.sendSync('switter_' + screenName);
-    return switter;
-  },
-
-  GetFollowDatas(screenName: string) {
-    const followDatas: I.FollowDatas = ipcRenderer.sendSync('followdatas_' + screenName);
-    return followDatas;
-  },
-
-  GetBlockIds(screenName: string) {
-    const blockIds: Map<string, I.BlockIds> = ipcRenderer.sendSync('blokcids_' + screenName);
-    return blockIds;
+    ipcRenderer.send('OpenWindow', {
+      url: url,
+      title: 'dalsae-profile',
+      type: 'profile',
+      ipcName: screenName
+    });
+    ipcRenderer.send('RegisterData', { name: `switter_${screenName}`, data: switter });
+    ipcRenderer.send('RegisterData', { name: `followdatas_${screenName}`, data: followDatas });
+    ipcRenderer.send('RegisterData', { name: `blokcids_${screenName}`, data: blockIds });
   }
 };

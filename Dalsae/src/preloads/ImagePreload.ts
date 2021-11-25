@@ -66,13 +66,4 @@ export const imagePreload = {
     ipcRenderer.send('RegisterData', { name: `option_${ipcName}`, data: option });
     ipcRenderer.send('RegisterData', { name: `tweet_${ipcName}`, data: tweet });
   }
-  // GetTweet(tweetId: string) {
-  //   ipcRenderer.send(EIPcType.EGetData, `tweet_${tweetId}`);
-  // },
-  // GetOption(tweetId: string) {
-  //   ipcRenderer.send(EIPcType.EGetData, `option_${tweetId}`);
-  // },
-  // GetSwitter(tweetId: string) {
-  //   ipcRenderer.send(EIPcType.EGetData, `switter_${tweetId}`);
-  // }
 };
