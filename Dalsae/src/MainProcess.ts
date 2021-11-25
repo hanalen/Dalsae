@@ -216,6 +216,8 @@ ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
   if (fs.existsSync(pathAppConfig)) {
     const appConfig: AppConfig = fs.readJsonSync(pathAppConfig);
     if (appConfig) path = appConfig.appPath;
+  } else {
+    path = app.getPath('userData') + '/Dalsae/';
   }
   event.reply('GetAppPath', path);
 });
