@@ -244,13 +244,14 @@ class UtilStore extends VuexModule {
   Retweet(tweet: I.Tweet | undefined) {
     if (!tweet) return;
     const { isSendRTCheck, isSendRTProtected } = moduleOption.uiOption;
-    if (!isSendRTProtected && tweet.orgUser.protected) {
+    const itsMe = moduleSwitter.selectID === tweet.orgUser.id_str;
+    if (!isSendRTProtected && tweet.orgUser.protected && !itsMe) {
       moduleModal.AddMessage({
         errorType: Messagetype.E_WARNING,
         message: '잠금 사용자의 트윗은 리트윗 할 수 없습니다.',
         time: 2
       });
-    } else if (isSendRTProtected && tweet.orgUser.protected) {
+    } else if (isSendRTProtected && tweet.orgUser.protected && !itsMe) {
       this.CheckProtectRetweet(tweet);
     } else if (isSendRTCheck) {
       this.CheckRetweet(tweet);
