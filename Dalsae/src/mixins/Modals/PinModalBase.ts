@@ -67,6 +67,10 @@ export class PinModalBase extends Vue {
   }
 
   async ClickClose() {
+    moduleSwitter.SetStateSwitter({
+      ...moduleSwitter.stateSwitter,
+      tempUser: new I.DalsaeUser()
+    });
     this.CloseModal();
   }
 

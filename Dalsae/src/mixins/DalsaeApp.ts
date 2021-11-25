@@ -47,7 +47,7 @@ export class DalsaeApp extends Vue {
       if (oldID) {
         moduleTweet.StopStreaming(oldID);
       }
-      if (newID) {
+      if (newID && !moduleModal.bPin) {
         moduleDom.ResetScrollDatas();
         this.StartDalsae();
       }
