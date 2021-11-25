@@ -38,6 +38,7 @@
             v-on:paste="Paste"
             type="text"
             v-model="input"
+            spellcheck="false"
             @keydown.enter="OnEnter"
             @keydown.esc="OnEsc"
           />
