@@ -123,7 +123,7 @@ ipcMain.on('GetData', (event, name: string) => {
   listIpcParam.splice(idx, 1);
   mainWin?.webContents.send(name, find);
   for (const win of listWindow) {
-    if (win) win.webContents.send(name, find);
+    if (win) win.webContents.send(name, find.data);
   }
 });
 import electronLocalshortcut from 'electron-localshortcut';
