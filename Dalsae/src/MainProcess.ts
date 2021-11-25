@@ -72,6 +72,9 @@ function createWindow() {
 
   mainWin.on('closed', () => {
     mainWin = null;
+    for (const win of listWindow) {
+      win.destroy();
+    }
   });
   mainWin.on('focus', () => {
     mainWin?.webContents.send('windowFocused');
@@ -175,12 +178,6 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     if (window === imageWindow) {
       e.preventDefault();
       imageWindow.hide();
-      timerKey = setTimeout(() => {
-        const idx = listWindow.findIndex(x => x === imageWindow);
-        listWindow.splice(idx, 1);
-        imageWindow?.destroy();
-        imageWindow = undefined;
-      }, 10000);
     } else {
       const idx = listWindow.findIndex(x => x === window);
       listWindow.splice(idx, 1);
