@@ -15,6 +15,7 @@ export class ImagePage extends Vue {
   @Watch('tweet')
   OnWatchTweet(newVal: I.Tweet, oldVal: I.Tweet) {
     console.log('watch tweet', oldVal, newVal);
+    moduleImage.Reset();
     if (newVal.orgTweet) {
       // this.isLoaded
       setTimeout(() => {

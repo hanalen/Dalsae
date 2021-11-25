@@ -34,7 +34,7 @@ class ImageViewState {
   }
 }
 
-class ProgressState {
+class StateProgress {
   listProgress: M.Progress[];
   constructor() {
     this.listProgress = [
@@ -50,7 +50,7 @@ class ProgressState {
 class ImageStore extends VuexModule {
   // states
   stateImage = new ImageViewState();
-  stateProgress = new ProgressState();
+  stateProgress = new StateProgress();
   tweet = new I.Tweet();
   isInit = false;
 
@@ -66,6 +66,7 @@ class ImageStore extends VuexModule {
   @Mutation
   private reset() {
     this.stateImage = new ImageViewState();
+    this.stateProgress = new StateProgress();
   }
   @Action
   Reset() {
