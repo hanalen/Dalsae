@@ -1,9 +1,8 @@
 'use strict';
 
-import { app, protocol, BrowserWindow, ipcMain, MenuItem, dialog, ipcRenderer } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain, dialog, screen } from 'electron';
 import path from 'path';
 import Log from 'electron-log';
-import windowStateKeeper from 'electron-window-state';
 import {
   createProtocol
   /* installVueDevtools */
@@ -35,21 +34,21 @@ const baseUrl = process.env.WEBPACK_DEV_SERVER_URL
 
 const isDevMode: boolean = process.env.WEBPACK_DEV_SERVER_URL ? true : false;
 import electronLocalshortcut from 'electron-localshortcut';
-
+import windowStateSaver from './WindowState';
 function createWindow() {
   // Create the browser window.
 
-  const windowState = windowStateKeeper({
+  const windowState = windowStateSaver({
     defaultWidth: 600,
     defaultHeight: 1000,
-    file: 'dalsaeMainWindow.json'
+    fileName: 'dalsae-main-window.json'
   });
 
   mainWin = new BrowserWindow({
     x: isDevMode ? 400 : windowState.x,
     y: isDevMode ? 0 : windowState.y,
     width: isDevMode ? 1900 : windowState.width,
-    height: isDevMode ? 1200 : windowState.height,
+    height: isDevMode ? 1100 : windowState.height,
     title: 'dalsae',
     autoHideMenuBar: true,
     webPreferences: {
@@ -60,7 +59,9 @@ function createWindow() {
       preload: path.join(__dirname, 'preload')
     }
   });
-  if (!isDevMode) windowState.manage(mainWin);
+  if (isDevMode && windowState.manageWindow) {
+    windowState.manageWindow(mainWin);
+  }
 
   electronLocalshortcut.register(mainWin, 'F12', () => {
     mainWin?.webContents.openDevTools();
@@ -149,10 +150,10 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     imageWindow.show();
     return;
   }
-  const windowState = windowStateKeeper({
+  const windowState = windowStateSaver({
     defaultWidth: 600,
     defaultHeight: 1000,
-    file: `dalsae${param.title}window.json`
+    fileName: `dalsae-${param.title}-window.json`
   });
 
   const window = new BrowserWindow({
@@ -173,7 +174,9 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     //이미지 윈도우 하나만 캐싱
     imageWindow = window;
   }
-  if (!isDevMode) windowState.manage(window);
+  if (isDevMode && windowState.manageWindow) {
+    windowState.manageWindow(window);
+  }
   window.loadURL(`${baseUrl}#${param.url}`);
   if (isDevMode) window.webContents.openDevTools();
   listWindow.push(window);
