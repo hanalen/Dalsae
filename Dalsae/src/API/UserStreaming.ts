@@ -14,6 +14,7 @@ export class UserStreaming {
   private json = '';
   private controller!: AbortController;
   private signal!: AbortSignal;
+  timer!: NodeJS.Timeout;
   async Connect(publicKey: string, secretKey: string, idStr: string) {
     this.idStr = idStr;
     this.controller = new AbortController();
@@ -35,12 +36,15 @@ export class UserStreaming {
         this.SteamingResponse(resp);
       })
       .catch((err: Error) => {
-        this.SteamingResponse.bind(this);
         this.StreamingError(err);
+        this.timer = setTimeout(() => {
+          this.Connect(publicKey, secretKey, idStr);
+        }, 3000);
       });
   }
   StopStreaming() {
     console.log('stop streaming!!!  id: ', this.idStr);
+    clearTimeout(this.timer);
     this.controller.abort();
     moduleSysbar.RemoveSystemBar(ESystemBar.EStreaming);
     moduleSysbar.AddSystemBar({
