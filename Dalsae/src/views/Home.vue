@@ -51,6 +51,7 @@ import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
+import { moduleDom } from '@/store/modules/DomStore';
 
 @Component
 export default class Home extends Mixins(DalsaeApp, IPCPipeLine) {
@@ -102,11 +103,13 @@ export default class Home extends Mixins(DalsaeApp, IPCPipeLine) {
         this.OnKeyDownHotKey(currentHotKey.hotkeyType);
       }
     });
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.altKey && !e.shiftKey && !e.ctrlKey) {
       e.preventDefault();
       e.stopPropagation();
       if (moduleUI.stateContext.isShow) {
         moduleUtil.OnEnterByContext();
+      } else {
+        moduleDom.stateDom.textArea.focus();
       }
     } else if (e.key === 'Escape') {
       if (moduleUI.stateContext.isShow) {
