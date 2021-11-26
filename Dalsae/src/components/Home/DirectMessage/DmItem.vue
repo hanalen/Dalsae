@@ -12,7 +12,7 @@
         <v-icon color="primary">mdi-alert-circle-outline</v-icon>
         <span>이미지 불러오기 에러</span>
       </div>
-      <video v-if="isVideo" ref="refVideo" class="video-js"></video>
+      <div ref="refVideoView" class="video-view" v-show="isVideo"></div>
       <img v-if="img" :src="img" />
       <div v-html="text" class="left-message" @click="OnClickLink"></div>
       <span class=" time">{{ time }}</span>
@@ -76,6 +76,8 @@ export default class DmItem extends Vue {
   refVideo!: HTMLVideoElement;
   player!: VideoJsPlayer;
 
+  @Ref()
+  refVideoView!: HTMLElement;
   img = '';
   video = '';
 
@@ -121,6 +123,8 @@ export default class DmItem extends Vue {
 
   @Watch('dm', { immediate: true, deep: true })
   OnWatchDm(newVal: I.DMEvent) {
+    this.img = '';
+    this.video = '';
     if (!this.media) return;
 
     if (this.isVideo) {
@@ -192,18 +196,25 @@ export default class DmItem extends Vue {
   }
 
   PlayVideo() {
+    if (this.player) {
+      this.player.dispose();
+    }
+    const el = document.createElement('video');
+    el.className = 'video-js';
+    this.refVideoView.appendChild(el);
+
     const option: VideoJsPlayerOptions = {
       controls: true,
-      loop: this.isGif,
+      loop: false,
       fluid: true,
       controlBar: {
-        volumePanel: !this.isGif,
+        volumePanel: true,
         fullscreenToggle: false,
         pictureInPictureToggle: false
       },
-      sources: [{ src: this.video, type: this.media?.video_info?.variants[0].content_type }]
+      sources: [{ src: this.video, type: 'video/mp4' }]
     };
-    this.player = videojs(this.refVideo, option);
+    this.player = videojs(el, option);
   }
 
   OnClickLink(e: MouseEvent) {
