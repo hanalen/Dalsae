@@ -119,6 +119,7 @@ export class DalsaeApp extends Vue {
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
       await moduleApi.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
       window.ipc.files.SaveSwitter(moduleSwitter.stateSwitter.switter);
+      moduleDm.ClearDM();
       moduleApi.friends.List({ screen_name: '', count: 200 }, id, true);
       moduleApi.followers.List({ screen_name: '', count: 200 }, id, true);
       const dicBlock = moduleSwitter.stateIds.dicBlockIds.get(id);

@@ -182,6 +182,17 @@ class DmStore extends VuexModule {
   StartDM(user: I.User) {
     this.context.commit('startDM', user);
   }
+
+  @Mutation
+  private clearDM() {
+    this.stateDm = new StateDirectMessage();
+    this.stateInput = new StateInput();
+  }
+
+  @Action
+  ClearDM() {
+    this.context.commit('clearDM');
+  }
 }
 
 export const moduleDm = getModule(DmStore);
