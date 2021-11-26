@@ -59,7 +59,7 @@ export default class Propic extends Vue {
   size!: number;
 
   get verified() {
-    return this.user.verified;
+    return this.user.verified && !this.size;
   }
 
   get styleImg() {
