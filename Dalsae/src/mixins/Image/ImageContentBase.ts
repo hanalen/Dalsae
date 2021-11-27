@@ -135,8 +135,12 @@ export class ImageContentBase extends Mixins(Vue) {
     this.$emit('on-prev');
   }
 
-  MouseWheel(e: MouseEvent) {
-    // console.log(e);
+  MouseWheel(e: WheelEvent) {
+    if (e.deltaY < 0) {
+      this.Zoom();
+    } else if (e.deltaY > 0) {
+      this.ZoomOut();
+    }
   }
   MouseDown(e: MouseEvent) {
     if (e.button == 0) {
