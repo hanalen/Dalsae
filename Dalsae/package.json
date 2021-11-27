@@ -13,6 +13,9 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@sentry/electron": "^2.5.4",
+    "@sentry/tracing": "^6.15.0",
+    "@sentry/vue": "^6.15.0",
     "@types/fs-extra": "^9.0.3",
     "axios": "^0.24.0",
     "copy-image-clipboard": "^2.0.1",
