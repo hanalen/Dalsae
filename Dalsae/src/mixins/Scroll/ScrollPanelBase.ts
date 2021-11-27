@@ -13,7 +13,6 @@ import TestItem from '@/components/Scroll/TestItem.vue';
 import { moduleOption } from '@/store/modules/OptionStore';
 class State {
   scrollTop = 0;
-  totalHeight = 0;
   startIndex = 0;
   endIndex = 50;
   translateY = 0;
@@ -327,7 +326,7 @@ export class ScrollPanelBase extends Vue {
     const idx = this.stateData.listData.findIndex(x => x.key == resizeEvent.key);
     const data = this.stateData.listData[idx];
     if (!data) return;
-    if (data.isResized && idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
+    if (idx <= this.state.startIndex && this.scrollPanel.scrollTop > 0) {
       this.scrollPanel.scrollTo({ top: this.scrollPanel.scrollTop + moveY + moduleUI.minHeight });
     }
     this.MoveScroll(this.stateData.listData, idx, resizeEvent.newVal);
@@ -335,7 +334,6 @@ export class ScrollPanelBase extends Vue {
 
   MoveScroll(listTweet: M.ScrollItem<any>[], idxFrom: number, height: number) {
     listTweet[idxFrom].height = height;
-    listTweet[idxFrom].isResized = false;
     let total = listTweet[idxFrom].scrollTop + listTweet[idxFrom].height;
     for (let i = idxFrom + 1, len = listTweet.length; i < len; i++) {
       listTweet[i].scrollTop = total;

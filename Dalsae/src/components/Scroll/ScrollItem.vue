@@ -41,7 +41,7 @@ export default class ScrollItem extends Vue {
   async created() {
     this.$on('on-change-selected-key', this.OnChangeSelectedKey);
     this.$nextTick(() => {
-      this.SetHeight();
+      // this.SetHeight();
       this.obs = new ResizeObserver(() => {
         this.SetHeight();
       });
@@ -56,16 +56,18 @@ export default class ScrollItem extends Vue {
   }
 
   SetHeight() {
-    if (!this.data || (!this.data.isResized && !moduleOption.uiOption.isSmallTweet)) return;
-
-    const oldVal = this.data.height;
-    const newVal = this.$el.clientHeight;
-    if (newVal === 0 || oldVal === newVal) return;
-    this.data.height = newVal;
-    this.$emit('on-resize', {
-      oldVal: oldVal,
-      newVal: newVal,
-      key: this.data.key.toString()
+    if (!this.data) return;
+    // if (!this.data.isResized) return;
+    // this.data.height = newVal;
+    this.$nextTick(() => {
+      const oldVal = this.data.height;
+      const newVal = this.$el.clientHeight;
+      if (newVal === 0 || oldVal === newVal) return;
+      this.$emit('on-resize', {
+        oldVal: oldVal,
+        newVal: newVal,
+        key: this.data.key.toString()
+      });
     });
   }
 
