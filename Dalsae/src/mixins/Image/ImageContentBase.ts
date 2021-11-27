@@ -215,6 +215,18 @@ export class ImageContentBase extends Mixins(Vue) {
       const index = Number.parseInt(e.key) - 1;
       if (index >= this.media.length) return;
       moduleImage.ChangeState({ ...moduleImage.stateImage, index: index });
+    } else if (e.code === 'ArrowLeft') {
+      moduleImage.Reset();
+      const index = this.index - 1;
+      if (index < 0) return;
+      else if (index >= this.media.length) return;
+      moduleImage.ChangeState({ ...moduleImage.stateImage, index: index });
+    } else if (e.code === 'ArrowRight') {
+      moduleImage.Reset();
+      const index = this.index + 1;
+      if (index < 0) return;
+      else if (index >= this.media.length) return;
+      moduleImage.ChangeState({ ...moduleImage.stateImage, index: index });
     } else if (e.key === 'e') {
       this.Zoom();
     } else if (e.key === 'q') {
