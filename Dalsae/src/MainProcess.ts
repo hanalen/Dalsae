@@ -121,7 +121,7 @@ interface CreateWindowParam {
 ipcMain.on('AddChannelOn', (event, arg: IpcParam) => {
   mainWin?.webContents.send(arg.name, arg.data);
   for (const win of listWindow) {
-    if (win) win.webContents.send(arg.name, arg.data);
+    if (win) win?.webContents.send(arg.name, arg.data);
   }
 });
 
@@ -146,8 +146,8 @@ let imageWindow: BrowserWindow | undefined = undefined;
 ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
   if (param.type === 'image' && imageWindow) {
     //이미지 윈도우 요청일 경우 띄우고 종료
-    imageWindow.webContents.send('showimage', { ipcName: param.ipcName });
-    imageWindow.show();
+    imageWindow?.webContents.send('showimage', { ipcName: param.ipcName });
+    imageWindow?.show();
     return;
   }
   const windowState = windowStateSaver({
@@ -178,14 +178,14 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     windowState.manageWindow(window);
   }
   window.loadURL(`${baseUrl}#${param.url}`);
-  if (isDevMode) window.webContents.openDevTools();
+  if (isDevMode) window?.webContents.openDevTools();
   listWindow.push(window);
 
   window.on('ready-to-show', () => {
     if (param.type === 'image') window.webContents.send('showimage', { ipcName: param.ipcName });
     if (param.type === 'video') window.webContents.send('showvideo', { ipcName: param.ipcName });
     if (param.type === 'profile')
-      window.webContents.send('showprofile', { ipcName: param.ipcName });
+      window?.webContents.send('showprofile', { ipcName: param.ipcName });
     window.show();
   });
 
