@@ -4,7 +4,7 @@ import * as I from '@/Interfaces';
 import { moduleImage } from '@/store/modules/ImageStore';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleOption } from '@/store/modules/OptionStore';
-
+import * as Sentry from '@sentry/vue';
 @Component
 export class ImagePage extends Vue {
   indexContext = 0;
@@ -44,8 +44,13 @@ export class ImagePage extends Vue {
   }
 
   get media() {
-    if (!this.orgTweet) return [];
-    else return this.orgTweet.extended_entities.media;
+    try {
+      return this.orgTweet.extended_entities.media;
+    } catch (e) {
+      console.log(this.tweet);
+      Sentry.captureException(e);
+      return [];
+    }
   }
 
   get listProgress() {

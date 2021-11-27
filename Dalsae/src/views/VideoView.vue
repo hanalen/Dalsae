@@ -66,6 +66,7 @@ import { moduleModal } from '@/store/modules/ModalStore';
 import { IPCPipeLine, Messagetype } from '@/mixins';
 import { moduleUI } from '@/store/modules/UIStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
+import * as Sentry from '@sentry/vue';
 @Component
 export default class VideoView extends Mixins(Vue, IPCPipeLine) {
   bExpanded = false;
@@ -127,8 +128,12 @@ export default class VideoView extends Mixins(Vue, IPCPipeLine) {
   }
 
   get media() {
-    if (!this.tweet.orgTweet) return undefined;
-    else return this.tweet.extended_entities.media[0];
+    try {
+      return this.tweet.extended_entities.media[0];
+    } catch (e) {
+      console.log(this.tweet);
+      Sentry.captureException(e);
+    }
   }
 
   get tweet() {
