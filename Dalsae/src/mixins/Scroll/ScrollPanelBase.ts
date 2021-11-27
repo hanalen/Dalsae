@@ -322,7 +322,6 @@ export class ScrollPanelBase extends Vue {
 
   OnResizeTweet(resizeEvent: M.ResizeEvent) {
     const moveY = resizeEvent.newVal - resizeEvent.oldVal;
-    this.state.totalHeight += moveY;
     const idx = this.stateData.listData.findIndex(x => x.key == resizeEvent.key);
     const data = this.stateData.listData[idx];
     if (!data) return;
