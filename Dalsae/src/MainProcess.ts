@@ -59,7 +59,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload')
     }
   });
-  if (isDevMode && windowState.manageWindow) {
+  if (!isDevMode && windowState.manageWindow) {
     windowState.manageWindow(mainWin);
   }
 
@@ -174,7 +174,7 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     //이미지 윈도우 하나만 캐싱
     imageWindow = window;
   }
-  if (isDevMode && windowState.manageWindow) {
+  if (!isDevMode && windowState.manageWindow) {
     windowState.manageWindow(window);
   }
   window.loadURL(`${baseUrl}#${param.url}`);
