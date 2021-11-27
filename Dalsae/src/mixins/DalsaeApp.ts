@@ -175,7 +175,7 @@ export class DalsaeApp extends Vue {
         break;
       case I.E_HOTKEY.SHOWQT:
         if (selectTweet) {
-          moduleUtil.AddQtTweet(selectTweet.orgTweet.quoted_status);
+          moduleUtil.AddQtTweet(new I.Tweet(selectTweet.orgTweet.quoted_status));
         }
         break;
       case I.E_HOTKEY.SENDQT:
