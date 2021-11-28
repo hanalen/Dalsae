@@ -219,10 +219,10 @@ ipcMain.on('OpenWindow', (event, param: CreateWindowParam) => {
     }
     mainWin?.focus();
   });
-  electronLocalshortcut.register(window, 'ESC', () => {
+  electronLocalshortcut.register(window, 'Esc', () => {
     window.close();
   });
-  electronLocalshortcut.register(window, 'ENTER', () => {
+  electronLocalshortcut.register(window, 'Enter', () => {
     window.close();
   });
   electronLocalshortcut.register(window, 'F12', () => {
