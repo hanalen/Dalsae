@@ -10,6 +10,7 @@ import { eventBus } from '@/plugins';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
+import { Messagetype } from '@/mixins';
 @Component
 export class TweetInputBase extends Vue {
   @Ref()
@@ -295,7 +296,15 @@ export class TweetInputBase extends Vue {
     for (let i = 0; i < files.length; i++) {
       if (files[i].type === 'image/png') {
         const img = await this.FileToString(files[i].getAsFile());
-        this.AddImage(img);
+        if (img.length >= 5242880) {
+          moduleModal.AddMessage({
+            errorType: Messagetype.E_INFO,
+            message: '5MB가 넘는 이미지는 업로드 할 수 없습니다.',
+            time: 3
+          });
+        } else {
+          this.AddImage(img);
+        }
       }
     }
   }
