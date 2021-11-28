@@ -9,7 +9,26 @@ import {
 } from 'vue-cli-plugin-electron-builder/lib';
 const isDevelopment = process.env.NODE_ENV !== 'production';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import * as Sentry from '@sentry/electron';
 
+Sentry.init({
+  dsn: 'https://609f91d225d64a608adf180234225757@o146584.ingest.sentry.io/6083907',
+  beforeBreadcrumb(breadcrumb) {
+    if (breadcrumb.category !== 'console') return null;
+    else {
+      return breadcrumb;
+    }
+  },
+  beforeSend: (e: Sentry.Event) => {
+    if (e.user) {
+      delete e.user;
+    }
+    if (e.platform) {
+      delete e.platform;
+    }
+    return e;
+  }
+});
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWin: BrowserWindow | null;
