@@ -80,31 +80,31 @@ class StatePanel {
   constructor() {
     this.home = {
       tweetType: ETweetType.E_HOME,
-      index: -1,
+      index: 0,
       selectedId: '',
       isLoad: false
     };
     this.mention = {
       tweetType: ETweetType.E_MENTION,
-      index: -1,
+      index: 0,
       selectedId: '',
       isLoad: false
     };
     this.favorite = {
       tweetType: ETweetType.E_FAVORITE,
-      index: -1,
+      index: 0,
       selectedId: '',
       isLoad: false
     };
     this.open = {
       tweetType: ETweetType.E_OPEN,
-      index: -1,
+      index: 0,
       selectedId: '',
       isLoad: false
     };
     this.conv = {
       tweetType: ETweetType.E_CONV,
-      index: -1,
+      index: 0,
       selectedId: '',
       isLoad: false
     };
