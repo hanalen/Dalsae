@@ -29,21 +29,15 @@ export default class ScrollItem extends Vue {
   itemType!: string;
 
   selected = false;
-
-  @Watch('data', { immediate: true, deep: true })
-  OnChangeData() {
-    this.$nextTick(() => {
-      this.SetHeight();
-    });
-  }
   obs!: ResizeObserver;
 
   async created() {
     this.$on('on-change-selected-key', this.OnChangeSelectedKey);
     this.$nextTick(() => {
-      // this.SetHeight();
-      this.obs = new ResizeObserver(() => {
-        this.SetHeight();
+      this.obs = new ResizeObserver(entries => {
+        const entri = entries[0];
+        if (!entri) return;
+        this.SetHeight(this.data.height, Math.ceil(entri.contentRect.height));
       });
       this.obs.observe(this.$el);
     });
@@ -55,19 +49,13 @@ export default class ScrollItem extends Vue {
     };
   }
 
-  SetHeight() {
+  SetHeight(oldVal: number, newVal: number) {
     if (!this.data) return;
-    // if (!this.data.isResized) return;
-    // this.data.height = newVal;
-    this.$nextTick(() => {
-      const oldVal = this.data.height;
-      const newVal = this.$el.clientHeight;
-      if (newVal === 0 || oldVal === newVal) return;
-      this.$emit('on-resize', {
-        oldVal: oldVal,
-        newVal: newVal,
-        key: this.data.key.toString()
-      });
+    if (newVal === 0 || oldVal === newVal) return;
+    this.$emit('on-resize', {
+      oldVal: oldVal,
+      newVal: newVal,
+      key: this.data.key.toString()
     });
   }
 
