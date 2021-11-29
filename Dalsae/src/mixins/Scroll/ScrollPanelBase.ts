@@ -160,9 +160,7 @@ export class ScrollPanelBase extends Vue {
     this.CreateScrollData();
     if (this.isRendered()) {
       this.SetIndex();
-      // this.CreateComponent();
     } else {
-      console.log('not render');
       this.WaitTime();
     }
   }
@@ -171,7 +169,6 @@ export class ScrollPanelBase extends Vue {
     if (!this.listData) return;
     if (this.listData.length === 0) return;
     this.SetIndex();
-    // this.CreateComponent();
   }
   WaitTime() {
     setTimeout(() => {
@@ -179,7 +176,6 @@ export class ScrollPanelBase extends Vue {
         this.WaitTime();
       } else {
         this.SetIndex();
-        // this.CreateComponent();
       }
     }, 100);
   }
