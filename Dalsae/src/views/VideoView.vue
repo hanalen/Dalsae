@@ -129,9 +129,11 @@ export default class VideoView extends Mixins(Vue, IPCPipeLine) {
 
   get media() {
     try {
-      return this.tweet.extended_entities.media[0];
+      return this.tweet.orgTweet.extended_entities.media[0];
     } catch (e) {
       console.log(this.tweet);
+      console.log(this.tweet.orgTweet);
+      console.log(this.tweet.orgTweet.extended_entities);
       Sentry.captureException(e);
     }
   }
@@ -142,7 +144,6 @@ export default class VideoView extends Mixins(Vue, IPCPipeLine) {
 
   @Watch('tweet')
   OnWatchTweet(newVal: I.Tweet, oldVal: I.Tweet) {
-    console.log('watch tweet', oldVal, newVal);
     if (newVal.orgTweet) {
       // this.isLoaded
       setTimeout(() => {
