@@ -131,6 +131,7 @@ export default class VideoView extends Mixins(Vue, IPCPipeLine) {
     try {
       return this.tweet.orgTweet.extended_entities.media[0];
     } catch (e) {
+      console.log(this.tweet.orgUser.id_str);
       console.log(this.tweet);
       console.log(this.tweet.orgTweet);
       console.log(this.tweet.orgTweet.extended_entities);
