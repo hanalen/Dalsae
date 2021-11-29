@@ -15,7 +15,7 @@ import { moduleSysbar } from './SystemBarStore';
 import { moduleModal } from './ModalStore';
 import { EIPcType, Messagetype } from '@/mixins';
 import { moduleDm } from './DmStore';
-
+import * as Sentry from '@sentry/vue';
 class Account {
   async VerifyCredentials(): Promise<P.APIResp<I.User>> {
     const result = await twitterRequest.call.account.VerifyCredentials();
@@ -62,26 +62,21 @@ class Statuses {
     type: string
   ): Promise<P.APIResp<P.MediaResp>> {
     //이미지 전송 방식: base64 to binary -> 자르기 -> binary 자른 데이터 to base64 전송
-    console.log('------start upload-----');
     const result = await twitterRequest.call.media.UploadInit({
       command: 'INIT',
       total_bytes: media.length,
       media_type: type,
       media_category: media_category
     });
-    console.log(result);
     const loopCount = Math.ceil(media.length / 5242880);
-    console.log('loop count: ' + loopCount);
     for (let i = 0; i < loopCount; i++) {
       const chunk = media.substr(i * 5242880, 5242880);
-      console.log('chun size: ' + chunk.length);
-      const resp = await twitterRequest.call.media.UploadAppend({
+      await twitterRequest.call.media.UploadAppend({
         command: 'APPEND',
         media: btoa(chunk),
         media_id: result.data.media_id_string,
         segment_index: i
       });
-      console.log(resp);
     }
     const resFinal = await twitterRequest.call.media.UploadFinally({
       command: 'FINALIZE',
@@ -92,14 +87,12 @@ class Statuses {
         command: 'STATUS',
         media_id: result.data.media_id_string
       });
-      console.log(resStatus);
       const { check_after_secs, state } = resStatus.data.processing_info;
       if (state === 'failed' || state === 'succeeded') break;
       if (resStatus.data.processing_info.check_after_secs > 0) {
         await this.sleep(check_after_secs);
       }
     }
-    console.log(resFinal);
     return result;
   }
   async Upload(media: string, isDm = false): Promise<P.MediaResp | undefined> {
@@ -122,8 +115,6 @@ class Statuses {
     if (isDm) media_category = media_category.replace('tweet_', 'dm_');
 
     const type = str.substring(5, str.indexOf(';'));
-    console.log(media_category, type);
-    console.log(media);
     try {
       if (media.length >= 5242880 || isVideo) {
         //이미지가 아닐 경우 init, append 로직을 태워야 함
@@ -138,7 +129,7 @@ class Statuses {
         return result.data;
       }
     } catch (e) {
-      console.log(e);
+      Sentry.captureException(e);
     }
   }
   async Update(

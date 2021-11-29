@@ -67,7 +67,6 @@ class ProfileStore extends VuexModule {
 
   @Action
   ChangeSelectUser(user: I.User) {
-    console.log('change select user', user);
     this.context.commit('changeSelectUser', user);
   }
 

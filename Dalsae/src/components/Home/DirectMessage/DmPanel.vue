@@ -217,7 +217,6 @@ export default class DmPanel extends Vue {
   }
 
   OnDrop(e: DragEvent) {
-    console.log('on drop dm');
     if (!e.dataTransfer) return;
     const files = e.dataTransfer.items;
     for (let i = 0; i < files.length; i++) {

@@ -41,7 +41,6 @@
         v-on:paste="Paste"
         @input="OnChange"
         @keyup.esc="OnEsc"
-        @dragenter="OnDragEnter"
         @keyup="selectionChange"
         @click="selectionChange"
         @focus="selectionChange"

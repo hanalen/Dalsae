@@ -7,6 +7,7 @@ import { moduleSysbar } from '@/store/modules/SystemBarStore';
 import { moduleTweet } from '@/store/modules/TweetStore';
 import axios from 'axios';
 import twitterRequest, { CreateHeader } from './TwitterRequest';
+import * as Sentry from '@sentry/vue';
 export class UserStreaming {
   private idStr = '';
   private reader!: ReadableStreamDefaultReader<Uint8Array>;
@@ -43,7 +44,6 @@ export class UserStreaming {
       });
   }
   StopStreaming() {
-    console.log('stop streaming!!!  id: ', this.idStr);
     clearTimeout(this.timer);
     this.controller.abort();
     moduleSysbar.RemoveSystemBar(ESystemBar.EStreaming);
@@ -69,12 +69,9 @@ export class UserStreaming {
     return this.ReadStreaming();
   }
   private StreamingError(err: Error) {
-    console.log('Streaming Error');
     console.error(err);
+    Sentry.captureException(err);
     this.StopStreaming();
-    // setTimeout(() => {
-    //   this.StartStreaming();
-    // }, 3000);
   }
   private async ReadStreaming() {
     const result = await this.reader.read();
@@ -106,8 +103,6 @@ export class UserStreaming {
     try {
       const tweet: I.Tweet = JSON.parse(json);
       if (tweet.id_str != undefined) {
-        console.log(tweet.full_text);
-        console.log(tweet);
         moduleTweet.AddTweet({
           tweet: tweet,
           user_id_str: this.idStr,
@@ -116,8 +111,6 @@ export class UserStreaming {
         });
       } else {
         const dm: I.StreamingDM = JSON.parse(json);
-        console.log(dm.direct_message.text);
-        console.log(dm);
         if (dm.direct_message) {
           const idx = dm.direct_message.text.indexOf('https://t.co');
           if (idx > -1) {
@@ -127,7 +120,6 @@ export class UserStreaming {
               moduleDm.AddDm(resp.data.event);
               return;
             } else {
-              console.log('dm api error');
             }
           }
           //api리밋, entitie가 없을 경우 그냥 등록

@@ -299,10 +299,8 @@ class UtilStore extends VuexModule {
         } else {
           url = media.media_url_https;
         }
-        console.log('media url: ', url);
         const result = await axios.get(url, { responseType: 'blob' });
         const base64 = (await this.readFileAsync(result.data)) as string;
-        console.log(base64);
         listMedia.push(base64);
       }
     }
@@ -355,7 +353,6 @@ class UtilStore extends VuexModule {
   @Action
   async AddQtTweet(qtTweet: I.Tweet) {
     //파라메터는 무조건 qtTweet
-    console.log(qtTweet);
     if (qtTweet.orgTweet.quoted_status_id_str && !qtTweet.orgTweet.quoted_status) {
       moduleApi.statuses.Show(qtTweet.orgTweet.id_str);
     } else {

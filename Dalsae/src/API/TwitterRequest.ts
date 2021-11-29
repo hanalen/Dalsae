@@ -6,7 +6,7 @@ import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import axios, { AxiosError } from 'axios';
 const baseUrl = 'https://api.twitter.com/1.1';
-
+import * as Sentry from '@sentry/vue';
 function CreateOptions(
   method: P.Method,
   body: string | FormData,
@@ -44,7 +44,6 @@ export class TwitterRequest {
     else return false;
   }
   GetApiError(e: I.ResponseTwitterError): string {
-    console.log(e);
     let message = '';
     if (!e.errors || e.errors.length < 1) return '';
     switch (e.errors[0].code) {
@@ -137,7 +136,6 @@ export class TwitterRequest {
         headers: CreateHeader(oauth.GetHeader(params, method, url)),
         data: body
       });
-      console.log(resp);
       return { data: resp.data };
     } catch (e) {
       const error = e as any;
@@ -176,7 +174,6 @@ export class TwitterRequest {
         throw new Error(resp.statusText);
       } else {
         const body = (await resp.data) as string;
-        console.log(body);
 
         const pro = new Promise<P.APIResp<P.OAuthRes>>(resolve => {
           const arr = body.split('&').map(x => x.split('='));
@@ -190,7 +187,6 @@ export class TwitterRequest {
           };
           const resp: P.APIResp<P.OAuthRes> = { data: oauth };
           arr.forEach(item => {
-            console.log(item);
             if (item[0] === 'oauth_callback_confirmed') {
               oauth.oauth_callback_confirmed = item[1] === 'true';
             } else if (item[0] === 'oauth_token') {
@@ -211,8 +207,6 @@ export class TwitterRequest {
         return pro;
       }
     } catch (e) {
-      console.log('catch');
-      console.log(e);
       const error = e as any;
       if (error.response) {
         const errorMsg = this.GetApiError(error.response.data);
@@ -224,6 +218,7 @@ export class TwitterRequest {
           time: 3,
           message: (e as Error).message
         });
+        Sentry.captureException(e);
       }
       return e as Promise<P.APIResp<P.OAuthRes>>;
     }
@@ -245,7 +240,6 @@ export class TwitterRequest {
         headers: CreateHeader(oauth.GetHeader(undefined, method, url), 'application/json'),
         data: JSON.stringify(params.data)
       });
-      console.log(resp);
       return { data: resp.data };
     } catch (e) {
       const error = e as any;
@@ -296,11 +290,8 @@ export class TwitterRequest {
         headers: header,
         data: body
       });
-      console.log(resp);
       return { data: resp.data };
     } catch (e) {
-      console.log('catch');
-      console.log(e);
       const error = e as any;
       if (error.response) {
         const errorMsg = this.GetApiError(error.response.data);

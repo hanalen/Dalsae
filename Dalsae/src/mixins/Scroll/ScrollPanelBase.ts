@@ -107,11 +107,9 @@ export class ScrollPanelBase extends Vue {
 
   get listVisible() {
     return this.stateData.listVisible;
-    // return this.stateData.listData.slice(this.state.startIndex, this.state.endIndex);
   }
 
   ScrollToIndex(newVal: number) {
-    console.log('index panel', newVal);
     if (newVal === -1) return;
     const selectData = this.stateData.listData[newVal];
     if (!selectData) return;

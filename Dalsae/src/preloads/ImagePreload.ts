@@ -6,7 +6,7 @@ import fs from 'fs';
 import Axios from 'axios';
 import http from 'http';
 import { EIPcType } from '@/mixins';
-
+import * as Sentry from '@sentry/vue';
 function CheckFolder(path: string) {
   if (fs.existsSync(path) === false) {
     fs.mkdirSync(path);
@@ -43,13 +43,12 @@ export const imagePreload = {
         })
         .on('end', function() {
           file.end();
-          console.log('down ok~');
+          Sentry.captureMessage('image ok');
         })
         .on('error', function(err) {
           file.end();
           callback(index, 0, true);
-          console.log('img down error!!!');
-          console.log(err);
+          Sentry.captureException(err);
         });
     });
   },

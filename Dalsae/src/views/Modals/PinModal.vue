@@ -39,13 +39,5 @@ import { PinModalBase } from '@/mixins';
 import { moduleModal } from '@/store/modules/ModalStore';
 
 @Component
-export default class PinModal extends PinModalBase {
-  async crated() {
-    console.log('msg modal crated');
-  }
-
-  async prepare() {
-    console.log('pin modal prepare');
-  }
-}
+export default class PinModal extends PinModalBase {}
 </script>

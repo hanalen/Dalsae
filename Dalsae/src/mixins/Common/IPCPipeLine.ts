@@ -49,15 +49,12 @@ export class IPCPipeLine extends Vue {
     //이미지 윈도우 전용
     window.ipc.ipcPipe.on(EIPcType.EShowIage, (ipcData: { ipcName: string }) => {
       window.ipc.ipcPipe.once(`switter_${ipcData.ipcName}`, (switter: I.Switter) => {
-        console.log('ipc once switter', switter);
         moduleSwitter.InitSwitter(switter);
       });
       window.ipc.ipcPipe.once(`option_${ipcData.ipcName}`, (option: I.UIOption) => {
-        console.log('ipc once option', option);
         moduleOption.ChangeOption(option);
       });
       window.ipc.ipcPipe.once(`tweet_${ipcData.ipcName}`, (tweet: I.Tweet) => {
-        console.log('ipc once tweet', tweet);
         moduleImage.SetTweet(tweet);
       });
 
@@ -68,15 +65,12 @@ export class IPCPipeLine extends Vue {
 
     window.ipc.ipcPipe.on(EIPcType.EShowVideo, (ipcData: { ipcName: string }) => {
       window.ipc.ipcPipe.once(`switter_${ipcData.ipcName}`, (switter: I.Switter) => {
-        console.log('ipc once switter', switter);
         moduleSwitter.InitSwitter(switter);
       });
       window.ipc.ipcPipe.once(`option_${ipcData.ipcName}`, (option: I.UIOption) => {
-        console.log('ipc once option', option);
         moduleOption.ChangeOption(option);
       });
       window.ipc.ipcPipe.once(`tweet_${ipcData.ipcName}`, (tweet: I.Tweet) => {
-        console.log('ipc once tweet', tweet);
         moduleImage.SetTweet(tweet);
       });
 
@@ -87,7 +81,6 @@ export class IPCPipeLine extends Vue {
 
     window.ipc.ipcPipe.on(EIPcType.EShowProfile, (ipcData: { ipcName: string }) => {
       window.ipc.ipcPipe.once(`switter_${ipcData.ipcName}`, (switter: I.Switter) => {
-        console.log('ipc once switter', switter);
         moduleSwitter.InitSwitter(switter);
       });
       window.ipc.ipcPipe.once(`followdatas_${ipcData.ipcName}`, (followDatas: I.FollowDatas) => {

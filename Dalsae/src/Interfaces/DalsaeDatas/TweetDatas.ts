@@ -397,11 +397,7 @@ export class TweetDatas {
     if (!tweets) throw Error('No ListTweets');
     if (!tweets.find(x => x.id_str === tweet.id_str)) {
       const idx = this.FindIndex(tweet, tweets);
-      // const prevTweet = tweets[idx - 1];
-      // const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
       tweets.splice(idx, 0, new I.Tweet(tweet));
-    } else {
-      console.log('key exists');
     }
     eventBus.$emit('AddedTweet', ETweetType.E_CONV);
   }

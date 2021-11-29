@@ -136,7 +136,6 @@ export class DalsaeApp extends Vue {
   }
 
   async OnKeyDownHotKey(hotKeyType: I.E_HOTKEY) {
-    console.log('hotkey', hotKeyType);
     let selectTweet: I.Tweet | undefined = undefined;
     if (moduleUI.selectTweet) selectTweet = moduleUI.selectTweet;
     switch (hotKeyType) {

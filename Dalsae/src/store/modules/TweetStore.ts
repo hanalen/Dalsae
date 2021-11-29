@@ -163,7 +163,6 @@ class TweetStore extends VuexModule {
     let isAddMention = false;
     for (const item of listConcatTweets) {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
-        console.log('exists');
         return; //exists
       }
       if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
@@ -210,7 +209,6 @@ class TweetStore extends VuexModule {
     }
     for (const item of listConcatTweets) {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
-        console.log('exists');
         return; //exists
       }
       if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
@@ -239,7 +237,6 @@ class TweetStore extends VuexModule {
     const orgTweets = tweets.tweets.opens;
 
     if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
-      console.log('exists');
       return; //exists
     }
     orgTweets.splice(0, 0, new I.Tweet(tweet));
@@ -271,7 +268,6 @@ class TweetStore extends VuexModule {
     const orgTweets = tweets.tweets.conv;
 
     if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
-      console.log('exists');
       return; //exists
     }
     if (!CheckShowMentionTweet(tweet, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
@@ -340,7 +336,6 @@ class TweetStore extends VuexModule {
     if (homes) {
       homes.forEach(item => {
         if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
-          console.log('update rt fav');
           item.orgTweet.retweeted = tweet.orgTweet.retweeted;
           item.orgTweet.favorited = tweet.orgTweet.favorited;
         }
@@ -429,7 +424,6 @@ class TweetStore extends VuexModule {
     const find = this.stateTweet.tweets.find(x => x.key === user_id_str);
     if (find) {
       find.tweets.conv.splice(0, 999);
-      console.log(find.tweets.conv);
     }
   }
 
@@ -450,7 +444,6 @@ class TweetStore extends VuexModule {
 
   @Mutation
   private stopStreaming(idStr: string) {
-    console.log('stop streaming');
     const idx = this.stateStreaming.streamings.findIndex(x => x.key === idStr);
     if (idx < 0) return;
     const streaming = this.stateStreaming.streamings[idx];

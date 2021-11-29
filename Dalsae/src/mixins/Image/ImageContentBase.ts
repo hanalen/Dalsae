@@ -197,7 +197,6 @@ export class ImageContentBase extends Mixins(Vue) {
     const url = this.media[index].media_url_https;
     copyImageToClipboard(url)
       .then(() => {
-        console.log('Image Copied');
         moduleModal.AddMessage({
           errorType: Messagetype.E_INFO,
           message: '이미지가 복사 되었습니다',

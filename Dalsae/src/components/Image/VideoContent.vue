@@ -30,19 +30,5 @@ import * as I from '@/Interfaces';
 import * as MIX from '@/mixins';
 
 @Component
-export default class VideoContent extends Mixins(MIX.VideoContentBase) {
-  ClickLink(e: Event) {
-    // const listTweet: I.Tweet[] = TweetDataManager.listTweet as I.Tweet[];
-    // console.log(listTweet[this.index]);
-    // window.preload.image.OpenImageWindow(
-    //   listTweet[this.index].id_str.toString(),
-    //   listTweet[this.index]
-    // );
-    // this.index++;
-  }
-
-  async ClickModal() {
-    // await this.ShowMessage('modal test');
-  }
-}
+export default class VideoContent extends Mixins(MIX.VideoContentBase) {}
 </script>

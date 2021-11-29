@@ -38,7 +38,6 @@ export class PinModalBase extends Vue {
     const result = await moduleApi.oauth.ReqToken({ oauth_callback: 'oob' });
     if (!result.data) return;
     result.data.oauth_token_secret;
-    console.log(result.data);
     window.ipc.browser.OpenBrowser(
       `https://api.twitter.com/oauth/authorize?oauth_token=${result.data.oauth_token}`
     );

@@ -312,28 +312,22 @@ export class TweetSelectorBase extends Vue {
   }
 
   OnClickReply(value: number) {
-    console.log('reply');
-    console.log(this.tweet.orgTweet, this.tweet.orgUser);
     moduleUtil.Reply(this.tweet);
   }
 
   OnClickReplyAll(value: number) {
-    console.log('reply all');
     moduleUtil.ReplyAll(this.tweet);
   }
 
   OnClickRetweet(value: number) {
-    console.log('retweet');
     moduleUtil.Retweet(this.tweet);
   }
 
   OnClickQT(value: number) {
-    console.log('qt');
     moduleUtil.OnClickQt(this.tweet);
   }
 
   OnClickFavorite(value: number) {
-    console.log('favo');
     moduleApi.favorites.Create(this.tweet);
   }
 
@@ -350,27 +344,22 @@ export class TweetSelectorBase extends Vue {
   }
 
   OnClickHash(value: number) {
-    console.log(value);
     const context = this.listContext.find(x => x.value === value);
     if (!context) return;
     const hash = this.tweet.entities.hashtags.find(x => x.text === context.title.replace('#', ''));
-    console.log('hash', hash);
     if (!hash) return;
     moduleUtil.AddHash(hash);
   }
 
   OnClickWeb(value: number) {
-    console.log('web');
     moduleUtil.OnClickViewWeb(this.tweet);
   }
 
   OnClickCopy(value: number) {
-    console.log('copy');
     moduleUtil.CopyTweet(this.tweet);
   }
 
   OnClickMuteClient(value: number) {
-    console.log(value);
     const client = moduleOption.muteOption.client.concat(this.via);
     const muteoption = { ...moduleOption.muteOption, client: client };
     moduleOption.ChangeMuteOption(muteoption);
@@ -386,7 +375,6 @@ export class TweetSelectorBase extends Vue {
   }
 
   OnClickDelete(value: number) {
-    console.log('delete');
     moduleApi.statuses.Destroy(this.tweet);
   }
 

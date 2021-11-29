@@ -14,7 +14,6 @@ export class ImagePage extends Vue {
 
   @Watch('tweet')
   OnWatchTweet(newVal: I.Tweet, oldVal: I.Tweet) {
-    console.log('watch tweet', oldVal, newVal);
     moduleImage.Reset();
     if (newVal.orgTweet) {
       // this.isLoaded
@@ -47,7 +46,6 @@ export class ImagePage extends Vue {
     try {
       return this.orgTweet.extended_entities.media;
     } catch (e) {
-      console.log(this.tweet);
       Sentry.captureException(e);
       return [];
     }

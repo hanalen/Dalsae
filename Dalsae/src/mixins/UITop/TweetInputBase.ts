@@ -153,14 +153,6 @@ export class TweetInputBase extends Vue {
     }
   }
 
-  OnDragEnter(e: Event) {
-    console.log(e);
-  }
-
-  OnDragEnd(e: Event) {
-    console.log(e);
-  }
-
   OnEsc(e: Event) {
     this.inputText = '';
     this.listImage = [];
