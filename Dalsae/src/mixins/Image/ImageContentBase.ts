@@ -18,6 +18,10 @@ export class ImageContentBase extends Mixins(Vue) {
     return moduleImage.stateImage.index;
   }
 
+  set index(index: number) {
+    moduleImage.ChangeState({ ...moduleImage.stateImage, index: index });
+  }
+
   get isZoom() {
     return moduleImage.stateImage.isZoom;
   }
@@ -217,19 +221,19 @@ export class ImageContentBase extends Mixins(Vue) {
       moduleImage.Reset();
       const index = Number.parseInt(e.key) - 1;
       if (index >= this.media.length) return;
-      moduleImage.ChangeState({ ...moduleImage.stateImage, index: index });
+      this.index = index;
     } else if (e.code === 'ArrowLeft') {
-      moduleImage.Reset();
       const index = this.index - 1;
       if (index < 0) return;
       else if (index >= this.media.length) return;
-      moduleImage.ChangeState({ ...moduleImage.stateImage, index: index });
-    } else if (e.code === 'ArrowRight') {
       moduleImage.Reset();
+      this.index = index;
+    } else if (e.code === 'ArrowRight') {
       const index = this.index + 1;
       if (index < 0) return;
       else if (index >= this.media.length) return;
-      moduleImage.ChangeState({ ...moduleImage.stateImage, index: index });
+      moduleImage.Reset();
+      this.index = index;
     } else if (e.key === 'e') {
       this.Zoom();
     } else if (e.key === 'q') {
