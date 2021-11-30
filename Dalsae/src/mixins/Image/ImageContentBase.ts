@@ -209,9 +209,9 @@ export class ImageContentBase extends Mixins(Vue) {
       })
       .catch((e: Error) => {
         moduleModal.AddMessage({
-          errorType: Messagetype.E_INFO,
+          errorType: Messagetype.E_ERROR,
           message: `이미지가 복사에 실패했습니다. ${e.message}`,
-          time: 1
+          time: 3
         });
       });
   }
