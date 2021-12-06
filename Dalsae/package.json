@@ -25,6 +25,7 @@
     "electron-builder": "^22.13.1",
     "electron-localshortcut": "^3.2.1",
     "electron-log": "^4.2.4",
+    "electron-updater": "^4.6.1",
     "html-entities": "^2.3.2",
     "moment": "^2.29.1",
     "video.js": "^7.15.4",
