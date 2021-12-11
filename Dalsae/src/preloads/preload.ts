@@ -125,6 +125,9 @@ const ipcPipe = {
   getData: (name: string) => {
     ipcRenderer.send('GetData', name);
   },
+  restart: () => {
+    ipcRenderer.send('restart_app');
+  },
   send: (channel: EIPcType | string, data: any | undefined) => {
     ipcRenderer.send('AddChannelOn', { name: channel, data: data, value: '' });
   },

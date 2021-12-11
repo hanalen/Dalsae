@@ -1,6 +1,7 @@
 'use strict';
 
 import { app, protocol, BrowserWindow, ipcMain, dialog, screen } from 'electron';
+import { autoUpdater, ProgressInfo, UpdateDownloadedEvent, UpdateFileInfo } from 'electron-updater';
 import path from 'path';
 import Log from 'electron-log';
 import {
@@ -69,6 +70,7 @@ function createWindow() {
     width: isDevMode ? 1900 : windowState.width,
     height: isDevMode ? 1100 : windowState.height,
     title: 'dalsae',
+    show: false,
     autoHideMenuBar: true,
     webPreferences: {
       // Use pluginOptions.`nodeIntegration, leave this alone
@@ -101,6 +103,10 @@ function createWindow() {
   }
   if (isDevMode) mainWin.webContents.openDevTools();
 
+  mainWin.on('ready-to-show', () => {
+    autoUpdater.checkForUpdates();
+    mainWin?.show();
+  });
   mainWin.on('closed', () => {
     mainWin = null;
     for (const win of listWindow) {
@@ -299,6 +305,27 @@ app.on('ready', async () => {
     // }
   }
   createWindow();
+});
+
+ipcMain.once('restart_app', () => {
+  autoUpdater.quitAndInstall(true, true);
+});
+
+autoUpdater.on('update-available', (info: UpdateFileInfo) => {
+  mainWin?.webContents.send('updateavailable', info);
+});
+
+autoUpdater.on('error', (err: Error) => {
+  mainWin?.webContents.send('updateerror', err);
+});
+autoUpdater.on('download-progress', (info: ProgressInfo) => {
+  mainWin?.webContents.send('progress', info);
+  // sendStatusToWindow(log_message);
+});
+autoUpdater.on('update-downloaded', (info: UpdateDownloadedEvent) => {
+  // mainWindow.webContents.send('update_downloaded');
+  if (info.releaseName) Sentry.captureMessage(info.releaseName);
+  mainWin?.webContents.send('updatedownloaded', info);
 });
 
 // Exit cleanly on request from parent process in development mode.
