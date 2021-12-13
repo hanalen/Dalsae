@@ -436,6 +436,7 @@ class TweetStore extends VuexModule {
   @Action
   ClearConv(user_id_str: string) {
     this.context.commit('clearConv', user_id_str);
+    moduleDom.scrollConv?.panel.Clear();
   }
 
   @Mutation
