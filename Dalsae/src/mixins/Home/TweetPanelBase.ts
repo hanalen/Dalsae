@@ -116,8 +116,8 @@ export class TweetPanelBase extends Vue {
 
   KeyDown(e: KeyboardEvent) {
     if (!moduleUtil.isFocusPanel || document?.activeElement?.tagName === 'TEXTAREA') return;
-    if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
-      if (e.code === 'ArrowUp') {
+    if (!e.altKey && !e.shiftKey) {
+      if (e.code === 'ArrowUp' && !e.ctrlKey) {
         e.preventDefault();
         if (moduleUI.stateContext.isShow) {
           let index = moduleUI.stateContext.index - 1;
@@ -126,7 +126,7 @@ export class TweetPanelBase extends Vue {
         } else {
           this.ArrowUp();
         }
-      } else if (e.code === 'ArrowDown') {
+      } else if (e.code === 'ArrowDown' && !e.ctrlKey) {
         e.preventDefault();
         if (moduleUI.stateContext.isShow) {
           let index = moduleUI.stateContext.index + 1;
@@ -135,6 +135,30 @@ export class TweetPanelBase extends Vue {
           moduleUI.SetStateContext({ ...moduleUI.stateContext, index: index });
         } else {
           this.ArrowDown();
+        }
+      } else if (e.code === 'ArrowUp' && e.ctrlKey && !moduleUI.stateContext.isShow) {
+        const tweet = moduleUI.selectTweet;
+        if (!tweet) return;
+        const tweets = moduleUI.selectTweetList;
+        if (!tweets) return;
+        const idx = tweets.findIndex(x => x.id_str === tweet.id_str);
+        for (let i = idx - 1; i > -1; i--) {
+          if (tweets[i].user.id_str === tweet.user.id_str) {
+            moduleUtil.ScrollToIndex(i);
+            break;
+          }
+        }
+      } else if (e.code === 'ArrowDown' && e.ctrlKey && !moduleUI.stateContext.isShow) {
+        const tweet = moduleUI.selectTweet;
+        if (!tweet) return;
+        const tweets = moduleUI.selectTweetList;
+        if (!tweets) return;
+        const idx = tweets.findIndex(x => x.id_str === tweet.id_str);
+        for (let i = idx + 1; i < tweets.length; i++) {
+          if (tweets[i].user.id_str === tweet.user.id_str) {
+            moduleUtil.ScrollToIndex(i);
+            break;
+          }
         }
       }
     }

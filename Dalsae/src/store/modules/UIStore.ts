@@ -49,7 +49,7 @@ class StateInput {
   }
 }
 
-class StatePanel {
+export class StatePanel {
   listIcon = [
     {
       name: 'mdi-home',
@@ -158,6 +158,22 @@ class UIStore extends VuexModule {
     }
     if (!state || !listTweet) return undefined;
     else return listTweet[state.index];
+  }
+
+  get selectTweetList() {
+    switch (this.stateUI.selectMenu) {
+      case ETweetType.E_HOME:
+        return moduleTweet.homes;
+      case ETweetType.E_MENTION:
+        return moduleTweet.mentions;
+      case ETweetType.E_FAVORITE:
+        return moduleTweet.favorites;
+      case ETweetType.E_OPEN:
+        return moduleTweet.opens;
+      case ETweetType.E_CONV:
+        return moduleTweet.convs;
+    }
+    return moduleTweet.homes;
   }
 
   @Mutation

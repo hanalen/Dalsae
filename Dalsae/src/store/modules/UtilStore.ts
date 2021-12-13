@@ -8,7 +8,7 @@ import { moduleTweet } from '@/store/modules/TweetStore';
 import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
 import { ContextItem, EIPcType, Messagetype } from '@/mixins';
-import { moduleUI } from './UIStore';
+import { IStatePanel, moduleUI, StatePanel } from './UIStore';
 import { moduleApi } from './APIStore';
 import copy from 'copy-to-clipboard';
 import { moduleProfile } from './ProfileStore';
@@ -364,6 +364,54 @@ class UtilStore extends VuexModule {
       });
     }
     moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 5 });
+  }
+
+  @Action
+  ScrollToIndex(index: number) {
+    const tweetType = moduleUI.stateUI.selectMenu;
+    const statePanel = moduleUI.statePanel;
+    if (tweetType === ETweetType.E_HOME) {
+      const home: IStatePanel = {
+        ...statePanel.home,
+        index: index,
+        selectedId: moduleTweet.homes ? moduleTweet.homes[index].id_str : ''
+      };
+      const state: StatePanel = { ...statePanel, home: home };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_MENTION) {
+      const mention: IStatePanel = {
+        ...statePanel.mention,
+        index: index,
+        selectedId: moduleTweet.mentions ? moduleTweet.mentions[index].id_str : ''
+      };
+      const state: StatePanel = { ...statePanel, mention: mention };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_FAVORITE) {
+      const favorite: IStatePanel = {
+        ...statePanel.favorite,
+        index: index,
+        selectedId: moduleTweet.favorites ? moduleTweet.favorites[index].id_str : ''
+      };
+      const state: StatePanel = { ...statePanel, favorite: favorite };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_OPEN) {
+      const open: IStatePanel = {
+        ...statePanel.open,
+        index: index,
+        selectedId: moduleTweet.opens ? moduleTweet.opens[index].id_str : ''
+      };
+      const state: StatePanel = { ...statePanel, open: open };
+      this.context.commit('setStatePanel', state);
+    } else if (tweetType === ETweetType.E_CONV) {
+      const conv: IStatePanel = {
+        ...statePanel.conv,
+        index: index,
+        selectedId: moduleTweet.convs ? moduleTweet.convs[index].id_str : ''
+      };
+      const state: StatePanel = { ...statePanel, conv: conv };
+      this.context.commit('setStatePanel', state);
+    }
+    moduleDom.stateScrollPanel.ScrollToIndex(index);
   }
 }
 export const moduleUtil = getModule(UtilStore);
