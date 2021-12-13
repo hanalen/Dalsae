@@ -193,12 +193,12 @@ export class DalsaeApp extends Vue {
         if (selectTweet) eventBus.$emit('ShowContextMenu', selectTweet.id_str);
         break;
       case I.E_HOTKEY.HOME:
-        eventBus.$emit('PanelHome', moduleUI.stateUI.selectMenu);
-        moduleUI.Home(moduleUI.stateUI.selectMenu);
+        moduleUtil.ScrollToIndex(0);
         break;
       case I.E_HOTKEY.END:
-        eventBus.$emit('PanelEnd', moduleUI.stateUI.selectMenu);
-        moduleUI.End(moduleUI.stateUI.selectMenu);
+        if (moduleUI.selectTweetList) {
+          moduleUtil.ScrollToIndex(moduleUI.selectTweetList.length - 1);
+        }
         break;
       case I.E_HOTKEY.SHOWIMAGE:
         if (selectTweet) moduleUtil.OpenImage(selectTweet);

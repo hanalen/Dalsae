@@ -9,6 +9,7 @@ import { moduleSwitter } from './SwitterStore';
 import { moduleOption } from './OptionStore';
 import { ContextItem } from '@/mixins';
 import { moduleDom } from './DomStore';
+import { moduleUtil } from './UtilStore';
 
 export interface IStatePanel {
   tweetType: ETweetType;
@@ -176,6 +177,22 @@ class UIStore extends VuexModule {
     return moduleTweet.homes;
   }
 
+  get selectPanel() {
+    switch (this.stateUI.selectMenu) {
+      case ETweetType.E_HOME:
+        return this.statePanel.home;
+      case ETweetType.E_MENTION:
+        return this.statePanel.mention;
+      case ETweetType.E_FAVORITE:
+        return this.statePanel.favorite;
+      case ETweetType.E_CONV:
+        return this.statePanel.conv;
+      case ETweetType.E_OPEN:
+        return this.statePanel.open;
+    }
+    return this.statePanel.home;
+  }
+
   @Mutation
   private setStateUI(state: StateUI) {
     this.stateUI = state;
@@ -330,233 +347,27 @@ class UIStore extends VuexModule {
   ChangeSelectTweet(idStr: string) {
     let panel: IStatePanel | undefined = undefined;
     let listTweet: I.Tweet[] | undefined = undefined;
-    if (this.stateUI.selectMenu === ETweetType.E_HOME) {
-      panel = this.statePanel.home;
-      listTweet = moduleTweet.homes;
-      if (!panel || !listTweet) return;
-      const idx = listTweet.findIndex(x => x.id_str === idStr);
-      const home: IStatePanel = {
-        ...this.statePanel.home,
-        index: idx,
-        selectedId: idStr
-      };
-      const state: StatePanel = { ...this.statePanel, home: home };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(idx);
-    } else if (this.stateUI.selectMenu === ETweetType.E_MENTION) {
-      panel = this.statePanel.mention;
-      listTweet = moduleTweet.mentions;
-      if (!panel || !listTweet) return;
-      const idx = listTweet.findIndex(x => x.id_str === idStr);
-      const mention: IStatePanel = {
-        ...this.statePanel.mention,
-        index: idx,
-        selectedId: idStr
-      };
-      const state: StatePanel = { ...this.statePanel, mention: mention };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(idx);
-    } else if (this.stateUI.selectMenu === ETweetType.E_FAVORITE) {
-      panel = this.statePanel.favorite;
-      listTweet = moduleTweet.favorites;
-      if (!panel || !listTweet) return;
-      const idx = listTweet.findIndex(x => x.id_str === idStr);
-      const favorite: IStatePanel = {
-        ...this.statePanel.home,
-        index: idx,
-        selectedId: idStr
-      };
-      const state: StatePanel = { ...this.statePanel, favorite: favorite };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(idx);
-    } else if (this.stateUI.selectMenu === ETweetType.E_CONV) {
-      panel = this.statePanel.conv;
-      listTweet = moduleTweet.convs;
-      if (!panel || !listTweet) return;
-      const idx = listTweet.findIndex(x => x.id_str === idStr);
-      const conv: IStatePanel = {
-        ...this.statePanel.conv,
-        index: idx,
-        selectedId: idStr
-      };
-      const state: StatePanel = { ...this.statePanel, conv: conv };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(idx);
-    } else if (this.stateUI.selectMenu === ETweetType.E_OPEN) {
-      panel = this.statePanel.open;
-      listTweet = moduleTweet.opens;
-      if (!panel || !listTweet) return;
-      const idx = listTweet.findIndex(x => x.id_str === idStr);
-      const open: IStatePanel = {
-        ...this.statePanel.open,
-        index: idx,
-        selectedId: idStr
-      };
-      const state: StatePanel = { ...this.statePanel, open: open };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(idx);
-    }
-  }
 
-  @Action
-  Up(): boolean {
-    let panel: IStatePanel | undefined = undefined;
-    let listTweet: I.Tweet[] | undefined = undefined;
     if (this.stateUI.selectMenu === ETweetType.E_HOME) {
       panel = this.statePanel.home;
       listTweet = moduleTweet.homes;
-      if (!panel || !listTweet) return true;
-      const index = panel.index - 1;
-      if (index < 0) return true; //focus input
-      const home: IStatePanel = {
-        ...this.statePanel.home,
-        index: index,
-        selectedId: listTweet[index].id_str
-      };
-      const state: StatePanel = { ...this.statePanel, home: home };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_MENTION) {
       panel = this.statePanel.mention;
       listTweet = moduleTweet.mentions;
-      if (!panel || !listTweet) return true;
-      const index = panel.index - 1;
-      if (index < 0) return true; //focus input
-      const mention: IStatePanel = {
-        ...this.statePanel.mention,
-        index: index,
-        selectedId: listTweet[index].id_str
-      };
-      const state: StatePanel = { ...this.statePanel, mention: mention };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_FAVORITE) {
       panel = this.statePanel.favorite;
       listTweet = moduleTweet.favorites;
-      if (!panel || !listTweet) return true;
-      const index = panel.index - 1;
-      if (index < 0) return true; //focus input
-      const favorite: IStatePanel = {
-        ...this.statePanel.favorite,
-        index: index,
-        selectedId: listTweet[index].id_str
-      };
-      const state: StatePanel = { ...this.statePanel, favorite: favorite };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_CONV) {
       panel = this.statePanel.conv;
       listTweet = moduleTweet.convs;
-      if (!panel || !listTweet) return true;
-      const index = panel.index - 1;
-      if (index < 0) return true; //focus input
-      const conv: IStatePanel = {
-        ...this.statePanel.conv,
-        index: index,
-        selectedId: listTweet[index].id_str
-      };
-      const state: StatePanel = { ...this.statePanel, conv: conv };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(index);
     } else if (this.stateUI.selectMenu === ETweetType.E_OPEN) {
       panel = this.statePanel.open;
       listTweet = moduleTweet.opens;
-      if (!panel || !listTweet) return true;
-      const index = panel.index - 1;
-      if (index < 0) return true; //focus input
-      const opens: IStatePanel = {
-        ...this.statePanel.open,
-        index: index,
-        selectedId: listTweet[index].id_str
-      };
-      const state: StatePanel = { ...this.statePanel, open: opens };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(index);
     }
-    return false;
-  }
-
-  @Action
-  Down(): boolean {
-    let panel: IStatePanel | undefined = undefined;
-    let listTweet: I.Tweet[] | undefined = undefined;
-    if (this.stateUI.selectMenu === ETweetType.E_HOME) {
-      panel = this.statePanel.home;
-      listTweet = moduleTweet.homes;
-      if (!panel || !listTweet) return true;
-      const index = panel.index + 1;
-      const len = listTweet.length;
-      if (index >= len) return true; //end
-      const home: IStatePanel = {
-        ...this.statePanel.home,
-        index: index,
-        selectedId: listTweet[index].id_str
-      };
-      const state: StatePanel = { ...this.statePanel, home: home };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(index);
-    } else if (this.stateUI.selectMenu === ETweetType.E_MENTION) {
-      panel = this.statePanel.mention;
-      listTweet = moduleTweet.mentions;
-      if (!panel || !listTweet) return true;
-      const index = panel.index + 1;
-      const len = listTweet.length;
-      if (index >= len) return true; //end
-      const mention: IStatePanel = {
-        ...this.statePanel.mention,
-        index: index,
-        selectedId: listTweet[index].id_str
-      };
-      const state: StatePanel = { ...this.statePanel, mention: mention };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(index);
-    } else if (this.stateUI.selectMenu === ETweetType.E_FAVORITE) {
-      panel = this.statePanel.favorite;
-      listTweet = moduleTweet.favorites;
-      if (!panel || !listTweet) return true;
-      const index = panel.index + 1;
-      const len = listTweet.length;
-      if (index >= len) return true; //end
-      const favorite: IStatePanel = {
-        ...this.statePanel.favorite,
-        index: index,
-        selectedId: listTweet[index].id_str
-      };
-      const state: StatePanel = { ...this.statePanel, favorite: favorite };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(index);
-    } else if (this.stateUI.selectMenu === ETweetType.E_CONV) {
-      panel = this.statePanel.conv;
-      listTweet = moduleTweet.convs;
-      if (!panel || !listTweet) return true;
-      const index = panel.index + 1;
-      const len = listTweet.length;
-      if (index >= len) return true; //end
-      const convs: IStatePanel = {
-        ...this.statePanel.conv,
-        index: index,
-        selectedId: listTweet[index].id_str
-      };
-      const state: StatePanel = { ...this.statePanel, conv: convs };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(index);
-    } else if (this.stateUI.selectMenu === ETweetType.E_OPEN) {
-      panel = this.statePanel.open;
-      listTweet = moduleTweet.opens;
-      if (!panel || !listTweet) return true;
-      const index = panel.index + 1;
-      const len = listTweet.length;
-      if (index >= len) return true; //end
-      const open: IStatePanel = {
-        ...this.statePanel.open,
-        index: index,
-        selectedId: listTweet[index].id_str
-      };
-      const state: StatePanel = { ...this.statePanel, conv: open };
-      this.context.commit('setStatePanel', state);
-      moduleDom.stateScrollPanel.ScrollToIndex(index);
-    }
-    return false;
+    let idx = 0;
+    if (!panel || !listTweet) return;
+    idx = listTweet.findIndex(x => x.id_str === idStr);
+    moduleUtil.ScrollToIndex(idx);
   }
 
   @Mutation

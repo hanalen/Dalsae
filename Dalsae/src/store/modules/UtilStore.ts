@@ -369,48 +369,44 @@ class UtilStore extends VuexModule {
   @Action
   ScrollToIndex(index: number) {
     const tweetType = moduleUI.stateUI.selectMenu;
-    const statePanel = moduleUI.statePanel;
+    let state = moduleUI.statePanel;
     if (tweetType === ETweetType.E_HOME) {
       const home: IStatePanel = {
-        ...statePanel.home,
+        ...state.home,
         index: index,
         selectedId: moduleTweet.homes ? moduleTweet.homes[index].id_str : ''
       };
-      const state: StatePanel = { ...statePanel, home: home };
-      this.context.commit('setStatePanel', state);
+      state = { ...state, home: home };
     } else if (tweetType === ETweetType.E_MENTION) {
       const mention: IStatePanel = {
-        ...statePanel.mention,
+        ...state.mention,
         index: index,
         selectedId: moduleTweet.mentions ? moduleTweet.mentions[index].id_str : ''
       };
-      const state: StatePanel = { ...statePanel, mention: mention };
-      this.context.commit('setStatePanel', state);
+      state = { ...state, mention: mention };
     } else if (tweetType === ETweetType.E_FAVORITE) {
       const favorite: IStatePanel = {
-        ...statePanel.favorite,
+        ...state.favorite,
         index: index,
         selectedId: moduleTweet.favorites ? moduleTweet.favorites[index].id_str : ''
       };
-      const state: StatePanel = { ...statePanel, favorite: favorite };
-      this.context.commit('setStatePanel', state);
+      state = { ...state, favorite: favorite };
     } else if (tweetType === ETweetType.E_OPEN) {
       const open: IStatePanel = {
-        ...statePanel.open,
+        ...state.open,
         index: index,
         selectedId: moduleTweet.opens ? moduleTweet.opens[index].id_str : ''
       };
-      const state: StatePanel = { ...statePanel, open: open };
-      this.context.commit('setStatePanel', state);
+      state = { ...state, open: open };
     } else if (tweetType === ETweetType.E_CONV) {
       const conv: IStatePanel = {
-        ...statePanel.conv,
+        ...state.conv,
         index: index,
         selectedId: moduleTweet.convs ? moduleTweet.convs[index].id_str : ''
       };
-      const state: StatePanel = { ...statePanel, conv: conv };
-      this.context.commit('setStatePanel', state);
+      state = { ...state, conv: conv };
     }
+    this.context.commit('setStatePanel', state);
     moduleDom.stateScrollPanel.ScrollToIndex(index);
   }
 }

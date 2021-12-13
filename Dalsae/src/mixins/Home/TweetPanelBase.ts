@@ -188,18 +188,19 @@ export class TweetPanelBase extends Vue {
     return listTweet !== undefined ? listTweet : [];
   }
 
-  async ArrowUp() {
+  ArrowUp() {
     if (this.listTweet.length === 0) {
       moduleDom.stateDom.textArea.focus();
       return;
     }
-    if (await moduleUI.Up()) {
-      moduleDom.stateDom.textArea.focus();
-    }
+    const idx = moduleUI.selectPanel.index;
+    if (idx === 0) moduleDom.stateDom.textArea.focus();
+    else moduleUtil.ScrollToIndex(idx - 1);
   }
 
-  async ArrowDown() {
+  ArrowDown() {
     if (this.listTweet.length === 0) return;
-    await moduleUI.Down();
+    const idx = moduleUI.selectPanel.index;
+    moduleUtil.ScrollToIndex(idx + 1);
   }
 }
