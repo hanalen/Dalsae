@@ -46,7 +46,7 @@ function ReadState(fileName: string): WindowState | undefined {
 function WindowAddEventListener(window: BrowserWindow) {
   if (!window) return;
   window.on('close', (event: Event) => {
-    SaveState(window, config.fileName);
+    if (!window.isVisible()) SaveState(window, config.fileName);
   });
   window.on('resized', (event: Event) => {
     SaveState(window, config.fileName);
