@@ -47,7 +47,6 @@ app.whenReady().then(() => {
     .catch((err: Error) => console.log('An error occurred: ', err));
 });
 
-const pathAppConfig = app.getPath('userData') + '/Dalsae/AppConfig.json';
 const baseUrl = process.env.WEBPACK_DEV_SERVER_URL
   ? (process.env.WEBPACK_DEV_SERVER_URL as string)
   : 'app://./index.html';
