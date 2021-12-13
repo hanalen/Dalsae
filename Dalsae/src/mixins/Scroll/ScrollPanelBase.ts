@@ -165,8 +165,6 @@ export class ScrollPanelBase extends Vue {
 
   @Watch('state.scrollTop')
   OnWatchScrollTop(newVal: number, oldVal: number) {
-    if (!this.listData) return;
-    if (this.listData.length === 0) return;
     this.SetIndex();
   }
   WaitTime() {
