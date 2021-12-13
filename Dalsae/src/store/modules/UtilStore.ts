@@ -371,38 +371,48 @@ class UtilStore extends VuexModule {
     const tweetType = moduleUI.stateUI.selectMenu;
     let state = moduleUI.statePanel;
     if (tweetType === ETweetType.E_HOME) {
+      if (!moduleTweet.homes) return;
+      if (index < 0 || index > moduleTweet.homes.length - 1) return;
       const home: IStatePanel = {
         ...state.home,
         index: index,
-        selectedId: moduleTweet.homes ? moduleTweet.homes[index].id_str : ''
+        selectedId: moduleTweet.homes[index].id_str
       };
       state = { ...state, home: home };
     } else if (tweetType === ETweetType.E_MENTION) {
+      if (!moduleTweet.mentions) return;
+      if (index < 0 || index > moduleTweet.mentions.length - 1) return;
       const mention: IStatePanel = {
         ...state.mention,
         index: index,
-        selectedId: moduleTweet.mentions ? moduleTweet.mentions[index].id_str : ''
+        selectedId: moduleTweet.mentions[index].id_str
       };
       state = { ...state, mention: mention };
     } else if (tweetType === ETweetType.E_FAVORITE) {
+      if (!moduleTweet.favorites) return;
+      if (index < 0 || index > moduleTweet.favorites.length - 1) return;
       const favorite: IStatePanel = {
         ...state.favorite,
         index: index,
-        selectedId: moduleTweet.favorites ? moduleTweet.favorites[index].id_str : ''
+        selectedId: moduleTweet.favorites[index].id_str
       };
       state = { ...state, favorite: favorite };
     } else if (tweetType === ETweetType.E_OPEN) {
+      if (!moduleTweet.opens) return;
+      if (index < 0 || index > moduleTweet.opens.length - 1) return;
       const open: IStatePanel = {
         ...state.open,
         index: index,
-        selectedId: moduleTweet.opens ? moduleTweet.opens[index].id_str : ''
+        selectedId: moduleTweet.opens[index].id_str
       };
       state = { ...state, open: open };
     } else if (tweetType === ETweetType.E_CONV) {
+      if (!moduleTweet.convs) return;
+      if (index < 0 || index > moduleTweet.convs.length - 1) return;
       const conv: IStatePanel = {
         ...state.conv,
         index: index,
-        selectedId: moduleTweet.convs ? moduleTweet.convs[index].id_str : ''
+        selectedId: moduleTweet.convs[index].id_str
       };
       state = { ...state, conv: conv };
     }
