@@ -67,7 +67,8 @@ export class TweetSelectorBase extends Vue {
       y: y,
       isShow: isShow,
       maxIndex: 0,
-      listContext: this.listContext
+      listContext: this.listContext,
+      index: 0
     });
   }
 
@@ -95,7 +96,8 @@ export class TweetSelectorBase extends Vue {
       y: e.y,
       isShow: true,
       maxIndex: this.contextMaxIndex,
-      listContext: this.listContext
+      listContext: this.listContext,
+      index: 0
     });
   }
 
