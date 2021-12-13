@@ -218,7 +218,7 @@ export class ImageContentBase extends Mixins(Vue) {
   OnKeyDown(e: KeyboardEvent) {
     const { isZoom, top, left } = moduleImage.stateImage;
     if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4') {
-      moduleImage.Reset();
+      moduleImage.ResetImageState();
       const index = Number.parseInt(e.key) - 1;
       if (index >= this.media.length) return;
       this.index = index;
@@ -226,13 +226,13 @@ export class ImageContentBase extends Mixins(Vue) {
       const index = this.index - 1;
       if (index < 0) return;
       else if (index >= this.media.length) return;
-      moduleImage.Reset();
+      moduleImage.ResetImageState();
       this.index = index;
     } else if (e.code === 'ArrowRight') {
       const index = this.index + 1;
       if (index < 0) return;
       else if (index >= this.media.length) return;
-      moduleImage.Reset();
+      moduleImage.ResetImageState();
       this.index = index;
     } else if (e.key === 'e') {
       this.Zoom();
@@ -258,7 +258,7 @@ export class ImageContentBase extends Mixins(Vue) {
         message: '이미지 원본을 불러왔습니다.',
         time: 1
       });
-      moduleImage.Reset();
+      moduleImage.ResetImageState();
       moduleOption.ChangeOption({ ...moduleOption.uiOption, isLoadOrgImg: true });
     } else if (e.key === ' ') {
       if (this.isZoomAble) {

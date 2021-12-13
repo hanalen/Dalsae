@@ -74,6 +74,16 @@ class ImageStore extends VuexModule {
   }
 
   @Mutation
+  private resetImageState() {
+    this.stateImage = new ImageViewState();
+  }
+
+  @Action
+  ResetImageState() {
+    this.context.commit('resetImageState');
+  }
+
+  @Mutation
   private setTweet(tweet: I.Tweet) {
     this.tweet = tweet;
   }
