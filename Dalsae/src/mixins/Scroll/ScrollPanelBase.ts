@@ -65,9 +65,6 @@ export class ScrollPanelBase extends Vue {
   @Ref()
   scrollPort!: HTMLElement;
 
-  @Ref()
-  refScrollArea!: Vue;
-
   @Prop()
   listData!: any[];
 
@@ -101,7 +98,7 @@ export class ScrollPanelBase extends Vue {
 
   isRendered() {
     if (!this.isMounted) return false;
-    else if (this.$el.clientHeight === 0) return false;
+    // else if (this.$el.clientHeight === 0) return false;
     else return true;
   }
 
