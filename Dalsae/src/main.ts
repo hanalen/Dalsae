@@ -20,38 +20,41 @@ register();
 
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
-Sentry.init({
-  Vue,
-  maxBreadcrumbs: 4,
-  dsn: 'https://98af9300813e4906ab16aa0a336be0bd@o146584.ingest.sentry.io/6083906',
-  integrations: [
-    new Integrations.BrowserTracing({
-      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-      tracingOrigins: ['localhost', 'my-site-url.com', /^\//],
-      traceXHR: false
-    })
-  ],
-  beforeBreadcrumb(breadcrumb, hint) {
-    if (breadcrumb.category !== 'console') return null;
-    else {
-      return breadcrumb;
-    }
-  },
-  beforeSend: (e: Sentry.Event, hint: Sentry.EventHint) => {
-    if (e.user) {
-      delete e.user;
-    }
-    if (e.platform) {
-      delete e.platform;
-    }
-    return e;
-  },
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0
-});
-
+console.log(process.env.NODE_ENV);
+const isDevMode: boolean = process.env.NODE_ENV === 'development';
+if (!isDevMode) {
+  Sentry.init({
+    Vue,
+    maxBreadcrumbs: 4,
+    dsn: 'https://98af9300813e4906ab16aa0a336be0bd@o146584.ingest.sentry.io/6083906',
+    integrations: [
+      new Integrations.BrowserTracing({
+        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+        tracingOrigins: ['localhost', 'my-site-url.com', /^\//],
+        traceXHR: false
+      })
+    ],
+    beforeBreadcrumb(breadcrumb, hint) {
+      if (breadcrumb.category !== 'console') return null;
+      else {
+        return breadcrumb;
+      }
+    },
+    beforeSend: (e: Sentry.Event, hint: Sentry.EventHint) => {
+      if (e.user) {
+        delete e.user;
+      }
+      if (e.platform) {
+        delete e.platform;
+      }
+      return e;
+    },
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0
+  });
+}
 new Vue({
   router,
   store,

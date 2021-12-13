@@ -11,25 +11,28 @@ import {
 const isDevelopment = process.env.NODE_ENV !== 'production';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import * as Sentry from '@sentry/electron';
+const isDevMode: boolean = process.env.WEBPACK_DEV_SERVER_URL ? true : false;
 
-Sentry.init({
-  dsn: 'https://609f91d225d64a608adf180234225757@o146584.ingest.sentry.io/6083907',
-  beforeBreadcrumb(breadcrumb) {
-    if (breadcrumb.category !== 'console') return null;
-    else {
-      return breadcrumb;
+if (!isDevMode) {
+  Sentry.init({
+    dsn: 'https://609f91d225d64a608adf180234225757@o146584.ingest.sentry.io/6083907',
+    beforeBreadcrumb(breadcrumb) {
+      if (breadcrumb.category !== 'console') return null;
+      else {
+        return breadcrumb;
+      }
+    },
+    beforeSend: (e: Sentry.Event) => {
+      if (e.user) {
+        delete e.user;
+      }
+      if (e.platform) {
+        delete e.platform;
+      }
+      return e;
     }
-  },
-  beforeSend: (e: Sentry.Event) => {
-    if (e.user) {
-      delete e.user;
-    }
-    if (e.platform) {
-      delete e.platform;
-    }
-    return e;
-  }
-});
+  });
+}
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWin: BrowserWindow | null;
@@ -51,7 +54,6 @@ const baseUrl = process.env.WEBPACK_DEV_SERVER_URL
   ? (process.env.WEBPACK_DEV_SERVER_URL as string)
   : 'app://./index.html';
 
-const isDevMode: boolean = process.env.WEBPACK_DEV_SERVER_URL ? true : false;
 import electronLocalshortcut from 'electron-localshortcut';
 import windowStateSaver from './WindowState';
 function createWindow() {
