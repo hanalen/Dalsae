@@ -17,6 +17,7 @@ class State {
   endIndex = 50;
   translateY = 0;
   selectKey = '';
+  index = 0;
 }
 
 class StateData<T> {
@@ -108,6 +109,7 @@ export class ScrollPanelBase extends Vue {
 
   ScrollToIndex(newVal: number) {
     if (newVal === -1) return;
+    this.state.index = newVal;
     const selectData = this.stateData.listData[newVal];
     if (!selectData) return;
     (selectData.data as any).isRead = true;
@@ -142,7 +144,8 @@ export class ScrollPanelBase extends Vue {
   Emit(index: number) {
     const key = this.stateData.listData[index].key;
     for (let i = 0; i < this.statePool.listBench.length; i++) {
-      this.statePool.listBench[i].$emit('on-change-selected-key', key);
+      const data = this.statePool.listBench[i].$props['data'] as M.ScrollItem<any>;
+      this.statePool.listBench[i].$props['selected'] = data.key === key;
     }
   }
 
@@ -238,7 +241,10 @@ export class ScrollPanelBase extends Vue {
       if (keysBench.includes(item.key)) {
         return true;
       }
-      const component = new ScrollItem({ propsData: { data: item, itemType: this.itemType } });
+      const selected = item.key === this.stateData.listData[this.state.index].key;
+      const component = new ScrollItem({
+        propsData: { data: item, itemType: this.itemType, selected: selected }
+      });
       component.$on('on-resize', this.OnResizeTweet);
       component.$vuetify = this.$vuetify;
       this.statePool.listBench.push(component);

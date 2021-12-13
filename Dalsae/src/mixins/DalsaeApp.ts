@@ -168,8 +168,9 @@ export class DalsaeApp extends Vue {
         break;
       case I.E_HOTKEY.LOADCONV:
         if (selectTweet) {
-          moduleUtil.LoadConv(selectTweet);
           moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: ETweetType.E_CONV });
+          await moduleUtil.LoadConv(selectTweet);
+          if (moduleUI.stateUI.selectMenu !== ETweetType.E_CONV) moduleUtil.ScrollToIndex(0);
         }
         break;
       case I.E_HOTKEY.SHOWQT:

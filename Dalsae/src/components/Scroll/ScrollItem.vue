@@ -28,11 +28,13 @@ export default class ScrollItem extends Vue {
   @Prop()
   itemType!: string;
 
-  selected = false;
+  @Prop()
+  selected!: boolean;
+
   obs!: ResizeObserver;
 
   async created() {
-    this.$on('on-change-selected-key', this.OnChangeSelectedKey);
+    // this.$on('on-change-selected-key', this.OnChangeSelectedKey);
     this.$nextTick(() => {
       this.obs = new ResizeObserver(entries => {
         const entri = entries[0];
@@ -66,8 +68,10 @@ export default class ScrollItem extends Vue {
     }
   }
 
-  OnChangeSelectedKey(key: string) {
-    this.selected = this.data.key === key;
-  }
+  // OnChangeSelectedKey(key: string) {
+  //   this.$nextTick(() => {
+  //     this.selected = this.data.key === key;
+  //   });
+  // }
 }
 </script>
