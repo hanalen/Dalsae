@@ -162,6 +162,7 @@ export class ScrollPanelBase extends Vue {
       this.WaitTime();
     }
   }
+
   @Watch('state.scrollTop')
   OnWatchScrollTop(newVal: number, oldVal: number) {
     if (!this.listData) return;
@@ -176,6 +177,32 @@ export class ScrollPanelBase extends Vue {
         this.SetIndex();
       }
     }, 100);
+  }
+
+  AddData(data: any, index: number) {
+    const minHeight = moduleUI.minHeight;
+    if (!this.stateData.setKey.has(data.id_str)) {
+      this.stateData.setKey.add(data.id_str);
+      const prev = this.stateData.listData[index - 1];
+      const scrollTop = prev ? prev.scrollTop + prev.height : index * minHeight;
+      const item: M.ScrollItem<any> = {
+        data: this.CreateData(data),
+        key: data.id_str,
+        height: minHeight,
+        isResized: true,
+        scrollTop: scrollTop
+      };
+      this.stateData.listData.splice(index, 0, item);
+    }
+    if (this.isRendered()) {
+      this.SetIndex();
+    }
+  }
+
+  RemoveData(key: string, index: number) {
+    this.stateData.listData.splice(index, 1);
+    this.stateData.setKey.delete(key);
+    this.statePool.listBench.splice;
   }
 
   CreateScrollData() {
@@ -227,6 +254,12 @@ export class ScrollPanelBase extends Vue {
       this.scrollPort.appendChild(div);
       component.$mount(div);
       this.$children.push(component);
+      this.$nextTick(() => {
+        //기본 observer 제거, 메모리 줄이는 로직
+        delete component.$props['data'].data.__ob__;
+        delete component.$props['data'].__ob__;
+        delete component.$data.__ob__;
+      });
     });
     //렌더링에서 뺴야 될 데이터 체크
     const keysVisible = this.listVisible.map(x => x.key);

@@ -6,7 +6,7 @@
       </v-tab>
     </v-tabs>
     <v-tabs-items v-model="selectMenu">
-      <v-tab-item :key="0">
+      <v-tab-item :key="0" eager>
         <v-progress-circular
           v-if="isLoadHome"
           :width="3"
@@ -14,14 +14,13 @@
           indeterminate
         ></v-progress-circular>
         <scroll-panel
-          :listData="tweetHome"
           :itemType="'tweet'"
           :tweetType="home"
           :indexPanel="indexHome"
           :style="stylePanel"
         />
       </v-tab-item>
-      <v-tab-item :key="1">
+      <v-tab-item :key="1" eager>
         <v-progress-circular
           v-if="isLoadMention"
           :width="3"
@@ -29,17 +28,16 @@
           indeterminate
         ></v-progress-circular>
         <scroll-panel
-          :listData="tweetMention"
           :itemType="'tweet'"
           :tweetType="mention"
           :indexPanel="indexMention"
           :style="stylePanel"
         />
       </v-tab-item>
-      <v-tab-item :key="2">
+      <v-tab-item :key="2" eager>
         <dm-panel />
       </v-tab-item>
-      <v-tab-item :key="3">
+      <v-tab-item :key="3" eager>
         <v-progress-circular
           v-if="isLoadFavorite"
           :width="3"
@@ -47,23 +45,21 @@
           indeterminate
         ></v-progress-circular>
         <scroll-panel
-          :listData="tweetFavorite"
           :itemType="'tweet'"
           :tweetType="favorite"
           :indexPanel="indexFavorite"
           :style="stylePanel"
         />
       </v-tab-item>
-      <v-tab-item :key="4">
+      <v-tab-item :key="4" eager>
         <scroll-panel
-          :listData="tweetOpen"
           :itemType="'tweet'"
           :tweetType="open"
           :indexPanel="indexOpen"
           :style="stylePanel"
         />
       </v-tab-item>
-      <v-tab-item :key="5">
+      <v-tab-item :key="5" eager>
         <v-progress-circular
           v-if="isLoadConv"
           :width="3"
@@ -71,7 +67,6 @@
           indeterminate
         ></v-progress-circular>
         <scroll-panel
-          :listData="tweetConv"
           :itemType="'tweet'"
           :tweetType="conv"
           :indexPanel="indexConv"

@@ -107,6 +107,7 @@ class TweetStore extends VuexModule {
         if (mentions) {
           const idx = FindTweetIndex(item, mentions);
           mentions.splice(idx, 0, new I.Tweet(item));
+          moduleDom.scrollMention?.panel.AddData(new I.Tweet(item), idx);
           const { mention } = moduleUI.statePanel;
           let selectedId = mention.selectedId;
           let idx2 = tweets.tweets.mentions.findIndex(x => x.id_str === selectedId);
@@ -123,6 +124,7 @@ class TweetStore extends VuexModule {
       }
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
+      moduleDom.scrollHome?.panel.AddData(new I.Tweet(item), idx);
     }
     const { home } = moduleUI.statePanel;
     let selectedId = home.selectedId;
@@ -168,6 +170,7 @@ class TweetStore extends VuexModule {
       if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
+      moduleDom.scrollMention?.panel.AddData(new I.Tweet(item), idx);
       isAddMention = true;
     }
     const { mention } = moduleUI.statePanel;
@@ -214,6 +217,7 @@ class TweetStore extends VuexModule {
       if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
+      moduleDom.scrollFavorite?.panel.AddData(new I.Tweet(item), idx);
     }
     const { favorite } = moduleUI.statePanel;
     let selectedId = favorite.selectedId;
@@ -240,6 +244,7 @@ class TweetStore extends VuexModule {
       return; //exists
     }
     orgTweets.splice(0, 0, new I.Tweet(tweet));
+    moduleDom.scrollOpen?.panel.AddData(new I.Tweet(addTweet.tweet), 0);
     const { open } = moduleUI.statePanel;
     let selectedId = open.selectedId;
     let idx = tweets.tweets.opens.findIndex(x => x.id_str === selectedId);
@@ -274,6 +279,7 @@ class TweetStore extends VuexModule {
 
     const idx = FindTweetIndex(tweet, orgTweets);
     orgTweets.splice(idx, 0, new I.Tweet(tweet));
+    moduleDom.scrollConv?.panel.AddData(new I.Tweet(tweet), idx);
     const { conv } = moduleUI.statePanel;
     let selectedId = conv.selectedId;
     let idx2 = tweets.tweets.conv.findIndex(x => x.id_str === selectedId);

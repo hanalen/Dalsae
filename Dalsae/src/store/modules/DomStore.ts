@@ -35,6 +35,26 @@ class DomStore extends VuexModule {
   stateScrollPanel = new StateScrollPanel();
   stateDom = new StateDom();
 
+  get scrollHome() {
+    return this.stateScrollPanel.listScrollPanel.find(x => x.panelType === ETweetType.E_HOME);
+  }
+
+  get scrollMention() {
+    return this.stateScrollPanel.listScrollPanel.find(x => x.panelType === ETweetType.E_MENTION);
+  }
+
+  get scrollFavorite() {
+    return this.stateScrollPanel.listScrollPanel.find(x => x.panelType === ETweetType.E_FAVORITE);
+  }
+
+  get scrollOpen() {
+    return this.stateScrollPanel.listScrollPanel.find(x => x.panelType === ETweetType.E_OPEN);
+  }
+
+  get scrollConv() {
+    return this.stateScrollPanel.listScrollPanel.find(x => x.panelType === ETweetType.E_CONV);
+  }
+
   @Mutation
   private updateRTandFav(tweet: I.Tweet) {
     for (const panel of this.stateScrollPanel.listScrollPanel) {
