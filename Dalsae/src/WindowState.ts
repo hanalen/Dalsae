@@ -32,7 +32,6 @@ function SaveState(window: BrowserWindow | undefined | null, name: string) {
   try {
     const json = JSON.stringify(state);
     fs.writeFileSync(`${app.getPath('userData')}/${name}`, json);
-    Log.info('json!!!!:', json);
   } catch (e) {}
 }
 
