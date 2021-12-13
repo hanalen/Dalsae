@@ -75,7 +75,7 @@
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
-      <v-list-item>
+      <!-- <v-list-item>
         <v-list-item-content>
           <v-list-item-title>폴더 설정</v-list-item-title>
           <v-list-item-subtitle>현재 경로: {{ appPath }}</v-list-item-subtitle>
@@ -86,7 +86,7 @@
             폴더 열기
           </v-btn>
         </v-list-item-content>
-      </v-list-item>
+      </v-list-item> -->
       <!-- <v-divider></v-divider> -->
     </v-list>
     <!-- <v-divider></v-divider> -->

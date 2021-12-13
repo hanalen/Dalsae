@@ -46,9 +46,9 @@ export class OptionModalBase extends Vue {
   get listUser() {
     return moduleSwitter.stateSwitter.switter.listUser;
   }
-  OnClickChangePath() {
-    window.ipc.ipcPipe.openPathSetting();
-  }
+  // OnClickChangePath() {
+  //   window.ipc.ipcPipe.openPathSetting();
+  // }
   OnClickOpenPath() {
     // path
     window.ipc.browser.OpenFolder(this.appPath);

@@ -240,12 +240,9 @@ import fs from 'fs-extra';
 import { AppConfig } from '@/Interfaces';
 
 ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
-  let path = app.getAppPath();
-  if (fs.existsSync(pathAppConfig)) {
-    const appConfig: AppConfig = fs.readJsonSync(pathAppConfig);
-    if (appConfig) path = appConfig.appPath;
-  } else {
-    path = app.getPath('userData') + '/Dalsae/';
+  const path = `${app.getPath('documents')}\\Dalsae`;
+  if (fs.existsSync(path) === false) {
+    fs.mkdirsSync(path);
   }
   event.reply('GetAppPath', path);
 });
@@ -255,20 +252,20 @@ ipcMain.on('MainWindowAlarm', () => {
   if (!mainWin.isFocused()) mainWin.flashFrame(true);
 });
 
-ipcMain.on('OpenPathSetting', async event => {
-  if (!mainWin) return;
-  const dir = await dialog.showOpenDialog(mainWin, {
-    title: '달새 설정 폴더 위치 지정',
-    properties: ['openDirectory']
-  });
-  if (dir.canceled) return;
+// ipcMain.on('OpenPathSetting', async event => {
+//   if (!mainWin) return;
+//   const dir = await dialog.showOpenDialog(mainWin, {
+//     title: '달새 설정 폴더 위치 지정',
+//     properties: ['openDirectory']
+//   });
+//   if (dir.canceled) return;
 
-  const appConfig: AppConfig = { appPath: dir.filePaths[0] };
-  fs.writeJSON(pathAppConfig, appConfig);
+//   const appConfig: AppConfig = { appPath: dir.filePaths[0] };
+//   fs.writeJSON(pathAppConfig, appConfig);
 
-  mainWin.webContents.send('pathSetting', { path: dir.filePaths[0] });
-  event.reply('ChangeAppPath', dir.filePaths[0]);
-});
+//   mainWin.webContents.send('pathSetting', { path: dir.filePaths[0] });
+//   event.reply('ChangeAppPath', dir.filePaths[0]);
+// });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

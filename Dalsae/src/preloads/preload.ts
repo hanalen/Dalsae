@@ -119,9 +119,9 @@ const ipcPipe = {
   alarm: () => {
     ipcRenderer.send('MainWindowAlarm');
   },
-  openPathSetting: () => {
-    ipcRenderer.send('OpenPathSetting');
-  },
+  // openPathSetting: () => {
+  //   ipcRenderer.send('OpenPathSetting');
+  // },
   getData: (name: string) => {
     ipcRenderer.send('GetData', name);
   },
