@@ -248,6 +248,10 @@ ipcMain.on('GetAppPath', (event: Electron.IpcMainEvent) => {
   event.reply('GetAppPath', path);
 });
 
+ipcMain.on('GetVersion', (event: Electron.IpcMainEvent) => {
+  event.reply('GetVersion', app.getVersion());
+});
+
 ipcMain.on('MainWindowAlarm', () => {
   if (!mainWin) return;
   if (!mainWin.isFocused()) mainWin.flashFrame(true);

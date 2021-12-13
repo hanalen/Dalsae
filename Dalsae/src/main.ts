@@ -20,7 +20,6 @@ register();
 
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
-console.log(process.env.NODE_ENV);
 const isDevMode: boolean = process.env.NODE_ENV === 'development';
 if (!isDevMode) {
   Sentry.init({

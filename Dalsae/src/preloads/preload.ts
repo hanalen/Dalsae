@@ -16,10 +16,15 @@ const pathOption = '/Data/Option.json';
 const pathBlockids = '/Data/block.json';
 
 let appPath = '';
+let version = '';
 ipcRenderer.once('GetAppPath', (event, path: string) => {
   appPath = path;
 });
+ipcRenderer.once('GetVersion', (event, ver: string) => {
+  version = ver;
+});
 ipcRenderer.send('GetAppPath');
+ipcRenderer.send('GetVersion');
 
 function CheckFolder() {
   if (fs.existsSync(appPath + pathData) === false) {
@@ -46,6 +51,9 @@ function SaveFile(path: string, data: object) {
 const files = {
   GetAppPath(): string {
     return appPath;
+  },
+  GetVersion(): string {
+    return version;
   },
   LoadSwitter(): I.Switter {
     return ReadFile<I.Switter>(appPath + pathSwitter);

@@ -25,6 +25,10 @@ export class OptionModalBase extends Vue {
     return moduleOption.appPath;
   }
 
+  get version() {
+    return window.ipc.files.GetVersion();
+  }
+
   OnClickAddAccount() {
     moduleModal.ShowOptionModal(true);
     moduleModal.ShowPinModal(true);
