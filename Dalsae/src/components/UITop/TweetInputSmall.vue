@@ -39,6 +39,7 @@
         no-resize
         :spellcheck="false"
         v-on:paste="Paste"
+        :style="styleTextArea"
         @input="OnChange"
         @keyup.esc="OnEsc"
         @keyup="selectionChange"

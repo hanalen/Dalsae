@@ -20,6 +20,14 @@ export class TweetInputBase extends Vue {
   @Ref()
   refFileVideo!: HTMLInputElement;
 
+  get styleTextArea() {
+    if (this.GetTweetLength() > 280) {
+      return {
+        'background-color': '#ffc6b9'
+      };
+    } else return '';
+  }
+
   get inputText() {
     return moduleUI.stateInput.inputText;
   }
@@ -269,6 +277,14 @@ export class TweetInputBase extends Vue {
   }
 
   SendTweet() {
+    if (this.GetTweetLength() > 280) {
+      moduleModal.AddMessage({
+        errorType: Messagetype.E_INFO,
+        message: '트윗 길이가 초과 됩니다.',
+        time: 3
+      });
+      return;
+    }
     const { inputText, listImage, replyTweet, video } = moduleUI.stateInput;
     if (inputText.length === 0 && listImage.length === 0 && !video) return;
     moduleApi.statuses.Update(inputText, listImage, video, replyTweet?.id_str);

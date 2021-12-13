@@ -25,6 +25,7 @@
       :spellcheck="false"
       height="44"
       v-on:paste="Paste"
+      :style="styleTextArea"
       @input="OnChange"
       @keyup.esc="OnEsc"
       @keyup="selectionChange"
