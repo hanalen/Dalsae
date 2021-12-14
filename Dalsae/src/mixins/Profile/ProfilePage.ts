@@ -14,12 +14,6 @@ import twitterRequest from '@/API/TwitterRequest';
 
 @Component
 export class ProfilePage extends Vue {
-  state = {
-    name: '',
-    bio: '',
-    place: '',
-    url: ''
-  };
   @Ref()
   refScrollFollowing!: ScrollPanelBase;
   @Ref()
@@ -434,13 +428,15 @@ export class ProfilePage extends Vue {
   OnClickEdit(e: MouseEvent) {
     const { isEditMode } = moduleProfile.stateProfile;
     if (isEditMode) {
-      const { name, url, place, bio } = this.state;
+      const { name, url, place, bio } = moduleProfile.stateUpdateProfile;
       moduleApi.account.UpdateProfile(name, url, place, bio);
     } else {
-      this.state.bio = this.userBio;
-      this.state.name = this.name;
-      this.state.place = this.place;
-      this.state.url = this.url;
+      moduleProfile.SetStateUpdateProfile({
+        bio: this.userBio,
+        name: this.name,
+        place: this.place,
+        url: this.url
+      });
     }
     moduleProfile.SetState({ ...moduleProfile.stateProfile, isEditMode: !isEditMode });
   }

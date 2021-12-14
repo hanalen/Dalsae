@@ -29,7 +29,8 @@
       indeterminate
     ></v-progress-circular>
     <div v-else>
-      <div>
+      <profile-edit v-if="editMode"> </profile-edit>
+      <div v-else class="no-edit-mode">
         <v-img class="profile-header" :src="userHeader">
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -37,131 +38,94 @@
             </v-row>
           </template>
         </v-img>
-      </div>
-      <div class="profile">
-        <div class="profile-left">
-          <div class="propic">
-            <v-badge
-              :value="verified"
-              avatar
-              bottom
-              overlap
-              color="white"
-              offset-x="20"
-              offset-y="20"
-            >
-              <template v-slot:badge>
-                <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
-              </template>
-              <v-avatar rounded :size="84">
-                <v-img :src="userPropic">
-                  <template v-slot:placeholder>
-                    <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-progress-circular
-                        indeterminate
-                        color="grey lighten-5"
-                      ></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
-                <!-- <img ref="refImg" :src="img" :class="imgClass" /> -->
-              </v-avatar>
-            </v-badge>
-          </div>
-          <div class="profile-count">
-            <div class="profile-count-left">
-              <span>트윗</span>
-              <span>팔로잉</span>
-              <span>팔로워</span>
+        <div class="profile">
+          <div class="profile-left">
+            <div class="propic">
+              <v-badge
+                :value="verified"
+                avatar
+                bottom
+                overlap
+                color="white"
+                offset-x="20"
+                offset-y="20"
+              >
+                <template v-slot:badge>
+                  <v-icon style="font-size:18px; color:#1da1f2">mdi-check-decagram</v-icon>
+                </template>
+                <v-avatar rounded :size="84">
+                  <v-img :src="userPropic">
+                    <template v-slot:placeholder>
+                      <v-row class="fill-height ma-0" align="center" justify="center">
+                        <v-progress-circular
+                          indeterminate
+                          color="grey lighten-5"
+                        ></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-img>
+                  <!-- <img ref="refImg" :src="img" :class="imgClass" /> -->
+                </v-avatar>
+              </v-badge>
             </div>
-            <div class="profile-count-right color-gray">
-              <span @click="ClickTweet">{{ countTweet }}</span>
-              <span @click="OnClickShowFollowing">{{ countFollowing }}</span>
-              <span @click="OnClickShowFollower">{{ countFollower }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="profile-right">
-          <div class="profile-right-top">
-            <div>
-              <v-text-field
-                v-if="editMode"
-                class="ma-0 "
-                label="이름"
-                v-model="state.name"
-                height="20"
-                hide-details
-                style="font-size: 14px"
-              ></v-text-field>
-              <span v-else class="user-name">{{ name }}</span
-              ><br />
-              <div v-if="!editMode">
-                <span class="user-screen-name">{{ screenName }}</span>
-                <span class="follow-text" v-if="!editMode">
-                  {{ followerText }}
-                </span>
-                <br />
-                <br />
+            <div class="profile-count">
+              <div class="profile-count-left">
+                <span>트윗</span>
+                <span>팔로잉</span>
+                <span>팔로워</span>
+              </div>
+              <div class="profile-count-right color-gray">
+                <span @click="ClickTweet">{{ countTweet }}</span>
+                <span @click="OnClickShowFollowing">{{ countFollowing }}</span>
+                <span @click="OnClickShowFollower">{{ countFollower }}</span>
               </div>
             </div>
-            <v-btn
-              v-if="!itsMe"
-              class="btn-follow"
-              height="30"
-              outlined
-              color="primary"
-              text
-              @click="OnClickFollow"
-            >
-              {{ followText }}
-            </v-btn>
-            <v-btn
-              v-if="itsMe"
-              class="btn-follow"
-              height="30"
-              outlined
-              color="primary"
-              text
-              @click="OnClickEdit"
-            >
-              {{ editText }}
-            </v-btn>
           </div>
-          <v-text-field
-            v-if="editMode"
-            height="20"
-            class="ma-0 "
-            label="자기소개 입력"
-            v-model="state.bio"
-            hide-details
-            style="font-size: 14px"
-          ></v-text-field>
-          <div v-else v-html="userBio" @click="OnClickLink"></div>
-          <div class="user-place color-gray">
-            <v-icon v-if="!editMode" size="16">mdi-compass-outline </v-icon>
-            <v-text-field
-              v-if="editMode"
-              height="20"
-              class="ma-0 "
-              label="위치 입력"
-              v-model="state.place"
-              hide-details
-              style="font-size: 14px ;margin-top:12px !important"
-            ></v-text-field>
-            <span v-else>{{ place }}</span>
-          </div>
-          <div class="user-url">
-            <v-icon v-if="!editMode" size="16">mdi-link-variant</v-icon>
-            <v-text-field
-              v-if="editMode"
-              height="20"
-              class="ma-0 "
-              label="링크 입력"
-              v-model="state.url"
-              hide-details
-              style="font-size: 14px ; margin-top:12px !important"
-            ></v-text-field>
-            <span v-else class="url" @click="OnClickProfileURL">{{ url }}</span>
+          <div class="profile-right">
+            <div class="profile-right-top">
+              <div>
+                <span class="user-name">{{ name }}</span
+                ><br />
+                <div>
+                  <span class="user-screen-name">{{ screenName }}</span>
+                  <span class="follow-text">
+                    {{ followerText }}
+                  </span>
+                  <br />
+                  <br />
+                </div>
+              </div>
+              <v-btn
+                v-if="!itsMe"
+                class="btn-follow"
+                height="30"
+                outlined
+                color="primary"
+                text
+                @click="OnClickFollow"
+              >
+                {{ followText }}
+              </v-btn>
+              <v-btn
+                v-if="itsMe"
+                class="btn-follow"
+                height="30"
+                outlined
+                color="primary"
+                text
+                @click="OnClickEdit"
+              >
+                {{ editText }}
+              </v-btn>
+            </div>
+            <div v-html="userBio" @click="OnClickLink"></div>
+            <div class="user-place color-gray">
+              <span>{{ place }}</span>
+            </div>
+            <div class="user-url">
+              <v-icon size="16">mdi-link-variant</v-icon>
+              <span class="url" @click="OnClickProfileURL">{{ url }}</span>
+            </div>
           </div>
         </div>
       </div>
