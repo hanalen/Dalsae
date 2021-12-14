@@ -218,9 +218,9 @@ export class ImageContentBase extends Mixins(Vue) {
   OnKeyDown(e: KeyboardEvent) {
     const { isZoom, top, left } = moduleImage.stateImage;
     if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4') {
-      moduleImage.ResetImageState();
       const index = Number.parseInt(e.key) - 1;
       if (index >= this.media.length) return;
+      moduleImage.ResetImageState();
       this.index = index;
     } else if (e.code === 'ArrowLeft') {
       const index = this.index - 1;
