@@ -9,7 +9,7 @@ export enum ETweetType {
 }
 export interface AddTweet {
   type: ETweetType;
-  user_id_str: string;
+  user_id: bigint;
   listTweet: I.Tweet[] | undefined;
   tweet: I.Tweet | undefined;
 }

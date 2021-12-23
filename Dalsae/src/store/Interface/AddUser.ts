@@ -1,7 +1,7 @@
 export interface AddUser {
   publicKey: string;
   secretKey: string;
-  userId: string;
+  userId: bigint;
   name: string;
   screenName: string;
 }

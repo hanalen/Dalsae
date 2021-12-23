@@ -15,9 +15,15 @@ class StateSwitter {
   }
 }
 
+interface BlockIdsBigInt {
+  ids: bigint[];
+  next_cursor_str: string;
+  previous_cursor_str: string;
+}
+
 class StateIds {
-  dicBlockIds: Map<string, I.BlockIds> = new Map();
-  dicMuteIds: Map<string, string[]> = new Map();
+  dicBlockIds: Map<bigint, BlockIdsBigInt> = new Map();
+  dicMuteIds: Map<bigint, bigint[]> = new Map();
 
   followDatas = new FollowDatas();
 }
@@ -48,7 +54,7 @@ class SwitterStore extends VuexModule {
   // getters
   get selectID() {
     const id = this.stateSwitter.switter.selectUser.user_id;
-    return id ? id : '';
+    return id ? id : BigInt(0);
   }
 
   get selectUser() {
@@ -126,13 +132,13 @@ class SwitterStore extends VuexModule {
   @Mutation
   private updateSwitterUser(user: I.User) {
     const { switter } = this.stateSwitter;
-    const find = switter.listUser.find(x => x.user_id === user.id_str);
+    const find = switter.listUser.find(x => x.user_id === user.id);
     if (find) {
       find.user = user;
       find.name = user.name;
       find.screen_name = user.screen_name;
     }
-    if (switter.selectUser.user_id === user.id_str) {
+    if (switter.selectUser.user_id === user.id) {
       switter.selectUser.user = user;
     }
   }
@@ -170,17 +176,19 @@ class SwitterStore extends VuexModule {
 
   @Mutation
   private addBlockIds(ids: A.AddBlockIds) {
-    let listIds = this.stateIds.dicBlockIds.get(ids.idStr);
+    let listIds = this.stateIds.dicBlockIds.get(ids.id);
     if (!listIds) {
       const item = {
         ids: [],
         next_cursor_str: '',
         previous_cursor_str: ''
       };
-      this.stateIds.dicBlockIds.set(ids.idStr, item);
+      this.stateIds.dicBlockIds.set(ids.id, item);
       listIds = item;
     }
-    listIds.ids = listIds.ids.concat(ids.ids.ids);
+    for (const id of ids.ids.ids) {
+      listIds.ids.push(BigInt(id));
+    }
     listIds.next_cursor_str = ids.ids.next_cursor_str;
     listIds.previous_cursor_str = ids.ids.previous_cursor_str;
   }

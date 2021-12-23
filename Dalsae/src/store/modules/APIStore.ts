@@ -559,7 +559,7 @@ class Friendships {
         });
       } else {
         result.data.following = true;
-        window.ipc.ipcPipe.send(EIPcType.EFollow, result.data);
+        window.ipc.ipcPipe.send(EIPcType.EFollow, new P.User(result.data));
         // moduleProfile.UpdateFollowUserInfo(result.data);
       }
     }
@@ -569,7 +569,7 @@ class Friendships {
     const result = await twitterRequest.call.friendships.Destroy(data);
     if (!twitterRequest.CheckAPIError(result.data)) {
       result.data.following = false;
-      window.ipc.ipcPipe.send(EIPcType.EFollow, result.data);
+      window.ipc.ipcPipe.send(EIPcType.EFollow, new P.User(result.data));
       // moduleProfile.UpdateFollowUserInfo(result.data);
       // window.preload.profile.UpdateFollow(result.data);
     }

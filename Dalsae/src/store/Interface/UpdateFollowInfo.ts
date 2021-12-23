@@ -1,5 +1,5 @@
 import * as I from '@/Interfaces';
 export interface UpdateFollowInfo {
-  selecId: string;
+  selecId: bigint;
   user: I.User;
 }

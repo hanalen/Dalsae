@@ -23,12 +23,12 @@ export interface ITweetStore {
 }
 
 interface TweetPair {
-  key: string;
+  key: bigint;
   tweets: I.Tweets;
 }
 
 interface StreamingPair {
-  key: string;
+  key: bigint;
   streaming: UserStreaming;
 }
 
@@ -75,7 +75,7 @@ class TweetStore extends VuexModule {
       tweets = { key: moduleSwitter.selectID, tweets: new I.Tweets() };
       this.stateTweet.tweets.push(tweets);
     }
-    const { tweet, listTweet, user_id_str } = addTweet;
+    const { tweet, listTweet, user_id } = addTweet;
     const { dicMuteIds, dicBlockIds } = moduleSwitter.stateIds;
     const { muteOption } = moduleOption;
     const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
@@ -96,13 +96,12 @@ class TweetStore extends VuexModule {
     for (const item of listConcatTweets) {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) return; //exists
       if (
-        !CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds) &&
+        !CheckShowHomeTweet(item, user_id, muteOption, listBlockIds, listMuteIds) &&
         muteOption.isMuteMention //멘션도 뮤트처리
       )
         return; //muted
-      if (CheckMention(item, user_id_str, muteOption)) {
-        if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds))
-          return; //muted
+      if (CheckMention(item, user_id, muteOption)) {
+        if (!CheckShowMentionTweet(item, user_id, muteOption, listBlockIds, listMuteIds)) return; //muted
         const mentions = tweets?.tweets.mentions;
         if (mentions) {
           const idx = FindTweetIndex(item, mentions);
@@ -120,7 +119,7 @@ class TweetStore extends VuexModule {
           });
         }
       } else {
-        if (!CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return;
+        if (!CheckShowHomeTweet(item, user_id, muteOption, listBlockIds, listMuteIds)) return;
       }
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
@@ -145,7 +144,7 @@ class TweetStore extends VuexModule {
       tweets = { key: moduleSwitter.selectID, tweets: new I.Tweets() };
       this.stateTweet.tweets.push(tweets);
     }
-    const { tweet, listTweet, user_id_str } = addTweet;
+    const { tweet, listTweet, user_id } = addTweet;
     const { dicMuteIds, dicBlockIds } = moduleSwitter.stateIds;
     const { muteOption } = moduleOption;
     const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
@@ -167,7 +166,7 @@ class TweetStore extends VuexModule {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
         return; //exists
       }
-      if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
+      if (!CheckShowMentionTweet(item, user_id, muteOption, listBlockIds, listMuteIds)) return; //muted
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
       moduleDom.scrollMention?.panel.AddData(new I.Tweet(item), idx);
@@ -193,7 +192,7 @@ class TweetStore extends VuexModule {
       tweets = { key: moduleSwitter.selectID, tweets: new I.Tweets() };
       this.stateTweet.tweets.push(tweets);
     }
-    const { tweet, listTweet, user_id_str } = addTweet;
+    const { tweet, listTweet, user_id } = addTweet;
     const { dicMuteIds, dicBlockIds } = moduleSwitter.stateIds;
     const { muteOption } = moduleOption;
     const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
@@ -214,7 +213,7 @@ class TweetStore extends VuexModule {
       if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
         return; //exists
       }
-      if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
+      if (!CheckShowMentionTweet(item, user_id, muteOption, listBlockIds, listMuteIds)) return; //muted
       const idx = FindTweetIndex(item, orgTweets);
       orgTweets.splice(idx, 0, new I.Tweet(item));
       moduleDom.scrollFavorite?.panel.AddData(new I.Tweet(item), idx);
@@ -262,7 +261,7 @@ class TweetStore extends VuexModule {
       tweets = { key: moduleSwitter.selectID, tweets: new I.Tweets() };
       this.stateTweet.tweets.push(tweets);
     }
-    const { tweet, user_id_str } = addTweet;
+    const { tweet, user_id } = addTweet;
     const { dicMuteIds, dicBlockIds } = moduleSwitter.stateIds;
     const { muteOption } = moduleOption;
     const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
@@ -275,7 +274,7 @@ class TweetStore extends VuexModule {
     if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
       return; //exists
     }
-    if (!CheckShowMentionTweet(tweet, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
+    if (!CheckShowMentionTweet(tweet, user_id, muteOption, listBlockIds, listMuteIds)) return; //muted
 
     const idx = FindTweetIndex(tweet, orgTweets);
     orgTweets.splice(idx, 0, new I.Tweet(tweet));
@@ -426,16 +425,16 @@ class TweetStore extends VuexModule {
   }
 
   @Mutation
-  private clearConv(user_id_str: string) {
-    const find = this.stateTweet.tweets.find(x => x.key === user_id_str);
+  private clearConv(user_id: bigint) {
+    const find = this.stateTweet.tweets.find(x => x.key === user_id);
     if (find) {
       find.tweets.conv.splice(0, 999);
     }
   }
 
   @Action
-  ClearConv(user_id_str: string) {
-    this.context.commit('clearConv', user_id_str);
+  ClearConv(user_id: bigint) {
+    this.context.commit('clearConv', user_id);
     moduleDom.scrollConv?.panel.Clear();
   }
 
@@ -450,8 +449,8 @@ class TweetStore extends VuexModule {
   }
 
   @Mutation
-  private stopStreaming(idStr: string) {
-    const idx = this.stateStreaming.streamings.findIndex(x => x.key === idStr);
+  private stopStreaming(id: bigint) {
+    const idx = this.stateStreaming.streamings.findIndex(x => x.key === id);
     if (idx < 0) return;
     const streaming = this.stateStreaming.streamings[idx];
     if (streaming) {
@@ -461,8 +460,8 @@ class TweetStore extends VuexModule {
   }
 
   @Action
-  StopStreaming(idStr: string) {
-    this.context.commit('stopStreaming', idStr);
+  StopStreaming(id: string) {
+    this.context.commit('stopStreaming', id);
   }
 }
 
