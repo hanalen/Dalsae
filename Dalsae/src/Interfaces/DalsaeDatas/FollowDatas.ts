@@ -10,31 +10,31 @@ export class FollowUsers {
 }
 
 export class FollowDatas {
-  dicUsers: Map<string, FollowUsers>;
+  dicUsers: Map<bigint, FollowUsers>;
 
   constructor() {
     this.dicUsers = new Map();
   }
 
-  CheckKey(user_id_str: string) {
-    if (!this.dicUsers.has(user_id_str)) {
-      this.dicUsers.set(user_id_str, new FollowUsers());
+  CheckKey(user_id: bigint) {
+    if (!this.dicUsers.has(user_id)) {
+      this.dicUsers.set(user_id, new FollowUsers());
     }
   }
 
-  AddFollowing(listUser: I.User[], user_id_str: string) {
-    this.CheckKey(user_id_str);
-    const users = this.dicUsers.get(user_id_str);
+  AddFollowing(listUser: I.User[], user_id: bigint) {
+    this.CheckKey(user_id);
+    const users = this.dicUsers.get(user_id);
     if (!users) return;
     listUser.forEach(user => {
-      if (!users.listFollowing.find(x => x.id_str === user.id_str)) {
+      if (!users.listFollowing.find(x => x.id === user.id)) {
         users.listFollowing.push(user);
       }
     });
   }
-  AddFollower(listUser: I.User[], user_id_str: string) {
-    this.CheckKey(user_id_str);
-    const users = this.dicUsers.get(user_id_str);
+  AddFollower(listUser: I.User[], user_id: bigint) {
+    this.CheckKey(user_id);
+    const users = this.dicUsers.get(user_id);
     if (!users) return;
     listUser.forEach(user => {
       if (!users.listFollower.find(x => x.id_str === user.id_str)) {
@@ -42,8 +42,8 @@ export class FollowDatas {
       }
     });
   }
-  UpdateUserInfo(user: I.User, user_id_str: string) {
-    const users = this.dicUsers.get(user_id_str);
+  UpdateUserInfo(user: I.User, user_id: bigint) {
+    const users = this.dicUsers.get(user_id);
     if (!users) return;
     //팔로잉 팔로워 데이터 갱신
     const idxFollowing = users.listFollowing.findIndex(x => x.id_str === user.id_str);
