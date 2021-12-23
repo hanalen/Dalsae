@@ -27,19 +27,11 @@ class StateProfile {
   isUpdateProfile = false;
 }
 
-interface StateUpdateProfile {
-  name: string;
-  bio: string;
-  place: string;
-  url: string;
-}
-
 @Module({ dynamic: true, store, name: 'profile' })
 class ProfileStore extends VuexModule {
   showUser: I.User = new I.User(); //상단에 보이는 유저
   selectUser: I.User = new I.User(); //하단 목록에 사용되는 유저
   stateProfile = new StateProfile();
-  stateUpdateProfile: StateUpdateProfile = { name: '', bio: '', place: '', url: '' };
   listFollower: I.FollowerList = { next_cursor_str: '', users: [], previous_cursor_str: '' };
   listFollowing: I.FollowerList = { next_cursor_str: '', users: [], previous_cursor_str: '' };
   listFollowerIds: I.BlockIds = {
@@ -197,16 +189,6 @@ class ProfileStore extends VuexModule {
   @Action
   ClearIds() {
     this.context.commit('clearIds');
-  }
-
-  @Mutation
-  private setStateUpdateProfile(state: StateUpdateProfile) {
-    this.stateUpdateProfile = state;
-  }
-
-  @Action
-  SetStateUpdateProfile(state: StateUpdateProfile) {
-    this.context.commit('setStateUpdateProfile', state);
   }
 }
 
