@@ -13,6 +13,8 @@ module.exports = {
     parser: '@typescript-eslint/parser'
   },
   rules: {
+    'camelcase': 'off',
+    '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/interface-name-prefix': 0,
     'prettier/prettier': [
       'warn',
