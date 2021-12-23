@@ -42,8 +42,8 @@ export function FindTweetIndex(tweet: I.Tweet, list: I.Tweet[]) {
   }
   return idx;
 }
-export function CheckMention(tweet: I.Tweet, userIdStr: string, muteOption: I.MuteOption): boolean {
-  if (tweet.entities.user_mentions.map(x => x.id_str).includes(userIdStr)) return true;
+export function CheckMention(tweet: I.Tweet, userId: bigint, muteOption: I.MuteOption): boolean {
+  if (tweet.entities.user_mentions.map(x => x.id).includes(userId)) return true;
 
   const { highlight } = muteOption;
   for (let i = 0; i < highlight.length; i++) {
@@ -55,11 +55,11 @@ export function CheckMention(tweet: I.Tweet, userIdStr: string, muteOption: I.Mu
   return false;
 }
 
-export function CheckBlock(tweet: I.Tweet, blockIds: string[]): boolean {
-  const ids: string[] = [];
-  if (tweet.retweeted_status) ids.push(tweet.retweeted_status.user.id_str);
-  ids.push(tweet.user.id_str);
-  ids.concat(tweet.entities.user_mentions.map(x => x.id_str));
+export function CheckBlock(tweet: I.Tweet, blockIds: bigint[]): boolean {
+  const ids: bigint[] = [];
+  if (tweet.retweeted_status) ids.push(tweet.retweeted_status.user.id);
+  ids.push(tweet.user.id);
+  ids.concat(tweet.entities.user_mentions.map(x => x.id));
   for (let i = 0; i < ids.length; i++) {
     if (blockIds.includes(ids[i])) return true;
   }
@@ -70,12 +70,12 @@ export function CheckBlock(tweet: I.Tweet, blockIds: string[]): boolean {
 
 export function CheckMute(
   tweet: I.Tweet,
-  userIdStr: string,
+  userId: bigint,
   muteOption: I.MuteOption,
-  muteIds: string[] | undefined
+  muteIds: bigint[] | undefined
 ): boolean {
   const { client, keyword } = muteOption;
-  const orgTweet = tweet.retweeted_status ? tweet.retweeted_status : tweet;
+  const orgTweet = { ...tweet };
   let source = orgTweet.source;
   source = source.substring(source.indexOf('>') + 1, 999);
   source = source.substring(0, source.indexOf('<'));
@@ -101,8 +101,8 @@ export function CheckMute(
   //TODO 공홈에서 땡겨온 유저 뮤트 목록이랑 연동 필요
   if (muteIds) {
     for (let i = 0; i < muteIds.length; i++) {
-      if (muteIds.includes(orgTweet.user.id_str)) return true;
-      else if (muteIds.includes(tweet.user.id_str)) return true;
+      if (muteIds.includes(orgTweet.user.id)) return true;
+      else if (muteIds.includes(tweet.user.id)) return true;
     }
   }
   return false;
@@ -110,25 +110,25 @@ export function CheckMute(
 
 export function CheckShowHomeTweet(
   tweet: I.Tweet,
-  userIdStr: string,
+  userId: bigint,
   muteOption: I.MuteOption,
-  blockIds: string[],
-  muteIds: string[] | undefined
+  blockIds: bigint[],
+  muteIds: bigint[] | undefined
 ): boolean {
   if (CheckBlock(tweet, blockIds)) return false;
-  if (CheckMute(tweet, userIdStr, muteOption, muteIds)) return false;
+  if (CheckMute(tweet, userId, muteOption, muteIds)) return false;
   return true;
 }
 
 export function CheckShowMentionTweet(
   tweet: I.Tweet,
-  userIdStr: string,
+  userId: bigint,
   muteOption: I.MuteOption,
-  blockIds: string[],
-  muteIds: string[] | undefined
+  blockIds: bigint[],
+  muteIds: bigint[] | undefined
 ): boolean {
   if (CheckBlock(tweet, blockIds)) return false;
-  if (CheckMute(tweet, userIdStr, muteOption, muteIds) && muteOption.isMuteMention) return false;
+  if (CheckMute(tweet, userId, muteOption, muteIds) && muteOption.isMuteMention) return false;
   return true;
 }
 
