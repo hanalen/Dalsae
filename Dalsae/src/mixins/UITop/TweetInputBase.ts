@@ -11,6 +11,7 @@ import { moduleModal } from '@/store/modules/ModalStore';
 import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
 import { Messagetype } from '@/mixins';
+import { moduleDom } from '@/store/modules/DomStore';
 @Component
 export class TweetInputBase extends Vue {
   @Ref()
@@ -21,11 +22,11 @@ export class TweetInputBase extends Vue {
   refFileVideo!: HTMLInputElement;
 
   get styleTextArea() {
+    const obj: any = new Object();
     if (this.GetTweetLength() > 280) {
-      return {
-        'background-color': '#ffc6b9'
-      };
-    } else return '';
+      obj['background-color'] = '#ffc6b9';
+    }
+    return obj;
   }
 
   get inputText() {
@@ -33,6 +34,13 @@ export class TweetInputBase extends Vue {
   }
 
   set inputText(text: string) {
+    this.textArea.style.height = this.textArea.style.minHeight;
+    let height = this.textArea.scrollHeight;
+    if (text === '') {
+      height = 0;
+    }
+    this.textArea.style.height = height + 'px';
+    moduleDom.SetTextAreaHeight(height);
     moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: text });
   }
 

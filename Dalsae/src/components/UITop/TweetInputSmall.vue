@@ -60,8 +60,6 @@
 
 <style lang="scss" scoped>
 .tweet-input {
-  // width: calc(100vw - 20px);
-  // height: 90px;
   padding: 0px !important;
   display: flex;
   flex-direction: column;
@@ -69,10 +67,6 @@
 .tweet-input-top {
   display: flex;
   width: 100%;
-}
-textarea {
-  border-radius: 4px;
-  border: 1px solid #c1c1c1;
 }
 textarea:focus {
   outline: none;
@@ -106,12 +100,15 @@ textarea:focus {
 }
 textarea {
   font-family: 'Malgun Gothic' !important;
-  height: 25px;
+  min-height: 25px;
   font-size: 13px !important;
   background-color: white;
   padding: 2px 4px 2px 4px;
   resize: none;
   width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #c1c1c1;
 }
 </style>
 

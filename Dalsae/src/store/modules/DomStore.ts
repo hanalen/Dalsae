@@ -9,6 +9,10 @@ import { moduleUI } from './UIStore';
 class StateDom {
   audio!: HTMLAudioElement;
   textArea!: HTMLTextAreaElement;
+  textAreaheight: number;
+  constructor() {
+    this.textAreaheight = 0;
+  }
 }
 
 interface ScrollPanel {
@@ -126,6 +130,16 @@ class DomStore extends VuexModule {
   @Action
   DeleteTweet(tweet: I.Tweet) {
     this.context.commit('deleteTweet', tweet);
+  }
+
+  @Mutation
+  private setTextAreaHeight(height: number) {
+    this.stateDom.textAreaheight = height;
+  }
+
+  @Action
+  SetTextAreaHeight(height: number) {
+    this.context.commit('setTextAreaHeight', height);
   }
 }
 

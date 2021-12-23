@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 <template>
   <v-app>
     <audio style="diplay: none;" ref="refAudio" :src="pathSound" />
@@ -60,7 +59,13 @@ export default class Home extends Mixins(DalsaeApp, IPCPipeLine) {
   }
   get topHeight() {
     let ret = 0;
-    ret += moduleOption.uiOption.isSmallInput ? 33 : 90;
+    const height = moduleDom.stateDom.textAreaheight;
+    if (height) {
+      ret += height;
+    } else {
+      ret += moduleOption.uiOption.isSmallInput ? 25 : 42;
+    }
+    ret += moduleOption.uiOption.isSmallInput ? 11 : 46;
     ret += moduleUI.stateInput.listImage.length > 0 ? 280 : 0;
     ret += moduleUI.stateInput.video ? 280 : 0;
     return ret;

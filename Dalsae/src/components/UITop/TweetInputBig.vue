@@ -23,7 +23,6 @@
       background-color="white"
       no-resize
       :spellcheck="false"
-      height="44"
       v-on:paste="Paste"
       :style="styleTextArea"
       @input="OnChange"
@@ -74,10 +73,6 @@
   display: flex;
   flex-direction: column;
 }
-textarea {
-  border-radius: 4px;
-  border: 1px solid #c1c1c1;
-}
 textarea:focus {
   outline: none;
   border-radius: 4px;
@@ -109,11 +104,14 @@ textarea:focus {
 }
 textarea {
   font-family: 'Malgun Gothic' !important;
-  height: 44px;
   font-size: 13px !important;
   background-color: white;
   padding: 2px 4px 2px 4px;
   resize: none;
+  border-radius: 4px;
+  border: 1px solid #c1c1c1;
+  overflow: hidden;
+  min-height: 44px;
 }
 </style>
 
