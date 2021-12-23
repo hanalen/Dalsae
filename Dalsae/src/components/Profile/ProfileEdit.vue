@@ -1,24 +1,20 @@
 <template>
   <div>
-    <v-img class="profile-header" :src="userHeader">
-      <template v-slot:placeholder>
-        <v-row class="fill-height ma-0" align="center" justify="center">
-          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-        </v-row>
-      </template>
-    </v-img>
+    <div class="header">
+      <img class="profile-header" :src="userHeader" />
+      <div class="overlay" />
+      <v-icon class="edit-btn" style="font-size:28px; color:#1da1f2" offset-x="20"
+        >mdi-camera-enhance</v-icon
+      >
+    </div>
     <div class="profile">
       <div class="profile-left">
         <div class="propic">
-          <v-avatar rounded :size="84">
-            <v-img :src="userPropic">
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                </v-row>
-              </template>
-            </v-img>
-          </v-avatar>
+          <img class="v-avatar" :src="userPropic" />
+          <div class="overlay" />
+          <v-icon class="edit-btn" style="font-size:28px; color:#1da1f2" offset-x="20"
+            >mdi-camera-enhance</v-icon
+          >
         </div>
       </div>
       <div class="profile-right">
@@ -91,14 +87,34 @@
 </template>
 
 <style lang="scss" scoped>
-.profile {
+.profile,
+.header {
   display: flex;
-  width: 100vh;
+  width: 100vw;
+  position: relative;
 }
 
+.header {
+  height: 250px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.profile-header {
+  border-radius: 20px;
+  height: 250px;
+}
 .profile {
   height: 200px;
-  overflow: hidden;
+}
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+  background-color: rgba(128, 128, 128, 0.5);
 }
 .profile-left {
   width: 128px;
@@ -120,15 +136,29 @@
   border-radius: 20px;
   margin-bottom: 8px;
   height: 250px;
+  width: 100%;
 }
 
 .v-avatar {
   border-radius: 10px !important;
+  width: 84px;
+  height: 84px;
+}
+.edit-btn {
+  position: absolute !important;
+  top: calc(50% - 14px);
+  left: calc(50% - 14px);
+  background-color: white;
+  border-radius: 50%;
+}
+.edit-btn:hover {
+  cursor: pointer;
 }
 .propic {
   margin-left: 20px;
   width: 84px;
   height: 84px;
+  position: relative;
 }
 </style>
 
