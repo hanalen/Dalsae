@@ -18,15 +18,15 @@ export class Tweets {
   }
 }
 export function FindTweet(
-  tweetIdStr: string,
-  userIdStr: string,
+  tweetId: bigint,
+  userIdStr: bigint,
   homes: I.Tweet[] | undefined,
   mentions: I.Tweet[] | undefined
 ) {
   if (!homes || !mentions) return;
-  const findA = homes.find(x => x.id_str === tweetIdStr);
+  const findA = homes.find(x => x.id === tweetId);
   if (findA) return findA;
-  const findB = mentions.find(x => x.id_str === tweetIdStr);
+  const findB = mentions.find(x => x.id === tweetId);
   if (findB) return findB;
   return undefined;
 }
@@ -91,12 +91,12 @@ export function CheckMute(
     }
   }
 
-  const tweetIds = muteOption.tweet.map(x => x.id_str);
+  const tweetIds = muteOption.tweet.map(x => x.id);
 
   for (let i = 0; i < tweetIds.length; i++) {
-    if (tweetIds.includes(orgTweet.id_str)) return true;
-    else if (tweetIds.includes(orgTweet.in_reply_to_status_id_str)) return true;
-    else if (tweetIds.includes(orgTweet.quoted_status?.id_str)) return true;
+    if (tweetIds.includes(orgTweet.id)) return true;
+    else if (tweetIds.includes(orgTweet.in_reply_to_status_id)) return true;
+    else if (tweetIds.includes(orgTweet.quoted_status?.id)) return true;
   }
   //TODO 공홈에서 땡겨온 유저 뮤트 목록이랑 연동 필요
   if (muteIds) {
@@ -213,10 +213,10 @@ export class TweetDatas {
       }
     }
 
-    const tweetIds = muteOption.tweet.map(x => x.id_str);
+    const tweetIds = muteOption.tweet.map(x => x.id);
 
     for (let i = 0; i < tweetIds.length; i++) {
-      if (tweetIds.includes(orgTweet.id_str)) return true;
+      if (tweetIds.includes(orgTweet.id)) return true;
     }
     //TODO 공홈에서 땡겨온 유저 뮤트 목록이랑 연동 필요
 
@@ -225,24 +225,24 @@ export class TweetDatas {
       else if (muteIds.includes(tweet.user.id)) return true;
     }
     for (let i = 0; i < listTweet.length; i++) {
-      if (listTweet[i].id_str === orgTweet.id_str) {
+      if (listTweet[i].id === orgTweet.id) {
         return true;
-      } else if (listTweet[i].id_str === orgTweet.in_reply_to_status_id_str) {
+      } else if (listTweet[i].id === orgTweet.in_reply_to_status_id) {
         return true;
-      } else if (listTweet[i].id_str === orgTweet.quoted_status?.id_str) {
+      } else if (listTweet[i].id === orgTweet.quoted_status?.id) {
         return true;
       }
     }
     return false;
   }
 
-  FindTweet(tweetIdStr: string, userId: bigint) {
+  FindTweet(tweetId: bigint, userId: bigint) {
     const homes = this.dicTweets.get(userId)?.homes;
     const mentions = this.dicTweets.get(userId)?.mentions;
     if (!homes || !mentions) return;
-    const findA = homes.find(x => x.id_str === tweetIdStr);
+    const findA = homes.find(x => x.id === tweetId);
     if (findA) return findA;
-    const findB = mentions.find(x => x.id_str === tweetIdStr);
+    const findB = mentions.find(x => x.id === tweetId);
     if (findB) return findB;
     return null;
   }
@@ -301,7 +301,7 @@ export class TweetDatas {
     const tweets = this.dicTweets.get(user_id)?.mentions;
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
-    if (tweets.find(x => x.id_str === tweet.id_str)) return; //exists
+    if (tweets.find(x => x.id === tweet.id)) return; //exists
     if (!this.CheckShowMentionTweet(tweet, user_id, muteOption, blockIds, muteIds)) return; //muted
     const idx = this.FindIndex(tweet, tweets);
     // const prevTweet = tweets[idx - 1];
@@ -323,7 +323,7 @@ export class TweetDatas {
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
-      if (!tweets.find(x => x.id_str === tweet.id_str)) {
+      if (!tweets.find(x => x.id === tweet.id)) {
         if (!this.CheckShowHomeTweet(tweet, muteOption, blockIds, muteIds)) return true; //muted
         if (this.CheckMention(tweet, user_id, muteOption)) {
           this.AddMention(tweet, user_id, muteOption, blockIds, muteIds);
@@ -370,7 +370,7 @@ export class TweetDatas {
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
     list.forEach(tweet => {
-      if (!tweets.find(x => x.id_str === tweet.id_str)) {
+      if (!tweets.find(x => x.id === tweet.id)) {
         const idx = this.FindIndex(tweet, tweets);
         // const prevTweet = tweets[idx - 1];
         // const scrollTop = prevTweet ? prevTweet.scrollTop + prevTweet.height : idx * minHeight;
@@ -386,7 +386,7 @@ export class TweetDatas {
     const tweets = this.dicTweets.get(user_id)?.conv;
     //TODO 에러 처리 해야함
     if (!tweets) throw Error('No ListTweets');
-    if (!tweets.find(x => x.id_str === tweet.id_str)) {
+    if (!tweets.find(x => x.id === tweet.id)) {
       const idx = this.FindIndex(tweet, tweets);
       tweets.splice(idx, 0, new I.Tweet(tweet));
     }

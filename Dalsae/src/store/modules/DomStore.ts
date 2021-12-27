@@ -64,7 +64,7 @@ class DomStore extends VuexModule {
     for (const panel of this.stateScrollPanel.listScrollPanel) {
       for (const item of panel.panel.stateData.listData) {
         const currentTweet = item.data as I.Tweet;
-        if (currentTweet.orgTweet.id_str === tweet.orgTweet.id_str) {
+        if (currentTweet.orgTweet.id === tweet.orgTweet.id) {
           currentTweet.orgTweet.retweeted = tweet.retweeted;
           currentTweet.orgTweet.favorited = tweet.favorited;
           item.isResized = true;
@@ -118,7 +118,7 @@ class DomStore extends VuexModule {
   @Mutation
   private deleteTweet(tweet: I.Tweet) {
     for (const panel of this.stateScrollPanel.listScrollPanel) {
-      const find = panel.panel.stateData.listData.find(x => x.key === tweet.id_str);
+      const find = panel.panel.stateData.listData.find(x => x.key === tweet.id);
       if (find) {
         const t = find.data as I.Tweet;
         t.isDelete = true;

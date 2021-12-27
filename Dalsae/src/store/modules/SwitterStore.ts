@@ -15,14 +15,8 @@ class StateSwitter {
   }
 }
 
-interface BlockIdsBigInt {
-  ids: bigint[];
-  next_cursor_str: string;
-  previous_cursor_str: string;
-}
-
 class StateIds {
-  dicBlockIds: Map<bigint, BlockIdsBigInt> = new Map();
+  dicBlockIds: Map<bigint, I.BlockIdsBigInt> = new Map();
   dicMuteIds: Map<bigint, bigint[]> = new Map();
 
   followDatas = new FollowDatas();
@@ -155,11 +149,11 @@ class SwitterStore extends VuexModule {
     const { user } = userInfo;
     if (user.following) {
       //팔로잉 추가
-      const idx = ids.listFollowing.findIndex(x => x.id_str === user.id_str);
+      const idx = ids.listFollowing.findIndex(x => x.id === user.id);
       if (idx === -1) ids.listFollowing.push(user);
     } else {
       //언팔로잉
-      const idx = ids.listFollowing.findIndex(x => x.id_str === user.id_str);
+      const idx = ids.listFollowing.findIndex(x => x.id === user.id);
       if (idx !== -1) ids.listFollowing.splice(idx, 1);
     }
   }

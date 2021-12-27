@@ -118,17 +118,17 @@ export class DalsaeApp extends Vue {
       //홈, 멘션, 관글, 차단 비동기로 호출
       //사용자 정보의 경우 그때그때 호출 하고 인장은 switter에 저장 해놓자
       await moduleApi.account.VerifyCredentials(); //사용자 정보 수신 대기 후 user 최신 정보 update
-      window.ipc.files.SaveSwitter(moduleSwitter.stateSwitter.switter);
-      moduleDm.ClearDM();
-      moduleApi.friends.List({ screen_name: '', count: 200 }, id, true);
-      moduleApi.followers.List({ screen_name: '', count: 200 }, id, true);
-      const dicBlock = moduleSwitter.stateIds.dicBlockIds.get(id);
-      const cursorBlock = dicBlock ? dicBlock.next_cursor_str : '-1';
-      moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true }, id);
-      moduleApi.block.Ids({ cursor: cursorBlock, stringify_ids: true }, id);
+      // window.ipc.files.SaveSwitter(moduleSwitter.stateSwitter.switter);
+      // moduleDm.ClearDM();
+      // moduleApi.friends.List({ screen_name: '', count: 200 }, id, true);
+      // moduleApi.followers.List({ screen_name: '', count: 200 }, id, true);
+      // const dicBlock = moduleSwitter.stateIds.dicBlockIds.get(id);
+      // const cursorBlock = dicBlock ? dicBlock.next_cursor_str : '-1';
+      // moduleApi.mutes.Ids({ cursor: '-1', stringify_ids: true }, id);
+      // moduleApi.block.Ids({ cursor: cursorBlock, stringify_ids: true }, id);
       moduleApi.statuses.TimeLine();
       moduleApi.statuses.Mention();
-      moduleApi.directMessage.List();
+      // moduleApi.directMessage.List();
       const streaming = new UserStreaming();
       streaming.Connect(moduleSwitter.publicKey, moduleSwitter.secretKey, id);
       moduleTweet.AddStreaming({ key: id, streaming: streaming });
@@ -192,7 +192,7 @@ export class DalsaeApp extends Vue {
         moduleDom.stateDom.textArea.focus();
         break;
       case I.E_HOTKEY.SHOWCONTEXT:
-        if (selectTweet) eventBus.$emit('ShowContextMenu', selectTweet.id_str);
+        if (selectTweet) eventBus.$emit('ShowContextMenu', selectTweet.id);
         break;
       case I.E_HOTKEY.HOME:
         moduleUtil.ScrollToIndex(0);

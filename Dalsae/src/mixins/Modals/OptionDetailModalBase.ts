@@ -280,7 +280,7 @@ export class OptionDetailModalBase extends Vue {
   OnRemoveTweet() {
     const tweet = this.state.selectTweet;
     if (tweet) {
-      const index = this.muteOption.tweet.findIndex(x => x.id_str === tweet.id_str);
+      const index = this.muteOption.tweet.findIndex(x => x.id === tweet.id);
       if (index === -1) return;
       this.state.selectTweet = undefined;
       this.muteOption.tweet.splice(index, 1);

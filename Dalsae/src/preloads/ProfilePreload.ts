@@ -9,7 +9,7 @@ export const profilePreload = {
     screenName: string,
     switter: I.Switter,
     followDatas: I.FollowDatas,
-    blockIds: Map<string, I.BlockIds>
+    blockIds: Map<bigint, I.BlockIdsBigInt>
   ) {
     const url = `/ProfileView?screenName=${screenName}`;
 

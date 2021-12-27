@@ -53,7 +53,7 @@ export const imagePreload = {
     });
   },
   OpenImageWindow(tweet: I.Tweet, option: I.UIOption, switter: I.Switter) {
-    const ipcName = tweet.id_str;
+    const ipcName = tweet.id.toString();
     const url = `/ImageView?tweetId=${ipcName}`;
     ipcRenderer.send('OpenWindow', {
       url: url,

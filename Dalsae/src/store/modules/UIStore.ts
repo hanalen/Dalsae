@@ -14,7 +14,7 @@ import { moduleUtil } from './UtilStore';
 export interface IStatePanel {
   tweetType: ETweetType;
   index: number;
-  selectedId: string;
+  selectedId: bigint;
   isLoad: boolean;
 }
 
@@ -82,31 +82,31 @@ export class StatePanel {
     this.home = {
       tweetType: ETweetType.E_HOME,
       index: 0,
-      selectedId: '',
+      selectedId: BigInt(0),
       isLoad: false
     };
     this.mention = {
       tweetType: ETweetType.E_MENTION,
       index: 0,
-      selectedId: '',
+      selectedId: BigInt(0),
       isLoad: false
     };
     this.favorite = {
       tweetType: ETweetType.E_FAVORITE,
       index: 0,
-      selectedId: '',
+      selectedId: BigInt(0),
       isLoad: false
     };
     this.open = {
       tweetType: ETweetType.E_OPEN,
       index: 0,
-      selectedId: '',
+      selectedId: BigInt(0),
       isLoad: false
     };
     this.conv = {
       tweetType: ETweetType.E_CONV,
       index: 0,
-      selectedId: '',
+      selectedId: BigInt(0),
       isLoad: false
     };
   }
@@ -234,7 +234,7 @@ class UIStore extends VuexModule {
   }
 
   @Action
-  ChangeSelectTweet(idStr: string) {
+  ChangeSelectTweet(id: bigint) {
     let panel: IStatePanel | undefined = undefined;
     let listTweet: I.Tweet[] | undefined = undefined;
 
@@ -256,7 +256,7 @@ class UIStore extends VuexModule {
     }
     let idx = 0;
     if (!panel || !listTweet) return;
-    idx = listTweet.findIndex(x => x.id_str === idStr);
+    idx = listTweet.findIndex(x => x.id === id);
     moduleUtil.ScrollToIndex(idx);
   }
 

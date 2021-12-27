@@ -43,7 +43,7 @@ export class TweetBase extends Vue {
   }
 
   get isConv() {
-    return this.orgTweet.in_reply_to_status_id_str ? true : false;
+    return this.orgTweet.in_reply_to_status_id ? true : false;
   }
 
   get uiOption() {

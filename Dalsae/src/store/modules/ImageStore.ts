@@ -96,7 +96,7 @@ class ImageStore extends VuexModule {
   @Mutation
   private updateRTandFav(tweet: I.Tweet) {
     if (!this.tweet || !this.tweet.orgTweet) return;
-    if (this.tweet.orgTweet.id_str !== tweet.orgTweet.id_str) return;
+    if (this.tweet.orgTweet.id !== tweet.orgTweet.id) return;
 
     this.tweet.orgTweet.favorited = tweet.orgTweet.favorited;
     this.tweet.orgTweet.retweeted = tweet.orgTweet.retweeted;
@@ -105,7 +105,7 @@ class ImageStore extends VuexModule {
   @Mutation
   private deleteTweet(tweet: I.Tweet) {
     if (!this.tweet.orgTweet) return;
-    if (this.tweet.orgTweet.id_str === tweet.id_str) {
+    if (this.tweet.orgTweet.id === tweet.id) {
       this.tweet.isDelete = true;
     }
   }

@@ -37,7 +37,7 @@ export class ProfilePage extends Vue {
     return moduleModal.stateMessage.listMessage;
   }
   get itsMe() {
-    return moduleProfile.showUser.id_str === moduleSwitter.selectID;
+    return moduleProfile.showUser.id === moduleSwitter.selectID;
   }
   get isLoadProfile() {
     return moduleProfile.stateProfile.isLoadProfile;
@@ -171,7 +171,7 @@ export class ProfilePage extends Vue {
     const { screen_name } = moduleProfile.selectUser;
     const resp = await moduleApi.followers.List(
       { screen_name: screen_name, count: 200, cursor: cursor },
-      '',
+      BigInt(0),
       false
     );
     moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadFollower: false });
@@ -187,7 +187,7 @@ export class ProfilePage extends Vue {
     const { screen_name } = moduleProfile.selectUser;
     const resp = await moduleApi.friends.List(
       { screen_name: screen_name, count: 200, cursor: cursor },
-      '',
+      BigInt(0),
       false
     );
     moduleProfile.SetState({ ...moduleProfile.stateProfile, isLoadFollowing: false });
@@ -208,7 +208,7 @@ export class ProfilePage extends Vue {
   get followerText() {
     const user = this.showUser;
     if (!user) return '';
-    if (moduleProfile.listFollowerIds.ids.findIndex(x => x === user.id_str) > -1) {
+    if (moduleProfile.listFollowerIds.ids.findIndex(x => x === user.id) > -1) {
       return ' 님은 나를 팔로우 하고 있습니다.';
     } else {
       return '';
@@ -218,9 +218,9 @@ export class ProfilePage extends Vue {
   get followText() {
     const user = this.showUser;
     if (!user) return '';
-    if (moduleProfile.listRequestIds.ids.findIndex(x => x === user.id_str) > -1) {
+    if (moduleProfile.listRequestIds.ids.findIndex(x => x === user.id) > -1) {
       return '팔로우 요청 중';
-    } else if (moduleProfile.listFollowingIds.ids.findIndex(x => x === user.id_str) > -1) {
+    } else if (moduleProfile.listFollowingIds.ids.findIndex(x => x === user.id) > -1) {
       return '언팔로우';
     } else {
       return '팔로잉';

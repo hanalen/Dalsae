@@ -94,7 +94,7 @@ class TweetStore extends VuexModule {
       listConcatTweets = [tweet];
     }
     for (const item of listConcatTweets) {
-      if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) return; //exists
+      if (orgTweets.find(x => x.id === addTweet.tweet?.id)) return; //exists
       if (
         !CheckShowHomeTweet(item, user_id, muteOption, listBlockIds, listMuteIds) &&
         muteOption.isMuteMention //멘션도 뮤트처리
@@ -109,9 +109,9 @@ class TweetStore extends VuexModule {
           moduleDom.scrollMention?.panel.AddData(new I.Tweet(item), idx);
           const { mention } = moduleUI.statePanel;
           let selectedId = mention.selectedId;
-          let idx2 = tweets.tweets.mentions.findIndex(x => x.id_str === selectedId);
+          let idx2 = tweets.tweets.mentions.findIndex(x => x.id === selectedId);
           if (idx2 === -1) idx2 = 0;
-          selectedId = tweets.tweets.mentions[idx2].id_str;
+          selectedId = tweets.tweets.mentions[idx2].id;
           isAddMention = true;
           moduleUI.SetStatePanel({
             ...moduleUI.statePanel,
@@ -127,9 +127,9 @@ class TweetStore extends VuexModule {
     }
     const { home } = moduleUI.statePanel;
     let selectedId = home.selectedId;
-    let idx = tweets.tweets.homes.findIndex(x => x.id_str === selectedId);
+    let idx = tweets.tweets.homes.findIndex(x => x.id === selectedId);
     if (idx === -1) idx = 0;
-    selectedId = tweets.tweets.homes[idx].id_str;
+    selectedId = tweets.tweets.homes[idx].id;
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
       home: { ...home, index: idx, selectedId: selectedId }
@@ -163,7 +163,7 @@ class TweetStore extends VuexModule {
     }
     let isAddMention = false;
     for (const item of listConcatTweets) {
-      if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
+      if (orgTweets.find(x => x.id === addTweet.tweet?.id)) {
         return; //exists
       }
       if (!CheckShowMentionTweet(item, user_id, muteOption, listBlockIds, listMuteIds)) return; //muted
@@ -174,9 +174,9 @@ class TweetStore extends VuexModule {
     }
     const { mention } = moduleUI.statePanel;
     let selectedId = mention.selectedId;
-    let idx = tweets.tweets.mentions.findIndex(x => x.id_str === selectedId);
+    let idx = tweets.tweets.mentions.findIndex(x => x.id === selectedId);
     if (idx === -1) idx = 0;
-    selectedId = tweets.tweets.mentions[idx].id_str;
+    selectedId = tweets.tweets.mentions[idx].id;
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
       mention: { ...mention, index: idx, selectedId: selectedId }
@@ -210,7 +210,7 @@ class TweetStore extends VuexModule {
       listConcatTweets = [tweet];
     }
     for (const item of listConcatTweets) {
-      if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
+      if (orgTweets.find(x => x.id === addTweet.tweet?.id)) {
         return; //exists
       }
       if (!CheckShowMentionTweet(item, user_id, muteOption, listBlockIds, listMuteIds)) return; //muted
@@ -220,9 +220,9 @@ class TweetStore extends VuexModule {
     }
     const { favorite } = moduleUI.statePanel;
     let selectedId = favorite.selectedId;
-    let idx2 = tweets.tweets.favorites.findIndex(x => x.id_str === selectedId);
+    let idx2 = tweets.tweets.favorites.findIndex(x => x.id === selectedId);
     if (idx2 === -1) idx2 = 0;
-    selectedId = tweets.tweets.favorites[idx2].id_str;
+    selectedId = tweets.tweets.favorites[idx2].id;
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
       favorite: { ...favorite, index: idx2, selectedId: selectedId }
@@ -239,16 +239,16 @@ class TweetStore extends VuexModule {
     if (!tweet) return;
     const orgTweets = tweets.tweets.opens;
 
-    if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
+    if (orgTweets.find(x => x.id === addTweet.tweet?.id)) {
       return; //exists
     }
     orgTweets.splice(0, 0, new I.Tweet(tweet));
     moduleDom.scrollOpen?.panel.AddData(new I.Tweet(addTweet.tweet), 0);
     const { open } = moduleUI.statePanel;
     let selectedId = open.selectedId;
-    let idx = tweets.tweets.opens.findIndex(x => x.id_str === selectedId);
+    let idx = tweets.tweets.opens.findIndex(x => x.id === selectedId);
     if (idx === -1) idx = 0;
-    selectedId = tweets.tweets.opens[idx].id_str;
+    selectedId = tweets.tweets.opens[idx].id;
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
       open: { ...open, index: idx, selectedId: selectedId }
@@ -271,7 +271,7 @@ class TweetStore extends VuexModule {
     if (!tweet) return;
     const orgTweets = tweets.tweets.conv;
 
-    if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
+    if (orgTweets.find(x => x.id === addTweet.tweet?.id)) {
       return; //exists
     }
     if (!CheckShowMentionTweet(tweet, user_id, muteOption, listBlockIds, listMuteIds)) return; //muted
@@ -281,9 +281,9 @@ class TweetStore extends VuexModule {
     moduleDom.scrollConv?.panel.AddData(new I.Tweet(tweet), idx);
     const { conv } = moduleUI.statePanel;
     let selectedId = conv.selectedId;
-    let idx2 = tweets.tweets.conv.findIndex(x => x.id_str === selectedId);
+    let idx2 = tweets.tweets.conv.findIndex(x => x.id === selectedId);
     if (idx2 === -1) idx2 = 0;
-    selectedId = tweets.tweets.conv[idx2].id_str;
+    selectedId = tweets.tweets.conv[idx2].id;
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
       conv: { ...conv, index: idx2, selectedId: selectedId }
@@ -340,7 +340,7 @@ class TweetStore extends VuexModule {
     const homes = tweets.homes;
     if (homes) {
       homes.forEach(item => {
-        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+        if (item.orgTweet.id === tweet.orgTweet.id) {
           item.orgTweet.retweeted = tweet.orgTweet.retweeted;
           item.orgTweet.favorited = tweet.orgTweet.favorited;
         }
@@ -349,7 +349,7 @@ class TweetStore extends VuexModule {
     const mentions = tweets.mentions;
     if (mentions) {
       mentions.forEach(item => {
-        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+        if (item.orgTweet.id === tweet.orgTweet.id) {
           item.orgTweet.retweeted = tweet.orgTweet.retweeted;
           item.orgTweet.favorited = tweet.orgTweet.favorited;
         }
@@ -358,7 +358,7 @@ class TweetStore extends VuexModule {
     const fav = tweets.favorites;
     if (fav) {
       fav.forEach(item => {
-        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+        if (item.orgTweet.id === tweet.orgTweet.id) {
           item.orgTweet.retweeted = tweet.orgTweet.retweeted;
           item.orgTweet.favorited = tweet.orgTweet.favorited;
         }
@@ -367,7 +367,7 @@ class TweetStore extends VuexModule {
     const open = tweets.opens;
     if (open) {
       open.forEach(item => {
-        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+        if (item.orgTweet.id === tweet.orgTweet.id) {
           item.orgTweet.retweeted = tweet.orgTweet.retweeted;
           item.orgTweet.favorited = tweet.orgTweet.favorited;
         }
@@ -376,7 +376,7 @@ class TweetStore extends VuexModule {
     const conv = tweets.conv;
     if (conv) {
       conv.forEach(item => {
-        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
+        if (item.orgTweet.id === tweet.orgTweet.id) {
           item.orgTweet.retweeted = tweet.orgTweet.retweeted;
           item.orgTweet.favorited = tweet.orgTweet.favorited;
         }
@@ -394,25 +394,25 @@ class TweetStore extends VuexModule {
     if (!pair) return;
 
     for (const t of pair.tweets.homes) {
-      if (t.orgTweet.id_str === tweet.id_str) {
+      if (t.orgTweet.id === tweet.id) {
         t.isDelete = true;
         break;
       }
     }
     for (const t of pair.tweets.mentions) {
-      if (t.orgTweet.id_str === tweet.id_str) {
+      if (t.orgTweet.id === tweet.id) {
         t.isDelete = true;
         break;
       }
     }
     for (const t of pair.tweets.favorites) {
-      if (t.orgTweet.id_str === tweet.id_str) {
+      if (t.orgTweet.id === tweet.id) {
         t.isDelete = true;
         break;
       }
     }
     for (const t of pair.tweets.conv) {
-      if (t.orgTweet.id_str === tweet.id_str) {
+      if (t.orgTweet.id === tweet.id) {
         t.isDelete = true;
         break;
       }

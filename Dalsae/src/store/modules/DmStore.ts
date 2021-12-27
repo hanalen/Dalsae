@@ -10,7 +10,7 @@ import { moduleDom } from './DomStore';
 import { moduleUtil } from './UtilStore';
 
 interface DmPair {
-  id: string; //key
+  id: bigint; //key
   user: I.User; //대화 상대 정보
   listDm: I.DMEvent[]; //list dm
 }
@@ -44,7 +44,7 @@ class DmStore extends VuexModule {
   }
 
   get listDm() {
-    const pair = this.stateDm.listDmPair.find(x => x.id === this.stateDm.selectUser.id_str);
+    const pair = this.stateDm.listDmPair.find(x => x.id === this.stateDm.selectUser.id);
     if (pair) {
       return pair.listDm;
     } else {
@@ -67,21 +67,21 @@ class DmStore extends VuexModule {
       const recv = dm.message_create?.target?.recipient_id;
       if (!sender || !recv) continue;
 
-      const key = sender === selectID ? recv : sender; //대화 상대 id
-      let pair = this.stateDm.listDmPair.find(x => x.id === key);
+      const key = sender === selectID.toString() ? recv : sender; //대화 상대 id
+      let pair = this.stateDm.listDmPair.find(x => x.id.toString() === key);
       if (!pair) {
         //첫 대화 add
         let user: I.User | undefined;
         //내 팔로잉, 팔로워일 경우 user정보 땡겨옴
-        user = moduleSwitter.listFollower.find(x => x.id_str === key);
-        if (!user) user = moduleSwitter.listFollowing.find(x => x.id_str === key);
+        user = moduleSwitter.listFollower.find(x => x.id.toString() === key);
+        if (!user) user = moduleSwitter.listFollowing.find(x => x.id.toString() === key);
         if (!user) {
           //팔로잉, 워가 아닌 사람과의 dm, user정보 요청 해야 함....
           user = new I.User();
-          user.id_str = key;
+          user.id = BigInt(key);
           moduleApi.users.Show({ user_id: key });
         }
-        pair = { id: key, listDm: [], user: user };
+        pair = { id: BigInt(key), listDm: [], user: user };
         isAdded = true;
         this.stateDm.listDmPair.push(pair);
       }
@@ -130,10 +130,10 @@ class DmStore extends VuexModule {
   AddDmStreaming(dm: I.StreamingDM) {
     const timeStamp = new Date(dm.direct_message.created_at).getTime().toString();
     const addDm: I.DMEvent = { created_timestamp: timeStamp, type: 'message_create' };
-    addDm.id = dm.direct_message.id_str;
+    addDm.id = dm.direct_message.id.toString();
     const messageCreate: I.MessageCreate = {
-      sender_id: dm.direct_message.sender.id_str,
-      target: { recipient_id: dm.direct_message.recipient.id_str }
+      sender_id: dm.direct_message.sender.id.toString(),
+      target: { recipient_id: dm.direct_message.recipient.id.toString() }
     };
     addDm.message_create = messageCreate;
     messageCreate.message_data = { text: dm.direct_message.text };
@@ -157,7 +157,7 @@ class DmStore extends VuexModule {
 
   @Mutation
   private setDMUser(user: I.User) {
-    const pair = this.stateDm.listDmPair.find(x => x.id === user.id_str);
+    const pair = this.stateDm.listDmPair.find(x => x.id === user.id);
     if (!pair) return;
     user.last_direct_message = pair.user.last_direct_message;
     pair.user = user;
@@ -170,10 +170,10 @@ class DmStore extends VuexModule {
 
   @Mutation
   private startDM(user: I.User) {
-    if (this.stateDm.listDmPair.find(x => x.id === user.id_str)) {
+    if (this.stateDm.listDmPair.find(x => x.id === user.id)) {
       this.stateDm.selectUser = user;
     } else {
-      this.stateDm.listDmPair.push({ id: user.id_str, user: user, listDm: [] });
+      this.stateDm.listDmPair.push({ id: user.id, user: user, listDm: [] });
       this.stateDm.selectUser = user;
     }
   }

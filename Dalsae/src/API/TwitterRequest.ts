@@ -375,18 +375,24 @@ export class TwitterRequest {
             data
           }),
         Destroy: (data: P.ReqDestroy) =>
-          this.post<P.ReqRetweet, I.Tweet>(baseUrl + '/statuses/destroy/' + data.id_str + '.json', {
-            data
-          }),
+          this.post<P.ReqRetweet, I.Tweet>(
+            baseUrl + '/statuses/destroy/' + data.id.toString() + '.json',
+            {
+              data
+            }
+          ),
         Show: (data: P.ReqConv) =>
           this.get<P.ReqConv, I.Tweet>(baseUrl + '/statuses/show.json', { data }),
         Retweet: (data: P.ReqRetweet) =>
-          this.post<P.ReqRetweet, I.Tweet>(baseUrl + '/statuses/retweet/' + data.id_str + '.json', {
-            data
-          }),
+          this.post<P.ReqRetweet, I.Tweet>(
+            baseUrl + '/statuses/retweet/' + data.id.toString() + '.json',
+            {
+              data
+            }
+          ),
         UnRetweet: (data: P.ReqRetweet) =>
           this.post<P.ReqRetweet, I.Tweet>(
-            baseUrl + '/statuses/unretweet/' + data.id_str + '.json',
+            baseUrl + '/statuses/unretweet/' + data.id.toString() + '.json',
             {
               data
             }

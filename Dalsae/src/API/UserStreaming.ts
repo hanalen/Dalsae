@@ -9,15 +9,15 @@ import axios from 'axios';
 import twitterRequest, { CreateHeader } from './TwitterRequest';
 import * as Sentry from '@sentry/vue';
 export class UserStreaming {
-  private idStr = '';
+  private id = BigInt(0);
   private reader!: ReadableStreamDefaultReader<Uint8Array>;
   private decoder = new TextDecoder();
   private json = '';
   private controller!: AbortController;
   private signal!: AbortSignal;
   timer!: NodeJS.Timeout;
-  async Connect(publicKey: string, secretKey: string, idStr: string) {
-    this.idStr = idStr;
+  async Connect(publicKey: string, secretKey: string, id: bigint) {
+    this.id = id;
     this.controller = new AbortController();
     this.signal = this.controller.signal;
 
@@ -39,7 +39,7 @@ export class UserStreaming {
       .catch((err: Error) => {
         this.StreamingError(err);
         this.timer = setTimeout(() => {
-          this.Connect(publicKey, secretKey, idStr);
+          this.Connect(publicKey, secretKey, id);
         }, 3000);
       });
   }
@@ -103,9 +103,10 @@ export class UserStreaming {
     try {
       const tweet: I.Tweet = JSON.parse(json);
       if (tweet.id_str != undefined) {
+        //id_str맞다
         moduleTweet.AddTweet({
           tweet: tweet,
-          user_id_str: this.idStr,
+          user_id: this.id,
           type: ETweetType.E_HOME,
           listTweet: undefined
         });

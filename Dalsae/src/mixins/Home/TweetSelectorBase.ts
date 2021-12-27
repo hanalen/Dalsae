@@ -36,7 +36,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickTweet(e: MouseEvent) {
     e.preventDefault();
-    moduleUI.ChangeSelectTweet(this.tweet.id_str);
+    moduleUI.ChangeSelectTweet(this.tweet.id);
   }
 
   get via() {
@@ -54,12 +54,10 @@ export class TweetSelectorBase extends Vue {
   }
 
   get isShowContext() {
-    return (
-      moduleUI.stateContext.isShow && moduleUI.stateContext.tweet?.id_str === this.tweet.id_str
-    );
+    return moduleUI.stateContext.isShow && moduleUI.stateContext.tweet?.id === this.tweet.id;
   }
   set isShowContext(isShow: boolean) {
-    if (isShow) moduleUI.ChangeSelectTweet(this.tweet.id_str);
+    if (isShow) moduleUI.ChangeSelectTweet(this.tweet.id);
     const { x, y } = moduleUI.stateContext;
     moduleUI.SetStateContext({
       ...moduleUI.stateContext,
@@ -105,9 +103,9 @@ export class TweetSelectorBase extends Vue {
     const arr: I.UserMention[] = [];
     //org, user, mentions
     arr.push(this.tweet.orgUser);
-    if (!arr.find(x => x.id_str === this.tweet.user.id_str)) arr.push(this.tweet.user);
+    if (!arr.find(x => x.id === this.tweet.user.id)) arr.push(this.tweet.user);
     this.tweet.entities.user_mentions.forEach(user => {
-      if (!arr.find(x => x.id_str === user.id_str)) arr.push(user);
+      if (!arr.find(x => x.id === user.id)) arr.push(user);
     });
     return arr;
   }
@@ -282,7 +280,7 @@ export class TweetSelectorBase extends Vue {
       isDivider: false
     });
 
-    if (this.orgUser.id_str === moduleSwitter.selectID) {
+    if (this.orgUser.id === moduleSwitter.selectID) {
       listContext.push({
         title: '',
         onClick: () => {
@@ -369,7 +367,7 @@ export class TweetSelectorBase extends Vue {
 
   OnClickMuteTweet(value: number) {
     const tweet = new I.Tweet();
-    tweet.id_str = this.tweet.orgTweet.id_str;
+    tweet.id = this.tweet.orgTweet.id;
     tweet.full_text = this.tweet.orgTweet.full_text;
     const tweets = moduleOption.muteOption.tweet.concat(tweet);
     const muteoption = { ...moduleOption.muteOption, tweet: tweets };

@@ -34,7 +34,7 @@ export class IPCPipeLine extends Vue {
         listTweet: undefined,
         tweet: tweet,
         type: ETweetType.E_OPEN,
-        user_id_str: moduleSwitter.selectID
+        user_id: moduleSwitter.selectID
       });
     });
     window.ipc.ipcPipe.on(EIPcType.EDeleteTweet, (tweet: I.Tweet) => {
@@ -131,7 +131,7 @@ export class IPCPipeLine extends Vue {
       });
       window.ipc.ipcPipe.once(
         `blokcids_${ipcData.ipcName}`,
-        (blockIds: Map<string, I.BlockIds>) => {
+        (blockIds: Map<bigint, I.BlockIdsBigInt>) => {
           moduleSwitter.SetStateIds({
             ...moduleSwitter.stateIds,
             dicBlockIds: blockIds

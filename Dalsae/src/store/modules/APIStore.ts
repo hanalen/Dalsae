@@ -136,7 +136,7 @@ class Statuses {
     tweet: string,
     image: string[],
     video: string,
-    in_reply_to_status_id?: string
+    in_reply_to_status_id: bigint
   ): Promise<P.APIResp<I.Tweet>> {
     let mediaStr = '';
     if (image || video) {
@@ -152,25 +152,28 @@ class Statuses {
     const result = await twitterRequest.call.statuses.Update({
       status: tweet,
       media_ids: mediaStr,
-      in_reply_to_status_id: in_reply_to_status_id
+      in_reply_to_status_id: in_reply_to_status_id.toString()
     });
     return result;
   }
   async Destroy(tweet: I.Tweet): Promise<void | P.APIResp<I.Tweet>> {
-    if (moduleSwitter.selectUser?.user.id_str === tweet.orgUser.id_str) {
-      const { id_str } = tweet.orgTweet;
-      const result = await twitterRequest.call.statuses.Destroy({ id_str: id_str });
+    if (moduleSwitter.selectUser?.user.id === tweet.orgUser.id) {
+      const { id } = tweet.orgTweet;
+      const result = await twitterRequest.call.statuses.Destroy({ id: id });
       if (!twitterRequest.CheckAPIError(result.data)) {
         window.ipc.ipcPipe.send(EIPcType.EDeleteTweet, result.data);
       }
     }
   }
-  async Show(id_str: string) {
+  async Show(id: bigint) {
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
       conv: { ...moduleUI.statePanel.conv, isLoad: true }
     });
-    const result = await twitterRequest.call.statuses.Show({ id: id_str, tweet_mode: 'extended' });
+    const result = await twitterRequest.call.statuses.Show({
+      id: id.toString(),
+      tweet_mode: 'extended'
+    });
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
       conv: { ...moduleUI.statePanel.conv, isLoad: false }
@@ -179,7 +182,7 @@ class Statuses {
       listTweet: undefined,
       tweet: result.data,
       type: ETweetType.E_CONV,
-      user_id_str: moduleSwitter.selectID
+      user_id: moduleSwitter.selectID
     });
     return result;
   }
@@ -188,8 +191,8 @@ class Statuses {
     if (tweet.orgTweet.retweeted) {
       return this.UnRetweet(tweet);
     } else {
-      const { id_str } = tweet.orgTweet;
-      const result = await twitterRequest.call.statuses.Retweet({ id_str: id_str });
+      const { id } = tweet.orgTweet;
+      const result = await twitterRequest.call.statuses.Retweet({ id: id });
       if (!twitterRequest.CheckAPIError(result.data)) {
         result.data.retweeted = true;
         window.ipc.ipcPipe.send(EIPcType.ERetweet, new I.Tweet(result.data));
@@ -202,8 +205,8 @@ class Statuses {
     if (!tweet.orgTweet.retweeted) {
       return this.Retweet(tweet);
     } else {
-      const { id_str } = tweet.orgTweet;
-      const result = await twitterRequest.call.statuses.UnRetweet({ id_str: id_str });
+      const { id } = tweet.orgTweet;
+      const result = await twitterRequest.call.statuses.UnRetweet({ id: id });
       if (!twitterRequest.CheckAPIError(result.data)) {
         result.data.retweeted = false;
         window.ipc.ipcPipe.send(EIPcType.ERetweet, new I.Tweet(result.data));
@@ -212,7 +215,7 @@ class Statuses {
       return result;
     }
   }
-  async TimeLine(maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> {
+  async TimeLine(maxId?: bigint, sinceId?: bigint): Promise<P.APIResp<I.Tweet[]>> {
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
       home: { ...moduleUI.statePanel.home, isLoad: true }
@@ -221,8 +224,8 @@ class Statuses {
     const result = await twitterRequest.call.statuses.TimeLine({
       count: 200,
       tweet_mode: 'extended',
-      max_id: maxId,
-      since_id: sinceId
+      max_id: maxId?.toString(),
+      since_id: sinceId?.toString()
     });
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
@@ -231,13 +234,13 @@ class Statuses {
     if (!twitterRequest.CheckAPIError(result.data)) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_HOME,
-        user_id_str: id,
+        user_id: id,
         listTweet: result.data
       });
     }
     return result;
   }
-  async Mention(maxId?: string, sinceId?: string): Promise<P.APIResp<I.Tweet[]>> {
+  async Mention(maxId?: bigint, sinceId?: bigint): Promise<P.APIResp<I.Tweet[]>> {
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
       mention: { ...moduleUI.statePanel.mention, isLoad: true }
@@ -246,8 +249,8 @@ class Statuses {
     const result = await twitterRequest.call.statuses.Mention({
       count: 200,
       tweet_mode: 'extended',
-      max_id: maxId,
-      since_id: sinceId
+      max_id: maxId?.toString(),
+      since_id: sinceId?.toString()
     });
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
@@ -256,7 +259,7 @@ class Statuses {
     if (!twitterRequest.CheckAPIError(result.data)) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_MENTION,
-        user_id_str: id,
+        user_id: id,
         listTweet: result.data
       });
     }
@@ -269,8 +272,8 @@ class Favorites {
     if (tweet.orgTweet.favorited) {
       return this.Destroy(tweet);
     } else {
-      const { id_str } = tweet.orgTweet;
-      const result = await twitterRequest.call.favorites.Create({ id: id_str });
+      const { id } = tweet.orgTweet;
+      const result = await twitterRequest.call.favorites.Create({ id: id.toString() });
       if (!twitterRequest.CheckAPIError(result.data)) {
         result.data.favorited = true;
         window.ipc.ipcPipe.send(EIPcType.EFavorite, new I.Tweet(result.data));
@@ -283,8 +286,8 @@ class Favorites {
     if (!tweet.orgTweet.favorited) {
       return this.Create(tweet);
     } else {
-      const { id_str } = tweet.orgTweet;
-      const result = await twitterRequest.call.favorites.Destroy({ id: id_str });
+      const { id } = tweet.orgTweet;
+      const result = await twitterRequest.call.favorites.Destroy({ id: id.toString() });
       if (!twitterRequest.CheckAPIError(result.data)) {
         result.data.favorited = false;
         window.ipc.ipcPipe.send(EIPcType.EFavorite, new I.Tweet(result.data));
@@ -293,7 +296,7 @@ class Favorites {
       return result;
     }
   }
-  async List(max_id?: string, since_id?: string) {
+  async List(max_id?: bigint, since_id?: bigint) {
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
       favorite: { ...moduleUI.statePanel.favorite, isLoad: true }
@@ -302,8 +305,8 @@ class Favorites {
     const result = await twitterRequest.call.favorites.List({
       count: 200,
       tweet_mode: 'extended',
-      max_id: max_id,
-      since_id: since_id
+      max_id: max_id?.toString(),
+      since_id: since_id?.toString()
     });
     moduleUI.SetStatePanel({
       ...moduleUI.statePanel,
@@ -312,7 +315,7 @@ class Favorites {
     if (!twitterRequest.CheckAPIError(result.data)) {
       store.dispatch('AddTweet', {
         type: S.ETweetType.E_FAVORITE,
-        user_id_str: id,
+        user_id: id,
         listTweet: result.data
       });
     }
@@ -321,7 +324,7 @@ class Favorites {
 
 class Block {
   timer!: NodeJS.Timeout;
-  async Ids(data: P.ReqBlockIds, idStr: string): Promise<P.APIResp<I.BlockIds>> {
+  async Ids(data: P.ReqBlockIds, id: bigint): Promise<P.APIResp<I.BlockIds>> {
     clearTimeout(this.timer);
     moduleSysbar.RemoveSystemBar(S.ESystemBar.EErrorBlockIds);
     moduleSysbar.AddSystemBar({
@@ -332,14 +335,14 @@ class Block {
     });
     const result = await twitterRequest.call.block.Ids(data);
     if (!twitterRequest.CheckAPIError(result.data)) {
-      moduleSwitter.AddBlockIds({ idStr: idStr, ids: result.data });
+      moduleSwitter.AddBlockIds({ id: id, ids: result.data });
       if (result.data.next_cursor_str !== '0') {
         this.Ids(
           {
             cursor: result.data.next_cursor_str,
             stringify_ids: true
           },
-          idStr
+          id
         );
       }
     } else {
@@ -351,7 +354,7 @@ class Block {
         toolTip: error
       });
       this.timer = setTimeout(() => {
-        this.Ids(data, idStr);
+        this.Ids(data, id);
       }, 60000);
     }
     moduleSysbar.RemoveSystemBar(ESystemBar.EBolckIds);
@@ -377,7 +380,7 @@ class Followers {
   timerList!: NodeJS.Timeout;
   async List(
     data: P.ReqList,
-    selectId: string,
+    selectId: bigint,
     isLoadFull: boolean
   ): Promise<P.APIResp<I.FollowerList>> {
     clearTimeout(this.timerList);
@@ -455,7 +458,7 @@ class Friends {
   timerList!: NodeJS.Timeout;
   async List(
     data: P.ReqList,
-    selectId: string,
+    selectId: bigint,
     isLoadFull: boolean
   ): Promise<P.APIResp<I.FollowerList>> {
     clearTimeout(this.timerList);
@@ -529,14 +532,17 @@ class Friends {
 }
 
 class Mutes {
-  async Ids(data: P.ReqMuteIds, userId: string): Promise<P.APIResp<I.BlockIds>> {
+  async Ids(data: P.ReqMuteIds, userId: bigint): Promise<P.APIResp<I.BlockIds>> {
     const result = await twitterRequest.call.mutes.Ids(data);
     if (!twitterRequest.CheckAPIError(result.data)) {
       const { dicMuteIds } = moduleSwitter.stateIds;
       const datas = dicMuteIds.get(userId);
       if (datas) {
-        dicMuteIds.set(userId, datas.concat(result.data.ids));
-        moduleSwitter.SetStateIds({ ...moduleSwitter.stateIds, dicMuteIds: dicMuteIds });
+        // for(const id of result.data.ids){
+        // dicMuteIds.set(userId, )
+        // }
+        // dicMuteIds.set(userId, datas.concat(result.data.ids));
+        // moduleSwitter.SetStateIds({ ...moduleSwitter.stateIds, dicMuteIds: dicMuteIds });
       }
     }
     return result;
@@ -620,7 +626,7 @@ class OAuth {
       secretKey: user.oauth_token_secret,
       screenName: user.screen_name,
       name: user.name,
-      userId: user.user_id
+      userId: BigInt(user.user_id)
     });
 
     return result;

@@ -78,7 +78,7 @@ export class ImagePage extends Vue {
   }
 
   OnClickMedia(media: I.Media) {
-    const index = this.media.findIndex(x => x.id_str === media.id_str);
+    const index = this.media.findIndex(x => x.id === media.id);
     if (index > -1) {
       moduleImage.ChangeState({ ...moduleImage.stateImage, index: index });
     }

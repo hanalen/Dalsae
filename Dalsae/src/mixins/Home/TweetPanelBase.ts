@@ -141,9 +141,9 @@ export class TweetPanelBase extends Vue {
         if (!tweet) return;
         const tweets = moduleUI.selectTweetList;
         if (!tweets) return;
-        const idx = tweets.findIndex(x => x.id_str === tweet.id_str);
+        const idx = tweets.findIndex(x => x.id === tweet.id);
         for (let i = idx - 1; i > -1; i--) {
-          if (tweets[i].user.id_str === tweet.user.id_str) {
+          if (tweets[i].user.id === tweet.user.id) {
             moduleUtil.ScrollToIndex(i);
             break;
           }
@@ -153,9 +153,9 @@ export class TweetPanelBase extends Vue {
         if (!tweet) return;
         const tweets = moduleUI.selectTweetList;
         if (!tweets) return;
-        const idx = tweets.findIndex(x => x.id_str === tweet.id_str);
+        const idx = tweets.findIndex(x => x.id === tweet.id);
         for (let i = idx + 1; i < tweets.length; i++) {
-          if (tweets[i].user.id_str === tweet.user.id_str) {
+          if (tweets[i].user.id === tweet.user.id) {
             moduleUtil.ScrollToIndex(i);
             break;
           }

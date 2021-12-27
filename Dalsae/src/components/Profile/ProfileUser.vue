@@ -90,11 +90,11 @@ export default class ProfileUser extends Vue {
   OnClickUser(e: MouseEvent) {
     moduleProfile.ChangeShowUser(this.user);
     if (moduleProfile.stateProfile.selectMenu === 0) {
-      const idx = moduleProfile.listFollowing.users.findIndex(x => x.id_str === this.user.id_str);
+      const idx = moduleProfile.listFollowing.users.findIndex(x => x.id === this.user.id);
       if (idx === -1) return;
       moduleProfile.SetState({ ...moduleProfile.stateProfile, indexFollowing: idx });
     } else {
-      const idx = moduleProfile.listFollower.users.findIndex(x => x.id_str === this.user.id_str);
+      const idx = moduleProfile.listFollower.users.findIndex(x => x.id === this.user.id);
       if (idx === -1) return;
       moduleProfile.SetState({ ...moduleProfile.stateProfile, indexFollower: idx });
     }
@@ -159,9 +159,9 @@ export default class ProfileUser extends Vue {
     const user = this.user;
     const ids = moduleProfile.listFollowingIds.ids;
     if (!user) return '';
-    if (moduleProfile.listRequestIds.ids.findIndex(x => x === user.id_str) > -1) {
+    if (moduleProfile.listRequestIds.ids.findIndex(x => x === user.id) > -1) {
       return '팔로우 요청 중';
-    } else if (ids.findIndex(x => x === user.id_str) > -1) {
+    } else if (ids.findIndex(x => x === user.id) > -1) {
       return '언팔로우';
     } else {
       return '팔로잉';

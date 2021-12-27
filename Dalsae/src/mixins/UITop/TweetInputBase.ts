@@ -295,7 +295,7 @@ export class TweetInputBase extends Vue {
     }
     const { inputText, listImage, replyTweet, video } = moduleUI.stateInput;
     if (inputText.length === 0 && listImage.length === 0 && !video) return;
-    moduleApi.statuses.Update(inputText, listImage, video, replyTweet?.id_str);
+    moduleApi.statuses.Update(inputText, listImage, video, replyTweet ? replyTweet.id : BigInt(0));
     this.inputText = '';
     this.listImage = [];
     this.video = '';

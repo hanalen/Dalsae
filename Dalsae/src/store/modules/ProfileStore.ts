@@ -34,17 +34,17 @@ class ProfileStore extends VuexModule {
   stateProfile = new StateProfile();
   listFollower: I.FollowerList = { next_cursor_str: '', users: [], previous_cursor_str: '' };
   listFollowing: I.FollowerList = { next_cursor_str: '', users: [], previous_cursor_str: '' };
-  listFollowerIds: I.BlockIds = {
+  listFollowerIds: I.BlockIdsBigInt = {
     next_cursor_str: '',
     previous_cursor_str: '',
     ids: []
   };
-  listFollowingIds: I.BlockIds = {
+  listFollowingIds: I.BlockIdsBigInt = {
     next_cursor_str: '',
     previous_cursor_str: '',
     ids: []
   };
-  listRequestIds: I.BlockIds = {
+  listRequestIds: I.BlockIdsBigInt = {
     next_cursor_str: '',
     previous_cursor_str: '',
     ids: []
@@ -73,7 +73,9 @@ class ProfileStore extends VuexModule {
   @Mutation
   private setSelectUserFollowerList(listUser: I.FollowerList) {
     if (this.listFollower.users.length > 0) {
-      this.listFollower.users = this.listFollower.users.concat(listUser.users);
+      for (const user of listUser.users) {
+        this.listFollower.users.push(new I.User(user));
+      }
       this.listFollower.next_cursor_str = listUser.next_cursor_str;
       this.listFollower.previous_cursor_str = listUser.previous_cursor_str;
     } else {
@@ -89,7 +91,9 @@ class ProfileStore extends VuexModule {
   @Mutation
   private setSelectUserFollowingList(listUser: I.FollowerList) {
     if (this.listFollowing.users.length > 0) {
-      this.listFollowing.users = this.listFollowing.users.concat(listUser.users);
+      for (const user of listUser.users) {
+        this.listFollowing.users.push(new I.User(user));
+      }
       this.listFollowing.next_cursor_str = listUser.next_cursor_str;
       this.listFollowing.previous_cursor_str = listUser.previous_cursor_str;
     } else {
@@ -118,9 +122,9 @@ class ProfileStore extends VuexModule {
   private updateFollow(userInfo: UpdateFollowInfo) {
     const { user } = userInfo;
     if (user.following) {
-      this.listFollowingIds.ids.push(user.id_str);
+      this.listFollowingIds.ids.push(BigInt(user.id_str));
     } else {
-      const idx = this.listFollowingIds.ids.indexOf(user.id_str);
+      const idx = this.listFollowingIds.ids.indexOf(BigInt(user.id_str));
       if (idx > -1) {
         this.listFollowingIds.ids.splice(idx, 1);
       }
@@ -135,7 +139,9 @@ class ProfileStore extends VuexModule {
   @Mutation
   private addFollowerIds(ids: I.BlockIds) {
     if (!ids) return;
-    this.listFollowerIds.ids = this.listFollowerIds.ids.concat(ids.ids);
+    for (const id of ids.ids) {
+      this.listFollowerIds.ids.push(BigInt(id));
+    }
     this.listFollowerIds.next_cursor_str = ids.next_cursor_str;
     this.listFollowerIds.previous_cursor_str = ids.previous_cursor_str;
   }
@@ -148,7 +154,9 @@ class ProfileStore extends VuexModule {
   @Mutation
   private addFollowingIds(ids: I.BlockIds) {
     if (!ids) return;
-    this.listFollowingIds.ids = this.listFollowingIds.ids.concat(ids.ids);
+    for (const id of ids.ids) {
+      this.listFollowingIds.ids.push(BigInt(id));
+    }
     this.listFollowingIds.next_cursor_str = ids.next_cursor_str;
     this.listFollowingIds.previous_cursor_str = ids.previous_cursor_str;
   }
@@ -161,7 +169,9 @@ class ProfileStore extends VuexModule {
   @Mutation
   private addRequestIds(ids: I.BlockIds) {
     if (!ids) return;
-    this.listRequestIds.ids = this.listRequestIds.ids.concat(ids.ids);
+    for (const id of ids.ids) {
+      this.listRequestIds.ids.push(BigInt(id));
+    }
     this.listRequestIds.next_cursor_str = ids.next_cursor_str;
     this.listRequestIds.previous_cursor_str = ids.previous_cursor_str;
   }

@@ -64,7 +64,7 @@ class ModalStore extends VuexModule {
     );
     const ret = following.concat(follower);
     return ret.filter((user, i) => {
-      return ret.findIndex(x => x.id_str === user.id_str) === i;
+      return ret.findIndex(x => x.id === user.id) === i;
     });
   }
 

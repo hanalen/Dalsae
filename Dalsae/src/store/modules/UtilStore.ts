@@ -79,13 +79,17 @@ class UtilStore extends VuexModule {
   }
   @Action
   OnClickViewWeb(tweet: I.Tweet) {
-    const url = `https://twitter.com/${tweet.orgUser.screen_name}/status/${tweet.orgTweet.id_str}`;
+    const url = `https://twitter.com/${
+      tweet.orgUser.screen_name
+    }/status/${tweet.orgTweet.id.toString()}`;
     window.ipc.browser.OpenBrowser(url);
     window.ipc.ipcPipe.send(EIPcType.EOpenWeb, tweet);
   }
   @Action
   OnClickQt(tweet: I.Tweet) {
-    const str = `https://twitter.com/${tweet.orgUser.screen_name}/status/${tweet.orgTweet.id_str}`;
+    const str = `https://twitter.com/${
+      tweet.orgUser.screen_name
+    }/status/${tweet.orgTweet.id.toString()}`;
     moduleUI.SetStateInput({ ...moduleUI.stateInput, inputText: str });
     moduleDom.stateDom.textArea.focus();
   }
@@ -116,21 +120,21 @@ class UtilStore extends VuexModule {
   }
   @Action
   LoadTweets() {
-    let id_str = '';
+    let id = BigInt(0);
     switch (moduleUI.stateUI.selectMenu) {
       case 0:
-        if (moduleTweet.homes && moduleTweet.homes.length > 0) id_str = moduleTweet.homes[0].id_str;
-        moduleApi.statuses.TimeLine('', id_str);
+        if (moduleTweet.homes && moduleTweet.homes.length > 0) id = moduleTweet.homes[0].id;
+        moduleApi.statuses.TimeLine(BigInt(0), id);
         break;
       case 1:
         if (moduleTweet.mentions && moduleTweet.mentions.length > 0)
-          id_str = moduleTweet.mentions[0].id_str;
-        moduleApi.statuses.Mention('', id_str);
+          id = moduleTweet.mentions[0].id;
+        moduleApi.statuses.Mention(BigInt(0), id);
         break;
       case 3:
         if (moduleTweet.favorites && moduleTweet.favorites.length > 0)
-          id_str = moduleTweet.favorites[0].id_str;
-        moduleApi.favorites.List('', id_str);
+          id = moduleTweet.favorites[0].id;
+        moduleApi.favorites.List(BigInt(0), id);
         break;
     }
   }
@@ -142,29 +146,29 @@ class UtilStore extends VuexModule {
       listTweet: undefined,
       tweet: tweet,
       type: ETweetType.E_CONV,
-      user_id_str: moduleSwitter.selectID
+      user_id: moduleSwitter.selectID
     });
-    let id_str = tweet.orgTweet.in_reply_to_status_id_str;
-    if (!id_str) return;
-    let find = FindTweet(id_str, moduleSwitter.selectID, moduleTweet.homes, moduleTweet.mentions);
+    let id = tweet.orgTweet.in_reply_to_status_id;
+    if (!id) return;
+    let find = FindTweet(id, moduleSwitter.selectID, moduleTweet.homes, moduleTweet.mentions);
     while (find) {
       moduleTweet.AddConv({
         listTweet: undefined,
         tweet: find,
         type: ETweetType.E_CONV,
-        user_id_str: moduleSwitter.selectID
+        user_id: moduleSwitter.selectID
       });
-      id_str = find.in_reply_to_status_id_str;
-      find = FindTweet(id_str, moduleSwitter.selectID, moduleTweet.homes, moduleTweet.mentions);
+      id = find.in_reply_to_status_id;
+      find = FindTweet(id, moduleSwitter.selectID, moduleTweet.homes, moduleTweet.mentions);
     }
-    if (id_str && !find) {
-      const result = await moduleApi.statuses.Show(id_str);
+    if (id && !find) {
+      const result = await moduleApi.statuses.Show(id);
       if (!twitterRequest.CheckAPIError(result.data)) {
         moduleTweet.AddConv({
           tweet: new I.Tweet(result.data),
           type: ETweetType.E_CONV,
           listTweet: undefined,
-          user_id_str: moduleSwitter.selectID
+          user_id: moduleSwitter.selectID
         });
       }
     }
@@ -213,7 +217,7 @@ class UtilStore extends VuexModule {
   Follow(user: I.User) {
     if (!user) return;
     if (moduleProfile.stateProfile.isFollwRequest) return; //글로벌로 요청 중
-    const isFollowing = moduleProfile.listFollowingIds.ids.findIndex(x => x === user.id_str) > -1;
+    const isFollowing = moduleProfile.listFollowingIds.ids.findIndex(x => x === user.id) > -1;
     moduleProfile.SetState({ ...moduleProfile.stateProfile, isFollwRequest: true });
     if (isFollowing) {
       moduleApi.friendships.Destroy({ screen_name: user.screen_name });
@@ -244,7 +248,7 @@ class UtilStore extends VuexModule {
   Retweet(tweet: I.Tweet | undefined) {
     if (!tweet) return;
     const { isSendRTCheck, isSendRTProtected } = moduleOption.uiOption;
-    const itsMe = moduleSwitter.selectID === tweet.orgUser.id_str;
+    const itsMe = moduleSwitter.selectID === tweet.orgUser.id;
     if (!isSendRTProtected && tweet.orgUser.protected && !itsMe) {
       moduleModal.AddMessage({
         errorType: Messagetype.E_WARNING,
@@ -304,7 +308,7 @@ class UtilStore extends VuexModule {
         listMedia.push(base64);
       }
     }
-    moduleApi.statuses.Update(text, listMedia, '');
+    moduleApi.statuses.Update(text, listMedia, '', BigInt(0));
   }
 
   @Action
@@ -353,13 +357,13 @@ class UtilStore extends VuexModule {
   @Action
   async AddQtTweet(qtTweet: I.Tweet) {
     //파라메터는 무조건 qtTweet
-    if (qtTweet.orgTweet.quoted_status_id_str && !qtTweet.orgTweet.quoted_status) {
-      moduleApi.statuses.Show(qtTweet.orgTweet.id_str);
+    if (qtTweet.orgTweet.quoted_status_id && !qtTweet.orgTweet.quoted_status) {
+      moduleApi.statuses.Show(qtTweet.orgTweet.id);
     } else {
       moduleTweet.AddTweet({
         tweet: qtTweet,
         listTweet: undefined,
-        user_id_str: moduleSwitter.selectID,
+        user_id: moduleSwitter.selectID,
         type: ETweetType.E_CONV
       });
     }
@@ -376,7 +380,7 @@ class UtilStore extends VuexModule {
       const home: IStatePanel = {
         ...state.home,
         index: index,
-        selectedId: moduleTweet.homes[index].id_str
+        selectedId: moduleTweet.homes[index].id
       };
       state = { ...state, home: home };
     } else if (tweetType === ETweetType.E_MENTION) {
@@ -385,7 +389,7 @@ class UtilStore extends VuexModule {
       const mention: IStatePanel = {
         ...state.mention,
         index: index,
-        selectedId: moduleTweet.mentions[index].id_str
+        selectedId: moduleTweet.mentions[index].id
       };
       state = { ...state, mention: mention };
     } else if (tweetType === ETweetType.E_FAVORITE) {
@@ -394,7 +398,7 @@ class UtilStore extends VuexModule {
       const favorite: IStatePanel = {
         ...state.favorite,
         index: index,
-        selectedId: moduleTweet.favorites[index].id_str
+        selectedId: moduleTweet.favorites[index].id
       };
       state = { ...state, favorite: favorite };
     } else if (tweetType === ETweetType.E_OPEN) {
@@ -403,7 +407,7 @@ class UtilStore extends VuexModule {
       const open: IStatePanel = {
         ...state.open,
         index: index,
-        selectedId: moduleTweet.opens[index].id_str
+        selectedId: moduleTweet.opens[index].id
       };
       state = { ...state, open: open };
     } else if (tweetType === ETweetType.E_CONV) {
@@ -412,7 +416,7 @@ class UtilStore extends VuexModule {
       const conv: IStatePanel = {
         ...state.conv,
         index: index,
-        selectedId: moduleTweet.convs[index].id_str
+        selectedId: moduleTweet.convs[index].id
       };
       state = { ...state, conv: conv };
     }

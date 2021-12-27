@@ -36,18 +36,18 @@ export class FollowDatas {
     this.CheckKey(user_id);
     const users = this.dicUsers.get(user_id);
     if (!users) return;
-    listUser.forEach(user => {
-      if (!users.listFollower.find(x => x.id_str === user.id_str)) {
-        users.listFollower.push(user);
+    for (const user of listUser) {
+      if (!users.listFollower.find(x => x.id === user.id)) {
+        users.listFollower.push(new I.User(user));
       }
-    });
+    }
   }
   UpdateUserInfo(user: I.User, user_id: bigint) {
     const users = this.dicUsers.get(user_id);
     if (!users) return;
     //팔로잉 팔로워 데이터 갱신
-    const idxFollowing = users.listFollowing.findIndex(x => x.id_str === user.id_str);
-    const idxFollower = users.listFollower.findIndex(x => x.id_str === user.id_str);
+    const idxFollowing = users.listFollowing.findIndex(x => x.id === user.id);
+    const idxFollower = users.listFollower.findIndex(x => x.id === user.id);
     if (idxFollowing > -1) users.listFollowing.splice(idxFollowing, 1, user);
     if (idxFollower > -1) users.listFollower.splice(idxFollower, 1, user);
 

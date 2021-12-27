@@ -16,7 +16,7 @@ class State {
   startIndex = 0;
   endIndex = 50;
   translateY = 0;
-  selectKey = '';
+  selectKey = BigInt(0);
   index = 0;
 }
 
@@ -179,13 +179,13 @@ export class ScrollPanelBase extends Vue {
 
   AddData(data: any, index: number) {
     const minHeight = moduleUI.minHeight;
-    if (!this.stateData.setKey.has(data.id_str)) {
-      this.stateData.setKey.add(data.id_str);
+    if (!this.stateData.setKey.has(data.id)) {
+      this.stateData.setKey.add(data.id);
       const prev = this.stateData.listData[index - 1];
       const scrollTop = prev ? prev.scrollTop + prev.height : index * minHeight;
       const item: M.ScrollItem<any> = {
         data: this.CreateData(data),
-        key: data.id_str,
+        key: data.id,
         height: minHeight,
         isResized: true,
         scrollTop: scrollTop
@@ -210,13 +210,13 @@ export class ScrollPanelBase extends Vue {
     const minHeight = moduleUI.minHeight;
     for (let i = 0, len = list.length; i < len; i++) {
       const current = list[i];
-      if (!this.stateData.setKey.has(current.id_str)) {
-        this.stateData.setKey.add(current.id_str);
+      if (!this.stateData.setKey.has(current.id)) {
+        this.stateData.setKey.add(current.id);
         const prev = this.stateData.listData[i - 1];
         const scrollTop = prev ? prev.scrollTop + prev.height : i * minHeight;
         const item: M.ScrollItem<any> = {
           data: this.CreateData(current),
-          key: current.id_str,
+          key: current.id,
           height: minHeight,
           isResized: true,
           scrollTop: scrollTop
@@ -228,7 +228,7 @@ export class ScrollPanelBase extends Vue {
 
   CreateData(current: any) {
     if (this.itemType === 'tweet') {
-      return new I.Tweet(current);
+      return current as I.Tweet;
     } else if (this.itemType === 'user') {
       return current;
     }
@@ -250,7 +250,7 @@ export class ScrollPanelBase extends Vue {
       this.statePool.listBench.push(component);
 
       const div = document.createElement('div');
-      div.id = item.key;
+      div.id = item.key.toString();
 
       this.scrollPort.appendChild(div);
       component.$mount(div);
