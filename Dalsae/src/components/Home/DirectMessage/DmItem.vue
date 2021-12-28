@@ -167,7 +167,7 @@ export default class DmItem extends Vue {
   }
 
   get itsMe() {
-    return this.dm.message_create?.sender_id === moduleSwitter.selectID;
+    return this.dm.message_create?.sender_id === moduleSwitter.selectID.toString();
   }
 
   get text() {
