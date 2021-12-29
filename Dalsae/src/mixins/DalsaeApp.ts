@@ -16,8 +16,10 @@ import { ETweetType } from '@/store/Interface';
 import { UserStreaming } from '@/API';
 import { moduleDom } from '@/store/modules/DomStore';
 import { moduleDm } from '@/store/modules/DmStore';
+import { TimerAgent } from '@/util/TimerAgent';
 @Component
 export class DalsaeApp extends Vue {
+  timerAgent = new TimerAgent();
   get selectUserID() {
     return moduleSwitter.selectID;
   }
@@ -132,6 +134,7 @@ export class DalsaeApp extends Vue {
       const streaming = new UserStreaming();
       streaming.Connect(moduleSwitter.publicKey, moduleSwitter.secretKey, id);
       moduleTweet.AddStreaming({ key: id, streaming: streaming });
+      this.timerAgent.StartRemoveTweetObserver();
     }
   }
 
