@@ -184,7 +184,7 @@ export class ScrollPanelBase extends Vue {
       const prev = this.stateData.listData[index - 1];
       const scrollTop = prev ? prev.scrollTop + prev.height : index * minHeight;
       const item: M.ScrollItem<any> = {
-        data: this.CreateData(data),
+        data: data,
         key: data.id_str,
         height: minHeight,
         isResized: true,
@@ -215,7 +215,7 @@ export class ScrollPanelBase extends Vue {
         const prev = this.stateData.listData[i - 1];
         const scrollTop = prev ? prev.scrollTop + prev.height : i * minHeight;
         const item: M.ScrollItem<any> = {
-          data: this.CreateData(current),
+          data: current,
           key: current.id_str,
           height: minHeight,
           isResized: true,
@@ -226,13 +226,13 @@ export class ScrollPanelBase extends Vue {
     }
   }
 
-  CreateData(current: any) {
-    if (this.itemType === 'tweet') {
-      return new I.Tweet(current);
-    } else if (this.itemType === 'user') {
-      return current;
-    }
-  }
+  // CreateData(current: any) {
+  //   if (this.itemType === 'tweet') {
+  //     return new I.Tweet(current);
+  //   } else if (this.itemType === 'user') {
+  //     return current;
+  //   }
+  // }
 
   CreateComponent() {
     //렌더링용 데이터 추가

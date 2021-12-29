@@ -22,12 +22,10 @@ export class IPCPipeLine extends Vue {
       moduleProfile.UpdateFollowUserInfo(user);
     });
     window.ipc.ipcPipe.on(EIPcType.ERetweet, (tweet: I.Tweet) => {
-      const sendTweet = new I.Tweet(tweet);
-      moduleTweet.UpdateRTandFav(sendTweet);
+      moduleTweet.UpdateRTandFav(tweet);
     });
     window.ipc.ipcPipe.on(EIPcType.EFavorite, (tweet: I.Tweet) => {
-      const sendTweet = new I.Tweet(tweet);
-      moduleTweet.UpdateRTandFav(sendTweet);
+      moduleTweet.UpdateRTandFav(tweet);
     });
     window.ipc.ipcPipe.on(EIPcType.EOpenWeb, (tweet: I.Tweet) => {
       moduleTweet.AddTweet({

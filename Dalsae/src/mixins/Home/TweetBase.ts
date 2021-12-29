@@ -35,7 +35,7 @@ export class TweetBase extends Vue {
   }
 
   get qtTweet() {
-    return new I.Tweet(this.orgTweet.quoted_status);
+    return this.orgTweet.quoted_status;
   }
 
   get retweetText() {

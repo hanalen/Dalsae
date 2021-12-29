@@ -106,8 +106,9 @@ class TweetStore extends VuexModule {
         const mentions = tweets?.tweets.mentions;
         if (mentions) {
           const idx = FindTweetIndex(item, mentions);
-          mentions.splice(idx, 0, new I.Tweet(item));
-          moduleDom.scrollMention?.panel.AddData(new I.Tweet(item), idx);
+          const tweet = new I.Tweet(item);
+          mentions.splice(idx, 0, tweet);
+          moduleDom.scrollMention?.panel.AddData(tweet, idx);
           const { mention } = moduleUI.statePanel;
           let selectedId = mention.selectedId;
           let idx2 = tweets.tweets.mentions.findIndex(x => x.id_str === selectedId);
@@ -123,8 +124,9 @@ class TweetStore extends VuexModule {
         if (!CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return;
       }
       const idx = FindTweetIndex(item, orgTweets);
-      orgTweets.splice(idx, 0, new I.Tweet(item));
-      moduleDom.scrollHome?.panel.AddData(new I.Tweet(item), idx);
+      const tweet = new I.Tweet(item);
+      orgTweets.splice(idx, 0, tweet);
+      moduleDom.scrollHome?.panel.AddData(tweet, idx);
     }
     const { home } = moduleUI.statePanel;
     let selectedId = home.selectedId;
@@ -243,8 +245,8 @@ class TweetStore extends VuexModule {
     if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
       return; //exists
     }
-    orgTweets.splice(0, 0, new I.Tweet(tweet));
-    moduleDom.scrollOpen?.panel.AddData(new I.Tweet(addTweet.tweet), 0);
+    orgTweets.splice(0, 0, tweet);
+    moduleDom.scrollOpen?.panel.AddData(tweet, 0);
     const { open } = moduleUI.statePanel;
     let selectedId = open.selectedId;
     let idx = tweets.tweets.opens.findIndex(x => x.id_str === selectedId);

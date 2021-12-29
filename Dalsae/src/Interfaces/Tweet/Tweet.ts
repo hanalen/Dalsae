@@ -23,13 +23,10 @@ export class Tweet {
   isRead: boolean;
   isDelete: boolean;
 
-  orgTweet!: I.Tweet;
-  orgUser!: I.User;
-
   constructor(tweet?: Tweet) {
     if (tweet) {
-      this.created_at = tweet.created_at;
       this.id_str = tweet.id_str;
+      this.created_at = tweet.created_at;
       this.full_text = tweet.full_text;
       this.is_quote_status = tweet.is_quote_status;
       this.favorited = tweet.favorited;
@@ -37,21 +34,26 @@ export class Tweet {
       this.source = tweet.source;
       this.entities = tweet.entities;
       this.extended_entities = tweet.extended_entities;
-      this.user = tweet.user;
       this.retweeted_status = tweet.retweeted_status;
       this.retweet_count = tweet.retweet_count;
       this.favorite_count = tweet.favorite_count;
       this.place = tweet.place;
       this.is_quote_status = tweet.is_quote_status;
       this.quoted_status = tweet.quoted_status;
-      this.quoted_status_id_str = tweet.quoted_status_id_str;
       this.quoted_status = tweet.quoted_status;
-      this.in_reply_to_status_id_str = tweet.in_reply_to_status_id_str;
       this.isRead = false;
-      const orgTweet = tweet.retweeted_status ? tweet.retweeted_status : tweet; //원본 트윗 저장
-      this.orgTweet = JSON.parse(JSON.stringify(orgTweet));
-      this.orgUser = JSON.parse(JSON.stringify(this.orgTweet?.user));
+      this.in_reply_to_status_id_str = tweet.in_reply_to_status_id_str;
+      this.in_reply_to_user_id_str = tweet.in_reply_to_user_id_str;
+      this.quoted_status_id_str = tweet.quoted_status_id_str;
+      this.in_reply_to_status_id_str = tweet.in_reply_to_status_id_str;
       this.isDelete = false;
+      this.user = new I.User(tweet.user);
+      if (tweet.retweeted_status) {
+        this.retweeted_status = new Tweet(tweet.retweeted_status);
+      }
+      if (tweet.quoted_status) {
+        tweet.quoted_status = new Tweet(tweet.quoted_status);
+      }
     } else {
       this.created_at = '';
       this.id_str = '';
@@ -60,29 +62,24 @@ export class Tweet {
       this.favorited = false;
       this.retweeted = false;
       this.source = '';
-      this.entities = {
-        hashtags: [],
-        urls: [],
-        user_mentions: [],
-        media: [
-          {
-            media_url: '',
-            id_str: '',
-            media_url_https: '',
-            url: '',
-            display_url: '',
-            expanded_url: '',
-            type: ''
-          }
-        ]
-      };
+      this.entities = { hashtags: [], media: [], urls: [], user_mentions: [] };
       this.extended_entities = { media: [] };
       this.isRead = false;
       this.isDelete = false;
     }
   }
 
-  get media() {
-    return this.orgTweet?.extended_entities?.media;
+  get media(): I.Media[] {
+    if (this.orgTweet.extended_entities) return this.orgTweet.extended_entities.media;
+    else return [];
+  }
+
+  get orgTweet(): Tweet {
+    if (this.retweeted_status) return this.retweeted_status;
+    else return this;
+  }
+
+  get orgUser(): I.User {
+    return this.orgTweet.user;
   }
 }
