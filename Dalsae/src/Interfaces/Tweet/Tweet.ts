@@ -39,8 +39,6 @@ export class Tweet {
       this.favorite_count = tweet.favorite_count;
       this.place = tweet.place;
       this.is_quote_status = tweet.is_quote_status;
-      this.quoted_status = tweet.quoted_status;
-      this.quoted_status = tweet.quoted_status;
       this.isRead = false;
       this.in_reply_to_status_id_str = tweet.in_reply_to_status_id_str;
       this.in_reply_to_user_id_str = tweet.in_reply_to_user_id_str;
@@ -52,7 +50,7 @@ export class Tweet {
         this.retweeted_status = new Tweet(tweet.retweeted_status);
       }
       if (tweet.quoted_status) {
-        tweet.quoted_status = new Tweet(tweet.quoted_status);
+        this.quoted_status = new Tweet(tweet.quoted_status);
       }
     } else {
       this.created_at = '';
