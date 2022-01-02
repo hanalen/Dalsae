@@ -78,7 +78,7 @@ export default class VideoView extends Mixins(Vue, IPCPipeLine) {
   refTweet!: HTMLElement;
 
   get isShowTweet() {
-    return moduleOption.uiOption.isShowTweet && this.tweet.orgTweet !== undefined;
+    return moduleOption.uiOption.isShowTweet && this.tweet.created_at !== '';
   }
 
   get listMsg() {
