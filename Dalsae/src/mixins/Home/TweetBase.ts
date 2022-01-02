@@ -23,7 +23,10 @@ export class TweetBase extends Vue {
   }
 
   get isNoData() {
-    return this.tweet.created_at === '';
+    if (this.tweet === undefined) return true;
+    else {
+      return this.tweet.created_at === '';
+    }
   }
 
   get isRetweet() {
