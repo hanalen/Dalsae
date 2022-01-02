@@ -94,6 +94,7 @@ export class IPCPipeLine extends Vue {
       });
       window.ipc.ipcPipe.once(`tweet_${ipcData.ipcName}`, (tweet: I.Tweet) => {
         moduleImage.SetTweet(tweet);
+        moduleImage.SetTweet(new I.Tweet(tweet));
       });
 
       window.ipc.ipcPipe.getData(`switter_${ipcData.ipcName}`);
