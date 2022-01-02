@@ -109,6 +109,11 @@ class TweetStore extends VuexModule {
           const tweet = new I.Tweet(item);
           mentions.splice(idx, 0, tweet);
           moduleDom.scrollMention?.panel.AddData(tweet, idx);
+          if (mentions.length > 1500) {
+            const key = mentions[mentions.length - 1].id_str;
+            mentions.splice(mentions.length - 1, 1);
+            moduleDom.scrollMention?.panel.RemoveData(key, mentions.length - 1);
+          }
           const { mention } = moduleUI.statePanel;
           let selectedId = mention.selectedId;
           let idx2 = tweets.tweets.mentions.findIndex(x => x.id_str === selectedId);
@@ -127,6 +132,11 @@ class TweetStore extends VuexModule {
       const tweet = new I.Tweet(item);
       orgTweets.splice(idx, 0, tweet);
       moduleDom.scrollHome?.panel.AddData(tweet, idx);
+      if (orgTweets.length > 1500) {
+        const key = orgTweets[orgTweets.length - 1].id_str;
+        orgTweets.splice(orgTweets.length - 1, 1);
+        moduleDom.scrollHome?.panel.RemoveData(key, orgTweets.length - 1);
+      }
     }
     const { home } = moduleUI.statePanel;
     let selectedId = home.selectedId;
