@@ -24,6 +24,8 @@ export class TweetPanelBase extends Vue {
   OnChangeSelectMenu(newVal: number, oldVal: number) {
     if (oldVal === 5 && newVal !== 5) {
       moduleTweet.ClearConv(moduleSwitter.selectID);
+    } else if (oldVal === 6) {
+      moduleTweet.ClearUserTweet(moduleSwitter.selectID);
     }
   }
 
@@ -45,6 +47,10 @@ export class TweetPanelBase extends Vue {
 
   get conv() {
     return ETweetType.E_CONV;
+  }
+
+  get user() {
+    return ETweetType.E_USER;
   }
 
   get tweetHome() {
@@ -71,6 +77,10 @@ export class TweetPanelBase extends Vue {
     return moduleTweet.opens;
   }
 
+  get tweetUser() {
+    return moduleTweet.userTweets;
+  }
+
   get isLoadHome() {
     return moduleUI.statePanel.home.isLoad;
   }
@@ -86,6 +96,10 @@ export class TweetPanelBase extends Vue {
   get isLoadFavorite() {
     return moduleUI.statePanel.favorite.isLoad;
   }
+
+  get isLoadUser() {
+    return moduleUI.statePanel.user.isLoad;
+  }
   get indexHome() {
     return moduleUI.statePanel.home.index;
   }
@@ -100,6 +114,9 @@ export class TweetPanelBase extends Vue {
   }
   get indexConv() {
     return moduleUI.statePanel.conv.index;
+  }
+  get indexUser() {
+    return moduleUI.statePanel.user.index;
   }
 
   get stylePanel() {
@@ -180,6 +197,12 @@ export class TweetPanelBase extends Vue {
         break;
       case 4:
         listTweet = this.tweetOpen;
+        break;
+      case 5:
+        listTweet = this.tweetConv;
+        break;
+      case 6:
+        listTweet = this.tweetUser;
         break;
       default:
         listTweet = this.tweetHome;

@@ -68,6 +68,10 @@ class TweetStore extends VuexModule {
     return this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID)?.tweets.conv;
   }
 
+  get userTweets() {
+    return this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID)?.tweets.user;
+  }
+
   @Mutation
   private addHome(addTweet: A.AddTweet) {
     let tweets = this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID);
@@ -181,8 +185,9 @@ class TweetStore extends VuexModule {
       }
       if (!CheckShowMentionTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
       const idx = FindTweetIndex(item, orgTweets);
-      orgTweets.splice(idx, 0, new I.Tweet(item));
-      moduleDom.scrollMention?.panel.AddData(new I.Tweet(item), idx);
+      const tweet = new I.Tweet(item);
+      orgTweets.splice(idx, 0, tweet);
+      moduleDom.scrollMention?.panel.AddData(tweet, idx);
       isAddMention = true;
     }
     const { mention } = moduleUI.statePanel;
@@ -303,6 +308,51 @@ class TweetStore extends VuexModule {
     });
   }
 
+  @Mutation
+  private addUserTweet(addTweet: A.AddTweet) {
+    let tweets = this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID);
+    if (!tweets) {
+      tweets = { key: moduleSwitter.selectID, tweets: new I.Tweets() };
+      this.stateTweet.tweets.push(tweets);
+    }
+    const { tweet, listTweet, user_id_str } = addTweet;
+    const { dicMuteIds, dicBlockIds } = moduleSwitter.stateIds;
+    const { muteOption } = moduleOption;
+    const listMuteIds = dicMuteIds.get(moduleSwitter.selectID);
+    let listBlockIds = dicBlockIds.get(moduleSwitter.selectID)?.ids;
+    if (!listBlockIds) listBlockIds = [];
+
+    const orgTweets = tweets.tweets.user;
+    let listConcatTweets: I.Tweet[] = [];
+    listConcatTweets = tweet ? [tweet] : [];
+
+    if (listTweet) {
+      listConcatTweets = listConcatTweets.concat(listTweet);
+    }
+    if (tweet) {
+      listConcatTweets = [tweet];
+    }
+    for (const item of listConcatTweets) {
+      if (orgTweets.find(x => x.id_str === addTweet.tweet?.id_str)) {
+        continue; //exists
+      }
+      if (!CheckShowHomeTweet(item, user_id_str, muteOption, listBlockIds, listMuteIds)) return; //muted
+      const idx = FindTweetIndex(item, orgTweets);
+      const tweet = new I.Tweet(item);
+      orgTweets.splice(idx, 0, tweet);
+      moduleDom.scrollUser?.panel.AddData(tweet, idx);
+    }
+    const { user } = moduleUI.statePanel;
+    let selectedId = user.selectedId;
+    let idx = tweets.tweets.mentions.findIndex(x => x.id_str === selectedId);
+    if (idx === -1) idx = 0;
+    selectedId = tweets.tweets.mentions[idx].id_str;
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      user: { ...user, index: idx, selectedId: selectedId }
+    });
+  }
+
   @Action
   AddTweet(addTweet: A.AddTweet) {
     const { type } = { ...addTweet };
@@ -322,78 +372,27 @@ class TweetStore extends VuexModule {
       case A.ETweetType.E_CONV:
         this.context.commit('addConv', addTweet);
         break;
+      case A.ETweetType.E_USER:
+        this.context.commit('addUserTweet', addTweet);
     }
-    eventBus.$emit('AddTweetHome');
   }
-
-  // @Mutation
-  // private resized() {
-  //   this.tweetDatas.OnResized();
-  // }
-
-  // @Action
-  // Resized() {
-  //   this.context.commit('resized');
-  // }
-
-  // @Mutation
-  // private moveScroll(move: A.MoveScroll) {
-  //   this.tweetDatas.MoveScroll(move.listTweet, move.idxFrom, move.height);
-  // }
-
-  // @Action
-  // MoveScroll(move: A.MoveScroll) {
-  //   this.context.commit('moveScroll', move);
-  // }
 
   @Mutation
   private updateRTandFav(tweet: I.Tweet) {
     const tweets = this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID)?.tweets;
     if (!tweets) return;
-    const homes = tweets.homes;
-    if (homes) {
-      homes.forEach(item => {
-        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
-          item.orgTweet.retweeted = tweet.orgTweet.retweeted;
-          item.orgTweet.favorited = tweet.orgTweet.favorited;
-        }
-      });
-    }
-    const mentions = tweets.mentions;
-    if (mentions) {
-      mentions.forEach(item => {
-        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
-          item.orgTweet.retweeted = tweet.orgTweet.retweeted;
-          item.orgTweet.favorited = tweet.orgTweet.favorited;
-        }
-      });
-    }
-    const fav = tweets.favorites;
-    if (fav) {
-      fav.forEach(item => {
-        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
-          item.orgTweet.retweeted = tweet.orgTweet.retweeted;
-          item.orgTweet.favorited = tweet.orgTweet.favorited;
-        }
-      });
-    }
-    const open = tweets.opens;
-    if (open) {
-      open.forEach(item => {
-        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
-          item.orgTweet.retweeted = tweet.orgTweet.retweeted;
-          item.orgTweet.favorited = tweet.orgTweet.favorited;
-        }
-      });
-    }
-    const conv = tweets.conv;
-    if (conv) {
-      conv.forEach(item => {
-        if (item.orgTweet.id_str === tweet.orgTweet.id_str) {
-          item.orgTweet.retweeted = tweet.orgTweet.retweeted;
-          item.orgTweet.favorited = tweet.orgTweet.favorited;
-        }
-      });
+    const listTweet = tweets.homes.concat(
+      tweets.mentions,
+      tweets.favorites,
+      tweets.conv,
+      tweets.opens,
+      tweets.user
+    );
+    for (const t of listTweet) {
+      if (t.orgTweet.id_str === tweet.orgTweet.id_str) {
+        t.orgTweet.retweeted = tweet.orgTweet.retweeted;
+        t.orgTweet.favorited = tweet.orgTweet.favorited;
+      }
     }
   }
 
@@ -405,26 +404,9 @@ class TweetStore extends VuexModule {
   private deleteTweet(tweet: I.Tweet) {
     const pair = this.stateTweet.tweets.find(x => x.key === moduleSwitter.selectID);
     if (!pair) return;
-
-    for (const t of pair.tweets.homes) {
-      if (t.orgTweet.id_str === tweet.id_str) {
-        t.isDelete = true;
-        break;
-      }
-    }
-    for (const t of pair.tweets.mentions) {
-      if (t.orgTweet.id_str === tweet.id_str) {
-        t.isDelete = true;
-        break;
-      }
-    }
-    for (const t of pair.tweets.favorites) {
-      if (t.orgTweet.id_str === tweet.id_str) {
-        t.isDelete = true;
-        break;
-      }
-    }
-    for (const t of pair.tweets.conv) {
+    const { homes, mentions, conv, opens, favorites, user } = pair.tweets;
+    const listTweet = homes.concat(mentions, conv, opens, favorites, user);
+    for (const t of listTweet) {
       if (t.orgTweet.id_str === tweet.id_str) {
         t.isDelete = true;
         break;
@@ -449,6 +431,18 @@ class TweetStore extends VuexModule {
   ClearConv(user_id_str: string) {
     this.context.commit('clearConv', user_id_str);
     moduleDom.scrollConv?.panel.Clear();
+  }
+  @Mutation
+  private clearUserTweet(user_id_str: string) {
+    const find = this.stateTweet.tweets.find(x => x.key === user_id_str);
+    if (find) {
+      find.tweets.user.splice(0, find.tweets.user.length);
+    }
+  }
+  @Action
+  ClearUserTweet(user_id_str: string) {
+    this.context.commit('clearUserTweet', user_id_str);
+    moduleDom.scrollUser?.panel.Clear();
   }
 
   @Mutation

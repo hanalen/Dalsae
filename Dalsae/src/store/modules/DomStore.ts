@@ -59,6 +59,10 @@ class DomStore extends VuexModule {
     return this.stateScrollPanel.listScrollPanel.find(x => x.panelType === ETweetType.E_CONV);
   }
 
+  get scrollUser() {
+    return this.stateScrollPanel.listScrollPanel.find(x => x.panelType === ETweetType.E_USER);
+  }
+
   @Mutation
   private updateRTandFav(tweet: I.Tweet) {
     for (const panel of this.stateScrollPanel.listScrollPanel) {

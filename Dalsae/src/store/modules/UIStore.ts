@@ -78,6 +78,7 @@ export class StatePanel {
   favorite: IStatePanel;
   open: IStatePanel;
   conv: IStatePanel;
+  user: IStatePanel;
   constructor() {
     this.home = {
       tweetType: ETweetType.E_HOME,
@@ -105,6 +106,12 @@ export class StatePanel {
     };
     this.conv = {
       tweetType: ETweetType.E_CONV,
+      index: 0,
+      selectedId: '',
+      isLoad: false
+    };
+    this.user = {
+      tweetType: ETweetType.E_USER,
       index: 0,
       selectedId: '',
       isLoad: false
@@ -153,6 +160,9 @@ class UIStore extends VuexModule {
         state = this.statePanel.conv;
         listTweet = moduleTweet.convs;
         break;
+      case ETweetType.E_USER:
+        state = this.statePanel.user;
+        listTweet = moduleTweet.userTweets;
       default:
         listTweet = moduleTweet.homes;
         break;
@@ -173,6 +183,8 @@ class UIStore extends VuexModule {
         return moduleTweet.opens;
       case ETweetType.E_CONV:
         return moduleTweet.convs;
+      case ETweetType.E_USER:
+        return moduleTweet.userTweets;
     }
     return moduleTweet.homes;
   }
@@ -189,6 +201,8 @@ class UIStore extends VuexModule {
         return this.statePanel.conv;
       case ETweetType.E_OPEN:
         return this.statePanel.open;
+      case ETweetType.E_USER:
+        return this.statePanel.user;
     }
     return this.statePanel.home;
   }
@@ -253,6 +267,9 @@ class UIStore extends VuexModule {
     } else if (this.stateUI.selectMenu === ETweetType.E_OPEN) {
       panel = this.statePanel.open;
       listTweet = moduleTweet.opens;
+    } else if (this.stateUI.selectMenu === ETweetType.E_USER) {
+      panel = this.statePanel.user;
+      listTweet = moduleTweet.userTweets;
     }
     let idx = 0;
     if (!panel || !listTweet) return;

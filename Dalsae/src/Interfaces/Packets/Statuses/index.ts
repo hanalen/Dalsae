@@ -4,3 +4,4 @@ export * from './ReqUpdate';
 export * from './ReqRetweet';
 export * from './ReqDestroy';
 export * from './ReqConv';
+export * from './ReqUserTimeLine';

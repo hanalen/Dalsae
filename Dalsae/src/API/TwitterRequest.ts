@@ -398,6 +398,10 @@ export class TwitterRequest {
         Mention: (data: P.ReqTimeLine) =>
           this.get<P.ReqMention, I.Tweet[]>(baseUrl + '/statuses/mentions_timeline.json', {
             data
+          }),
+        UserTimeLine: (data: P.ReqUserTimeLine) =>
+          this.get<P.ReqUserTimeLine, I.Tweet[]>(baseUrl + '/statuses/user_timeline.json', {
+            data
           })
       },
       favorites: {

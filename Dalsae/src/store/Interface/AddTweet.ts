@@ -5,7 +5,8 @@ export enum ETweetType {
   E_DM,
   E_FAVORITE,
   E_OPEN,
-  E_CONV
+  E_CONV,
+  E_USER
 }
 export interface AddTweet {
   type: ETweetType;

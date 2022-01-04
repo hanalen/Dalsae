@@ -132,6 +132,13 @@ class UtilStore extends VuexModule {
           id_str = moduleTweet.favorites[0].id_str;
         moduleApi.favorites.List('', id_str);
         break;
+      case 6:
+        if (moduleTweet.userTweets && moduleTweet.userTweets.length > 0) {
+          id_str = moduleTweet.userTweets[0].id_str;
+          const screen_name = moduleTweet.userTweets[0].user.screen_name;
+          moduleApi.statuses.UserTimeLine(screen_name, id_str);
+        }
+        break;
     }
   }
 
@@ -415,9 +422,24 @@ class UtilStore extends VuexModule {
         selectedId: moduleTweet.convs[index].id_str
       };
       state = { ...state, conv: conv };
+    } else if (tweetType === ETweetType.E_USER) {
+      if (!moduleTweet.userTweets) return;
+      if (index < 0 || index > moduleTweet.userTweets.length - 1) return;
+      const users: IStatePanel = {
+        ...state.user,
+        index: index,
+        selectedId: moduleTweet.userTweets[index].id_str
+      };
+      state = { ...state, user: users };
     }
     this.context.commit('setStatePanel', state);
     moduleDom.stateScrollPanel.ScrollToIndex(index);
+  }
+
+  @Action
+  LoadUserTweet(screen_name: string) {
+    moduleUI.SetStateUI({ ...moduleUI.stateUI, selectMenu: 6 });
+    moduleApi.statuses.UserTimeLine(screen_name, '', '');
   }
 }
 export const moduleUtil = getModule(UtilStore);

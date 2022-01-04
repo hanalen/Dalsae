@@ -262,6 +262,37 @@ class Statuses {
     }
     return result;
   }
+
+  async UserTimeLine(
+    screen_name: string,
+    maxId?: string,
+    sinceId?: string
+  ): Promise<P.APIResp<I.Tweet[]>> {
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      user: { ...moduleUI.statePanel.user, isLoad: true }
+    });
+    const id = store.getters.selectID;
+    const result = await twitterRequest.call.statuses.UserTimeLine({
+      count: 200,
+      tweet_mode: 'extended',
+      screen_name: screen_name,
+      max_id: maxId,
+      since_id: sinceId
+    });
+    moduleUI.SetStatePanel({
+      ...moduleUI.statePanel,
+      user: { ...moduleUI.statePanel.user, isLoad: false }
+    });
+    if (!twitterRequest.CheckAPIError(result.data)) {
+      store.dispatch('AddTweet', {
+        type: S.ETweetType.E_USER,
+        user_id_str: id,
+        listTweet: result.data
+      });
+    }
+    return result;
+  }
 }
 
 class Favorites {

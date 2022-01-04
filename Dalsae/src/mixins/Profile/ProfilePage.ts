@@ -9,7 +9,7 @@ import { moduleSwitter } from '@/store/modules/SwitterStore';
 import { moduleUtil } from '@/store/modules/UtilStore';
 import { moduleSysbar } from '@/store/modules/SystemBarStore';
 import { moduleModal } from '@/store/modules/ModalStore';
-import { ScrollPanelBase } from '@/mixins';
+import { EIPcType, ScrollPanelBase } from '@/mixins';
 import twitterRequest from '@/API/TwitterRequest';
 
 @Component
@@ -359,7 +359,7 @@ export class ProfilePage extends Vue {
   }
 
   ClickTweet() {
-    console.log('click tweet');
+    window.ipc.ipcPipe.send(EIPcType.EShowUserTweet, { screen_name: this.showUser.screen_name });
   }
   OnClickProfileURL() {
     if (!this.showUser.url) return;

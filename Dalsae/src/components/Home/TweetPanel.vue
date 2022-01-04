@@ -73,6 +73,20 @@
           :style="stylePanel"
         />
       </v-tab-item>
+      <v-tab-item :key="6" eager>
+        <v-progress-circular
+          v-if="isLoadUser"
+          :width="3"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+        <scroll-panel
+          :itemType="'tweet'"
+          :tweetType="user"
+          :indexPanel="indexUser"
+          :style="stylePanel"
+        />
+      </v-tab-item>
     </v-tabs-items>
   </div>
 </template>
@@ -98,7 +112,8 @@ export default class TweetPanel extends TweetPanelBase {
     { name: 'dm', value: 2 },
     { name: 'favorite', value: 3 },
     { name: 'url', value: 4 },
-    { name: 'conv', value: 5 }
+    { name: 'conv', value: 5 },
+    { name: 'user', value: 6 }
   ];
 
   async created() {

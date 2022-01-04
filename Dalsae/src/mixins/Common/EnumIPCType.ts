@@ -9,5 +9,6 @@ export enum EIPcType {
   EDeleteTweet = 'deleteTweet',
   EShowIage = 'showimage',
   EShowVideo = 'showvideo',
-  EShowProfile = 'showprofile'
+  EShowProfile = 'showprofile',
+  EShowUserTweet = 'showusertweet'
 }

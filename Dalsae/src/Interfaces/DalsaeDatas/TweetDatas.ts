@@ -9,12 +9,14 @@ export class Tweets {
   favorites: I.Tweet[];
   opens: I.Tweet[];
   conv: I.Tweet[];
+  user: I.Tweet[];
   constructor() {
     this.homes = [];
     this.mentions = [];
     this.favorites = [];
     this.opens = [];
     this.conv = [];
+    this.user = [];
   }
 }
 export function FindTweet(

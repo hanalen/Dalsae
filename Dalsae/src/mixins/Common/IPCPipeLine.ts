@@ -12,6 +12,7 @@ import { moduleOption } from '@/store/modules/OptionStore';
 import { moduleModal } from '@/store/modules/ModalStore';
 import { Messagetype } from '../Modals';
 import { ProgressInfo, UpdateDownloadedEvent, UpdateFileInfo } from 'electron-updater';
+import { moduleUtil } from '@/store/modules/UtilStore';
 @Component
 export class IPCPipeLine extends Vue {
   async created() {
@@ -22,10 +23,10 @@ export class IPCPipeLine extends Vue {
       moduleProfile.UpdateFollowUserInfo(user);
     });
     window.ipc.ipcPipe.on(EIPcType.ERetweet, (tweet: I.Tweet) => {
-      moduleTweet.UpdateRTandFav(tweet);
+      moduleTweet.UpdateRTandFav(new I.Tweet(tweet));
     });
     window.ipc.ipcPipe.on(EIPcType.EFavorite, (tweet: I.Tweet) => {
-      moduleTweet.UpdateRTandFav(tweet);
+      moduleTweet.UpdateRTandFav(new I.Tweet(tweet));
     });
     window.ipc.ipcPipe.on(EIPcType.EOpenWeb, (tweet: I.Tweet) => {
       moduleTweet.AddTweet({
@@ -37,6 +38,11 @@ export class IPCPipeLine extends Vue {
     });
     window.ipc.ipcPipe.on(EIPcType.EDeleteTweet, (tweet: I.Tweet) => {
       moduleDom.DeleteTweet(tweet);
+    });
+    window.ipc.ipcPipe.on(EIPcType.EShowUserTweet, (obj: { screen_name: string }) => {
+      if (this.$router.currentRoute.path !== '/') return;
+      moduleTweet.ClearUserTweet(moduleSwitter.selectID);
+      moduleUtil.LoadUserTweet(obj.screen_name);
     });
     ///////////////////
     window.ipc.ipcPipe.on(EIPcType.EWindowFocused, () => {
