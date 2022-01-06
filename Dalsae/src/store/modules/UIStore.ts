@@ -163,6 +163,7 @@ class UIStore extends VuexModule {
       case ETweetType.E_USER:
         state = this.statePanel.user;
         listTweet = moduleTweet.userTweets;
+        break;
       default:
         listTweet = moduleTweet.homes;
         break;
